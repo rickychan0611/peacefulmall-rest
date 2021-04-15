@@ -1,34 +1,42 @@
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import { Button, Icon } from 'semantic-ui-react';
+import {  useRecoilState, useRecoilValue } from 'recoil';
+import { repos as reposAtom, view as viewAtom} from '../atoms.js';
+import NextButton from '../components/NextButton';
+
+const Home = () => {
+  const [repos, setRepos] = useRecoilState(reposAtom);
+  const view = useRecoilValue(viewAtom);
+
+  useEffect(async () => {
+    const url = `https://reqres.in/api/users?page=${view}`;
+    const resp = await fetch(url);
+    const body = await resp.json();
+    setRepos(body.data);
+  }, [view]);
+
+  return (
+    <StyledContainer>
+      {repos.map((repo) => (
+        <div key={repo.id}>
+          <a href={repo.avatar}>
+            {repo.first_name + " " + repo.last_name}
+          </a>
+        </div>
+      ))}
+      <NextButton />
+    </StyledContainer>
+  )
+};
 
 const StyledContainer = styled.div`
-  display: flex;
-  height: 100vh;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
 
   div {
     margin: 10px 0 10px 0;
   }
 `;
 
-const Home = () => (
-  <StyledContainer>
-    <div>
-      <h1>Next.js + Fomantic-UI!</h1>
-    </div>
-    <div>
-      <Button primary>Primary</Button>
-      <Button secondary>Secondary</Button>
-    </div>
-    <div>
-      <Icon name="home" size="big" />
-      <Icon name="star" size="big" />
-      <Icon name="heart" size="big" />
-      <Icon name="ambulance" size="big" />
-      <Icon name="lightbulb" size="big" />
-    </div>
-  </StyledContainer>
-);
 export default Home;

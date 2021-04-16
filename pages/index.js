@@ -1,33 +1,35 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import { Button, Icon } from 'semantic-ui-react';
-import {  useRecoilState, useRecoilValue } from 'recoil';
-import { repos as reposAtom, view as viewAtom} from '../atoms.js';
-import NextButton from '../components/NextButton';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { repos as reposAtom, view as viewAtom } from '../atoms.js';
+import { Container, Image } from 'semantic-ui-react';
+import CatBar from '../components/CatBar';
+import TopBar from '../components/TopBar';
+import SearchBanner from '../components/SearchBanner';
+import Footer from '../components/Footer';
 
 const Home = () => {
   const [repos, setRepos] = useRecoilState(reposAtom);
   const view = useRecoilValue(viewAtom);
 
   useEffect(async () => {
-    const url = `https://reqres.in/api/users?page=${view}`;
-    const resp = await fetch(url);
-    const body = await resp.json();
-    setRepos(body.data);
-  }, [view]);
+    // const url = `https://reqres.in/api/users?page=${view}`;
+    // const resp = await fetch(url);
+    // const body = await resp.json();
+    // setRepos(body.data);
+  }, []);
 
   return (
-    <StyledContainer>
-      {repos.map((repo) => (
-        <div key={repo.id}>
-          <a href={repo.avatar}>
-            {repo.first_name + " " + repo.last_name}
-          </a>
-        </div>
-      ))}
-      <NextButton />
-    </StyledContainer>
-  )
+    <>
+      <TopBar />
+      <Image src="/banner.jpg" />
+      <SearchBanner />
+      <Container style={{ marginTop: '2em' }}>
+        <CatBar />
+      </Container>
+      <Footer />
+    </>
+  );
 };
 
 const StyledContainer = styled.div`

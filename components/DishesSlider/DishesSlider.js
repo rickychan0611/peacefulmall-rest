@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-import { Divider, Button } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import { data } from '../../data/restaurants';
-import { restaurants10 } from '../../data/restaurants10';
+import SliderTitle from '../SliderTitle';
 
-const MostLovedRestaurantsSlider = ({topic}) => {
+import { useRecoilState } from 'recoil';
+import { selectedCuisine as selectedCuisineAtom } from '../../data/atoms.js';
+
+const DishesSlider = ({topic}) => {
   const [dishes, setDishes] = useState([]);
+  const [selectedCuisine, setSelectedCuisine] = useRecoilState(selectedCuisineAtom);
 
   useEffect(() => {
     let temp = [];
@@ -35,26 +39,23 @@ const MostLovedRestaurantsSlider = ({topic}) => {
     }
     console.log(arr);
     setDishes(arr);
-  }, [data]);
+  }, [selectedCuisine]);
 
   return (
     <>
-      <h2 style={{ color: 'black' }}>{topic}</h2>
-      <Divider />
+      <SliderTitle title={topic} />
       <Container horizontal nativeMobileScroll>
         {dishes[0] &&
           dishes.map((item, i) => {
             return (
               <Card key={i}>
                 <Img
-                  src={`https://source.unsplash.com/featured/?dinning, steak${Math.floor(Math.random() * 10000)}`}
+                  src={`https://source.unsplash.com/featured/?restauants,dishes,food,taste,${item.name+topic}`}
                 />
-                <Name>Restaurant Name</Name>
-                {/* <Description>{item.description}</Description> */}
-                <Description>Location: Vacnouver</Description>
-                <Description>Style: Chinese</Description>
-                <Description>Price Range: 💲💲💲💲</Description>
-                <Description>Reviews: ⭐⭐⭐⭐⭐ (34)</Description>
+                <Name>{item.name}</Name>
+                <Description>{item.description}</Description>
+                <Price>50% off - $12.00</Price>
+                <Description>Restaurant Name ⭐⭐⭐⭐⭐</Description>
               </Card>
             );
           })}
@@ -97,4 +98,4 @@ const Price = styled.div`
   margin-top: 5px;
 `;
 
-export default MostLovedRestaurantsSlider;
+export default DishesSlider;

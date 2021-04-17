@@ -2,6 +2,10 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import { Image, Divider } from 'semantic-ui-react';
 import ScrollContainer from 'react-indiana-drag-scroll';
+import SliderTitle from '../SliderTitle';
+
+import { useRecoilState } from 'recoil';
+import { selectedCuisine as selectedCuisineAtom } from '../../data/atoms.js';
 
 const data = [
   { name: 'Cantonese', img: 'canton-thumb.jpg' },
@@ -18,22 +22,25 @@ const data = [
   { name: 'Mexcian', img: 'mexcian-thumb.jpg' }
 ];
 
-const CuisineSlider = () => (
-  <>
-    <h2 style={{ color: 'black' }}>Cuisines</h2>
-    <Divider />
-    <Container horizontal nativeMobileScroll >
-      {data.map((item, i) => {
-        return (
-          <CatCard key={i}>
-            <Image size="small" src={`/${item.img}`} />
-            <Text>{item.name.toUpperCase()}</Text>
-          </CatCard>
-        );
-      })}
-    </Container>
-  </>
-);
+const CuisineSlider = () => {
+  const [selectedCuisine, setSelectedCuisine] = useRecoilState(selectedCuisineAtom);
+
+  return (
+    <>
+      <SliderTitle title="Cuisines" />
+      <Container horizontal nativeMobileScroll>
+        {data.map((item, i) => {
+          return (
+            <CatCard key={i} onClick={() => setSelectedCuisine(item.name)}>
+              <Image size="small" src={`/${item.img}`} />
+              <Text>{item.name.toUpperCase()}</Text>
+            </CatCard>
+          );
+        })}
+      </Container>
+    </>
+  );
+};
 
 const Container = styled(ScrollContainer)`
   overflow: auto;
@@ -46,7 +53,7 @@ const CatCard = styled.div`
 `;
 const Text = styled.div`
   color: white;
-  background-color: rgba(0,0,0,.55);
+  background-color: rgba(0, 0, 0, 0.55);
   padding: 20px 0;
   text-shadow: 0px 0px 10px black;
   position: absolute;

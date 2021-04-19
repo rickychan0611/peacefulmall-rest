@@ -1,31 +1,51 @@
+import { useState, useEffect, createRef } from 'react';
 import styled from 'styled-components';
-import { Container, Image } from 'semantic-ui-react';
+import { Container, Image, Ref, Visibility, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
-import DishesSlider from '../components/DishesSlider';
-import RestaurantsSlider from '../components/RestaurantsSlider';
+import DishCards from '../components/DishCards';
+import RestaurantCards from '../components/RestaurantCards';
 import TopBar from '../components/TopBar';
 import SearchBanner from '../components/SearchBanner';
 import Footer from '../components/Footer';
 import ReviewsSlider from '../components/ReviewsSlider';
+import Slider from '../components/Slider';
 
 const Home = () => {
+  const [calculations, setCalculations] = useState({});
+
+  let contextRef = createRef();
 
   return (
     <>
       <TopBar />
       <Image src="/banner.jpg" />
       <SearchBanner />
-      <Container style={{ marginTop: '2em' }}>
-        <CuisineSlider/>
-        <DishesSlider topic="Discounted Dishes"/>
-        <DishesSlider topic="Top Rated Dishes"/>
-        <RestaurantsSlider topic="Most Loved Restaurants"/>
-        <RestaurantsSlider topic="Fastest Near you"/>
-        <RestaurantsSlider topic="Weekly Top 10"/>
-        <RestaurantsSlider topic="Peaceful Mall Featured"/>
-        <ReviewsSlider topic="User's Reviews"/>
-        <ReviewsSlider topic="Editor's Top Picks"/>
-      </Container>
+      <Ref innerRef={contextRef}>
+        <Container style={{ marginTop: '2em' }}>
+          <CuisineSlider contextRef={contextRef} />
+          <Slider topic="Discounted Dishes">
+            <DishCards />
+          </Slider>
+          <Slider topic="Most Popular Dishes">
+            <DishCards />
+          </Slider>
+          <Slider topic="Most Loved Restaurants">
+            <RestaurantCards />
+          </Slider>
+          <Slider topic="Fastest Near you">
+            <RestaurantCards />
+          </Slider>
+          <Slider topic="Weekly Top 10">
+            <RestaurantCards />
+          </Slider>
+          <Slider topic="Peaceful Mall Featured">
+            <RestaurantCards />
+          </Slider>
+          <ReviewsSlider topic="User's Reviews" />
+          <ReviewsSlider topic="Editor's Top Picks" />
+        </Container>
+      </Ref>
+
       <Footer />
     </>
   );

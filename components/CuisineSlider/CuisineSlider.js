@@ -1,11 +1,19 @@
+import { useState, useEffect, createRef } from 'react';
+import {
+  BrowserView,
+  MobileView,
+  isBrowser,
+  isMobile
+} from "react-device-detect";
+
 import _ from 'lodash';
 import styled from 'styled-components';
-import { Image, Divider } from 'semantic-ui-react';
+import { Sticky } from 'semantic-ui-react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import SliderTitle from '../SliderTitle';
 
 import { useRecoilState } from 'recoil';
-import { selectedCuisine as selectedCuisineAtom } from '../../data/atoms.js';
+import { selections as selectionsAtom } from '../../data/atoms.js';
 
 const data = [
   { name: 'Cantonese', img: 'canton-thumb.jpg' },
@@ -22,34 +30,42 @@ const data = [
   { name: 'Mexcian', img: 'mexcian-thumb.jpg' }
 ];
 
-const CuisineSlider = () => {
-  const [selectedCuisine, setSelectedCuisine] = useRecoilState(selectedCuisineAtom);
+const CuisineSlider = ({ contextRef }) => {
+  const [selections, setSelections] = useRecoilState(selectionsAtom);
 
   return (
-    <>
+    <div style={{cursor: "pointer"}}>
       <SliderTitle title="Cuisines" />
-      <Container horizontal nativeMobileScroll>
-        {data.map((item, i) => {
-          return (
-            <CatCard key={i} onClick={() => setSelectedCuisine(item.name)}>
-              <Image size="small" src={`/${item.img}`} />
-              <Text>{item.name.toUpperCase()}</Text>
-            </CatCard>
-          );
-        })}
-      </Container>
-    </>
+      <Sticky context={contextRef}>
+        <Container horizontal nativeMobileScroll hideScrollbars={isMobile ? true : false}>
+          {data.map((item, i) => {
+            return (
+              <CatCard key={i} onClick={() => setSelections(prev => ({...prev, cuisine: item.name}))}>
+                <Image size="small" src={`/${item.img}`} />
+                <Text>{item.name.toUpperCase()}</Text>
+              </CatCard>
+            );
+          })}
+        </Container>
+        <div style={{backgroundColor: "white", height: "20px", marginTop: -3, marginBottom: 30}}/>
+      </Sticky>
+    </div>
   );
 };
 
 const Container = styled(ScrollContainer)`
   overflow: auto;
   white-space: nowrap;
+  background-color: white;
 `;
 const CatCard = styled.div`
   display: inline-block;
   position: relative;
   margin: 10px;
+`;
+const Image = styled.img`
+  width: 150px;
+  height: 150px;
 `;
 const Text = styled.div`
   color: white;
@@ -60,7 +76,7 @@ const Text = styled.div`
   bottom: calc(50% - 30px);
   width: 100%;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 600;
 `;
 

@@ -1,19 +1,21 @@
 import { atom, selector } from 'recoil';
 
-// export const data = atom({
-//   key: 'data',
-//   default: data
-// });
-
-export const selectedCuisine = atom({
-  key: 'selectedCuisine',
-  default: 'All'
+export const selections = atom({
+  key: 'selections',
+  default: {cuisine: "all", category: "", restaurant: ""}
 });
 
-// export const all_dishes = selector({
-//   key: 'all_dishes',
-//   get: ({get}) => {
-//     let items = get(data)
-//     return items.categorys.map((item) => item.menu-items)
-//   }
+// export const selectedCat = atom({
+//   key: 'selectedCat',
+//   default: ''
+// });
+
+// export const selectedCat = atom({
+//   key: 'selectedCat',
+//   default: ''
+// });
+
+// export const selectedCatData = atom({
+//   key: 'selectedCatData',
+//   default: ""
 // });

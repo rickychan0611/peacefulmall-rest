@@ -1,17 +1,14 @@
 import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-import { Divider } from 'semantic-ui-react';
-import ScrollContainer from 'react-indiana-drag-scroll';
 import { data } from '../../data/restaurants';
-import SliderTitle from '../SliderTitle';
 
 import { useRecoilState } from 'recoil';
-import { selectedCuisine as selectedCuisineAtom } from '../../data/atoms.js';
+import  { selections as selectionsAtom }  from '../../data/atoms.js';
 
-const DishesSlider = ({topic}) => {
+const DishCards = ({topic}) => {
   const [dishes, setDishes] = useState([]);
-  const [selectedCuisine, setSelectedCuisine] = useRecoilState(selectedCuisineAtom);
+  const [selections, setSelections] = useRecoilState(selectionsAtom);
 
   useEffect(() => {
     let temp = [];
@@ -27,7 +24,6 @@ const DishesSlider = ({topic}) => {
       temp3.push(item);
     });
     temp3 = [].concat.apply([], temp3);
-    // console.log(temp3);
 
     let arr = [];
     for (var i = temp3.length - 1; i > 0; i--) {
@@ -37,21 +33,18 @@ const DishesSlider = ({topic}) => {
       temp3[j] = tempArr;
       arr.push(tempArr)
     }
-    console.log(arr);
     setDishes(arr);
-  }, [selectedCuisine]);
+  }, [selections]);
 
   return (
     <>
-      <SliderTitle title={topic} />
-      <Container horizontal nativeMobileScroll>
         {dishes[0] &&
           dishes.map((item, i) => {
             return (
               <Card key={i}>
                 <Img
-                  src={`https://source.unsplash.com/featured/?restauants,dishes,food,taste,${item.name+topic}`}
-                />
+                  src={`https://source.unsplash.com/featured/?dinning, steak${Math.floor(Math.random() * 10000)}`}
+                  />
                 <Name>{item.name}</Name>
                 <Description>{item.description}</Description>
                 <Price>50% off - $12.00</Price>
@@ -59,21 +52,16 @@ const DishesSlider = ({topic}) => {
               </Card>
             );
           })}
-      </Container>
     </>
   );
 };
 
-const Container = styled(ScrollContainer)`
-  overflow: auto;
-  white-space: nowrap;
-  display: flex;
-`;
 const Card = styled.div`
   display: inline-block;
   position: relative;
   margin: 10px;
-  width: 250px;
+  width: 100%;
+  max-width: 250px;
 `;
 const Img = styled.img`
   width: 250px;
@@ -98,4 +86,4 @@ const Price = styled.div`
   margin-top: 5px;
 `;
 
-export default DishesSlider;
+export default DishCards;

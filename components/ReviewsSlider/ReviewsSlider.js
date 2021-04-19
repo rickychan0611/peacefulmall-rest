@@ -4,10 +4,14 @@ import styled from 'styled-components';
 import { Divider, Button } from 'semantic-ui-react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import { data } from '../../data/restaurants';
-import { restaurants10 } from '../../data/restaurants10';
+import SliderTitle from '../SliderTitle';
+
+import { useRecoilState } from 'recoil';
+import { selections as selectionsAtom } from '../../data/atoms.js';
 
 const ReviewsSlider = ({ topic }) => {
   const [dishes, setDishes] = useState([]);
+  const [selections, setSelections] = useRecoilState(selectionsAtom);
 
   useEffect(() => {
     let temp = [];
@@ -23,7 +27,6 @@ const ReviewsSlider = ({ topic }) => {
       temp3.push(item);
     });
     temp3 = [].concat.apply([], temp3);
-    // console.log(temp3);
 
     let arr = [];
     for (var i = temp3.length - 1; i > 0; i--) {
@@ -33,14 +36,12 @@ const ReviewsSlider = ({ topic }) => {
       temp3[j] = tempArr;
       arr.push(tempArr);
     }
-    console.log(arr);
     setDishes(arr);
-  }, [data]);
+  }, [selections]);
 
   return (
     <>
-      <h2 style={{ color: 'black' }}>{topic}</h2>
-      <Divider />
+      <SliderTitle title={topic} />
       <Container horizontal nativeMobileScroll>
         {dishes[0] &&
           dishes.map((item, i) => {
@@ -53,7 +54,8 @@ const ReviewsSlider = ({ topic }) => {
                 />
                 <Description> ⭐⭐⭐⭐⭐</Description>
                 <Name>
-                 I like it so much. The food is so good. I like it. I like it. I like it. I like it. I like it.
+                  I like it so much. The food is so good. I like it. I like it. I like it. I like
+                  it. I like it.
                 </Name>
                 {/* <Description>{item.description}</Description> */}
                 <Review>
@@ -62,7 +64,8 @@ const ReviewsSlider = ({ topic }) => {
                   soothing. Great place to hang, and the food is like how it's advertised, clean and
                   delicate and very healthy.
                 </Review>
-                <Description>Read more...</Description><br></br>
+                <Description>Read more...</Description>
+                <br></br>
                 <Description>Name: Restaurant Name</Description>
                 <Description>Location: Vacnouver</Description>
                 <Description>Style: Chinese</Description>

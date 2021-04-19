@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-import { Divider, Button } from 'semantic-ui-react';
-import ScrollContainer from 'react-indiana-drag-scroll';
 import { data } from '../../data/restaurants';
-import { restaurants10 } from '../../data/restaurants10';
 
-const RestaurantsSlider = ({topic}) => {
+import { useRecoilState } from 'recoil';
+import { selections as selectionsAtom } from '../../data/atoms.js';
+
+const RestaurantCards = ({topic}) => {
   const [dishes, setDishes] = useState([]);
+  const [selections, setSelections] = useRecoilState(selectionsAtom);
 
   useEffect(() => {
     let temp = [];
@@ -23,7 +24,6 @@ const RestaurantsSlider = ({topic}) => {
       temp3.push(item);
     });
     temp3 = [].concat.apply([], temp3);
-    // console.log(temp3);
 
     let arr = [];
     for (var i = temp3.length - 1; i > 0; i--) {
@@ -33,15 +33,11 @@ const RestaurantsSlider = ({topic}) => {
       temp3[j] = tempArr;
       arr.push(tempArr)
     }
-    console.log(arr);
     setDishes(arr);
-  }, [data]);
+  }, [selections]);
 
   return (
     <>
-      <h2 style={{ color: 'black' }}>{topic}</h2>
-      <Divider />
-      <Container horizontal nativeMobileScroll>
         {dishes[0] &&
           dishes.map((item, i) => {
             return (
@@ -58,16 +54,10 @@ const RestaurantsSlider = ({topic}) => {
               </Card>
             );
           })}
-      </Container>
     </>
   );
 };
 
-const Container = styled(ScrollContainer)`
-  overflow: auto;
-  white-space: nowrap;
-  display: flex;
-`;
 const Card = styled.div`
   display: inline-block;
   position: relative;
@@ -90,11 +80,5 @@ const Description = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
-const Price = styled.div`
-  font-size: 1rem;
-  font-weight: bold;
-  color: red;
-  margin-top: 5px;
-`;
 
-export default RestaurantsSlider;
+export default RestaurantCards;

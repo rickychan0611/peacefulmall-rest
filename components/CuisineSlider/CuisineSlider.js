@@ -1,11 +1,5 @@
 import { useState, useEffect, createRef } from 'react';
-import {
-  BrowserView,
-  MobileView,
-  isBrowser,
-  isMobile
-} from "react-device-detect";
-
+import {useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { Sticky } from 'semantic-ui-react';
@@ -32,20 +26,22 @@ const data = [
 
 const CuisineSlider = ({ contextRef }) => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
-
+  const isDesktop = useDesktopMediaQuery();
   return (
     <div style={{cursor: "pointer"}}>
       <SliderTitle title="Cuisines" />
-      <Sticky context={contextRef}>
-        <Container horizontal nativeMobileScroll hideScrollbars={isMobile ? true : false}>
+      <Sticky offset={50} context={contextRef}>
+        <Container isDesktop={isDesktop} horizontal nativeMobileScroll hideScrollbars={!isDesktop}>
+          <ItemWrapper isDesktop={isDesktop}>
           {data.map((item, i) => {
             return (
-              <CatCard key={i} onClick={() => setSelections(prev => ({...prev, cuisine: item.name}))}>
-                <Image size="small" src={`/${item.img}`} />
-                <Text>{item.name.toUpperCase()}</Text>
+              <CatCard isDesktop={isDesktop} key={i} onClick={() => setSelections(prev => ({...prev, cuisine: item.name}))}>
+                <Image isDesktop={isDesktop} src={`/${item.img}`} />
+                <Text isDesktop={isDesktop}>{item.name.toUpperCase()}</Text>
               </CatCard>
             );
           })}
+          </ItemWrapper>
         </Container>
         <div style={{backgroundColor: "white", height: "20px", marginTop: -3, marginBottom: 30}}/>
       </Sticky>
@@ -57,27 +53,37 @@ const Container = styled(ScrollContainer)`
   overflow: auto;
   white-space: nowrap;
   background-color: white;
+  padding-top: 10px;
+`;
+const ItemWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: ${p => p.isDesktop ? "170px" : "100px"};
+  padding-top: 10px;
 `;
 const CatCard = styled.div`
   display: inline-block;
   position: relative;
-  margin: 10px;
+  margin-right: 10px;
+  width: ${p => p.isDesktop ? "150px" : "100px"};
 `;
 const Image = styled.img`
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  object-fit: cover;
 `;
 const Text = styled.div`
   color: white;
   background-color: rgba(0, 0, 0, 0.55);
-  padding: 20px 0;
   text-shadow: 0px 0px 10px black;
   position: absolute;
-  bottom: calc(50% - 30px);
+  padding: ${p => p.isDesktop ? "20px" : "3px"};
+  bottom: ${p => p.isDesktop ?" calc(50% - 30px)" : "13px"};
+  font-size: ${p => p.isDesktop ? "1.1rem" : ".9rem"};
   width: 100%;
   text-align: center;
-  font-size: 1.1rem;
   font-weight: 600;
+  white-space: initial;
 `;
 
 export default CuisineSlider;

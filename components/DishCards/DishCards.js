@@ -6,7 +6,7 @@ import { data } from '../../data/restaurants';
 import { useRecoilState } from 'recoil';
 import  { selections as selectionsAtom }  from '../../data/atoms.js';
 
-const DishCards = ({topic}) => {
+const DishCards = ({topic, featured}) => {
   const [dishes, setDishes] = useState([]);
   const [selections, setSelections] = useRecoilState(selectionsAtom);
 

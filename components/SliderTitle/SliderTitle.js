@@ -13,7 +13,7 @@ const SliderTitle = ({ title, dishChildren, hideViewAll }) => {
   return (
     <>
       <Grid verticalAlign='middle'>
-        <Grid.Column floated="left" width={9} >
+        <Grid.Column floated="left" width={12} >
           <Container>
           <Title>{title}</Title>
           {selections.cuisine !== 'all' && (
@@ -24,7 +24,7 @@ const SliderTitle = ({ title, dishChildren, hideViewAll }) => {
           )}
           </Container>
         </Grid.Column>
-        <Grid.Column floated="right" textAlign="right" width={3}>
+        <Grid.Column floated="right" textAlign="right" width={4}>
         <a style={{cursor: "pointer"}} onClick={() => {
             setSelections(prev => ({...prev, category: title}))
             router.push({

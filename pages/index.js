@@ -17,7 +17,6 @@ const Home = () => {
 
   return (
     <>
-      <TopBar />
       <Image src="/banner.jpg" />
       <SearchBanner />
       <Ref innerRef={contextRef}>
@@ -42,6 +41,8 @@ const Home = () => {
             <RestaurantCards />
           </Slider>
           <ReviewsSlider topic="User's Reviews" />
+          <br />
+          <br />
           <ReviewsSlider topic="Editor's Top Picks" />
         </Container>
       </Ref>

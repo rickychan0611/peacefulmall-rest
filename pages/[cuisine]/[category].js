@@ -44,7 +44,6 @@ const category = () => {
 
   return (
     <>
-      <TopBar />
       <SearchBanner />
       <Container style={{ marginTop: 50 }}>
         <SliderTitle title={router.query.category + ' - ' + router.query.cuisine} hideViewAll />

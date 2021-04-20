@@ -2,15 +2,13 @@ import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { data } from '../../data/restaurants';
-import { useRouter } from 'next/router'
 
 import { useRecoilState } from 'recoil';
-import { selections as selectionsAtom } from '../../data/atoms.js';
+import  { selections as selectionsAtom }  from '../../data/atoms.js';
 
-const RestaurantCards = ({topic}) => {
+const PopularDishes = ({topic, featured}) => {
   const [dishes, setDishes] = useState([]);
   const [selections, setSelections] = useRecoilState(selectionsAtom);
-  const router = useRouter()
 
   useEffect(() => {
     let temp = [];
@@ -36,7 +34,6 @@ const RestaurantCards = ({topic}) => {
       arr.push(tempArr)
     }
     setDishes(arr);
-    console.log(dishes)
   }, [selections]);
 
   return (
@@ -44,21 +41,12 @@ const RestaurantCards = ({topic}) => {
         {dishes[0] &&
           dishes.map((item, i) => {
             return (
-              <Card key={i} onClick={()=>{
-                router.push({
-                  pathname: '/restaurants/[restaurant]',
-                  query: {restaurant: "Restaurant Name"}
-                })
-              }}>
+              <Card key={i}>
                 <Img
                   src={`https://source.unsplash.com/featured/?dinning, steak${Math.floor(Math.random() * 10000)}`}
-                />
-                <Name>Restaurant Name</Name>
-                {/* <Description>{item.description}</Description> */}
-                <Description>Location: Vacnouver</Description>
-                <Description>Style: Chinese</Description>
-                <Description>Price Range: 💲💲💲💲</Description>
-                <Description>Reviews: ⭐⭐⭐⭐⭐ (34)</Description>
+                  />
+                <Name>{item.name}</Name>
+                <Price>$12.00</Price>
               </Card>
             );
           })}
@@ -70,11 +58,12 @@ const Card = styled.div`
   display: inline-block;
   position: relative;
   margin: 10px;
-  width: 250px;
+  width: 100%;
+  max-width: 150px;
 `;
 const Img = styled.img`
-  width: 250px;
-  height: 250px;
+  width: 150px;
+  height: 150px;
   object-fit: cover;
 `;
 const Name = styled.div`
@@ -88,5 +77,10 @@ const Description = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+const Price = styled.div`
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 5px;
+`;
 
-export default RestaurantCards;
+export default PopularDishes;

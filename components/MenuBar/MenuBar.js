@@ -18,7 +18,7 @@ const MenuBar = () => (
             <Dropdown.Header>Header Item</Dropdown.Header>
             <Dropdown.Item>
               <i className="dropdown icon" />
-              <span className="text">Submenu</span>
+              {/* <span className="text">Submenu</span> */}
               <Dropdown.Menu>
                 <Dropdown.Item>List Item</Dropdown.Item>
                 <Dropdown.Item>List Item</Dropdown.Item>
@@ -36,7 +36,7 @@ const MenuBar = () => (
             <Dropdown.Header>Header Item</Dropdown.Header>
             <Dropdown.Item>
               <i className="dropdown icon" />
-              <span className="text">Submenu</span>
+              {/* <span className="text">Submenu</span> */}
               <Dropdown.Menu>
                 <Dropdown.Item>List Item</Dropdown.Item>
                 <Dropdown.Item>List Item</Dropdown.Item>

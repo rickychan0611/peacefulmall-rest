@@ -9,3 +9,8 @@ export const openSideMenu = atom({
   key: 'openSideMenu',
   default: false
 });
+
+export const selectedItem = atom({
+  key: 'selectedItem',
+  default: {}
+});

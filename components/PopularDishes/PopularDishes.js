@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { data } from '../../data/restaurants';
+import {useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
 import { useRecoilState } from 'recoil';
 import  { selections as selectionsAtom }  from '../../data/atoms.js';
@@ -9,6 +10,7 @@ import  { selections as selectionsAtom }  from '../../data/atoms.js';
 const PopularDishes = ({topic, featured}) => {
   const [dishes, setDishes] = useState([]);
   const [selections, setSelections] = useRecoilState(selectionsAtom);
+  const isDesktop = useDesktopMediaQuery();
 
   useEffect(() => {
     let temp = [];
@@ -37,7 +39,7 @@ const PopularDishes = ({topic, featured}) => {
   }, [selections]);
 
   return (
-    <>
+    <ItemWrapper isDesktop={isDesktop}>
         {dishes[0] &&
           dishes.map((item, i) => {
             return (
@@ -50,27 +52,38 @@ const PopularDishes = ({topic, featured}) => {
               </Card>
             );
           })}
-    </>
+    </ItemWrapper>
   );
 };
+
+const ItemWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 380px;
+  /* height: ${p => p.isDesktop ? "330px" : "330px"}; */
+  padding-top: 10px;
+  align-items: stretch;
+`;
 
 const Card = styled.div`
   display: inline-block;
   position: relative;
-  margin: 10px;
-  width: 100%;
-  max-width: 150px;
+  margin: 5px;
+  width: 130px;
+  height: 165px;
 `;
 const Img = styled.img`
-  width: 150px;
-  height: 150px;
+  width: 130px;
+  height: 100px;
   object-fit: cover;
 `;
 const Name = styled.div`
-  font-size: 1.2rem;
+  font-size: .9rem;
   font-weight: bold;
   overflow: hidden;
-  text-overflow: ellipsis;
+  /* text-overflow: ellipsis; */
+  white-space: initial;
 `;
 const Description = styled.div`
   font-size: 1rem;
@@ -78,9 +91,8 @@ const Description = styled.div`
   text-overflow: ellipsis;
 `;
 const Price = styled.div`
-  font-size: 1rem;
+  font-size: .9rem;
   font-weight: bold;
-  margin-top: 5px;
 `;
 
 export default PopularDishes;

@@ -22,7 +22,7 @@ const RestaurantSideBar = () => {
         </Modal.Content>
       </Modal>
 
-      <Grid.Column width={5} style={{ height: 'calc(100vh - 120px)', overflowY: 'scroll' }}>
+      <Grid.Column width={5} style={{ height: 'calc(100vh - 140px)', overflowY: 'scroll' }}>
         <Img
           src={`http://vieamaggi.com/wp-content/uploads/2018/02/5564B6D3-9EB0-4705-ADE1-9098E1F5F248.jpeg`}
         />

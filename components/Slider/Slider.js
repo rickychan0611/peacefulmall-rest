@@ -4,12 +4,6 @@ import styled from 'styled-components';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import { data } from '../../data/restaurants';
 import SliderTitle from '../SliderTitle';
-import {
-  BrowserView,
-  MobileView,
-  isBrowser,
-  isMobile
-} from "react-device-detect";
 
 const Slider = ({topic, children}) => {
   const isDesktop = useDesktopMediaQuery();

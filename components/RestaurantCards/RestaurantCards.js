@@ -39,6 +39,8 @@ const RestaurantCards = ({topic}) => {
     console.log(dishes)
   }, [selections]);
 
+  // const IMG_URL = `/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`;
+
   return (
     <>
         {dishes[0] &&
@@ -50,9 +52,7 @@ const RestaurantCards = ({topic}) => {
                   query: {restaurant: "Restaurant Name"}
                 })
               }}>
-                <Img
-                  src={`https://source.unsplash.com/featured/?dinning, steak${Math.floor(Math.random() * 10000)}`}
-                />
+                <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} />
                 <Name>Restaurant Name</Name>
                 {/* <Description>{item.description}</Description> */}
                 <Description>Location: Vacnouver</Description>

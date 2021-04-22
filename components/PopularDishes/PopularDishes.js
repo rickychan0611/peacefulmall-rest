@@ -6,6 +6,8 @@ import {useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
 import { useRecoilState } from 'recoil';
 import  { selections as selectionsAtom }  from '../../data/atoms.js';
+import ItemModal from '../ItemModal';
+import MenuItem from '../MenuItem';
 
 const PopularDishes = ({topic, featured}) => {
   const [dishes, setDishes] = useState([]);
@@ -38,21 +40,29 @@ const PopularDishes = ({topic, featured}) => {
     setDishes(arr);
   }, [selections]);
 
+  const [open, setOpen] = useState(false);
+
   return (
+    <>
+
+    <ItemModal open={open} setOpen={setOpen}/>
+
     <ItemWrapper isDesktop={isDesktop}>
         {dishes[0] &&
           dishes.map((item, i) => {
             return (
-              <Card key={i}>
-                <Img
-                  src={`https://source.unsplash.com/featured/?dinning, steak${Math.floor(Math.random() * 10000)}`}
-                  />
-                <Name>{item.name}</Name>
-                <Price>$12.00</Price>
-              </Card>
+              <MenuItem item={item} isVCard/>
+              // <Card key={i}  onClick={() => route(item)}> 
+              //   <Img
+              //     src={`https://source.unsplash.com/featured/?dinning, steak${Math.floor(Math.random() * 10000)}`}
+              //     />
+              //   <Name>{item.name}</Name>
+              //   <Price>$12.00</Price>
+              // </Card>
             );
           })}
     </ItemWrapper>
+    </>
   );
 };
 

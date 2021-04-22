@@ -1,9 +1,8 @@
-import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { Button, Dropdown, Menu, Container, Image, Icon } from 'semantic-ui-react';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import { useRecoilState } from 'recoil';
 import { openSideMenu as openSideMenuAtom } from '../../data/atoms.js';
-import styled from 'styled-components';
 
 const options = [
   {
@@ -39,8 +38,10 @@ const options = [
 ];
 
 const TopBar = () => {
+  const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
+
   return (
     <div>
       <Menu
@@ -53,7 +54,7 @@ const TopBar = () => {
           width: "100vw",
           height: 60
         }}>
-        <Menu.Item header>
+        <Menu.Item header as="a" onClick={() => router.push('/')}>
           <Image size="mini" src="/logo-p.png" />
           <h4 style={{ color: '#4ab976', margin: 0 }}>
             Peaceful Mall

@@ -45,12 +45,12 @@ const ReviewsSlider = ({ topic }) => {
       <Container horizontal nativeMobileScroll>
         {dishes[0] &&
           dishes.map((item, i) => {
+            let IMG_URL = `/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`;
+
             return (
               <Card key={i}>
                 <Img
-                  src={`https://source.unsplash.com/featured/?dinning, steak${Math.floor(
-                    Math.random() * 10000
-                  )}`}
+                  src={IMG_URL}
                 />
                 <Description> ⭐⭐⭐⭐⭐</Description>
                 <Name>

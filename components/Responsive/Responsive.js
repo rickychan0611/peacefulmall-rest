@@ -13,8 +13,8 @@ export const MobileView = ({ children }) => {
   return isMobile ? children : null;
 };
 
-export const useDesktopMediaQuery = () => useMediaQuery({ query: '(min-width: 992px)' });
+export const useDesktopMediaQuery = () => useMediaQuery({ query: '(min-width: 900px)' });
 
-export const useTableMediaQuery = () => useMediaQuery({ query: '(min-width: 768px, max-width: 991px)' });
+export const useTableMediaQuery = () => useMediaQuery({ query: '(min-width: 768px, max-width: 901px)' });
 
 export const useMobileMediaQuery = () => useMediaQuery({ query: '(max-width: 767px)' });

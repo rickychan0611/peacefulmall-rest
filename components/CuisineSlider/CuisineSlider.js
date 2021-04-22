@@ -59,14 +59,14 @@ const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: ${p => p.isDesktop ? "170px" : "100px"};
+  height: ${p => JSON.stringify(p.isDesktop) === "true" ? "170px" : "100px"};
   padding-top: 10px;
 `;
 const CatCard = styled.div`
   display: inline-block;
   position: relative;
   margin-right: 10px;
-  width: ${p => p.isDesktop ? "150px" : "100px"};
+  width: ${p => JSON.stringify(p.isDesktop) === "true" ? "150px" : "100px"};
 `;
 const Image = styled.img`
   width: 100%;
@@ -77,9 +77,9 @@ const Text = styled.div`
   background-color: rgba(0, 0, 0, 0.55);
   text-shadow: 0px 0px 10px black;
   position: absolute;
-  padding: ${p => p.isDesktop ? "20px" : "3px"};
-  bottom: ${p => p.isDesktop ?" calc(50% - 30px)" : "13px"};
-  font-size: ${p => p.isDesktop ? "1.1rem" : ".9rem"};
+  padding: ${p => JSON.stringify(p.isDesktop) === "true" ? "20px" : "3px"};
+  bottom: ${p => JSON.stringify(p.isDesktop) === "true" ? "calc(50% - 30px)" : "25px"};
+  font-size: ${p => JSON.stringify(p.isDesktop) === "true" ? "1.1rem" : ".9rem"};
   width: 100%;
   text-align: center;
   font-weight: 600;

@@ -8,7 +8,7 @@ import BottomAddBar from '../../components/BottomAddBar';
 import _ from 'lodash';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
-const ItemDetails = ({setOpen}) => {
+const ItemDetails = ({ setOpen }) => {
   const isDesktop = useDesktopMediaQuery();
   const router = useRouter();
   const [item, setItem] = useRecoilState(itemAtom);
@@ -16,17 +16,14 @@ const ItemDetails = ({setOpen}) => {
   const [qty, setQty] = useState(0);
 
   const handleClose = () => {
-    isDesktop ? 
-    setOpen(false) :
-    router.back() 
-  }
+    isDesktop ? setOpen(false) : router.back();
+  };
 
   return (
     <>
-        <div onClick={()=>handleClose()}
-        style={{cursor: "pointer", margin: 10}}>
-          <Icon name="close" size="large"/> close
-          </div>
+      <div onClick={() => handleClose()} style={{ cursor: 'pointer', margin: 10 }}>
+        <Icon name="arrow left" size="large" /> Restaurant's page
+      </div>
       <Container>
         <h2>{item.name}</h2>
         <Img src={item.img} />
@@ -60,7 +57,7 @@ const ItemDetails = ({setOpen}) => {
         </Form>
       </Container>
 
-      <BottomAddBar qty={qty} setQty={setQty}/>
+      <BottomAddBar qty={qty} setQty={setQty} />
     </>
   );
 };

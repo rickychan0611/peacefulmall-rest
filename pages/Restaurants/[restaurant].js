@@ -14,6 +14,7 @@ import RestaurantSideBar from '../../components/RestaurantSideBar/RestaurantSide
 import MenuItem from '../../components/MenuItem/MenuItem.js';
 
 import _ from 'lodash'
+import dishes from '../../data/dishes';
 
 const catNames = [
   'Soup',
@@ -30,19 +31,8 @@ const catNames = [
   'Beverages'
 ];
 
-const dish = [
-  {
-    id : 1,
-    name: "This is dish's name",
-    description: `This is description. This is description. This is description. This is description. This
-    is description. This is description.`,
-    price: "14.00"
-  }
-]
-
 const category = () => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
-  const [dishes, setDishes] = useState(data);
   const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
 
@@ -72,7 +62,7 @@ const category = () => {
             {/* <Slider> */}
             {catNames.map((item, i) => {
               return (
-              <Label color="black" key={i} style={{margin: 5, padding: 15}}>
+              <Label color="black" key={i} style={{margin: 5, padding: 15, }}>
                 {item}
               </Label>
             )})}
@@ -85,7 +75,7 @@ const category = () => {
                   <ItemWrapper>
                     {_.times(4, (i) => (
                     <div key={i}>
-                      <MenuItem item={dish[0]}/>
+                      <MenuItem item={dishes[0]}/>
                       </div>
                     ))}
                   </ItemWrapper>

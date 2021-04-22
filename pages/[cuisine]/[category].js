@@ -8,6 +8,7 @@ import SliderTitle from '../../components/SliderTitle';
 import { Card, Image, Icon, Grid, Container } from 'semantic-ui-react';
 import SearchBanner from '../../components/SearchBanner/SearchBanner.js';
 import TopBar from '../../components/TopBar/TopBar.js';
+import DishCards from '../../components/DishCards/DishCards.js';
 
 const category = () => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
@@ -48,7 +49,8 @@ const category = () => {
       <Container style={{ marginTop: 50 }}>
         <SliderTitle title={router.query.category + ' - ' + router.query.cuisine} hideViewAll />
         <Grid stackable doubling columns={4}>
-          {dishes[0] &&
+            <DishCards />
+          {/* {dishes[0] &&
             dishes.map((item, i) => {
               return (
                 <Grid.Column>
@@ -67,7 +69,7 @@ const category = () => {
                   </Card>
                 </Grid.Column>
               );
-            })}
+            })} */}
         </Grid>
       </Container>
     </>

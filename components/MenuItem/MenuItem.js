@@ -3,62 +3,77 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { selectedItem as itemAtom } from '../../data/atoms.js';
-import { Grid, Divider, Modal, Button, Icon } from 'semantic-ui-react';
-import ItemDetails from '../ItemDetails/ItemDetails.js';
+import { Grid, Divider } from 'semantic-ui-react';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
-import BottomAddBar from '../BottomAddBar/BottomAddBar.js';
+import ItemModal from '../ItemModal/';
 
-const MenuItem = ({ item }) => {
+const MenuItem = ({ item, isVCard }) => {
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useRecoilState(itemAtom);
-  const IMG_URL = `https://source.unsplash.com/featured/?dinning, steak${Math.floor(
-    Math.random() * 10000
-  )}`;
+  const IMG_URL = `/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`;
   const isDesktop = useDesktopMediaQuery();
 
-  const [open, setOpen] = useState(false);
   const [qty, setQty] = useState(0);
+  const [open, setOpen] = useState(false);
 
   const route = (item) => {
     console.log(item);
     setSelectedItem({ ...item, img: IMG_URL });
+
     isDesktop ? setOpen(true) : router.push('/item/' + item);
   };
 
-  return (
-    <>
-      <ItemModal open={open} size="tiny">
-        <Modal.Content scrolling style={{ maxHeight: '80vh', padding: 0 }}>
-          <ItemDetails setOpen={setOpen} />
-        </Modal.Content>
-      </ItemModal>
+  const H_Card = () => {
+    return (
+      <>
+        <ItemModal open={open} setOpen={setOpen} />
+        <div
+          onClick={() => {
+            route(item);
+          }}>
+          <Grid>
+            <Grid.Column width={3}>
+              <Img src={IMG_URL} />
+            </Grid.Column>
+            <Grid.Column width={13} style={{ paddingLeft: 0 }}>
+              <H4>{item.name}</H4>
+              <Description>{item.description}</Description>
+              <H4>${item.price}</H4>
+            </Grid.Column>
+          </Grid>
+          <Divider />
+        </div>
+      </>
+    );
+  };
 
-      <div
-        onClick={() => {
-          route(item);
-        }}>
-        <Grid>
-          <Grid.Column width={3}>
+  const V_Card = () => {
+    return (
+      <>
+        <ItemModal open={open} setOpen={setOpen} />
+        <div>
+          <VCardContainer onClick={() => route(item)}>
             <Img src={IMG_URL} />
-          </Grid.Column>
-          <Grid.Column width={13} style={{ paddingLeft: 0 }}>
             <H4>{item.name}</H4>
-            <Description>{item.description}</Description>
-            <H4>${item.price}</H4>
-          </Grid.Column>
-        </Grid>
-        <Divider />
-      </div>
-    </>
-  );
-};
+            <H4>$12.00</H4>
+          </VCardContainer>
+        </div>
+      </>
+    );
+  };
 
-const ItemModal = styled(Modal)`
-  /* height: calc(100vh - 70px);  */
-  /* overflow-y: scroll; */
+  return <>{isVCard ? <V_Card /> : <H_Card />}</>;
+};
+const VCardContainer = styled.div`
+  display: inline-block;
+  position: relative;
+  margin: 5px;
+  width: 130px;
+  height: 165px;
 `;
 const H4 = styled.h4`
   margin: 0;
+  white-space: initial;
 `;
 const Img = styled.img`
   width: 100%;

@@ -1,6 +1,6 @@
 import { useEffect, useState, createRef } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link'
+import Link from 'next/link';
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
@@ -23,9 +23,11 @@ import Slider from '../../components/Slider/Slider.js';
 import PopularDishes from '../../components/PopularDishes/PopularDishes.js';
 import RestaurantSideBar from '../../components/RestaurantSideBar/RestaurantSideBar.js';
 import MenuItem from '../../components/MenuItem/MenuItem.js';
+import RestaurantMenu from '../../components/RestaurantMenu/RestaurantMenu.js';
 
 import _ from 'lodash';
 import dishes from '../../data/dishes';
+import RestaurantTaps from '../../components/RestaurantTaps/RestaurantTaps.js';
 
 const catNames = [
   'Soup',
@@ -42,26 +44,30 @@ const catNames = [
   'Beverages'
 ];
 
-
 const category = () => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
   const labelRef = createRef();
-  console.log(router.query.restaurant)
+  console.log(router.query.restaurant);
 
   return (
     <>
-    <div style={{position: "fixed", top: 60}}>
-      <SearchBanner />
-    </div>
+      <div style={{ position: 'fixed', top: 60 }}>
+        <SearchBanner />
+      </div>
       <Container style={{ marginTop: 100 }}>
         <Grid column={2}>
           <RestaurantSideBar />
 
           <Grid.Column
             width={11}
-            style={{ paddingLeft: 20, height: 'calc(100vh - 140px)', overflowY: 'scroll', scrollBehavior: "smooth" }}>
+            style={{
+              paddingLeft: 20,
+              height: 'calc(100vh - 140px)',
+              overflowY: 'scroll',
+              scrollBehavior: 'smooth'
+            }}>
             <Ref innerRef={labelRef}>
               <div>
                 <Title>Peaceful Restaurant</Title>
@@ -76,40 +82,9 @@ const category = () => {
                   <PopularDishes hideViewAll />
                 </Slider>
 
-                <Sticky offset={120} context={labelRef}>
-                  <div style={{ backgroundColor: 'white' }}>
-                    <h2 style={{ padding: "10px 0 10px 0" }}>Full Menu</h2>
-                  </div>
-                  <CatWrapper>
-                    {catNames.map((item, i) => {
-                      return (
-                        <a href={"/restaurants/" + router.query.restaurant + "#" + i}>
-                            <Label
-                              color="black"
-                              key={i}
-                              style={{ margin: 5, padding: 15 }}>
-                              {item}
-                            </Label>
-                        </a>
-                      );
-                    })}
-                  </CatWrapper>
-                </Sticky>
+                <RestaurantTaps  labelRef={labelRef}/>
 
-                {catNames.map((item, i) => {
-                  return (
-                    <Segment raised>
-                      <CatTitle id={i}>{item}</CatTitle>
-                      <ItemWrapper>
-                        {_.times(4, (i) => (
-                          <div key={i}>
-                            <MenuItem item={dishes[0]} />
-                          </div>
-                        ))}
-                      </ItemWrapper>
-                    </Segment>
-                  );
-                })}
+                {/* <RestaurantMenu labelRef={labelRef}/> */}
               </div>
             </Ref>
           </Grid.Column>
@@ -143,8 +118,7 @@ const Title = styled.h1`
 `;
 const CatTitle = styled.div`
   margin-bottom: 20px;
-  cursor: pointer;
-  padding-top: 180px; 
+  padding-top: 180px;
   margin-top: -160px;
   font-size: 24px;
   font-weight: bold;

@@ -16,7 +16,8 @@ import {
   Label,
   Divider,
   Ref,
-  Sticky
+  Sticky,
+  Visibility
 } from 'semantic-ui-react';
 import SearchBanner from '../../components/SearchBanner/SearchBanner.js';
 import Slider from '../../components/Slider/Slider.js';
@@ -51,14 +52,15 @@ const restaurant = () => {
   const isDesktop = useDesktopMediaQuery();
   const labelRef = createRef();
   console.log(router.query.restaurant);
-
+  
   return (
     <>
-      <div style={{ position: 'fixed', top: 60 }}>
+      <div style={{ position: 'fixed', top: 55 }}>
         <SearchBanner />
       </div>
       <Container style={{ marginTop: 100 }}>
         <Grid column={2}>
+
           <Grid.Column
             width={4}
             style={{
@@ -76,25 +78,25 @@ const restaurant = () => {
               overflowY: 'scroll',
               scrollBehavior: 'smooth'
             }}>
-            <Ref innerRef={labelRef}>
-              <div>
-                <Title>Peaceful Restaurant</Title>
-                <Description style={{ marginBottom: 60 }}>
-                  globally inspired restaurant focused on using the freshest ingredients and making
-                  our food and drinks from scratch. We believe in using the best proteins and
-                  produce that is locally sourced and thinking consciously about how the product is
-                  produced, raised and grown.
+              <Ref innerRef={labelRef}>
+                <div>
+                  <Title>Peaceful Restaurant</Title>
+                  <Description style={{ marginBottom: 60 }}>
+                    globally inspired restaurant focused on using the freshest ingredients and making
+                    our food and drinks from scratch. We believe in using the best proteins and
+                    produce that is locally sourced and thinking consciously about how the product is
+                    produced, raised and grown.
                 </Description>
 
-                <Slider topic="Popular Items">
-                  <PopularDishes hideViewAll />
-                </Slider>
+                  <Slider topic="Popular Items">
+                    <PopularDishes hideViewAll />
+                  </Slider>
 
-                <RestaurantTaps labelRef={labelRef} />
+                  <RestaurantTaps labelRef={labelRef} />
 
-                {/* <RestaurantMenu labelRef={labelRef}/> */}
-              </div>
-            </Ref>
+                  {/* <RestaurantMenu labelRef={labelRef}/> */}
+                </div>
+              </Ref>
           </Grid.Column>
         </Grid>
         {/* <Slider topic="Fastest Near you">

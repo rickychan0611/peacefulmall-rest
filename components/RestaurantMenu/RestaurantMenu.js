@@ -43,8 +43,8 @@ const RestaurantMenu = ({ labelRef }) => {
             <Label
               color="black"
               key={i}
-              style={{ margin: 5, padding: 15, cursor: 'pointer', zIndex: 999 }}
-              onClick={() => router.push('/restaurants/' + router.query.restaurant + '#' + i)}>
+              style={{ margin: 5, padding: "10px 15px 10px 15px", cursor: 'pointer', zIndex: 999 }}
+              onClick={() => router.push('/restaurant/' + router.query.restaurant + '#' + i)}>
               {item}
             </Label>
           );

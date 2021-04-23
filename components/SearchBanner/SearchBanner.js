@@ -60,7 +60,7 @@ const InputWrapper = styled.div`
   justify-content: center;
   align-items: center;
   background-color: white;
-  padding: 9.9px;
+  padding: 10px;
 `;
 
 const StyledInput = styled.input`

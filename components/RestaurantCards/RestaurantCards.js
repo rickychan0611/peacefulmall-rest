@@ -71,6 +71,7 @@ const Card = styled.div`
   position: relative;
   margin: 10px;
   width: 250px;
+  cursor: pointer;
 `;
 const Img = styled.img`
   width: 250px;

@@ -28,6 +28,7 @@ import RestaurantMenu from '../../components/RestaurantMenu/RestaurantMenu.js';
 import _ from 'lodash';
 import dishes from '../../data/dishes';
 import RestaurantTaps from '../../components/RestaurantTaps/RestaurantTaps.js';
+import RestaurantCards from '../../components/RestaurantCards/RestaurantCards.js';
 
 const catNames = [
   'Soup',
@@ -96,6 +97,9 @@ const category = () => {
             </Ref>
           </Grid.Column>
         </Grid>
+        {/* <Slider topic="Fastest Near you">
+            <RestaurantCards/>
+          </Slider> */}
       </Container>
     </>
   );

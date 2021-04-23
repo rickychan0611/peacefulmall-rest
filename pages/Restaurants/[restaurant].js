@@ -58,10 +58,17 @@ const category = () => {
       </div>
       <Container style={{ marginTop: 100 }}>
         <Grid column={2}>
-          <RestaurantSideBar />
+          <Grid.Column
+            width={4}
+            style={{
+              height: 'calc(100vh - 140px)',
+              overflowY: 'scroll'
+            }}>
+            <RestaurantSideBar />
+          </Grid.Column>
 
           <Grid.Column
-            width={11}
+            width={12}
             style={{
               paddingLeft: 20,
               height: 'calc(100vh - 140px)',
@@ -82,7 +89,7 @@ const category = () => {
                   <PopularDishes hideViewAll />
                 </Slider>
 
-                <RestaurantTaps  labelRef={labelRef}/>
+                <RestaurantTaps labelRef={labelRef} />
 
                 {/* <RestaurantMenu labelRef={labelRef}/> */}
               </div>

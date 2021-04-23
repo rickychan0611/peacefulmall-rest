@@ -5,14 +5,14 @@ import RestaurantMenu from '../RestaurantMenu/RestaurantMenu';
 const RestaurantTaps = ({ labelRef }) => {
   const panes = [
     {
-      menuItem: 'Full Menu',
+      menuItem: {icon: "food", content: 'Full Menu'},
       pane: {
         key: 'Menu',
         content: <RestaurantMenu labelRef={labelRef} />
       }
     },
     {
-      menuItem: 'Reviews',
+      menuItem: {icon: "star", content: 'Reviews'},
       pane: {
         key: 'tab2',
         content: 'This tab has center-aligned text',
@@ -20,7 +20,7 @@ const RestaurantTaps = ({ labelRef }) => {
       }
     },
     {
-      menuItem: 'Features',
+      menuItem: {icon: "newspaper outline", content: 'Feature Articles'},
       pane: {
         key: 'tab3',
         content: (

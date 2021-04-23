@@ -23,7 +23,7 @@ const RestaurantSideBar = () => {
       </Modal>
 
         <Img
-          src={`http://vieamaggi.com/wp-content/uploads/2018/02/5564B6D3-9EB0-4705-ADE1-9098E1F5F248.jpeg`}
+          src={`/storefront.jpg`}
         />
         <List style={{ padding: 10 }}>
           <List.Item onClick={() => setOpen(true)}>

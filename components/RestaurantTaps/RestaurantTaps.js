@@ -15,8 +15,11 @@ const RestaurantTaps = ({ labelRef }) => {
       menuItem: {icon: "star", content: 'Reviews'},
       pane: {
         key: 'tab2',
-        content: 'This tab has center-aligned text',
-        textAlign: 'center'
+        content: (
+        <div style={{height: "60vh"}}>
+          This tab will contain REVIEWS
+        </div>
+        )
       }
     },
     {
@@ -24,9 +27,9 @@ const RestaurantTaps = ({ labelRef }) => {
       pane: {
         key: 'tab3',
         content: (
-          <div>
-            This tab contains a <Label>Features</Label> element
-          </div>
+          <div style={{height: "60vh"}}>
+          This tab will contain Feature Articles
+        </div>
         )
       }
     }

@@ -26,7 +26,13 @@ const data = [
 
 const CuisineSlider = ({ contextRef }) => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
-  const isDesktop = useDesktopMediaQuery();
+  const desktop = useDesktopMediaQuery();
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    setIsDesktop(desktop)
+  },[desktop]);
+  
   return (
     <div style={{cursor: "pointer"}}>
       <SliderTitle title="Cuisines" />
@@ -59,14 +65,14 @@ const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: ${p => JSON.stringify(p.isDesktop) === "true" ? "170px" : "100px"};
+  height: ${p => !p.isDesktop ? "100px" : "170px"};
   padding-top: 10px;
 `;
 const CatCard = styled.div`
   display: inline-block;
   position: relative;
   margin-right: 10px;
-  width: ${p => JSON.stringify(p.isDesktop) === "true" ? "150px" : "100px"};
+  width: ${p => !p.isDesktop ? "100px" : "150px"};
 `;
 const Image = styled.img`
   width: 100%;
@@ -77,9 +83,9 @@ const Text = styled.div`
   background-color: rgba(0, 0, 0, 0.55);
   text-shadow: 0px 0px 10px black;
   position: absolute;
-  padding: ${p => JSON.stringify(p.isDesktop) === "true" ? "20px" : "3px"};
-  bottom: ${p => JSON.stringify(p.isDesktop) === "true" ? "calc(50% - 30px)" : "25px"};
-  font-size: ${p => JSON.stringify(p.isDesktop) === "true" ? "1.1rem" : ".9rem"};
+  padding: ${p => !p.isDesktop ? "3px" : "20px"};
+  bottom: ${p => !p.isDesktop ?  "25px" : "calc(50% - 30px)"};
+  font-size: ${p => !p.isDesktop ? ".9rem" : "1.1rem"};
   width: 100%;
   text-align: center;
   font-weight: 600;

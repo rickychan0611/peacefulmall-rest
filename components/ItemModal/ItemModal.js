@@ -8,7 +8,7 @@ const ItemModal = ({ open, setOpen }) => {
   return (
     <>
       <ModalContainer open={open} size="tiny" closeIcon onClose={() => setOpen(false)}>
-        <Modal.Content scrolling style={{ maxHeight: '80vh', padding: 0 }}>
+        <Modal.Content scrolling style={{maxHeight: '80vh', padding: 0 }}>
           <ItemDetails setOpen={setOpen} />
         </Modal.Content>
       </ModalContainer>

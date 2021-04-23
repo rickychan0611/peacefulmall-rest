@@ -66,7 +66,6 @@ const Container = styled.div`
   padding: 20px;
   padding-bottom: 90px;
   min-height: calc(100vh - 60px);
-  overflow-y: scroll;
 `;
 const Description = styled.h4`
   color: grey;

@@ -45,7 +45,7 @@ const catNames = [
   'Beverages'
 ];
 
-const category = () => {
+const restaurant = () => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
@@ -150,4 +150,4 @@ const Description = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
-export default category;
+export default restaurant;

@@ -47,10 +47,7 @@ const RestaurantCards = ({topic}) => {
           dishes.map((item, i) => {
             return (
               <Card key={i} onClick={()=>{
-                router.push({
-                  pathname: '/restaurants/[restaurant]',
-                  query: {restaurant: "Restaurant Name"}
-                })
+                router.push('/restaurant/' + "peaceful-restaurant")
               }}>
                 <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} />
                 <Name>Restaurant Name</Name>
@@ -71,7 +68,7 @@ const Card = styled.div`
   position: relative;
   margin: 10px;
   width: 250px;
-  cursor: pointer;
+  // cursor: pointer;
 `;
 const Img = styled.img`
   width: 250px;

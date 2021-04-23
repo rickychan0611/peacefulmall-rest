@@ -7,6 +7,7 @@ import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom, selectedItem as itemAtom } from '../../data/atoms.js';
+import { Button, Label, Segment } from 'semantic-ui-react';
 
 const DishCards = ({ topic, featured }) => {
   const isDesktop = useDesktopMediaQuery();
@@ -26,12 +27,17 @@ const DishCards = ({ topic, featured }) => {
       temp2.push(item['menu-items']);
     });
     temp2.map((item) => {
-      let IMG_URL = `/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`;
+      let IMG_URL = `/img/food (${Math.floor(Math.random() * (86 - 1) + 1)}).jpg`;
 
       // const IMG_URL = `https://source.unsplash.com/featured/?dinning, steak${Math.floor(
       //   Math.random() * 10000
       // )}`;
-      temp3.push({ ...item, img: IMG_URL, description: "This is description. This is description. This is description. This is description. This is description. This is description. " });
+      temp3.push({
+        ...item,
+        img: IMG_URL,
+        description:
+          'This is description. This is description. This is description. This is description. This is description. This is description. '
+      });
     });
     temp3 = [].concat.apply([], temp3);
 
@@ -65,29 +71,36 @@ const DishCards = ({ topic, featured }) => {
               onClick={() => {
                 route(item);
               }}>
-              <Img src={item.img} />
-              <Name>{item.name}</Name>
-              <Description>{item.description}</Description>
-              <Price>50% off - $12.00</Price>
-              <Description>Restaurant Name ⭐⭐⭐⭐⭐</Description>
+              <Label as="a" color="red" ribbon style={{position: "absolute", left: -13, margin: 0}}>
+                10% OFF
+              </Label>
+              <Img src={item.img}/>
+                <Name>Dish's Name</Name>
+                <Description>{item.description}</Description>
+                <Price><span style={{textDecoration: "line-through", marginRigth: 5, color: "black"}}>$15.00 </span> $12.00</Price>
+                <Description>Restaurant Name </Description>
+                <Button basic size="tiny" style={{marginTop: 5, padding: 10, color: "red"}}>Order Now! </Button>
             </Card>
+            // </Segment>
           );
         })}
     </>
   );
 };
 
+const Wrapper = styled.div`
+  padding: 0px 10px 10px 10px;
+`;
 const Card = styled.div`
   display: inline-block;
   position: relative;
   margin: 10px;
-  width: 100%;
-  max-width: 250px;
+  width: 200px;
   cursor: pointer;
 `;
 const Img = styled.img`
-  width: 250px;
-  height: 250px;
+  width: 100%;
+  height: 180px;
   object-fit: cover;
 `;
 const Name = styled.div`

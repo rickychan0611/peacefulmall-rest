@@ -35,7 +35,7 @@ const CuisineSlider = ({ contextRef }) => {
   
   return (
     <div style={{cursor: "pointer"}}>
-      <SliderTitle title="Cuisines" />
+      <SliderTitle title="Choose a Cuisine Style" icon="leaf"/>
       <Sticky offset={50} context={contextRef}>
         <Container isDesktop={isDesktop} horizontal nativeMobileScroll hideScrollbars={!isDesktop}>
           <ItemWrapper isDesktop={isDesktop}>
@@ -65,14 +65,14 @@ const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: ${p => !p.isDesktop ? "100px" : "170px"};
+  height: ${p => !p.isDesktop ? "100px" : "130px"};
   padding-top: 10px;
 `;
 const CatCard = styled.div`
   display: inline-block;
   position: relative;
-  margin-right: 10px;
-  width: ${p => !p.isDesktop ? "100px" : "150px"};
+  margin-right: 15px;
+  width: ${p => !p.isDesktop ? "100px" : "110px"};
 `;
 const Image = styled.img`
   width: 100%;
@@ -83,9 +83,9 @@ const Text = styled.div`
   background-color: rgba(0, 0, 0, 0.55);
   text-shadow: 0px 0px 10px black;
   position: absolute;
-  padding: ${p => !p.isDesktop ? "3px" : "20px"};
-  bottom: ${p => !p.isDesktop ?  "25px" : "calc(50% - 30px)"};
-  font-size: ${p => !p.isDesktop ? ".9rem" : "1.1rem"};
+  padding: ${p => !p.isDesktop ? "3px" : "7px"};
+  bottom: ${p => !p.isDesktop ?  "25px" : "5px"};
+  font-size: ${p => !p.isDesktop ? ".9rem" : "1rem"};
   width: 100%;
   text-align: center;
   font-weight: 600;

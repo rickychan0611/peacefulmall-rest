@@ -1,40 +1,49 @@
 import { Divider, Label, Icon, Grid } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
 import { useRecoilState } from 'recoil';
-import  { selections as selectionsAtom }  from '../../data/atoms.js';
+import { selections as selectionsAtom } from '../../data/atoms.js';
 
-const SliderTitle = ({ title, dishChildren, hideViewAll }) => {
+const SliderTitle = ({ title, dishChildren, hideViewAll, icon }) => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
 
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <>
-      <Grid verticalAlign='middle'>
-        <Grid.Column floated="left" width={12} >
+      <Grid verticalAlign="middle">
+        <Grid.Column floated="left" width={12}>
           <Container>
-          <Title>{title}</Title>
-          {selections.cuisine !== 'all' && (
-            <Label as="a" color="blue" onClick={() => setSelections(prev => ({...prev, cuisine: 'All'}))}>
-              {selections.cuisine}
-              <Icon name="close" />
-            </Label>
-          )}
+            <Title>
+              {icon && <Icon name={icon} size="small" style={{ marginRight: 10 }} />}
+              {title}
+            </Title>
+            {selections.cuisine !== 'all' && (
+              <Label
+                as="a"
+                color="blue"
+                onClick={() => setSelections((prev) => ({ ...prev, cuisine: 'All' }))}>
+                {selections.cuisine}
+                <Icon name="close" />
+              </Label>
+            )}
           </Container>
         </Grid.Column>
         <Grid.Column floated="right" textAlign="right" width={4}>
-        <a style={{cursor: "pointer"}} onClick={() => {
-            setSelections(prev => ({...prev, category: title}))
-            router.push({
-              pathname: '/[cuisine]/[category]',
-              query: {cuisine: selections.cuisine, category: title}
-            })
-          }}>{!hideViewAll && 'View All >'}</a>
+          <a
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              setSelections((prev) => ({ ...prev, category: title }));
+              router.push({
+                pathname: '/[cuisine]/[category]',
+                query: { cuisine: selections.cuisine, category: title }
+              });
+            }}>
+            {!hideViewAll && 'View All >'}
+          </a>
         </Grid.Column>
       </Grid>
-      {/* <Divider /> */}
     </>
   );
 };
@@ -47,7 +56,8 @@ const Container = styled.div`
 const Title = styled.h2`
   color: black;
   margin: 0 10px 0 0;
-  display: inline;
+  display: flex;
+  align-items: center;
 `;
 
 export default SliderTitle;

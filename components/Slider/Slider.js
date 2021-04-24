@@ -5,12 +5,12 @@ import ScrollContainer from 'react-indiana-drag-scroll';
 import { data } from '../../data/restaurants';
 import SliderTitle from '../SliderTitle';
 
-const Slider = ({topic, children}) => {
+const Slider = ({topic, children, icon}) => {
   const isDesktop = useDesktopMediaQuery();
 
   return (
     <>
-      <SliderTitle title={topic} dishChildren={children}/>
+      <SliderTitle title={topic} icon={icon} dishChildren={children}/>
       <Container horizontal nativeMobileScroll hideScrollbars={!isDesktop ? true : false}>
         {children}
       </Container>

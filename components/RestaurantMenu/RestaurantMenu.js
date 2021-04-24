@@ -28,11 +28,10 @@ const catNames = [
   'Beverages'
 ];
 
-const RestaurantMenu = ({ labelRef }) => {
+const RestaurantMenu = ( ) => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
-  console.log(router.query.restaurant);
 
   return (
     <Container>
@@ -74,10 +73,9 @@ const RestaurantMenu = ({ labelRef }) => {
 const Container = styled.div`
 `;
 const MenuContainer = styled.div`
-  overflow: scroll;
-  height: 60vh;
+  overflow-y: scroll;
+  height: 67vh;
   scroll-behavior: smooth;
-
 `;
 const CatWrapper = styled.div`
   display: flex;
@@ -98,8 +96,8 @@ const Title = styled.h1`
 `;
 const CatTitle = styled.div`
   margin-bottom: 20px;
-  /* padding-top: 120px;
-  margin-top: -100px; */
+  /* padding-top: 20px;
+  margin-top: -10px; */
   font-size: 24px;
   font-weight: bold;
 `;

@@ -1,8 +1,8 @@
 import { Button, Container, Icon, Image, Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
 
-const SearchBanner = () => (
-  <BannerContainer>
+const SearchBanner = ( {hide} ) => (
+  <BannerContainer className={hide}>
     {/* <BannerImage src="/rest-banner.jpg" /> */}
     <InputContainer style={{ display: 'flex' }}>
     <Icon size='large' name='map marker alternate' style={{color: "white"}}/>

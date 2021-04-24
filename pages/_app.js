@@ -12,9 +12,7 @@ class MyApp extends App {
       <RecoilRoot>
         <SideMenu>
           <TopBar/>
-          <div style={{paddingTop: 55}}>
           <Component {...pageProps} />
-          </div>
         </SideMenu>
       </RecoilRoot>
     );

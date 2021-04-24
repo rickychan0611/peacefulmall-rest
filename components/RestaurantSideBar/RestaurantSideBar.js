@@ -26,6 +26,8 @@ const RestaurantSideBar = () => {
           src={`/storefront.jpg`}
         />
         <List style={{ padding: 10 }}>
+        <Header>Peaceful Restaurant</Header>
+
           <List.Item onClick={() => setOpen(true)}>
             <List.Icon name="map marker alternate" style={{ margiTop: 30 }} />
             <List.Content>

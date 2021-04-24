@@ -36,7 +36,7 @@ const restaurant = () => {
       <SearchBannerWrapper>
         <SearchBanner hide={hide} />
       </SearchBannerWrapper>
-      <Container style={{ paddingTop: hide === "hidden" ? 110 : 180}}>
+      <Container style={{ paddingTop: hide === 'hidden' ? 110 : 180 }}>
         <Grid column={2}>
           <Grid.Column
             width={4}
@@ -66,14 +66,21 @@ const restaurant = () => {
                     and produce that is locally sourced and thinking consciously about how the
                     product is produced, raised and grown.
                   </Description>
-
                   <Slider topic="Popular Items">
                     <PopularDishes hideViewAll />
                   </Slider>
                   <TabsContainer id="tabs">
                     <RestaurantTabs labelRef={labelRef} />
                   </TabsContainer>
-                  {/* <RestaurantMenu labelRef={labelRef}/> */}
+
+                  <br />
+                  <br />
+                  <br />
+                  <br />
+                  <Slider topic="Other restaurants you may like">
+                    <PopularDishes hideViewAll />
+                  </Slider>
+
                 </div>
               </Visibility>
             </Ref>

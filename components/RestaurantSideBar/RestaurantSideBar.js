@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { Grid, List, Header, Modal } from 'semantic-ui-react';
-import ReviewFeed from '../../components/ReviewFeed.js/ReviewFeed.js';
+import ReviewFeed from '../ReviewFeed/ReviewFeed.js';
 
 const RestaurantSideBar = () => {
   const [open, setOpen] = useState(false);

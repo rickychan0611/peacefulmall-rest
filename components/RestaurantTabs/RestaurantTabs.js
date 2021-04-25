@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Label, Tab } from 'semantic-ui-react';
 import RestaurantMenu from '../RestaurantMenu/RestaurantMenu';
-import ReviewFeed from '../ReviewFeed.js';
+import ReviewFeed from '../ReviewFeed/index.js';
 import styled from 'styled-components';
 
 import { useRecoilState } from 'recoil';

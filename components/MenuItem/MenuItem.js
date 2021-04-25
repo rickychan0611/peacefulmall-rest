@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { selectedItem as itemAtom } from '../../data/atoms.js';
-import { Grid, Divider } from 'semantic-ui-react';
+import { Grid, Divider, Icon } from 'semantic-ui-react';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import ItemModal from '../ItemModal/';
 
@@ -28,24 +28,27 @@ const MenuItem = ({ item, isVCard }) => {
       <>
         <ItemModal open={open} setOpen={setOpen} />
 
-        <div
+        <HCardContainer
           onClick={() => {
             route(item);
           }}>
           <Divider />
 
           <Wrapper>
-            <H_ImgContainer>
+            <div>
               <H_Img src={IMG_URL} />
-            </H_ImgContainer>
+            </div>
             <div style={{ padding: "0px 10px" }}>
               <H4>{item.name}</H4>
               <Description>{item.description}</Description>
-              <H4>${item.price}</H4>
+              <Wrapper>
+                <H4>${item.price}</H4>
+                <PlusSign><Icon name="plus circle" color="red" /></PlusSign>
+              </Wrapper>
             </div>
           </Wrapper>
 
-        </div>
+        </HCardContainer>
       </>
     );
   };
@@ -54,13 +57,18 @@ const MenuItem = ({ item, isVCard }) => {
     return (
       <>
         <ItemModal open={open} setOpen={setOpen} />
-        <div>
-          <VCardContainer onClick={() => route(item)}>
+        <VCardContainer onClick={() => route(item)}>
+          <div>
             <Img src={IMG_URL} />
-            <H4>{item.name}</H4>
-            <H4>$12.00</H4>
-          </VCardContainer>
-        </div>
+          <H4 style={{ padding: "0 5px" }}>{item.name}</H4>
+          </div>
+          <div style={{ padding: "0 5px" }}>
+            <Wrapper>
+              <H4>$14.00</H4>
+              <PlusSign><Icon name="plus circle" color="red" /></PlusSign>
+            </Wrapper>
+          </div>
+        </VCardContainer>
       </>
     );
   };
@@ -71,20 +79,31 @@ const Wrapper = styled.div`
   display : flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  justify-content: space-between;
   `;
 const VCardContainer = styled.div`
-  display: inline-block;
+  display : flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
   position: relative;
-  margin: 5px;
+  margin: 5px 15px 15px 5px;
   width: 130px;
-  height: 165px;
+  height: 155px;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: solid 1px #e9e9e9;
+  cursor: pointer;
 `;
 const H4 = styled.h4`
   margin: 0;
   white-space: initial;
 `;
-const H_ImgContainer = styled.div`
-/* padding-top: 5px; */
+const PlusSign = styled.div`
+  margin: 0;
+  white-space: initial;
+`;
+const HCardContainer = styled.div`
+  cursor: pointer;
 `;
 const H_Img = styled.img`
   width: 90px;

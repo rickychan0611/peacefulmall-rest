@@ -3,6 +3,8 @@ import { Feed, Icon } from 'semantic-ui-react'
 import styled from 'styled-components';
 
 const ReviewFeed = () => (
+  <>
+   <Title>Reviews</Title>
   <Feed>
     <Feed.Event>
       <Feed.Label>
@@ -105,11 +107,18 @@ const ReviewFeed = () => (
       </Feed.Content>
     </Feed.Event>
   </Feed>
+  </>
 )
 
 const Img = styled.img`
   min-width: 50px;
   height: 50px;
   object-fit: cover;
+`;
+const Title = styled.h2`
+  color: black;
+  margin: 0 10px 10px 0;
+  display: flex;
+  align-items: center;
 `;
 export default ReviewFeed

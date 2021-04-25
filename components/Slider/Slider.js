@@ -11,7 +11,8 @@ const Slider = ({topic, children, icon, hideViewAll}) => {
   return (
     <>
       <SliderTitle title={topic} icon={icon} dishChildren={children} hideViewAll={hideViewAll}/>
-      <Container horizontal nativeMobileScroll hideScrollbars={!isDesktop ? true : false}>
+      <Container horizontal nativeMobileScroll hideScrollbars={!isDesktop ? true : false}
+      style={{zIndex: 1000}}>
         {children}
       </Container>
     </>
@@ -23,6 +24,7 @@ const Container = styled(ScrollContainer)`
   white-space: nowrap;
   display: flex;
   margin-bottom: 50px;
+  z-index: 100;
 `;
 
 export default Slider;

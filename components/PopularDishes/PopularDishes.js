@@ -63,10 +63,11 @@ const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 380px;
+  height: 360px;
   /* height: ${p => p.isDesktop ? "330px" : "330px"}; */
   padding-top: 10px;
   align-items: stretch;
+  /* overflow-x: scroll; */
 `;
 
 const Card = styled.div`

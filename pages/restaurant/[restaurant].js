@@ -1,4 +1,5 @@
-import { useEffect, useState, createRef } from 'react';
+import { useEffect, useState } from 'react';
+import _ from 'lodash';
 import { useRouter } from 'next/router';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import { useRecoilState } from 'recoil';
@@ -11,8 +12,8 @@ import Slider from '../../components/Slider/';
 import PopularDishes from '../../components/PopularDishes/';
 import RestaurantSideBar from '../../components/RestaurantSideBar/';
 import RestaurantMenu from '../../components/RestaurantMenu/';
-
-import _ from 'lodash';
+import Footer from '../../components/Footer/';
+import ReviewFeed from '../../components/ReviewFeed/index.js';
 import RestaurantTabs from '../../components/RestaurantTabs/RestaurantTabs.js';
 
 const restaurant = () => {
@@ -20,7 +21,6 @@ const restaurant = () => {
 
   const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
-  const labelRef = createRef();
   const [hide, setHide] = useState(false);
 
   const handleScroll = (e, { calculations }) => {
@@ -33,13 +33,13 @@ const restaurant = () => {
   }, []);
 
   return (
-    <div style={{ minHeight: '100vh'}}>
+    <div style={{ minHeight: '100vh' }}>
 
       <SearchBannerWrapper>
         <SearchBanner hide={hide} />
       </SearchBannerWrapper>
 
-      <Container style={{ paddingTop: hide === 'hidden' ? 110 : 180}}>
+      <Container style={{ paddingTop: hide === 'hidden' ? 110 : 180 }}>
 
         <Grid column={2}>
           <Grid.Column
@@ -59,12 +59,11 @@ const restaurant = () => {
               padding: "0 20px",
               // height: 'calc(100vh - 100px)',
             }}>
-            <Ref innerRef={labelRef}>
               <Visibility offset={[10, 10]} onUpdate={handleScroll}>
                 <div>
 
                   <Wrapper>
-                      <Avatar src='/logo-p.png' />
+                    <Avatar src='/logo-p.png' />
                     <div style={{ width: "calc(100% - 50px)" }}>
                       <Title>Peaceful Restaurant</Title>
                       <Description style={{ marginBottom: 60 }}>
@@ -80,19 +79,28 @@ const restaurant = () => {
                     <PopularDishes />
                   </Slider>
 
-                  <RestaurantMenu labelRef={labelRef} />
+                  <RestaurantMenu />
+                  <br />
+                  <hr />
+                  <br />
+                  <ReviewFeed />
+                  <br />
+                  <hr />
+                  <br />
+                  <Slider topic="Restaurants you may like" hideViewAll>
+                    <PopularDishes />
+                  </Slider>
                   {/* <TabsContainer id="tabs">
                     <RestaurantTabs labelRef={labelRef} />
                   </TabsContainer> */}
                 </div>
               </Visibility>
-            </Ref>
           </Grid.Column>
         </Grid>
-        {/* <Slider topic="Fastest Near you">
-            <RestaurantCards/>
-          </Slider> */}
+
       </Container>
+      <Footer />
+
     </div>
   );
 };

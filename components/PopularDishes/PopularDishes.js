@@ -52,13 +52,6 @@ const PopularDishes = ({topic, featured}) => {
           dishes.map((item, i) => {
             return (
               <MenuItem item={item} isVCard/>
-              // <Card key={i}  onClick={() => route(item)}> 
-              //   <Img
-              //     src={`https://source.unsplash.com/featured/?dinning, steak${Math.floor(Math.random() * 10000)}`}
-              //     />
-              //   <Name>{item.name}</Name>
-              //   <Price>$12.00</Price>
-              // </Card>
             );
           })}
     </ItemWrapper>

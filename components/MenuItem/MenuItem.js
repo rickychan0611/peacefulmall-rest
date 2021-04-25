@@ -10,7 +10,7 @@ import ItemModal from '../ItemModal/';
 const MenuItem = ({ item, isVCard }) => {
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useRecoilState(itemAtom);
-  const IMG_URL = `/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`;
+  const IMG_URL = `/img/food (${Math.floor(Math.random() * (86 - 1) + 1)}).jpg`;
   const isDesktop = useDesktopMediaQuery();
 
   const [qty, setQty] = useState(0);
@@ -27,21 +27,24 @@ const MenuItem = ({ item, isVCard }) => {
     return (
       <>
         <ItemModal open={open} setOpen={setOpen} />
+
         <div
           onClick={() => {
             route(item);
           }}>
-          <Grid>
-            <Grid.Column width={3}>
-              <Img src={IMG_URL} />
-            </Grid.Column>
-            <Grid.Column width={13} style={{ paddingLeft: 0 }}>
+          <Divider />
+
+          <Wrapper>
+            <H_ImgContainer>
+              <H_Img src={IMG_URL} />
+            </H_ImgContainer>
+            <div style={{ padding: "0px 10px" }}>
               <H4>{item.name}</H4>
               <Description>{item.description}</Description>
               <H4>${item.price}</H4>
-            </Grid.Column>
-          </Grid>
-          <Divider />
+            </div>
+          </Wrapper>
+
         </div>
       </>
     );
@@ -64,6 +67,11 @@ const MenuItem = ({ item, isVCard }) => {
 
   return <>{isVCard ? <V_Card /> : <H_Card />}</>;
 };
+const Wrapper = styled.div`
+  display : flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  `;
 const VCardContainer = styled.div`
   display: inline-block;
   position: relative;
@@ -74,6 +82,14 @@ const VCardContainer = styled.div`
 const H4 = styled.h4`
   margin: 0;
   white-space: initial;
+`;
+const H_ImgContainer = styled.div`
+/* padding-top: 5px; */
+`;
+const H_Img = styled.img`
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
 `;
 const Img = styled.img`
   width: 100%;

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import { data } from '../../data/restaurants';
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
@@ -46,9 +47,12 @@ const RestaurantCards = ({topic}) => {
         {dishes[0] &&
           dishes.map((item, i) => {
             return (
-              <Card key={i} onClick={()=>{
-                router.push('/restaurant/' + "peaceful-restaurant")
-              }}>
+              <Link href={'/restaurant/' + "peaceful-restaurant"} scroll>
+              <Card key={i} 
+              // onClick={()=>{
+              //   router.push('/restaurant/' + "peaceful-restaurant")
+              // }}
+              >
                 <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} />
                 <Name>Restaurant Name</Name>
                 {/* <Description>{item.description}</Description> */}
@@ -57,6 +61,7 @@ const RestaurantCards = ({topic}) => {
                 <Description>Price Range: 💲💲💲💲</Description>
                 <Description>Reviews: ⭐⭐⭐⭐⭐ (34)</Description>
               </Card>
+              </Link>
             );
           })}
     </>
@@ -68,7 +73,7 @@ const Card = styled.div`
   position: relative;
   margin: 10px;
   width: 250px;
-  // cursor: pointer;
+  cursor: pointer;
 `;
 const Img = styled.img`
   width: 250px;

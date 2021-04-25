@@ -60,7 +60,7 @@ const RestaurantTabs = ({ labelRef }) => {
 const Container = styled.div`
   overflow-y: scroll;
   height: 77vh;
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth; */
 `;
 
 export default RestaurantTabs;

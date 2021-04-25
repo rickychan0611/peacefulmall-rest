@@ -33,7 +33,7 @@ const restaurant = () => {
   }, []);
 
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div id="top">
 
       <SearchBannerWrapper>
         <SearchBanner hide={hide} />
@@ -83,7 +83,9 @@ const restaurant = () => {
                   <br />
                   <hr />
                   <br />
-                  <ReviewFeed />
+                  <Section id="reviews">
+                  <ReviewFeed/>
+                  </Section>
                   <br />
                   <hr />
                   <br />
@@ -105,6 +107,9 @@ const restaurant = () => {
   );
 };
 
+const Section = styled.div`
+  scroll-margin-top: 240px;
+  `;
 const Wrapper = styled.div`
   display : flex;
   flex-direction: row;

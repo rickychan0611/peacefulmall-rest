@@ -5,16 +5,17 @@ import { data } from '../../data/restaurants';
 import ItemModal from '../ItemModal/';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 import { useRecoilState } from 'recoil';
-import { 
-  selections as selectionsAtom, 
+import {
+  selections as selectionsAtom,
   selectedItem as itemAtom,
   activeTabIndex as activeTabAtom,
 } from '../../data/atoms.js';
 import { Button, Label, Segment } from 'semantic-ui-react';
 
-const ReviewCards = ({tab}) => {
+const ReviewCards = ({ tab }) => {
   const isDesktop = useDesktopMediaQuery();
   const [dishes, setDishes] = useState([]);
   const [open, setOpen] = useState(false);
@@ -60,19 +61,18 @@ const ReviewCards = ({tab}) => {
     setDishes(arr);
   }, [selections]);
 
-  const route = (item) => {
-    console.log(item);
-    setActiveTabIndex(tab)
-    router.push('/restaurant/' + "peaceful-restaurant#tabs")
-  };
+  // const route = (item) => {
+  //   console.log(item);
+  //   setActiveTabIndex(tab)
+  //   // router.push({pathname: '/restaurant/' + "peaceful-restaurant#reviews"})
+  // };
   return (
     <>
-        {dishes[0] &&
-          dishes.map((item, i) => {
-            return (
-              <Card key={i} onClick={() => {
-                route(item);
-              }}>
+      {dishes[0] &&
+        dishes.map((item, i) => {
+          return (
+            <Link href={'/restaurant/' + "peaceful-restaurant#reviews"}>
+              <Card key={i} >
                 <Img
                   src={item.img}
                 />
@@ -94,8 +94,9 @@ const ReviewCards = ({tab}) => {
                 <Description>Location: Vacnouver</Description>
                 <Description>Style: Chinese</Description>
               </Card>
-            );
-          })}
+            </Link>
+          );
+        })}
     </>
   );
 };
@@ -109,6 +110,7 @@ const Card = styled.div`
   position: relative;
   margin: 10px;
   width: 250px;
+  cursor: pointer;
 `;
 const Img = styled.img`
   width: 250px;

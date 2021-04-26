@@ -75,10 +75,13 @@ const TopBar = () => {
           <Menu.Item>
             {isDesktop ? (
               <>
-                <Button compact inverted style={{ backgroundColor: '#ff614d', marginRight: 10 }}>
+                <Button compact inverted style={{ backgroundColor: '#ff614d', marginRight: 10, color: "white" }}
+                onClick={()=>router.push('/sign-up')}
+                >
                   Sign up
                 </Button>
-                <Button compact style={{ backgroundColor: 'white' }}>
+                <Button compact style={{ backgroundColor: 'white' }}
+                onClick={()=>router.push('/sign-in')}>
                   Sign in
                 </Button>
               </>

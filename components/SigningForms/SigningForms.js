@@ -1,9 +1,10 @@
 import { set } from 'lodash';
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Message, Segment, Icon, Input } from 'semantic-ui-react'
 import validator from 'validator';
 import passwordValidator from 'password-validator';
+import styled from 'styled-components';
 
 const SigningForms = ({ signUp }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -26,7 +27,7 @@ const SigningForms = ({ signUp }) => {
   const validation = () => {
     new Promise((resolve, reject) => {
       if (!inputs.firstName) {
-        signUp &&  reject()
+        signUp && reject()
       }
       if (!inputs.lastName) {
         signUp && reject()
@@ -47,7 +48,7 @@ const SigningForms = ({ signUp }) => {
       if (!schema.validate(inputs.password)) {
         signUp && setErr(prev => ({ ...prev, password: "Must be at least 6 characters with 1 uppercase letter and 2 digits" }))
         signUp && reject()
-      }if (inputs.password !== inputs.confirmPassword){
+      } if (inputs.password !== inputs.confirmPassword) {
         signUp && setErr(prev => ({ ...prev, confirmPassword: "Password are not matching." }))
         signUp && reject()
       }
@@ -70,7 +71,7 @@ const SigningForms = ({ signUp }) => {
         <Header as='h2' textAlign='center' style={{ color: "#4ab976" }}>
           {signUp ? "Sign up an account" : "Log in to your account"}
         </Header>
-        <Form size='large'>
+        <Form size='large' onSubmit={handleSubmit}>
           <Segment stacked>
             {signUp && <>
               <Form.Input fluid icon='user' iconPosition='left' placeholder='Fist Name'
@@ -87,44 +88,52 @@ const SigningForms = ({ signUp }) => {
             <Form.Input fluid icon='mail' iconPosition='left' placeholder='E-mail address'
               required
               value={inputs.email}
-              onChange={e => handleChange(e, "email")} 
+              onChange={e => handleChange(e, "email")}
               error={err.email}
-              />
-            <Form.Input
-              required
-              fluid
-              icon='lock'
-              iconPosition='left'
-              placeholder='Password'
-              type={showPassword ? 'text' : 'password'}
-              action={{
-                icon: showPassword ? 'eye' : 'eye slash',
-                basic: true,
-                onClick: () => setShowPassword(!showPassword)
-              }}
-              value={inputs.password}
-              onChange={e => handleChange(e, "password")}
-              error={err.password}
             />
-            {signUp &&
-              <Form.Input
+            <PasswordWrapper>
+              <Input
                 required
                 fluid
                 icon='lock'
                 iconPosition='left'
-                placeholder='Confirm Password'
+                placeholder='Password'
                 type={showPassword ? 'text' : 'password'}
-                action={{
-                  icon: showPassword ? 'eye' : 'eye slash',
+                label={{
+                  content: <Icon name={showPassword ? 'eye' : 'eye slash'} />,
                   basic: true,
-                  onClick: () => setShowPassword(!showPassword)
+                  onClick: () => setShowPassword(!showPassword),
                 }}
-                value={inputs.confirmPassword}
-                onChange={e => handleChange(e, "confirmPassword")}
-                error={err.confirmPassword}
+                labelPosition='right'
+                value={inputs.password}
+                onChange={e => handleChange(e, "password")}
+                error={err.password}
               />
+            </PasswordWrapper>
+
+            {signUp &&
+              <PasswordWrapper>
+                <Input
+                  required
+                  fluid
+                  icon='lock'
+                  iconPosition='left'
+                  placeholder='Confirm Password'
+                  type={showPassword ? 'text' : 'password'}
+                  label={{
+                    content: <Icon name={showPassword ? 'eye' : 'eye slash'} />,
+                    basic: true,
+                    onClick: () => setShowPassword(!showPassword),
+                  }}
+                  labelPosition='right'
+                  value={inputs.confirmPassword}
+                  onChange={e => handleChange(e, "confirmPassword")}
+                  error={err.confirmPassword}
+                />
+              </PasswordWrapper>
             }
-            <Button style={{ backgroundColor: "#4ab976", color: "white" }} fluid size='large'
+            <Button type='submit'
+              style={{ backgroundColor: "#4ab976", color: "white" }} fluid size='large'
               content={signUp ? "Sign Up" : "Log In"}
               onClick={() => {
                 setErr({})
@@ -132,7 +141,7 @@ const SigningForms = ({ signUp }) => {
               }}
             >
             </Button>
-           <Message negative size='mini' hidden={!err.submit}>{err.submit}</Message>
+            <Message negative size='mini' hidden={!err.submit}>{err.submit}</Message>
           </Segment>
         </Form>
         {signUp ?
@@ -144,4 +153,17 @@ const SigningForms = ({ signUp }) => {
   )
 }
 
+const PasswordWrapper = styled.div`
+  margin-bottom: 15px; 
+  .button {
+    padding : 0 10px 0 10px;
+  }
+  .icon {
+    margin: 0 !important;
+  }
+  .label {
+    border-left : none  !important;
+    border-radius : 0 5px 5px 0;
+  }
+`;
 export default SigningForms

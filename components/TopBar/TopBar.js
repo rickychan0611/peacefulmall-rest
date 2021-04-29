@@ -7,7 +7,9 @@ import {
   openSideMenu as openSideMenuAtom,
   openCheckOutList as openCheckOutListAtom
 } from '../../data/atoms.js';
+import { user as userAtom } from '../../data/userAtom';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
+
 import { useEffect } from 'react';
 
 const options = [
@@ -48,12 +50,13 @@ const TopBar = () => {
   const isDesktop = useDesktopMediaQuery();
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
+  const [user, setUser] = useRecoilState(userAtom);
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
   const [jiggle, setJiggle] = useState(false);
 
   useEffect(() => {
     setJiggle(!jiggle)
-  },[orderItems])
+  }, [orderItems])
 
   return (
     <div>
@@ -87,18 +90,47 @@ const TopBar = () => {
 
           {isDesktop ? (
             <>
-              <Menu.Item>
-                <Button inverted style={{ backgroundColor: '#ff614d', marginRight: 10, color: "white" }}
-                  onClick={() => router.push('/sign-up')}
-                >
-                  Sign up
+              {!user ? <>
+                <Menu.Item>
+                  <Button inverted style={{ backgroundColor: '#ff614d', marginRight: 10, color: "white" }}
+                    onClick={() => router.push('/sign-up')}
+                  >
+                    Sign up
                 </Button>
-                <Button compact style={{ backgroundColor: 'white' }}
-                  onClick={() => router.push('/sign-in')}>
-                  Sign in
+                  <Button compact style={{ backgroundColor: 'white' }}
+                    onClick={() => router.push('/sign-in')}>
+                    Sign in
                 </Button>
-              </Menu.Item>
-              <Transition
+                </Menu.Item>
+              </> :
+                <Menu.Item onClick={() => {
+                  setOpenSideMenu(!openSideMenu);
+                }}>
+                  <h4 style={{margin: 0 }}>
+                    Hi, {user.firstName} &nbsp;	 &nbsp;
+                  </h4>
+                  <Icon
+                      name="bars"
+                      size="large"
+                      style={{ color: '#707070' , margin: 0}}
+                    />
+              </Menu.Item>}
+
+            </>
+          ) : (
+            <>
+                <Icon
+                  name="bars"
+                  size="large"
+                  style={{ color: '#707070' }}
+                  onClick={() => {
+                    setOpenSideMenu(!openSideMenu);
+                  }}
+                />
+              </>
+          )}
+
+          <Transition
                 animation="jiggle"
                 duration={600}
                 visible={jiggle}
@@ -110,21 +142,7 @@ const TopBar = () => {
                   </Button>
                 </Menu.Item>
               </Transition>
-
-            </>
-          ) : (
-            <>
-              <Icon
-                name="bars"
-                size="large"
-                style={{ color: '#707070' }}
-                onClick={() => {
-                  setOpenSideMenu(!openSideMenu);
-                }}
-              />
-            </>
-          )}
-        </Menu.Menu>
+            </Menu.Menu>
       </Menu>
     </div>
   );

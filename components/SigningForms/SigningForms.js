@@ -1,15 +1,21 @@
-import { set } from 'lodash';
 import Link from 'next/link'
+import { useRouter } from 'next/router';
 import React, { useState } from 'react'
 import { Button, Form, Grid, Header, Message, Segment, Icon, Input } from 'semantic-ui-react'
 import validator from 'validator';
 import passwordValidator from 'password-validator';
 import styled from 'styled-components';
 
+import { useRecoilState } from 'recoil';
+import { user as userAtom, userdata } from '../../data/userAtom';
+
 const SigningForms = ({ signUp }) => {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [inputs, setInputs] = useState({})
-  const [err, setErr] = useState({})
+  const [inputs, setInputs] = useState({});
+  const [err, setErr] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useRecoilState(userAtom);
 
   var schema = new passwordValidator();
   schema
@@ -20,49 +26,80 @@ const SigningForms = ({ signUp }) => {
     .has().digits(2)                                // Must have at least 2 digits
     .has().not().spaces()                           // Should not have spaces
 
-  const handleChange = (e, name) => {
-    setInputs(prev => ({ ...prev, [name]: e.target.value }))
-  }
-
   const validation = () => {
     new Promise((resolve, reject) => {
       if (!inputs.firstName) {
         signUp && reject()
+        signUp && console.log("firstName")
       }
       if (!inputs.lastName) {
         signUp && reject()
+        signUp && console.log("lastName")
       }
       if (!inputs.email) {
         reject()
+        console.log("email")
       }
       if (!inputs.password) {
         reject()
+        console.log("password")
       }
       if (!inputs.confirmPassword) {
         signUp && reject()
+        signUp && console.log("confirmPassword")
       }
       if (!validator.isEmail(inputs.email)) {
         setErr(prev => ({ ...prev, email: "Email address is not valid" }))
         reject()
+        console.log("validatorisEmail")
       }
       if (!schema.validate(inputs.password)) {
         signUp && setErr(prev => ({ ...prev, password: "Must be at least 6 characters with 1 uppercase letter and 2 digits" }))
         signUp && reject()
-      } if (inputs.password !== inputs.confirmPassword) {
+        signUp && console.log("validatorpassword")
+      } 
+      if (inputs.password !== inputs.confirmPassword) {
         signUp && setErr(prev => ({ ...prev, confirmPassword: "Password are not matching." }))
         signUp && reject()
+        signUp && console.log("confirmPassword")
       }
-      else resolve()
+        resolve()
     }).then(() => {
-      console.log("signing in...")
-      setErr(prev => ({ ...prev, submit: "signing in..." }))
+      // setErr(prev => ({ ...prev, submit: "" }))
+      signUp ? handleSignUp() : handleSignIn()
     }).catch(() => {
       console.log("Not signing in")
     })
   }
 
+  const handleSignUp = async () => {
+    console.log("Signing UP..")
+    setLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log("await Signing UP..")
+    setUser(userdata)
+    setLoading(false);
+    router.push('/')
+  }
+
+  const handleSignIn = async () => {
+    console.log("Signing IN..")
+    setLoading(true)
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    console.log("await Signing IN..")
+    setUser(userdata)
+    setLoading(false);
+    router.push('/')
+  }
+
   const handleSubmit = () => {
+    setErr({})
+    console.log("submit")
     validation()
+  }
+
+  const handleChange = (e, name) => {
+    setInputs(prev => ({ ...prev, [name]: e.target.value }))
   }
 
   return (
@@ -133,12 +170,10 @@ const SigningForms = ({ signUp }) => {
               </PasswordWrapper>
             }
             <Button type='submit'
-              style={{ backgroundColor: "#4ab976", color: "white" }} fluid size='large'
-              content={signUp ? "Sign Up" : "Log In"}
-              onClick={() => {
-                setErr({})
-                handleSubmit()
-              }}
+              // loading={loading}
+              style={{ backgroundColor: "#4ab976", color: "white" }}
+              fluid size='large'
+              content={!loading ? signUp ? "Sign Up" : "Log In" : <Icon name="spinner" loading/>}
             >
             </Button>
             <Message negative size='mini' hidden={!err.submit}>{err.submit}</Message>

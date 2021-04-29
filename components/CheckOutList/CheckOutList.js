@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { Sidebar } from 'semantic-ui-react';
+
 import { useRecoilState } from 'recoil';
 import { openCheckOutList as openCheckOutListAtom } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
+
 import OrderItem from '../OrderItem';
 
 const CheckOutList = () => {
@@ -22,7 +24,6 @@ const CheckOutList = () => {
       animation="overlay"
       direction="right"
       onHide={() => setOpenCheckOutList(false)}
-      vertical
       width="wide"
       visible={openCheckOutList}
     >

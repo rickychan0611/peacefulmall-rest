@@ -1,29 +1,57 @@
-import React from 'react';
-import App from 'next/app';
-import { RecoilRoot } from 'recoil';
+import React, { useEffect } from 'react';
 import '../.semantic/dist/semantic.min.css';
+import './styles.css';
+import { CookiesProvider, useCookies } from 'react-cookie';
+
+import { RecoilRoot, useRecoilState } from 'recoil';
+import { user as userAtom, userdata } from '../data/userAtom';
+
 import SideMenu from '../components/SideMenu';
 import CheckOutListPusher from '../components/CheckOutListPusher';
-import CheckOutList from '../components/CheckOutList';
 import TopBar from '../components/TopBar';
-import './styles.css';
 
-class MyApp extends App {
-  render() {
-    const { Component, pageProps } = this.props;
-    return (
-      <RecoilRoot>
-        <TopBar />
-        <div className="contents" style={{paddingTop: 44, width: "100vw"}}>
-        <SideMenu>
-          <CheckOutListPusher>
-            <Component {...pageProps} />
-          </CheckOutListPusher>
-        </SideMenu>
-        </div>
-      </RecoilRoot>
-    );
-  }
+const InitApp = ({ children }) => {
+  const [user, setUser] = useRecoilState(userAtom);
+  const [cookies, setCookie, removeCookie] = useCookies();
+
+  useEffect(async () => {
+    console.log("initiate")
+    //check user cookie
+    if (cookies.userToken !== "123456789") {
+      console.log("cookies not found")
+
+      setUser(null)
+      localStorage.removeItem('user')
+    }
+    else if (cookies.userToken === "123456789") {
+      //login user and store user in localstorage
+      console.log("Signing IN from localStorage")
+      setUser(JSON.parse(localStorage.getItem('user')))
+    }
+  }, [])
+
+  return children
+}
+
+function MyApp({ Component, pageProps }) {
+  return (
+    <RecoilRoot>
+      <CookiesProvider>
+        <InitApp>
+          <>
+            <TopBar />
+            <div className="contents" style={{ paddingTop: 44, width: "100vw" }}>
+              <SideMenu>
+                <CheckOutListPusher>
+                  <Component {...pageProps} />
+                </CheckOutListPusher>
+              </SideMenu>
+            </div>
+          </>
+        </InitApp>
+      </CookiesProvider>
+    </RecoilRoot>
+  );
 }
 
 export default MyApp;

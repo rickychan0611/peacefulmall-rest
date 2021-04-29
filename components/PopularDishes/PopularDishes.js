@@ -51,7 +51,7 @@ const PopularDishes = ({topic, featured}) => {
         {dishes[0] &&
           dishes.map((item, i) => {
             return (
-              <MenuItem item={item} isVCard/>
+              <MenuItem item={item} isVCard key={i}/>
             );
           })}
     </ItemWrapper>

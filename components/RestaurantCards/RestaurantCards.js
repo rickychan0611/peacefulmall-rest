@@ -47,12 +47,8 @@ const RestaurantCards = ({topic}) => {
         {dishes[0] &&
           dishes.map((item, i) => {
             return (
-              <Link href={'/restaurant/' + "peaceful-restaurant"} scroll>
-              <Card key={i} 
-              // onClick={()=>{
-              //   router.push('/restaurant/' + "peaceful-restaurant")
-              // }}
-              >
+              <Link href={'/restaurant/' + "peaceful-restaurant"} scroll key={i}>
+              <Card>
                 <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} />
                 <Name>Restaurant Name</Name>
                 {/* <Description>{item.description}</Description> */}

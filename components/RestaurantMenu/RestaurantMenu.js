@@ -56,7 +56,7 @@ const RestaurantMenu = () => {
 
         {catNames.map((item, i) => {
           return (
-            <div style={{ padding: 5 }}>
+            <div style={{ padding: 5 }} key={i}>
               <Segment raised>
                 <CatTitle id={i}>{item}</CatTitle>
                 <ItemWrapper>

@@ -71,7 +71,7 @@ const ReviewCards = ({ tab }) => {
       {dishes[0] &&
         dishes.map((item, i) => {
           return (
-            <Link href={'/restaurant/' + "peaceful-restaurant#reviews"}>
+            <Link href={'/restaurant/' + "peaceful-restaurant#reviews"} key={i}>
               <Card key={i} >
                 <Img
                   src={item.img}

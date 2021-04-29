@@ -5,6 +5,7 @@ import { Button, Form, Grid, Header, Message, Segment, Icon, Input } from 'seman
 import validator from 'validator';
 import passwordValidator from 'password-validator';
 import styled from 'styled-components';
+import { useCookies } from 'react-cookie';
 
 import { useRecoilState } from 'recoil';
 import { user as userAtom, userdata } from '../../data/userAtom';
@@ -16,6 +17,7 @@ const SigningForms = ({ signUp }) => {
   const [err, setErr] = useState({});
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useRecoilState(userAtom);
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   var schema = new passwordValidator();
   schema
@@ -77,6 +79,8 @@ const SigningForms = ({ signUp }) => {
     setLoading(true)
     await new Promise(resolve => setTimeout(resolve, 2000));
     console.log("await Signing UP..")
+    setCookie("userToken", "123456789", {maxAge: 1000*60*24})
+    localStorage.setItem('user', JSON.stringify(userdata));
     setUser(userdata)
     setLoading(false);
     router.push('/')
@@ -87,6 +91,8 @@ const SigningForms = ({ signUp }) => {
     setLoading(true)
     await new Promise(resolve => setTimeout(resolve, 2000));
     console.log("await Signing IN..")
+    setCookie("userToken", "123456789", {maxAge: 1000*60*24})
+    localStorage.setItem('user', JSON.stringify(userdata));
     setUser(userdata)
     setLoading(false);
     router.push('/')

@@ -41,7 +41,7 @@ const CuisineSlider = ({ contextRef }) => {
           <ItemWrapper isDesktop={isDesktop}>
           {data.map((item, i) => {
             return (
-              <CatCard isDesktop={isDesktop} key={i} onClick={() => setSelections(prev => ({...prev, cuisine: item.name}))}>
+              <CatCard isDesktop={isDesktop} key={i} onClick={() => setSelections(prev => ({...prev, cuisine: item.name}))} key={i}>
                 <Image isDesktop={isDesktop} src={`/${item.img}`} />
                 <Text isDesktop={isDesktop}>{item.name.toUpperCase()}</Text>
               </CatCard>

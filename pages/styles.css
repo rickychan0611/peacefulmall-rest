@@ -1,3 +1,8 @@
 :root {
     scroll-behavior: smooth;
 }
+
+modals {
+  z-index: 10001;  
+}
+

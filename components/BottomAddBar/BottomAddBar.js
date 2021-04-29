@@ -2,7 +2,9 @@ import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
 import _ from 'lodash';
 
-const BottomAddBar = ({qty, setQty}) => {
+const BottomAddBar = ({ qty, setQty, option, price, addItem, setOpen }) => {
+
+  const total = () => (price + option.value) * qty
 
   return (
     <>
@@ -12,7 +14,7 @@ const BottomAddBar = ({qty, setQty}) => {
             name="minus circle"
             size="large"
             onClick={() => {
-              qty > 0 && setQty(qty-1);
+              qty > 1 && setQty(qty - 1);
             }}
           />
           <QtyNum>{qty}</QtyNum>
@@ -20,13 +22,16 @@ const BottomAddBar = ({qty, setQty}) => {
             name="plus circle"
             size="large"
             onClick={() => {
-              setQty(qty+1);
+              setQty(qty + 1);
             }}
           />
         </QtyContainer>
 
         <QtyContainer>
-          <AddButton>ADD - ${qty > 0 ? qty * 13 : 0}</AddButton>
+          <AddButton onClick={() => {
+            addItem(total())
+            setOpen(false)
+          }}>ADD - ${total()}</AddButton>
         </QtyContainer>
       </BottomBar>
     </>
@@ -44,6 +49,7 @@ const BottomBar = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
+  border-radius: 0 0 10px 10px;
 `;
 const AddButton = styled.div`
   display: flex;

@@ -162,7 +162,7 @@ const PasswordWrapper = styled.div`
     margin: 0 !important;
   }
   .label {
-    border-left : none  !important;
+    border-left : none;
     border-radius : 0 5px 5px 0;
   }
 `;

@@ -10,6 +10,16 @@ export const openSideMenu = atom({
   default: false
 });
 
+export const openOrderSlide = atom({
+  key: 'openOrderSlide',
+  default: false
+});
+
+export const openCheckOutList = atom({
+  key: 'openCheckOutList',
+  default: true
+});
+
 export const selectedItem = atom({
   key: 'selectedItem',
   default: {}
@@ -19,6 +29,7 @@ export const activeTabIndex = atom({
   key: 'activeTabIndex',
   default: 1
 });
+
 export const scrolling = atom({
   key: 'scrolling',
   default: 1

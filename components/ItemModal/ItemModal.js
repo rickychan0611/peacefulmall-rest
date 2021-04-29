@@ -17,7 +17,8 @@ const ItemModal = ({ open, setOpen }) => {
 };
 
 const ModalContainer = styled(Modal)`
-  height: calc(100vh - 70px); 
+  margin-top: 100px;
+  height: calc(100vh - 110px); 
 `;
 
 export default ItemModal;

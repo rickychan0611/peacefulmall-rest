@@ -2,7 +2,11 @@ import { useRouter } from 'next/router';
 import { Button, Dropdown, Menu, Container, Image, Icon } from 'semantic-ui-react';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import { useRecoilState } from 'recoil';
-import { openSideMenu as openSideMenuAtom } from '../../data/atoms.js';
+import {
+  openSideMenu as openSideMenuAtom,
+  openCheckOutList as openCheckOutListAtom
+} from '../../data/atoms.js';
+import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 
 const options = [
   {
@@ -41,18 +45,20 @@ const TopBar = () => {
   const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
+  const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
+  const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
 
   return (
     <div>
       <Menu
         style={{
           borderRadius: 0,
-          margin: "-3px 0 0 0",
           position: 'fixed',
-          zIndex: 100000,
+          zIndex: 1000,
           backgroundColor: 'white',
           width: "100vw",
-          height: 60
+          height: 60,
+          top: 0,
         }}>
         <Menu.Item header as="a" onClick={() => router.push('/')}>
           <Image size="mini" src="/logo-p.png" />
@@ -72,32 +78,39 @@ const TopBar = () => {
             />
           </Menu.Item>
 
-          <Menu.Item>
-            {isDesktop ? (
-              <>
-                <Button compact inverted style={{ backgroundColor: '#ff614d', marginRight: 10, color: "white" }}
-                onClick={()=>router.push('/sign-up')}
+          {isDesktop ? (
+            <>
+              <Menu.Item>
+                <Button inverted style={{ backgroundColor: '#ff614d', marginRight: 10, color: "white" }}
+                  onClick={() => router.push('/sign-up')}
                 >
                   Sign up
                 </Button>
                 <Button compact style={{ backgroundColor: 'white' }}
-                onClick={()=>router.push('/sign-in')}>
+                  onClick={() => router.push('/sign-in')}>
                   Sign in
                 </Button>
-              </>
-            ) : (
-              <>
-                <Icon
-                  name="bars"
-                  size="large"
-                  style={{ color: '#707070' }}
-                  onClick={() => {
-                    setOpenSideMenu(!openSideMenu);
-                  }}
-                />
-              </>
-            )}
-          </Menu.Item>
+              </Menu.Item>
+
+              <Menu.Item>
+                <Button style={{ backgroundColor: '#ff614d', marginRight: 10, color: "white", width: 80, borderRadius: 30 }}
+                  onClick={() => setOpenCheckOutList(!openCheckOutList)}>
+                    <Icon name='shop' /> {orderItems.length}                 
+                </Button>
+              </Menu.Item>
+            </>
+          ) : (
+            <>
+              <Icon
+                name="bars"
+                size="large"
+                style={{ color: '#707070' }}
+                onClick={() => {
+                  setOpenSideMenu(!openSideMenu);
+                }}
+              />
+            </>
+          )}
         </Menu.Menu>
       </Menu>
     </div>

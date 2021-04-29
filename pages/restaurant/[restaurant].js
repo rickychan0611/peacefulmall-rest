@@ -39,9 +39,9 @@ const restaurant = () => {
         <SearchBanner hide={hide} />
       </SearchBannerWrapper>
 
-      <Container style={{ paddingTop: hide === 'hidden' ? 110 : 180 }}>
+      <Container style={{ padding: "150px 0px 0px 0px" }}>
 
-        <Grid column={2}>
+        <Grid>
           <Grid.Column
             width={4}
             style={{
@@ -99,6 +99,7 @@ const restaurant = () => {
               </Visibility>
           </Grid.Column>
         </Grid>
+
 
       </Container>
       <Footer />

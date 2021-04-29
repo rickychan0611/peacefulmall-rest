@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+
 import { useRecoilState } from 'recoil';
-import { selectedItem as itemAtom } from '../../data/atoms.js';
+import { 
+  selectedItem as itemAtom,
+
+} from '../../data/atoms.js';
+import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
+
 import { Form, Grid, Icon, Radio } from 'semantic-ui-react';
 import BottomAddBar from '../../components/BottomAddBar';
 import _ from 'lodash';
@@ -12,12 +18,20 @@ const ItemDetails = ({ setOpen }) => {
   const isDesktop = useDesktopMediaQuery();
   const router = useRouter();
   const [item, setItem] = useRecoilState(itemAtom);
-  const [value, setValue] = useState('option0');
-  const [qty, setQty] = useState(0);
+  const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
+  const [value, setValue] = useState({option: 'option0', value: 0});
+  const [qty, setQty] = useState(1);
 
   const handleClose = () => {
     isDesktop ? setOpen(false) : router.back();
   };
+
+  const price = 10
+
+  const addItem = (total) => {
+    setOrderItems(prev => ([{...item, option: value, qty, total}, ...prev]))
+    console.log(orderItems)
+  }
 
   return (
     <>
@@ -31,7 +45,7 @@ const ItemDetails = ({ setOpen }) => {
         <h4>Choose your options</h4>
         <Form>
           <Form.Field>
-            Selected value: <b>{value}</b>
+            Selected option: <b>{value.option} : +${value.value}</b>
           </Form.Field>
           {_.times(6, (i) => (
             <Form.Field key={i}>
@@ -41,15 +55,15 @@ const ItemDetails = ({ setOpen }) => {
                     label={'option' + i}
                     name="radioGroup"
                     value={'option' + i}
-                    checked={value === 'option' + i}
+                    checked={value.option === 'option' + i}
                     onChange={(e, { value }) => {
                       console.log(e);
-                      setValue(value);
+                      setValue({option: value, value: i});
                     }}
                   />
                 </Grid.Column>
                 <Grid.Column width={8} style={{ textAlign: 'right' }}>
-                  + $3
+                  + ${i}
                 </Grid.Column>
               </Grid>
             </Form.Field>
@@ -57,7 +71,7 @@ const ItemDetails = ({ setOpen }) => {
         </Form>
       </Container>
 
-      <BottomAddBar qty={qty} setQty={setQty} />
+      <BottomAddBar qty={qty} setQty={setQty} option={value} price={price} addItem={addItem} setOpen={setOpen}/>
     </>
   );
 };

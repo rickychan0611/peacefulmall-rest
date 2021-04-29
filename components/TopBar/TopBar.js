@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { useRouter } from 'next/router';
-import { Button, Dropdown, Menu, Container, Image, Icon } from 'semantic-ui-react';
+import { Button, Dropdown, Menu, Transition, Image, Icon } from 'semantic-ui-react';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import { useRecoilState } from 'recoil';
 import {
@@ -7,6 +8,7 @@ import {
   openCheckOutList as openCheckOutListAtom
 } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
+import { useEffect } from 'react';
 
 const options = [
   {
@@ -47,6 +49,11 @@ const TopBar = () => {
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
+  const [jiggle, setJiggle] = useState(false);
+
+  useEffect(() => {
+    setJiggle(!jiggle)
+  },[orderItems])
 
   return (
     <div>
@@ -91,13 +98,19 @@ const TopBar = () => {
                   Sign in
                 </Button>
               </Menu.Item>
+              <Transition
+                animation="jiggle"
+                duration={600}
+                visible={jiggle}
+              >
+                <Menu.Item>
+                  <Button style={{ backgroundColor: '#ff614d', marginRight: 10, color: "white", width: 80, borderRadius: 30 }}
+                    onClick={() => setOpenCheckOutList(!openCheckOutList)}>
+                    <Icon name='shop' /> {orderItems.length}
+                  </Button>
+                </Menu.Item>
+              </Transition>
 
-              <Menu.Item>
-                <Button style={{ backgroundColor: '#ff614d', marginRight: 10, color: "white", width: 80, borderRadius: 30 }}
-                  onClick={() => setOpenCheckOutList(!openCheckOutList)}>
-                    <Icon name='shop' /> {orderItems.length}                 
-                </Button>
-              </Menu.Item>
             </>
           ) : (
             <>

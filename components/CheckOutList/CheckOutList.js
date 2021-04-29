@@ -21,18 +21,18 @@ const CheckOutList = () => {
   const total = () => {
     let counter = 0
     orderItems[0] && orderItems.forEach(item => {
-      counter = counter + item.total 
+      counter = counter + item.total
     })
     return counter.toFixed(2)
   }
 
-  const OrderItem = ({item , index}) => (
+  const OrderItem = ({ item, index }) => (
     <ItemContainer>
       <Qty>
         <ItemText style={{ minWidth: "30px" }}>{item.qty} x</ItemText>
         <div>
           <ItemName>{item.name}</ItemName>
-          {item.option.value !== 0  && <p>• {item.option.option + " " + "+$" + item.option.value}</p> }
+          {item.option.value !== 0 && <p>• {item.option.option + " " + "+$" + item.option.value}</p>}
           <Remove onClick={() => remove(index)}>Remove</Remove>
         </div>
       </Qty>
@@ -49,29 +49,32 @@ const CheckOutList = () => {
       width="wide"
       visible={openCheckOutList}
     >
-      {false && <>
-        <EmptyMsg>
-          <Img src="/cook-girl.jpg" />
-          <h4 style={{ color: 'gray' }}>
-            Your cart is empty <br />
-            Add items to get started!
-          </h4>
-        </EmptyMsg>
-      </>}
-      <OrdersContainer>
-        <H4>Your Order</H4>
-        <H4 style={{ color: 'red' }}>Restaurant's name</H4>
-        <CheckoutButton
-          onClick={() => setOpenCheckOutList(!openCheckOutList)}>
-          <H4>Checkout</H4>
-          <H4>${total()}</H4>
-        </CheckoutButton>
-        {orderItems[0] && orderItems.map((item, i) => {
-          return (
-            <OrderItem item={item} index={i} key={i}/>
-          )
-        })}
-      </OrdersContainer>
+      {orderItems[0] ?
+        <OrdersContainer>
+          <H4>Your Order</H4>
+          <H4 style={{ color: 'red' }}>Restaurant's name</H4>
+          <CheckoutButton
+            onClick={() => setOpenCheckOutList(!openCheckOutList)}>
+            <H4>Checkout</H4>
+            <H4>${total()}</H4>
+          </CheckoutButton>
+          {orderItems[0] && orderItems.map((item, i) => {
+            return (
+              <OrderItem item={item} index={i} key={i} />
+            )
+          })}
+        </OrdersContainer>
+        :
+        <>
+          <EmptyMsg>
+            <Img src="/cook-girl.jpg" />
+            <h4 style={{ color: 'gray' }}>
+              Your cart is empty <br />
+          Add items to get started!
+        </h4>
+          </EmptyMsg>
+        </>
+      }
     </SidebarContainer>
   );
 };

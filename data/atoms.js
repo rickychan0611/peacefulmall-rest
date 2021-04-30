@@ -17,7 +17,7 @@ export const openOrderSlide = atom({
 
 export const openCheckOutList = atom({
   key: 'openCheckOutList',
-  default: true
+  default: false
 });
 
 export const selectedItem = atom({

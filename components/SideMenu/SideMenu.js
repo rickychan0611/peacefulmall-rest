@@ -47,7 +47,7 @@ const SidebarMenu = () => {
             <H4>Sign Up</H4>
           </Menu.Item>
         </> : <>
-          <Menu.Item>
+          <Menu.Item  onClick={() => router.push('/consumer/edit-profile')}>
             <Icon name="user circle" size="large" />
             <H4>Account</H4>
             <p style={{ margin: 0, color: "grey" }}>{user.firstName + " " + user.lastName}</p>
@@ -55,6 +55,7 @@ const SidebarMenu = () => {
           <Menu.Item onClick={() => {
             removeCookie('userToken')
             setUser(null)
+            router.push('/')
           }}>
             <Icon name="sign out" size="large" />
             <H4>Sign Out</H4>
@@ -68,7 +69,7 @@ const SideMenu = ({ children }) => {
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   return (
     <>
-      <Sidebar.Pushable as={Segment} style={{ transform: 'none', overflow: 'hidden' }}>
+      <Sidebar.Pushable style={{ transform: 'none', overflow: 'hidden' }}>
         <SidebarMenu />
         <Sidebar.Pusher dimmed={openSideMenu}>
           {children}

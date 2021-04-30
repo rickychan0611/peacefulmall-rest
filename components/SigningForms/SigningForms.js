@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import React, { useState } from 'react'
-import { Button, Form, Grid, Header, Message, Segment, Icon, Input } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Message, Segment, Icon, Input, Label } from 'semantic-ui-react'
 import validator from 'validator';
-import passwordValidator from 'password-validator';
+import schema from '../../util/password_schema';
+
 import styled from 'styled-components';
 import { useCookies } from 'react-cookie';
 
@@ -19,39 +20,16 @@ const SigningForms = ({ signUp }) => {
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies, setCookie, removeCookie] = useCookies();
 
-  var schema = new passwordValidator();
-  schema
-    .is().min(6)                                    // Minimum length 8
-    .is().max(100)                                  // Maximum length 100
-    .has().uppercase()                              // Must have uppercase letters
-    .has().lowercase()                              // Must have lowercase letters
-    .has().digits(2)                                // Must have at least 2 digits
-    .has().not().spaces()                           // Should not have spaces
-
   const validation = () => {
     new Promise((resolve, reject) => {
-      if (!inputs.firstName) {
-        signUp && reject()
-        signUp && console.log("firstName")
-      }
-      if (!inputs.lastName) {
-        signUp && reject()
-        signUp && console.log("lastName")
-      }
-      if (!inputs.email) {
-        reject()
-        console.log("email")
-      }
-      if (!inputs.password) {
-        reject()
-        console.log("password")
-      }
-      if (!inputs.confirmPassword) {
-        signUp && reject()
-        signUp && console.log("confirmPassword")
-      }
+      
       if (!validator.isEmail(inputs.email)) {
         setErr(prev => ({ ...prev, email: "Email address is not valid" }))
+        reject()
+        console.log("validatorisEmail")
+      }
+      if (!inputs.phone.match(/^\d{10}$/)){
+        setErr(prev => ({ ...prev, phone: "10 digits number only. No symbols or letters" }))
         reject()
         console.log("validatorisEmail")
       }
@@ -59,13 +37,13 @@ const SigningForms = ({ signUp }) => {
         signUp && setErr(prev => ({ ...prev, password: "Must be at least 6 characters with 1 uppercase letter and 2 digits" }))
         signUp && reject()
         signUp && console.log("validatorpassword")
-      } 
+      }
       if (inputs.password !== inputs.confirmPassword) {
-        signUp && setErr(prev => ({ ...prev, confirmPassword: "Password are not matching." }))
+        signUp && setErr(prev => ({ ...prev, confirmPassword: "Passwords are not matching." }))
         signUp && reject()
         signUp && console.log("confirmPassword")
       }
-        resolve()
+      resolve()
     }).then(() => {
       // setErr(prev => ({ ...prev, submit: "" }))
       signUp ? handleSignUp() : handleSignIn()
@@ -79,7 +57,7 @@ const SigningForms = ({ signUp }) => {
     setLoading(true)
     await new Promise(resolve => setTimeout(resolve, 2000));
     console.log("await Signing UP..")
-    setCookie("userToken", "123456789", {maxAge: 1000*60*24})
+    setCookie("userToken", "123456789", { maxAge: 1000 * 60 * 24 })
     localStorage.setItem('user', JSON.stringify(userdata));
     setUser(userdata)
     setLoading(false);
@@ -91,7 +69,7 @@ const SigningForms = ({ signUp }) => {
     setLoading(true)
     await new Promise(resolve => setTimeout(resolve, 2000));
     console.log("await Signing IN..")
-    setCookie("userToken", "123456789", {maxAge: 1000*60*24})
+    setCookie("userToken", "123456789", { maxAge: 1000 * 60 * 24 })
     localStorage.setItem('user', JSON.stringify(userdata));
     setUser(userdata)
     setLoading(false);
@@ -134,6 +112,13 @@ const SigningForms = ({ signUp }) => {
               onChange={e => handleChange(e, "email")}
               error={err.email}
             />
+            <Form.Input fluid icon='phone' iconPosition='left' placeholder='Phone Number (10 digits only)'
+              required
+              value={inputs.phone}
+              onChange={e => handleChange(e, "phone")}
+              error={err.phone}
+              maxLength="10"
+            />
             <PasswordWrapper>
               <Input
                 required
@@ -150,8 +135,10 @@ const SigningForms = ({ signUp }) => {
                 labelPosition='right'
                 value={inputs.password}
                 onChange={e => handleChange(e, "password")}
-                error={err.password}
               />
+              {err.password &&
+                <Label basic color='red' pointing style={{ borderRadius: 5 }}
+                  content={err.password} />}
             </PasswordWrapper>
 
             {signUp &&
@@ -171,15 +158,17 @@ const SigningForms = ({ signUp }) => {
                   labelPosition='right'
                   value={inputs.confirmPassword}
                   onChange={e => handleChange(e, "confirmPassword")}
-                  error={err.confirmPassword}
                 />
+                {err.confirmPassword &&
+                <Label basic color='red' pointing style={{ borderRadius: 5 }}
+                  content={err.confirmPassword} />}
               </PasswordWrapper>
             }
             <Button type='submit'
               // loading={loading}
               style={{ backgroundColor: "#4ab976", color: "white" }}
               fluid size='large'
-              content={!loading ? signUp ? "Sign Up" : "Log In" : <Icon name="spinner" loading/>}
+              content={!loading ? signUp ? "Sign Up" : "Log In" : <Icon name="spinner" loading />}
             >
             </Button>
             <Message negative size='mini' hidden={!err.submit}>{err.submit}</Message>

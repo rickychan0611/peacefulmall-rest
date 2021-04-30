@@ -8,7 +8,7 @@ const CheckOutListPusher = ({ children }) => {
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   return (
     <>
-      <Sidebar.Pushable as={Segment} style={{ transform: 'none'}}>
+      <Sidebar.Pushable style={{ transform: 'none'}}>
         <CheckOutList />
         <Sidebar.Pusher>
           {children}

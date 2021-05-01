@@ -5,75 +5,95 @@ import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom';
 import { useEffect } from 'react';
+import validation from '../../util/validation';
 
 const Profile = () => {
   const isDesktop = useDesktopMediaQuery();
   const [user, setUser] = useRecoilState(userAtom);
 
-  const [changeUser, setChangeUser] = useState("")
+  const [editedUser, setEditedUser] = useState("")
   const [disableSave, setDisableSave] = useState(true)
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [err, setErr] = useState({});
 
   const handleChange = (e, name) => {
     setVisible(false)
-    setChangeUser(prev => ({ ...prev, [name]: e.target.value }))
+    setEditedUser(prev => ({ ...prev, [name]: e.target.value }))
   }
 
-  const handleSave = async() => {
+  const handleSave = () => {
     setLoading(true)
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    // if successful
-    setUser(changeUser)
-    setVisible(true)
-    setDisableSave(true)
-    setLoading(false)
+    setErr({})
+    validation(editedUser)
+    .then(async(res) => {
+      console.log(res)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      // if successful
+      setUser(editedUser)
+      setVisible(true)
+      setDisableSave(true)
+      setLoading(false)
+    })
+    .catch((err)=>{
+      console.log(err)
+      setLoading(false)
+      setErr(prev => ({ ...prev, ...err}))
+    })
   }
 
   useEffect(() => {
-    setChangeUser(user)
+    setEditedUser(user)
   }, [user])
 
   useEffect(() => {
-    changeUser && changeUser.firstName === user.firstName &&
-      changeUser.lastName === user.lastName &&
-      changeUser.phone === user.phone &&
-      changeUser.email === user.email ?
+    editedUser && editedUser.firstName === user.firstName &&
+      editedUser.lastName === user.lastName &&
+      editedUser.phone === user.phone &&
+      editedUser.email === user.email ?
       setDisableSave(true) : setDisableSave(false)
-  }, [changeUser])
+  }, [editedUser])
 
   return (
-    <>{user && changeUser && <CenteredFlex>
+    <>{user && editedUser && <CenteredFlex>
       <h1>Profile</h1>
       <Divider />
       <Form>
 
         <Form.Group widths='equal'>
-          <Form.Input fluid
+          <Form.Input fluid required
             label='First name'
             placeholder='First name'
-            value={changeUser.firstName}
-            onChange={(e) => handleChange(e, "firstName")} />
+            value={editedUser.firstName}
+            onChange={(e) => handleChange(e, "firstName")} 
+            error={err.firstName}
+            />
 
-          <Form.Input fluid
+          <Form.Input fluid required
             label='Last name'
             placeholder='Last name'
-            value={changeUser.lastName}
-            onChange={(e) => handleChange(e, "lastName")} />
+            value={editedUser.lastName}
+            onChange={(e) => handleChange(e, "lastName")} 
+            error={err.lastName}
+            />
         </Form.Group>
 
         <Form.Group widths='equal'>
-          <Form.Input fluid
+          <Form.Input fluid required
             label='Email'
             placeholder='Email'
-            value={changeUser.email}
-            onChange={(e) => handleChange(e, "email")} />
+            value={editedUser.email}
+            onChange={(e) => handleChange(e, "email")} 
+            error={err.email}
+            />
 
-          <Form.Input fluid
+          <Form.Input fluid required
             label='Phone Number'
             placeholder='Phone Number'
-            value={changeUser.phone}
-            onChange={(e) => handleChange(e, "phone")} />
+            value={editedUser.phone}
+            onChange={(e) => handleChange(e, "phone")} 
+            error={err.phone}
+            />
         </Form.Group>
 
         <ButtonWrapper>

@@ -14,10 +14,10 @@ const validation = (inputs) => {
   console.log("VVV", inputs)
   return new Promise((resolve, reject) => {
     
-    if (!validator.isEmail(inputs.email)) {
+    if (inputs.email && !validator.isEmail(inputs.email)) {
       reject({ email: "Email address is not valid" })
     }
-    if (!inputs.phone.match(/^\d{10}$/)) {
+    if (inputs.phone && !inputs.phone.match(/^\d{10}$/)) {
       reject({ phone: "10 digits number only. No symbols or letters" })
     }
 

@@ -11,7 +11,7 @@ import CheckOutListPusher from '../components/CheckOutListPusher';
 import TopBar from '../components/TopBar';
 
 const InitApp = ({ children }) => {
-  const [user, setUser] = useRecoilState(userAtom);
+  const [user, setUser, userdata] = useRecoilState(userAtom);
   const [cookies, setCookie, removeCookie] = useCookies();
 
   useEffect(async () => {
@@ -19,13 +19,13 @@ const InitApp = ({ children }) => {
     //check user cookie
     if (cookies.userToken !== "123456789") {
       console.log("cookies not found")
-
-      setUser(null)
+      setUser()
       localStorage.removeItem('user')
     }
     else if (cookies.userToken === "123456789") {
       //login user and store user in localstorage
       console.log("Signing IN from localStorage")
+      // setUser(userdata)
       setUser(JSON.parse(localStorage.getItem('user')))
     }
   }, [])

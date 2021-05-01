@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Divider, Form, Button, Icon, Transition } from 'semantic-ui-react';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
@@ -8,6 +9,7 @@ import { useEffect } from 'react';
 import validation from '../../util/validation';
 
 const Profile = () => {
+  const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
   const [user, setUser] = useRecoilState(userAtom);
 
@@ -16,6 +18,7 @@ const Profile = () => {
   const [visible, setVisible] = useState(false)
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState({});
+
 
   const handleChange = (e, name) => {
     setVisible(false)
@@ -41,6 +44,10 @@ const Profile = () => {
       setErr(prev => ({ ...prev, ...err}))
     })
   }
+
+  useEffect(() => {
+    !localStorage.getItem('user') && router.push('/sign-in') 
+  },[])
 
   useEffect(() => {
     setEditedUser(user)

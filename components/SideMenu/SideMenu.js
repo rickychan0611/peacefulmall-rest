@@ -54,6 +54,7 @@ const SidebarMenu = () => {
           </Menu.Item>
           <Menu.Item onClick={() => {
             removeCookie('userToken')
+            localStorage.removeItem('user')
             setUser(null)
             router.push('/')
           }}>

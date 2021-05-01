@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
-import React, { useState } from 'react'
 import { Button, Form, Grid, Header, Message, Segment, Icon, Input, Label } from 'semantic-ui-react'
 // import validator from 'validator';
 import validation from '../../util/validation';
@@ -10,7 +10,6 @@ import { useCookies } from 'react-cookie';
 
 import { useRecoilState } from 'recoil';
 import { user as userAtom, userdata } from '../../data/userAtom';
-import { set } from 'lodash-es';
 
 const SigningForms = ({ signUp }) => {
   const router = useRouter();
@@ -24,7 +23,7 @@ const SigningForms = ({ signUp }) => {
   const handleSignUp = async () => {
     console.log("Signing UP..")
     setLoading(true)
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     console.log("await Signing UP..")
     setCookie("userToken", "123456789", { maxAge: 1000 * 60 * 24 })
     localStorage.setItem('user', JSON.stringify(userdata));
@@ -36,7 +35,7 @@ const SigningForms = ({ signUp }) => {
   const handleSignIn = async () => {
     console.log("Signing IN..")
     setLoading(true)
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     console.log("await Signing IN..")
     setCookie("userToken", "123456789", { maxAge: 1000 * 60 * 24 })
     localStorage.setItem('user', JSON.stringify(userdata));
@@ -53,6 +52,7 @@ const SigningForms = ({ signUp }) => {
       signUp ? handleSignUp() : handleSignIn()
     })
     .catch((err) => {
+      console.log(err)
       setErr(prev => ({ ...prev, ...err}))
     })
   }
@@ -61,8 +61,13 @@ const SigningForms = ({ signUp }) => {
     setInputs(prev => ({ ...prev, [name]: e.target.value }))
   }
 
+  useEffect(() => {
+    console.log(localStorage.getItem('user'))
+    localStorage.getItem('user') && router.push('/') 
+  },[])
+
   return (
-    <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+    <Grid textAlign='center' style={{ height: '90vh' }} verticalAlign='middle'>
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as='h2' textAlign='center' style={{ color: "#4ab976" }}>
           {signUp ? "Sign up an account" : "Log in to your account"}

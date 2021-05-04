@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { Grid, List, Header, Modal } from 'semantic-ui-react';
 import ReviewFeed from '../ReviewFeed/ReviewFeed.js';
 
-const RestaurantSideBar = () => {
+const RestaurantSideBar = ({store}) => {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Modal open={open} closeIcon onClose={() => setOpen(false)}>
-        <Modal.Header>Peaceful Restaurant - 532 W Broadway #110, Vancouver, BC V5Z 1E9 </Modal.Header>
+        <Modal.Header>{store.name} - {store.address} </Modal.Header>
         <Modal.Content scrolling style={{ maxHeight: '80vh', padding: 0 }}>
           <iframe
             width="100%"
@@ -17,21 +17,20 @@ const RestaurantSideBar = () => {
             loading="lazy"
             allowfullscreen
             src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBHJSZlrLMWPcINP1GWunczBAt5bs-ZpzY&q=
-            Peaceful Restaurant 532 W Broadway`}>   
+            ${store.address}`}>   
           </iframe>
         </Modal.Content>
       </Modal>
 
         <Img
-          src={`/storefront.jpg`}
+          src={store.photo}
         />
         <List style={{ padding: 10 }}>
-        <Header>Peaceful Restaurant</Header>
 
           <List.Item onClick={() => setOpen(true)}>
             <List.Icon name="map marker alternate" style={{ margiTop: 30 }} />
             <List.Content>
-              <List.Header as="a">532 W Broadway #110, Vancouver, BC V5Z 1E9</List.Header>
+              <List.Header as="a">${store.address}</List.Header>
               <List.Description>View Map</List.Description>
             </List.Content>
           </List.Item>

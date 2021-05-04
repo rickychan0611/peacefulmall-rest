@@ -7,7 +7,7 @@ export const appReady = atom({
 
 export const selections = atom({
   key: 'selections',
-  default: {cuisine: "all", category: "", restaurant: ""}
+  default: {cuisine: "all", category: "", restaurant: "ya"}
 });
 
 export const openSideMenu = atom({

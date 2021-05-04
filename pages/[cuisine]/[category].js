@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
 import styled from 'styled-components';
-import { data } from '../../data/restaurants';
+import { data } from '../../data/restaurants-old';
 import SliderTitle from '../../components/SliderTitle';
 import { Card, Image, Icon, Grid, Container } from 'semantic-ui-react';
 import SearchBanner from '../../components/SearchBanner/SearchBanner.js';

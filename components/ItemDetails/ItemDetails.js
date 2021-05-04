@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { 
   selectedItem as itemAtom,
   selections as selectionsAtom
@@ -11,6 +11,9 @@ import {
 import {
   orderItems as orderItemsAtom,
  } from '../../data/orderAtoms.js';
+import {
+  selectedStore as selectedStoreAtom,
+ } from '../../data/storeAtoms.js';
 
 import { Form, Grid, Icon, Radio } from 'semantic-ui-react';
 import BottomAddBar from '../../components/BottomAddBar';
@@ -23,6 +26,7 @@ const ItemDetails = ({ setOpen }) => {
   const [item, setItem] = useRecoilState(itemAtom);
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
   const [selections, setSelections] = useRecoilState(selectionsAtom);
+  const [selectedStore, setSelectedStore] = useRecoilState(selectedStoreAtom);
   const [value, setValue] = useState({option: 'option0', value: 0});
   const [qty, setQty] = useState(1);
 
@@ -31,12 +35,13 @@ const ItemDetails = ({ setOpen }) => {
   };
 
   const price = 10
+  const currentRestaurant = selections.restaurant
 
   const addItem = (total) => {
-    //TODO: if restaurant's name is equal to currect restuaant of the whole object, update
+    //TODO: if a restaurant's name is equal to the current resturant, update the object
     //if not, replace the whole orderItem array. Add restaurant to currentRestaurant
     setOrderItems(prev => {
-      let updatedItems = [{...item, option: value, qty, total}, ...prev]
+      let updatedItems = [{...item, option: value, qty, total, currentRestaurant}, ...prev]
       localStorage.setItem('orderItems', JSON.stringify(updatedItems))
       return updatedItems
   })}
@@ -44,7 +49,7 @@ const ItemDetails = ({ setOpen }) => {
   return (
     <>
       <div onClick={() => handleClose()} style={{ cursor: 'pointer', margin: 10 }}>
-        <Icon name="arrow left" size="large" /> Restaurant's page
+        <Icon name="arrow left" size="large" /> {selectedStore.name}
       </div>
       <Container>
         <h2>{item.name}</h2>

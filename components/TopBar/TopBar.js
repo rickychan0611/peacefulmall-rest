@@ -4,7 +4,6 @@ import { Button, Dropdown, Menu, Transition, Image, Icon } from 'semantic-ui-rea
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
-  appReady as appReadyAtom,
   openSideMenu as openSideMenuAtom,
   openCheckOutList as openCheckOutListAtom,
   showCheckoutButton as showCheckoutButtonAtom

@@ -1,16 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Dropdown, Menu, Transition, Image, Icon } from 'semantic-ui-react';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
+  appReady as appReadyAtom,
   openSideMenu as openSideMenuAtom,
   openCheckOutList as openCheckOutListAtom
 } from '../../data/atoms.js';
 import { user as userAtom } from '../../data/userAtom';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
-
-import { useEffect } from 'react';
 
 const options = [
   {
@@ -48,15 +47,25 @@ const options = [
 const TopBar = () => {
   const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
+  const appReady = useRecoilValue(appReadyAtom);
+  const user = useRecoilValue(userAtom);
+  const orderItems  = useRecoilValue(orderItemsAtom);
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
-  const [user, setUser] = useRecoilState(userAtom);
-  const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
   const [jiggle, setJiggle] = useState(false);
+  const [showCheckoutButton, setShowCheckoutButton] = useState(true);
 
   useEffect(() => {
-    setJiggle(!jiggle)
-  }, [orderItems])
+    setJiggle(!jiggle);
+  }, [orderItems]);
+
+  useEffect(() => {
+    console.log(appReady)
+    console.log(router.route)
+    console.log(router.route === '/checkout')
+    setShowCheckoutButton(router.route === '/checkout' ? false : true);
+    console.log(showCheckoutButton)
+  }, [router.route, appReady]);
 
   return (
     <div>
@@ -66,9 +75,9 @@ const TopBar = () => {
           position: 'fixed',
           zIndex: 1000,
           backgroundColor: 'white',
-          width: "100vw",
+          width: '100vw',
           height: 60,
-          top: 0,
+          top: 0
         }}>
         <Menu.Item header as="div" onClick={() => router.push('/')}>
           <Image size="mini" src="/logo-p.png" />
@@ -90,59 +99,63 @@ const TopBar = () => {
 
           {isDesktop ? (
             <>
-              {!user ? <>
-                <Menu.Item>
-                  <Button inverted style={{ backgroundColor: '#ff614d', marginRight: 10, color: "white" }}
-                    onClick={() => router.push('/sign-up')}
-                  >
-                    Sign up
-                </Button>
-                  <Button compact style={{ backgroundColor: 'white' }}
-                    onClick={() => router.push('/sign-in')}>
-                    Sign in
-                </Button>
+              {!user ? (
+                <>
+                  <Menu.Item>
+                    <Button
+                      inverted
+                      style={{ backgroundColor: '#ff614d', marginRight: 10, color: 'white' }}
+                      onClick={() => router.push('/sign-up')}>
+                      Sign up
+                    </Button>
+                    <Button
+                      compact
+                      style={{ backgroundColor: 'white' }}
+                      onClick={() => router.push('/sign-in')}>
+                      Sign in
+                    </Button>
+                  </Menu.Item>
+                </>
+              ) : (
+                <Menu.Item
+                  onClick={() => {
+                    setOpenSideMenu(!openSideMenu);
+                  }}>
+                  <h4 style={{ margin: 0 }}>Hi, {user.firstName} &nbsp; &nbsp;</h4>
+                  <Icon name="bars" size="large" style={{ color: '#707070', margin: 0 }} />
                 </Menu.Item>
-              </> :
-                <Menu.Item onClick={() => {
-                  setOpenSideMenu(!openSideMenu);
-                }}>
-                  <h4 style={{margin: 0 }}>
-                    Hi, {user.firstName} &nbsp;	 &nbsp;
-                  </h4>
-                  <Icon
-                      name="bars"
-                      size="large"
-                      style={{ color: '#707070' , margin: 0}}
-                    />
-              </Menu.Item>}
-
+              )}
             </>
           ) : (
             <>
-                <Icon
-                  name="bars"
-                  size="large"
-                  style={{ color: '#707070' }}
-                  onClick={() => {
-                    setOpenSideMenu(!openSideMenu);
-                  }}
-                />
-              </>
+              <Icon
+                name="bars"
+                size="large"
+                style={{ color: '#707070' }}
+                onClick={() => {
+                  setOpenSideMenu(!openSideMenu);
+                }}
+              />
+            </>
           )}
-
-          <Transition
-                animation="jiggle"
-                duration={600}
-                visible={jiggle}
-              >
-                <Menu.Item>
-                  <Button style={{ backgroundColor: '#ff614d', marginRight: 10, color: "white", width: 80, borderRadius: 30 }}
-                    onClick={() => setOpenCheckOutList(!openCheckOutList)}>
-                    <Icon name='shop' /> {orderItems.length}
-                  </Button>
-                </Menu.Item>
-              </Transition>
-            </Menu.Menu>
+          {showCheckoutButton && (
+            <Transition animation="jiggle" duration={600} visible={jiggle}>
+              <Menu.Item>
+                <Button
+                  style={{
+                    backgroundColor: '#ff614d',
+                    marginRight: 10,
+                    color: 'white',
+                    width: 80,
+                    borderRadius: 30
+                  }}
+                  onClick={() => setOpenCheckOutList(!openCheckOutList)}>
+                  <Icon name="shop" /> {orderItems && orderItems.length}
+                </Button>
+              </Menu.Item>
+            </Transition>
+          )}
+        </Menu.Menu>
       </Menu>
     </div>
   );

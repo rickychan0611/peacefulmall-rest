@@ -37,7 +37,6 @@ const RestaurantCards = ({topic}) => {
       arr.push(tempArr)
     }
     setDishes(arr);
-    console.log(dishes)
   }, [selections]);
 
   // const IMG_URL = `/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`;

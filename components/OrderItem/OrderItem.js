@@ -7,7 +7,11 @@ const OrderItem = ({ item, index }) => {
   const [, setOrderItems] = useRecoilState(orderItemsAtom);
   
   const remove = (index) => {
-    setOrderItems(prev => prev.filter((_, i) => i !== index))
+    setOrderItems(prev => {
+      let removeItems = prev.filter((_, i) => i !== index)
+      localStorage.setItem('orderItems', JSON.stringify(removeItems))
+      return removeItems
+    })
   }
   
   return (

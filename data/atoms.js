@@ -1,5 +1,10 @@
 import { atom } from 'recoil';
 
+export const appReady = atom({
+  key: 'appReady',
+  default: false
+});
+
 export const selections = atom({
   key: 'selections',
   default: {cuisine: "all", category: "", restaurant: ""}

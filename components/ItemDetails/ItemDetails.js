@@ -29,9 +29,11 @@ const ItemDetails = ({ setOpen }) => {
   const price = 10
 
   const addItem = (total) => {
-    setOrderItems(prev => ([{...item, option: value, qty, total}, ...prev]))
-    console.log(orderItems)
-  }
+    setOrderItems(prev => {
+      let updatedItems = [{...item, option: value, qty, total}, ...prev]
+      localStorage.setItem('orderItems', JSON.stringify(updatedItems))
+      return updatedItems
+  })}
 
   return (
     <>

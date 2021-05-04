@@ -1,3 +1,4 @@
+import {useRouter} from 'next/router';
 import styled from 'styled-components';
 import { Sidebar } from 'semantic-ui-react';
 
@@ -6,8 +7,10 @@ import { openCheckOutList as openCheckOutListAtom } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 
 import OrderItem from '../OrderItem';
+import { Router } from 'next/router';
 
 const CheckOutList = () => {
+  const router = useRouter();
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   const [orderItems, ] = useRecoilState(orderItemsAtom);
 
@@ -27,12 +30,14 @@ const CheckOutList = () => {
       width="wide"
       visible={openCheckOutList}
     >
-      {orderItems[0] ?
+      {orderItems && orderItems[0] ?
         <OrdersContainer>
           <H4>Your Order</H4>
           <H4 style={{ color: 'red' }}>Restaurant's name</H4>
           <CheckoutButton
-            onClick={() => setOpenCheckOutList(!openCheckOutList)}>
+            onClick={() => {
+              router.push('/checkout')
+              setOpenCheckOutList(!openCheckOutList)}}>
             <H4>Checkout</H4>
             <H4>${total()}</H4>
           </CheckoutButton>
@@ -88,6 +93,7 @@ const CheckoutButton = styled.div`
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 `;
 const Img = styled.img`
   height: 200px;

@@ -44,7 +44,7 @@ const CheckOutList = () => {
       {orderItems && orderItems[0] ?
         <OrdersContainer>
           <H4>Your Order</H4>
-          <H4 style={{ color: 'red' }}>{orderDetails.store.name}</H4>
+          <H4 style={{ color: 'red' }}>{orderDetails.store && orderDetails.store.name}</H4>
           <CheckoutButton
             onClick={() => {
               router.push('/checkout')

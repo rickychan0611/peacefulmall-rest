@@ -29,12 +29,13 @@ const ItemDetails = ({ setOpen }) => {
 
   const price = 10;
   const store = selections.restaurant;
+  console.log(store)
   const addItem = (total) => {
     //if a restaurant's name is equal to the current resturant, update the object
     //if not, replace the whole orderItem array. Add restaurant to currentRestaurant
     let updatedItems;
     setOrderItems((prev) => {
-      if (prev[0].store.slug === store) {
+      if (prev[0] && prev[0].store.slug === store) {
         updatedItems = [{ ...item, option: value, qty, total, store: selectedStore }, ...prev];
       }
       //replace order with new restaurant's item

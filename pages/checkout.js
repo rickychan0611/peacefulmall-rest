@@ -62,7 +62,7 @@ const checkout = () => {
               return <OrderItem item={item} index={i} key={i} />;
             })}
         <Divider />
-        <a onClick={()=> router.push('/store/' + selections.restaurant)}>+ Add more items</a>
+        <a onClick={()=> router.push('/store/' + orderDetails.orderItems[0].store.slug)}>+ Add more items</a>
         <Divider />
 
         <TotalAmountList orderDetails={orderDetails}/> 

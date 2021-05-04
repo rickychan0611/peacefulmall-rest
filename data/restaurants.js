@@ -1,9 +1,9 @@
 export const restaurants = [{
       "id": 1,
-      "name": "Mission Chinese Food",
-      "slug": "mission-chinese-food",
+      "name": "Peaceful Restaurant",
+      "slug": "peaceful-restaurant",
       "neighborhood": "W. Vancouver",
-      "photo": "1.jpg",
+      "photo": "http://foodology.ca/wp-content/uploads/2018/02/peaceful-restaurant-chinese-new-year-1-2-620x465.jpg",
       "price_range": 3,
       "overall_rating" : 4,
       "address": "532 W. Broadway, Vancouver",
@@ -42,10 +42,10 @@ export const restaurants = [{
       ]
     }, {
       "id": 2,
-      "name": "Emily",
-      "slug": "emily",
+      "name": "Emily Restaurant",
+      "slug": "emily-restaurant",
       "neighborhood": "Brooklyn",
-      "photo": "2.jpg",
+      "photo": "https://images.squarespace-cdn.com/content/v1/53cc1616e4b0f4361f8ace24/1500144882068-WJGEQT209N1NXV780HTF/ke17ZwdGBToddI8pDm48kMR1yAHb8bPoH1-OdajP2rZZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZUJFbgE-7XRK3dMEBRBhUpya-Yv2-AUIrtyc_1d9d84jKAfrgH35AgL5HDK7jKFTEAbkVb2mHFRzAaMt_-j0ggg/image-asset.jpeg",
       "address": "919 Fulton St, Brooklyn, NY 11238",
       "latlng": {
         "lat": 40.683555,
@@ -85,7 +85,7 @@ export const restaurants = [{
       "name": "Kang Ho Dong Baekjeong",
       "slug": "kang-ho-dong-baekjeong",
       "neighborhood": "Manhattan",
-      "photo": "3.jpg",
+      "photo": "https://cdn.vox-cdn.com/thumbor/7Y4BfmLhU6MYl3r6iSsrwRicYfM=/0x0:960x720/1200x800/filters:focal(0x0:960x720)/cdn.vox-cdn.com/uploads/chorus_image/image/50224121/kang-hodong-torrance.0.0.jpg",
       "address": "1 E 32nd St, New York, NY 10016",
       "latlng": {
         "lat": 40.747143,
@@ -125,7 +125,7 @@ export const restaurants = [{
       "name": "Katz's Delicatessen",
       "slug": "katzs-delicatessen",
       "neighborhood": "Manhattan",
-      "photo": "4.jpg",
+      "photo": "https://media.timeout.com/images/105502948/630/472/image.jpg",
       "address": "205 E Houston St, New York, NY 10002",
       "latlng": {
         "lat": 40.722216,
@@ -165,7 +165,7 @@ export const restaurants = [{
       "name": "Roberta's Pizza",
       "slug": "5",
       "neighborhood": "Brooklyn",
-      "photo": "5.jpg",
+      "photo": "https://michelinstarfinedinings.files.wordpress.com/2019/06/5.jpg",
       "address": "261 Moore St, Brooklyn, NY 11206",
       "latlng": {
         "lat": 40.705089,
@@ -205,7 +205,7 @@ export const restaurants = [{
       "name": "Hometown BBQ",
       "slug": "6",
       "neighborhood": "Brooklyn",
-      "photo": "6.jpg",
+      "photo": "http://static1.squarespace.com/static/5533054fe4b09627e6f4c6c1/5545287ae4b015ca71968321/5bda2072032be4a79cb196b2/1541105830054/hometown+bbq+front.jpg",
       "address": "454 Van Brunt St, Brooklyn, NY 11231",
       "latlng": {
         "lat": 40.674925,
@@ -245,7 +245,7 @@ export const restaurants = [{
       "name": "Superiority Burger",
       "slug": "superiority-burger",
       "neighborhood": "Manhattan",
-      "photo": "7.jpg",
+      "photo": "https://cdn.vox-cdn.com/thumbor/Q_Ni6Dy9jHBlKebLA_gRafq_QWk=/0x0:2000x1336/1200x0/filters:focal(0x0:2000x1336):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/3824880/superiority_burger-11.0.jpg",
       "address": "430 E 9th St, New York, NY 10009",
       "latlng": {
         "lat": 40.727397,
@@ -285,7 +285,7 @@ export const restaurants = [{
       "name": "The Dutch",
       "slug": "the-dutch",
       "neighborhood": "Manhattan",
-      "photo": "8.jpg",
+      "photo": "https://media.timeout.com/images/100347355/630/472/image.jpg",
       "address": "131 Sullivan St, New York, NY 10012",
       "latlng": {
         "lat": 40.726584,
@@ -325,7 +325,7 @@ export const restaurants = [{
       "name": "Mu Ramen",
       "slug": "mu-ramen",
       "neighborhood": "Queens",
-      "photo": "9.jpg",
+      "photo": "https://i.pinimg.com/originals/e5/02/be/e502be7b81979cb25c87b286c0806f6d.jpg",
       "address": "1209 Jackson Ave, Queens, NY 11101",
       "latlng": {
         "lat": 40.743797,
@@ -365,7 +365,7 @@ export const restaurants = [{
       "name": "Casa Enrique",
       "slug": "casa-enrique",
       "neighborhood": "Queens",
-      "photo": "10.jpg",
+      "photo": "https://www.nycgo.com/images/venues/4808/casa_enrique-1__large.jpg",
       "address": "5-48 49th Ave, Queens, NY 11101",
       "latlng": {
         "lat": 40.743394,

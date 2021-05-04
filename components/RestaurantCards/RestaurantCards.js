@@ -27,7 +27,8 @@ const RestaurantCards = ({topic}) => {
                 router.push('/store/' + r.slug +"#top")
                 setSelections(prev => ({...prev, restaurant: r.slug}))
               }}>
-                <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} />
+                {/* <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} /> */}
+                <Img src={r.photo} />
                 <Name>{r.name}</Name>
                 {/* <Description>{item.description}</Description> */}
                 <Description>Location: {r.neighborhood}</Description>

@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
-import { useRecoilState } from 'recoil';
-import { activeTabIndex as activeTabAtom } from '../../data/atoms.js';
 
 import styled from 'styled-components';
-import { Grid, Container, Ref, Visibility, Image } from 'semantic-ui-react';
+import { Grid, Container, Visibility } from 'semantic-ui-react';
 import SearchBanner from '../../components/SearchBanner/';
 import Slider from '../../components/Slider/';
 import PopularDishes from '../../components/PopularDishes/';
@@ -14,10 +12,8 @@ import RestaurantSideBar from '../../components/RestaurantSideBar/';
 import RestaurantMenu from '../../components/RestaurantMenu/';
 import Footer from '../../components/Footer/';
 import ReviewFeed from '../../components/ReviewFeed/index.js';
-import RestaurantTabs from '../../components/RestaurantTabs/RestaurantTabs.js';
 
 const restaurant = () => {
-  const [activeTabIndex, setActiveTabIndex] = useRecoilState(activeTabAtom);
 
   const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
@@ -28,11 +24,7 @@ const restaurant = () => {
     // calculations.pixelsPassed > 350 ? setHide('hidden') : setHide('active');
   };
 
-  useEffect(() => {
-    return () => setActiveTabIndex(0);
-  }, []);
-
-  return (
+ return (
     <div id="top">
 
       <SearchBannerWrapper>
@@ -92,9 +84,6 @@ const restaurant = () => {
                   <Slider topic="Restaurants you may like" hideViewAll>
                     <PopularDishes />
                   </Slider>
-                  {/* <TabsContainer id="tabs">
-                    <RestaurantTabs labelRef={labelRef} />
-                  </TabsContainer> */}
                 </div>
               </Visibility>
           </Grid.Column>
@@ -144,10 +133,6 @@ z-index: 1000;
     transition: all 200ms ease-out;
     transform: translate(0, -100%);
   }
-`;
-const TabsContainer = styled.div`
-  /* margin-top: -10px;
-  padding-top: 10px */
 `;
 const Title = styled.h1`
   font-size: 2.5rem;

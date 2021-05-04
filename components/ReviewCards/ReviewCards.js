@@ -2,28 +2,19 @@ import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { data } from '../../data/restaurants';
-import ItemModal from '../ItemModal/';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import { useRecoilState } from 'recoil';
 import {
   selections as selectionsAtom,
-  selectedItem as itemAtom,
-  activeTabIndex as activeTabAtom,
 } from '../../data/atoms.js';
-import { Button, Label, Segment } from 'semantic-ui-react';
 
-const ReviewCards = ({ tab }) => {
+const ReviewCards = () => {
   const isDesktop = useDesktopMediaQuery();
   const [dishes, setDishes] = useState([]);
-  const [open, setOpen] = useState(false);
-  const router = useRouter()
 
   const [selections, setSelections] = useRecoilState(selectionsAtom);
-  const [selectedItem, setSelectedItem] = useRecoilState(itemAtom);
-  const [activeTabIndex, setActiveTabIndex] = useRecoilState(activeTabAtom);
 
   useEffect(() => {
     let temp = [];
@@ -61,11 +52,6 @@ const ReviewCards = ({ tab }) => {
     setDishes(arr);
   }, [selections]);
 
-  // const route = (item) => {
-  //   console.log(item);
-  //   setActiveTabIndex(tab)
-  //   // router.push({pathname: '/restaurant/' + "peaceful-restaurant#reviews"})
-  // };
   return (
     <>
       {dishes[0] &&

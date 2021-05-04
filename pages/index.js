@@ -44,10 +44,10 @@ const Home = () => {
               <RestaurantCards />
             </Slider>
             <Slider topic="User's Reviews" icon="star">
-              <ReviewCards tab={1} />
+              <ReviewCards />
             </Slider>
             <Slider topic="Editor's Top Picks" icon="star">
-              <ReviewCards tab={2} />
+              <ReviewCards />
             </Slider>
           </Container>
         </Ref>

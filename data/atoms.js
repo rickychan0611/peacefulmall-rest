@@ -30,11 +30,6 @@ export const selectedItem = atom({
   default: {}
 });
 
-export const activeTabIndex = atom({
-  key: 'activeTabIndex',
-  default: 1
-});
-
 export const scrolling = atom({
   key: 'scrolling',
   default: 1

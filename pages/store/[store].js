@@ -11,7 +11,7 @@ import { selectedStore as selectedStoreAtom } from '../../data/storeAtoms';
 import { Grid, Container, Dimmer, Loader } from 'semantic-ui-react';
 import SearchBanner from '../../components/SearchBanner';
 import Slider from '../../components/Slider';
-// import PopularDishes from '../../components/PopularDishes/';
+import PopularDishes from '../../components/PopularDishes/';
 import RestaurantSideBar from '../../components/RestaurantSideBar';
 import RestaurantMenu from '../../components/RestaurantMenu';
 import Footer from '../../components/Footer';
@@ -31,8 +31,12 @@ const store = () => {
     if (router.query.store) {
       setSelections((prev) => ({ ...prev, restaurant: router.query.store }));
     }
-    console.log(selectedStore);
   }, [router]);
+
+  useEffect(() => {
+    if (selectedStore === "not found") router.push('/404')
+    console.log(selectedStore);
+  }, [selectedStore]);
 
   return (
     <div id="top">
@@ -42,7 +46,7 @@ const store = () => {
       </SearchBannerWrapper>}
 
       <Container style={{ padding: '150px 0px 0px 0px' }}>
-        {!selectedStore ? (
+        {!selectedStore || selectedStore === "not found"? (
           <div style={{ height: '80vh' }}>
           <Dimmer inverted active={!selectedStore}>
             <Loader active content="Loading"/>
@@ -71,7 +75,7 @@ const store = () => {
                   <Wrapper>
                     <Avatar src="/logo-p.png" />
                     <div style={{ width: 'calc(100% - 50px)' }}>
-                      <Title>{selectedStore && selectedStore.name}</Title>
+                      <Title>{selectedStore.name}</Title>
                       <Description style={{ marginBottom: 60 }}>
                         globally inspired restaurant focused on using the freshest ingredients and
                         making our food and drinks from scratch. We believe in using the best
@@ -82,7 +86,7 @@ const store = () => {
                   </Wrapper>
 
                   <Slider topic="Popular Items" hideViewAll>
-                    {/* <PopularDishes /> */}
+                    <PopularDishes />
                   </Slider>
 
                   <RestaurantMenu store={selectedStore} />

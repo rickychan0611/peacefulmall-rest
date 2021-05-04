@@ -3,17 +3,10 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { 
-  selectedItem as itemAtom,
-  selections as selectionsAtom
-} from '../../data/atoms.js';
+import { selectedItem as itemAtom, selections as selectionsAtom } from '../../data/atoms.js';
 
-import {
-  orderItems as orderItemsAtom,
- } from '../../data/orderAtoms.js';
-import {
-  selectedStore as selectedStoreAtom,
- } from '../../data/storeAtoms.js';
+import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
+import { selectedStore as selectedStoreAtom } from '../../data/storeAtoms.js';
 
 import { Form, Grid, Icon, Radio } from 'semantic-ui-react';
 import BottomAddBar from '../../components/BottomAddBar';
@@ -27,24 +20,31 @@ const ItemDetails = ({ setOpen }) => {
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const [selectedStore, setSelectedStore] = useRecoilState(selectedStoreAtom);
-  const [value, setValue] = useState({option: 'option0', value: 0});
+  const [value, setValue] = useState({ option: 'option0', value: 0 });
   const [qty, setQty] = useState(1);
 
   const handleClose = () => {
     isDesktop ? setOpen(false) : router.back();
   };
 
-  const price = 10
-  const currentRestaurant = selections.restaurant
-
+  const price = 10;
+  const store = selections.restaurant;
   const addItem = (total) => {
-    //TODO: if a restaurant's name is equal to the current resturant, update the object
+    //if a restaurant's name is equal to the current resturant, update the object
     //if not, replace the whole orderItem array. Add restaurant to currentRestaurant
-    setOrderItems(prev => {
-      let updatedItems = [{...item, option: value, qty, total, currentRestaurant}, ...prev]
-      localStorage.setItem('orderItems', JSON.stringify(updatedItems))
-      return updatedItems
-  })}
+    let updatedItems;
+    setOrderItems((prev) => {
+      if (prev[0].store.slug === store) {
+        updatedItems = [{ ...item, option: value, qty, total, store: selectedStore }, ...prev];
+      }
+      //replace order with new restaurant's item
+      else {
+        updatedItems = [{ ...item, option: value, qty, total, store: selectedStore }];
+      }
+      localStorage.setItem('orderItems', JSON.stringify(updatedItems));
+      return updatedItems;
+    });
+  };
 
   return (
     <>
@@ -58,7 +58,10 @@ const ItemDetails = ({ setOpen }) => {
         <h4>Choose your options</h4>
         <Form>
           <Form.Field>
-            Selected option: <b>{value.option} : +${value.value}</b>
+            Selected option:{' '}
+            <b>
+              {value.option} : +${value.value}
+            </b>
           </Form.Field>
           {_.times(6, (i) => (
             <Form.Field key={i}>
@@ -71,7 +74,7 @@ const ItemDetails = ({ setOpen }) => {
                     checked={value.option === 'option' + i}
                     onChange={(e, { value }) => {
                       console.log(e);
-                      setValue({option: value, value: i});
+                      setValue({ option: value, value: i });
                     }}
                   />
                 </Grid.Column>
@@ -84,7 +87,14 @@ const ItemDetails = ({ setOpen }) => {
         </Form>
       </Container>
 
-      <BottomAddBar qty={qty} setQty={setQty} option={value} price={price} addItem={addItem} setOpen={setOpen}/>
+      <BottomAddBar
+        qty={qty}
+        setQty={setQty}
+        option={value}
+        price={price}
+        addItem={addItem}
+        setOpen={setOpen}
+      />
     </>
   );
 };

@@ -30,7 +30,7 @@ const RestaurantSideBar = ({store}) => {
           <List.Item onClick={() => setOpen(true)}>
             <List.Icon name="map marker alternate" style={{ margiTop: 30 }} />
             <List.Content>
-              <List.Header as="a">${store.address}</List.Header>
+              <List.Header as="a">{store.address}</List.Header>
               <List.Description>View Map</List.Description>
             </List.Content>
           </List.Item>
@@ -88,7 +88,7 @@ const RestaurantSideBar = ({store}) => {
             <List.Icon name="food" />
             <List.Content>
               <List.Header as="a">Cuisines</List.Header>
-              <List.Description>Chinese, Asian</List.Description>
+              <List.Description>{store.cuisine_type}</List.Description>
             </List.Content>
           </List.Item>
           <br />

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-import { data } from '../../data/restaurants';
+import { data } from '../../data/restaurants-old';
 import {useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
 import { useRecoilState } from 'recoil';

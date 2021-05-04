@@ -24,7 +24,7 @@ const RestaurantCards = ({topic}) => {
           stores.map((r, i) => {
             return (
               <Card key={i} onClick={()=>{
-                router.push('/store/' + r.slug)
+                router.push('/store/' + r.slug +"#top")
                 setSelections(prev => ({...prev, restaurant: r.slug}))
               }}>
                 <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} />

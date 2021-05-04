@@ -1,4 +1,5 @@
 import { atom, selector } from 'recoil';
+import { selectedStore } from './storeAtoms'
 
 export const orderItems = atom({
   key: 'orderItems',
@@ -23,7 +24,8 @@ export const orderDetails = selector({
         taxes,
         shippingFee: 0,
         discount: 0,
-        total: subtotal + taxes
+        total: subtotal + taxes,
+        store: get(selectedStore)
       }
     )
   }

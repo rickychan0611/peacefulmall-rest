@@ -5,9 +5,12 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { 
   selectedItem as itemAtom,
-
+  selections as selectionsAtom
 } from '../../data/atoms.js';
-import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
+
+import {
+  orderItems as orderItemsAtom,
+ } from '../../data/orderAtoms.js';
 
 import { Form, Grid, Icon, Radio } from 'semantic-ui-react';
 import BottomAddBar from '../../components/BottomAddBar';
@@ -19,6 +22,7 @@ const ItemDetails = ({ setOpen }) => {
   const router = useRouter();
   const [item, setItem] = useRecoilState(itemAtom);
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
+  const [selections, setSelections] = useRecoilState(selectionsAtom);
   const [value, setValue] = useState({option: 'option0', value: 0});
   const [qty, setQty] = useState(1);
 
@@ -29,6 +33,8 @@ const ItemDetails = ({ setOpen }) => {
   const price = 10
 
   const addItem = (total) => {
+    //TODO: if restaurant's name is equal to currect restuaant of the whole object, update
+    //if not, replace the whole orderItem array. Add restaurant to currentRestaurant
     setOrderItems(prev => {
       let updatedItems = [{...item, option: value, qty, total}, ...prev]
       localStorage.setItem('orderItems', JSON.stringify(updatedItems))

@@ -6,7 +6,8 @@ import { useRecoilValue, useRecoilState } from 'recoil';
 import { orderDetails as orderDetailsAtom } from '../data/orderAtoms.js';
 import { 
   appReady as appReadyAtom,   
-  showCheckoutButton as showCheckoutButtonAtom
+  showCheckoutButton as showCheckoutButtonAtom,
+  selections as selectionsAtom
 } from '../data/atoms';
 
 import OrderItem from '../components/OrderItem/';
@@ -16,6 +17,7 @@ import TotalAmountList from '../components/TotalAmountList/';
 const checkout = () => {
   const router = useRouter()
   const orderDetails = useRecoilValue(orderDetailsAtom);
+  const selections = useRecoilValue(selectionsAtom);
   const [deliveryTime, setDeliveryTime] = useState("ASAP")
   const appReady = useRecoilValue(appReadyAtom);
   const [, setShowCheckoutButton] = useRecoilState(showCheckoutButtonAtom);
@@ -25,6 +27,7 @@ const checkout = () => {
   },[orderDetails])
   
   useEffect(() => {
+    console.log("selections", selections)
     setShowCheckoutButton(false);
     return ()=> setShowCheckoutButton(true)
   },[])
@@ -33,7 +36,9 @@ const checkout = () => {
     <>
       <Container>
         <OrdersContainer>
+
           <h2>Delivery Details</h2>
+
           <Header>Address</Header>
           <H4>
             <Icon name="point" />
@@ -43,11 +48,13 @@ const checkout = () => {
             <Icon name="smile outline" />
             Instruction: Leave at door <a> edit</a>
           </H4>
+
           <Header>Delivery Time</Header>
           <div>
               <Button color={deliveryTime === "ASAP" ? "green" : "white"} onClick={()=>setDeliveryTime("ASAP")}>ASAP: 20 - 30min</Button>
               <Button color={deliveryTime === "Schedule" ? "green" : "white"} onClick={()=>setDeliveryTime("Schedule")}>Schedule</Button>
           </div>
+
           <Header>Order Summary</Header>
           {orderDetails.orderItems &&
             orderDetails.orderItems[0] &&
@@ -57,8 +64,11 @@ const checkout = () => {
         <Divider />
         <a>Add more item+</a>
         <Divider />
+
         <TotalAmountList orderDetails={orderDetails}/> 
+
         <Divider />
+
         <Header>Payment method</Header>
         <div>
         {/* <Button color="red"><Icon name="credit card" />Credit Card</Button>
@@ -70,6 +80,7 @@ const checkout = () => {
             <div>Place Order</div>
             <div>${orderDetails.total}</div>
           </CheckoutButton>
+
         </OrdersContainer>
       </Container>
     </>

@@ -6,7 +6,8 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   appReady as appReadyAtom,
   openSideMenu as openSideMenuAtom,
-  openCheckOutList as openCheckOutListAtom
+  openCheckOutList as openCheckOutListAtom,
+  showCheckoutButton as showCheckoutButtonAtom
 } from '../../data/atoms.js';
 import { user as userAtom } from '../../data/userAtom';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
@@ -47,25 +48,20 @@ const options = [
 const TopBar = () => {
   const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
-  const appReady = useRecoilValue(appReadyAtom);
   const user = useRecoilValue(userAtom);
-  const orderItems  = useRecoilValue(orderItemsAtom);
+  const orderItems = useRecoilValue(orderItemsAtom);
+  const showCheckoutButton = useRecoilValue(showCheckoutButtonAtom);
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   const [jiggle, setJiggle] = useState(false);
-  const [showCheckoutButton, setShowCheckoutButton] = useState(true);
 
   useEffect(() => {
     setJiggle(!jiggle);
   }, [orderItems]);
 
   useEffect(() => {
-    console.log(appReady)
-    console.log(router.route)
-    console.log(router.route === '/checkout')
-    setShowCheckoutButton(router.route === '/checkout' ? false : true);
-    console.log(showCheckoutButton)
-  }, [router.route, appReady]);
+    console.log("showCheckoutButton", showCheckoutButton)
+  }, [showCheckoutButton])
 
   return (
     <div>
@@ -138,23 +134,25 @@ const TopBar = () => {
               />
             </>
           )}
-          {showCheckoutButton && (
-            <Transition animation="jiggle" duration={600} visible={jiggle}>
-              <Menu.Item>
-                <Button
-                  style={{
-                    backgroundColor: '#ff614d',
-                    marginRight: 10,
-                    color: 'white',
-                    width: 80,
-                    borderRadius: 30
-                  }}
-                  onClick={() => setOpenCheckOutList(!openCheckOutList)}>
-                  <Icon name="shop" /> {orderItems && orderItems.length}
-                </Button>
-              </Menu.Item>
-            </Transition>
-          )}
+          <Transition animation="jiggle" duration={600} visible={jiggle}>
+            <div style={{ marginTop: 5 }}>
+              {showCheckoutButton &&
+                <Menu.Item>
+                  <Button
+                    style={{
+                      backgroundColor: '#ff614d',
+                      marginRight: 10,
+                      color: 'white',
+                      width: 80,
+                      borderRadius: 30
+                    }}
+                    onClick={() => setOpenCheckOutList(!openCheckOutList)}>
+                    <Icon name="shop" /> {orderItems && orderItems.length}
+                  </Button>
+                </Menu.Item>
+              }
+            </div>
+          </Transition>
         </Menu.Menu>
       </Menu>
     </div>

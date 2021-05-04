@@ -39,3 +39,8 @@ export const scrolling = atom({
   key: 'scrolling',
   default: 1
 });
+
+export const showCheckoutButton = atom({
+  key: 'showCheckoutButton',
+  default: true
+});

@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Router, useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import { Container, Button, Header, Icon, Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import { orderDetails as orderDetailsAtom } from '../data/orderAtoms.js';
-import { appReady as appReadyAtom } from '../data/atoms';
+import { 
+  appReady as appReadyAtom,   
+  showCheckoutButton as showCheckoutButtonAtom
+} from '../data/atoms';
 
 import OrderItem from '../components/OrderItem/';
 import TotalAmountList from '../components/TotalAmountList/';
@@ -15,12 +18,16 @@ const checkout = () => {
   const orderDetails = useRecoilValue(orderDetailsAtom);
   const [deliveryTime, setDeliveryTime] = useState("ASAP")
   const appReady = useRecoilValue(appReadyAtom);
+  const [, setShowCheckoutButton] = useRecoilState(showCheckoutButtonAtom);
 
   useEffect(() => {
-    console.log(appReady)
-    console.log(orderDetails.orderItems[0])
-    appReady && orderDetails.orderItems && orderDetails.orderItems[0] === undefined && router.push('/')
+    appReady && orderDetails && !orderDetails.orderItems[0] && router.push('/')
   },[orderDetails])
+  
+  useEffect(() => {
+    setShowCheckoutButton(false);
+    return ()=> setShowCheckoutButton(true)
+  },[])
 
   return (
     <>

@@ -1,6 +1,6 @@
 import {useRouter} from 'next/router';
 import styled from 'styled-components';
-import { Sidebar } from 'semantic-ui-react';
+import { Sidebar, Icon } from 'semantic-ui-react';
 
 import { useRecoilState } from 'recoil';
 import { openCheckOutList as openCheckOutListAtom } from '../../data/atoms.js';
@@ -30,6 +30,9 @@ const CheckOutList = () => {
       width="wide"
       visible={openCheckOutList}
     >
+      <Icon name="close" size="large"
+          style={{ marginTop: 80, marginLeft: 10, marginBottom: 20, cursor: "pointer" }}
+          onClick={()=>setOpenCheckOutList(false)}/>
       {orderItems && orderItems[0] ?
         <OrdersContainer>
           <H4>Your Order</H4>
@@ -79,7 +82,7 @@ const OrdersContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  padding: 80px 20px;
+  padding: 0px 20px;
 `;
 const H4 = styled.h4`
   margin: 0;

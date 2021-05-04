@@ -65,8 +65,7 @@ const Profile = () => {
     <>{user && editedUser && <CenteredFlex>
       <h1>Profile</h1>
       <Divider />
-      <Form>
-
+      <Form onSubmit={handleSave}>
         <Form.Group widths='equal'>
           <Form.Input fluid required
             label='First name'
@@ -107,7 +106,7 @@ const Profile = () => {
           <Button 
           content={loading ? <Icon name="spinner" loading style={{margin: 0, width: 30}}/> : "Save"} 
           disabled={disableSave} color="red"
-            onClick={() => handleSave()}
+            // onClick={() => handleSave()}
           />
           <Transition animation='swing right' duration={{hide: 0, show: 1000}} visible={visible}>
             <div><Icon name="check" color="green" /> saved!</div>

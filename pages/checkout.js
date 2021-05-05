@@ -77,9 +77,10 @@ const checkout = () => {
             </H4>
             <H4>
               <Icon name="smile outline" />
-              Instruction: Leave at door
+              Instruction: {orderDetails.deliveryAddress.dropoff}
               <EditButton />
             </H4>
+            <H4 style={{marginLeft: 20}}>{orderDetails.deliveryAddress.instructions}</H4>
 
             <Header>Delivery Time</Header>
             <div>

@@ -13,6 +13,8 @@ export const userdata = {
       postalCode: "V7A 4M9",
       province: "BC",
       country: "Canada",
+      dropoff: "Leave it at my door",
+      instructions: ""
   },
   addresses: [
     {

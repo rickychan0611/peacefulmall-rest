@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { Segment, Header, Form, Icon, Divider, Modal } from 'semantic-ui-react';
+import { Segment, Header, Form, Icon, Divider, Modal, TextArea, Button } from 'semantic-ui-react';
 import { useDesktopMediaQuery } from '../Responsive/Responsive';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom.js';
 import { useEffect } from 'react';
 import AddressNewForm from '../AddressNewForm';
+import { set } from 'lodash';
 
-const AddressChange = ({setOpen}) => {
+const AddressChange = ({ setOpen }) => {
   const router = useRouter();
   const isDesktop = useDesktopMediaQuery();
   const [user, setUser] = useRecoilState(userAtom);
@@ -25,6 +26,8 @@ const AddressChange = ({setOpen}) => {
   const [openEdit, setOpenEdit] = useState('');
   const [newAddress, setNewAddress] = useState({});
   const [err, setErr] = useState({});
+  const [dropoff, setDropoff] = useState(user.deliveryAddress.dropoff);
+  const [instructions, setInstructions] = useState(user.deliveryAddress.instructions);
 
   const selectAddress = (address) => {
     setUser((prev) => ({ ...prev, deliveryAddress: address }));
@@ -50,25 +53,31 @@ const AddressChange = ({setOpen}) => {
       const index = prev.addresses.findIndex((item) => item.id === newAddress.id);
       let newAddresses = [...prev.addresses];
       newAddresses[index] = newAddress;
-      console.log(newAddresses)
-      return { ...prev, addresses: newAddresses, deliveryAddress: newAddress};
+      console.log(newAddresses);
+      return { ...prev, addresses: newAddresses, deliveryAddress: newAddress };
     });
     setSelectedAddress(newAddress);
     setNewAddress({});
     setOpenEdit('');
   };
-  
+
   const removeAddress = (id) => {
     setUser((prev) => {
       const index = prev.addresses.findIndex((item) => item.id === id);
       let newAddresses = [...prev.addresses];
-      newAddresses.splice(index, 1)
-      console.log(newAddresses)
-      return { ...prev, addresses: newAddresses, deliveryAddress: selectedAddress};
+      newAddresses.splice(index, 1);
+      console.log(newAddresses);
+      return { ...prev, addresses: newAddresses, deliveryAddress: selectedAddress };
     });
     setSelectedAddress(newAddress);
-
   };
+
+  const handleOK = () => {
+    setOpen(false);
+    setUser((prev) => {
+      return { ...prev, deliveryAddress: {...prev.deliveryAddress, dropoff, instructions} };
+    });
+  }
 
   useEffect(() => {
     setSelectedAddress(user.deliveryAddress);
@@ -79,11 +88,17 @@ const AddressChange = ({setOpen}) => {
   return (
     <Segment basic padded>
       <Header>Change Address</Header>
-      <Form.Field>
-        Selected address: <b>{selectedAddress.address1}</b>
-      </Form.Field>
+      <Form onSubmit={addAddress}>
+        {openNew && (
+          <AddressNewForm err={err} setNewAddress={setNewAddress} newAddress={newAddress} />
+        )}
+        {!openNew ? (
+          <AddAddress onClick={() => setOpenNew(!openNew)}> + Add a new Address</AddAddress>
+        ) : (
+          <AddAddress onClick={() => setOpenNew(!openNew)}> - Hide</AddAddress>
+        )}
+      </Form>
       <Divider />
-
       {user &&
         user.addresses[0] &&
         user.addresses.map((address) => {
@@ -93,9 +108,6 @@ const AddressChange = ({setOpen}) => {
                 <Row
                   onClick={() => {
                     selectAddress(address);
-                    setTimeout(()=>{
-                      setOpen(false)
-                    },400)
                   }}>
                   <RadioButton
                     readOnly
@@ -104,11 +116,14 @@ const AddressChange = ({setOpen}) => {
                     checked={selectedAddress.id === address.id}
                   />
                   <Column>
-                    <Address1 style={{color: selectedAddress.id === address.id && "#5858e0"}}>
+                    <H4 style={{ color: selectedAddress.id === address.id && '#5858e0' }}>
                       {address.address1}
                       {address.address2 && ', ' + address.address2}
-                    </Address1>
-                    <Address2 style={{color: selectedAddress.id === address.id && "#5858e0"}}>{`${address.city}, ${address.province}, ${address.country}`}</Address2>
+                    </H4>
+                    <P
+                      style={{
+                        color: selectedAddress.id === address.id && '#5858e0'
+                      }}>{`${address.city}, ${address.province}, ${address.country}`}</P>
                   </Column>
                 </Row>
                 <div>
@@ -120,7 +135,11 @@ const AddressChange = ({setOpen}) => {
                     }}
                   />
                   {selectedAddress.id !== address.id && (
-                    <Icon name="delete" style={{ marginLeft: 20 }} onClick={()=>removeAddress(address.id)}/>
+                    <Icon
+                      name="delete"
+                      style={{ marginLeft: 20 }}
+                      onClick={() => removeAddress(address.id)}
+                    />
                   )}
                 </div>
               </Container>
@@ -140,16 +159,37 @@ const AddressChange = ({setOpen}) => {
           );
         })}
       <Divider />
-      <Form onSubmit={addAddress}>
-        {!openNew ? (
-          <AddAddress onClick={() => setOpenNew(!openNew)}> + Add a new Address</AddAddress>
-        ) : (
-          <AddAddress onClick={() => setOpenNew(!openNew)}> - Hide</AddAddress>
-        )}
-        {openNew && (
-          <AddressNewForm err={err} setNewAddress={setNewAddress} newAddress={newAddress} />
-        )}
-      </Form>
+      <Header>Drop-off options</Header>
+      <Container style={{ justifyContent: 'flex-start' }}>
+        <Row style={{ marginRight: 40 }} onClick={()=>setDropoff('Hand it to me')}>
+          <RadioButton
+            readOnly
+            type="radio"
+            value={'Hand it to me'}
+            checked={dropoff === 'Hand it to me'}
+          />
+          <Column><H4>Hand it to me</H4></Column>
+        </Row>
+        <Row onClick={()=>setDropoff('Leave it at my door')}>
+          <RadioButton
+            readOnly
+            type="radio"
+            value={'Leave it at my door'}
+            checked={dropoff === 'Leave it at my door'}
+          />
+          <Column><H4>Leave it at my door</H4></Column>
+        </Row>
+      </Container>
+      <H4>Instructions:</H4>
+      <TextArea
+        style={{ width: '100%', maxWidth: '100%', minWidth: '100%'}}
+        placeholder="eg. rignt the bell after dropoff, call for buzz code"
+        value={instructions}
+        onChange={(e)=>setInstructions(e.target.value)}
+      />
+      <Divider />
+      <Button style={{ backgroundColor: '#ff614d', color: 'white' }}
+      onClick={handleOK}>OK</Button>
     </Segment>
   );
 };
@@ -183,10 +223,10 @@ const Column = styled.div`
   flex-direction: column;
   flex-wrap: nowrap;
 `;
-const Address1 = styled.h4`
+const H4 = styled.h4`
   margin: 0;
 `;
-const Address2 = styled.p`
+const P = styled.p`
   margin: 0;
   color: grey;
 `;

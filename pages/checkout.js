@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Button, Header, Icon, Divider } from 'semantic-ui-react';
+import { Container, Button, Header, Icon, Divider, Modal } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { orderDetails as orderDetailsAtom } from '../data/orderAtoms.js';
@@ -12,6 +12,7 @@ import {
 
 import OrderItem from '../components/OrderItem/';
 import TotalAmountList from '../components/TotalAmountList/';
+import AddressChange from '../components/AddressChange/AddressChange.js';
 
 const checkout = () => {
   const router = useRouter();
@@ -20,6 +21,17 @@ const checkout = () => {
   const [deliveryTime, setDeliveryTime] = useState('ASAP');
   const appReady = useRecoilValue(appReadyAtom);
   const [, setShowCheckoutButton] = useRecoilState(showCheckoutButtonAtom);
+  const [open, setOpen] = useState(false);
+
+  const EditButton = () => (
+    <Edit
+      onClick={() => {
+        setOpen(true);
+      }}>
+      <Icon name="edit" />
+      edit
+    </Edit>
+  );
 
   useEffect(() => {
     appReady && orderDetails && !orderDetails.orderItems[0] && router.push('/');
@@ -33,6 +45,9 @@ const checkout = () => {
 
   return (
     <>
+      <Modal closeIcon open={open} size="tiny" onClose={() => setOpen(false)}>
+        <AddressChange setOpen={setOpen}  />
+      </Modal>
       {orderDetails.store && (
         <Container>
           <OrdersContainer>
@@ -44,19 +59,26 @@ const checkout = () => {
               height="250"
               style={{ border: 10 }}
               loading="lazy"
-              allowfullscreen
-              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBHJSZlrLMWPcINP1GWunczBAt5bs-ZpzY&q=
+              allowFullScreen
+              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBugBL6F0x-jyq_4l-6OS1i8Du6yv9bH-s&q=
               ${orderDetails.store.address}`}></iframe>
             <Divider />
 
             <Header>Your Address</Header>
             <H4>
               <Icon name="point" />
-              1128 W Broadway, Vancouver, BC, J4Y OK7, Canada <a> edit</a>
+              {orderDetails.deliveryAddress.address1},&nbsp;
+              {orderDetails.deliveryAddress.address2 && orderDetails.deliveryAddress.address2 + ','}
+              &nbsp;
+              {orderDetails.deliveryAddress.city},&nbsp;
+              {orderDetails.deliveryAddress.province},&nbsp;
+              {orderDetails.deliveryAddress.country}
+              <EditButton />
             </H4>
             <H4>
               <Icon name="smile outline" />
-              Instruction: Leave at door <a> edit</a>
+              Instruction: Leave at door
+              <EditButton />
             </H4>
 
             <Header>Delivery Time</Header>
@@ -88,12 +110,7 @@ const checkout = () => {
             <TotalAmountList orderDetails={orderDetails} />
 
             <Divider />
-
             <Header>Payment method</Header>
-            <div>
-              {/* <Button color="red"><Icon name="credit card" />Credit Card</Button>
-        <Button color="blue"><Icon name="paypal" />Paypal</Button> */}
-            </div>
             <Divider />
 
             <CheckoutButton onClick={() => {}}>
@@ -117,6 +134,10 @@ const OrdersContainer = styled.div`
 `;
 const H4 = styled.h4`
   margin: 0 0 10px 0;
+`;
+const Edit = styled.a`
+  cursor: pointer;
+  margin-left: 10px;
 `;
 const CheckoutButton = styled.div`
   background-color: black;

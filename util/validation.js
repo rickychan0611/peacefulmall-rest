@@ -11,7 +11,6 @@ schema
   .has().not().spaces()                           // Should not have spaces
 
 const validation = (inputs) => {
-  console.log("VVV", inputs)
   return new Promise((resolve, reject) => {
     
     if (inputs.email && !validator.isEmail(inputs.email)) {

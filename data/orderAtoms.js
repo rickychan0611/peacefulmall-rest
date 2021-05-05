@@ -25,7 +25,7 @@ export const orderDetails = selector({
         shippingFee: 0,
         discount: 0,
         total: subtotal + taxes,
-        store: get(selectedStore)
+        store: items[0] && items[0].store
       }
     )
   }

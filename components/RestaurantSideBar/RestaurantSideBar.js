@@ -17,7 +17,7 @@ const RestaurantSideBar = ({store}) => {
             loading="lazy"
             allowfullscreen
             src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBHJSZlrLMWPcINP1GWunczBAt5bs-ZpzY&q=
-            ${store.address}`}>   
+            ${store.address}&iwloc=near`}>   
           </iframe>
         </Modal.Content>
       </Modal>

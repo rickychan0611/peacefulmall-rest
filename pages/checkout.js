@@ -3,7 +3,10 @@ import { useRouter } from 'next/router';
 import { Container, Button, Header, Icon, Divider, Modal } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useRecoilValue, useRecoilState } from 'recoil';
-import { orderDetails as orderDetailsAtom } from '../data/orderAtoms.js';
+import {
+  orderDetails as orderDetailsAtom,
+  shippingMethod as shippingMethodAtom
+} from '../data/orderAtoms.js';
 import {
   appReady as appReadyAtom,
   showCheckoutButton as showCheckoutButtonAtom,
@@ -21,6 +24,7 @@ const checkout = () => {
   const [deliveryTime, setDeliveryTime] = useState('ASAP');
   const appReady = useRecoilValue(appReadyAtom);
   const [, setShowCheckoutButton] = useRecoilState(showCheckoutButtonAtom);
+  const [, setShippingMethod] = useRecoilState(shippingMethodAtom);
   const [open, setOpen] = useState(false);
 
   const EditButton = () => (
@@ -46,7 +50,7 @@ const checkout = () => {
   return (
     <>
       <Modal closeIcon open={open} size="tiny" onClose={() => setOpen(false)}>
-        <AddressChange setOpen={setOpen}  />
+        <AddressChange setOpen={setOpen} />
       </Modal>
       {orderDetails.store && (
         <Container>
@@ -64,38 +68,68 @@ const checkout = () => {
               ${orderDetails.store.address}`}></iframe>
             <Divider />
 
-            <Header>Your Address</Header>
-            <H4>
-              <Icon name="point" />
-              {orderDetails.deliveryAddress.address1},&nbsp;
-              {orderDetails.deliveryAddress.address2 && orderDetails.deliveryAddress.address2 + ','}
-              &nbsp;
-              {orderDetails.deliveryAddress.city},&nbsp;
-              {orderDetails.deliveryAddress.province},&nbsp;
-              {orderDetails.deliveryAddress.country}
-              <EditButton />
-            </H4>
-            <H4>
-              <Icon name="smile outline" />
-              Instruction: {orderDetails.deliveryAddress.dropoff}
-              <EditButton />
-            </H4>
-            <H4 style={{marginLeft: 20}}>{orderDetails.deliveryAddress.instructions}</H4>
+            <Header>Delivery or Pick-up?</Header>
+            <PickupContainer style={{ justifyContent: 'flex-start' }}>
+              <Row onClick={() => setShippingMethod('Delivery')}>
+                <RadioButton
+                  readOnly
+                  type="radio"
+                  value={'Delivery'}
+                  checked={orderDetails.shippingMethod === 'Delivery'}
+                />
+                <Column>
+                  <H4>Delivery</H4>
+                </Column>
+              </Row>
+              <Row style={{ marginLeft: 40 }} onClick={() => setShippingMethod('Pick-up')}>
+                <RadioButton
+                  readOnly
+                  type="radio"
+                  value={'Pick-up'}
+                  checked={orderDetails.shippingMethod === 'Pick-up'}
+                />
+                <Column>
+                  <H4>Pick-up</H4>
+                </Column>
+              </Row>
+            </PickupContainer>
 
-            <Header>Delivery Time</Header>
-            <div>
-              <Button
-                color={deliveryTime === 'ASAP' ? 'green' : 'white'}
-                onClick={() => setDeliveryTime('ASAP')}>
-                ASAP: 20 - 30min
-              </Button>
-              <Button
-                color={deliveryTime === 'Schedule' ? 'green' : 'white'}
-                onClick={() => setDeliveryTime('Schedule')}>
-                Schedule
-              </Button>
-            </div>
+            {orderDetails.shippingMethod === 'Delivery' && (
+              <>
+                <Header>Your Address</Header>
+                <H4>
+                  <Icon name="point" />
+                  {orderDetails.deliveryAddress.address1},&nbsp;
+                  {orderDetails.deliveryAddress.address2 &&
+                    orderDetails.deliveryAddress.address2 + ','}
+                  &nbsp;
+                  {orderDetails.deliveryAddress.city},&nbsp;
+                  {orderDetails.deliveryAddress.province},&nbsp;
+                  {orderDetails.deliveryAddress.country}
+                  <EditButton />
+                </H4>
+                <H4>
+                  <Icon name="smile outline" />
+                  Instruction: {orderDetails.deliveryAddress.dropoff}
+                  <EditButton />
+                </H4>
+                <H4 style={{ marginLeft: 20 }}>{orderDetails.deliveryAddress.instructions}</H4>
 
+                {/* <Header>Delivery Time</Header>
+                <div>
+                  <Button
+                    color={deliveryTime === 'ASAP' ? 'green' : 'white'}
+                    onClick={() => setDeliveryTime('ASAP')}>
+                    ASAP: 20 - 30min
+                  </Button>
+                  <Button
+                    color={deliveryTime === 'Schedule' ? 'green' : 'white'}
+                    onClick={() => setDeliveryTime('Schedule')}>
+                    Schedule
+                  </Button>
+                </div> */}
+              </>
+            )}
             <Header>Order Summary</Header>
             {orderDetails.orderItems &&
               orderDetails.orderItems[0] &&
@@ -151,5 +185,34 @@ const CheckoutButton = styled.div`
   justify-content: space-between;
   font-size: 16px;
   font-weight: bold;
+`;
+const PickupContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`;
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  cursor: pointer;
+  input[type='radio'] {
+    border: 0px;
+    width: 1.2em;
+    height: 1.2em;
+    color: black;
+  }
+`;
+const RadioButton = styled.input`
+  margin-right: 15px;
+`;
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
 `;
 export default checkout;

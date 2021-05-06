@@ -45,7 +45,7 @@ const PopularDishes = ({topic, featured}) => {
   return (
     <>
 
-    <ItemModal open={open} setOpen={setOpen}/>
+    <ItemModal open={open} setOpen={setOpen} fromRestaurantPage={true}/>
 
     <ItemWrapper isDesktop={isDesktop}>
         {dishes[0] &&

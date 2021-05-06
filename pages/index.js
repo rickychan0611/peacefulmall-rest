@@ -25,10 +25,10 @@ const Home = () => {
           <Container style={{ marginTop: '2em' }}>
             <CuisineSlider contextRef={contextRef} />
             <Slider topic="Discounted Dishes" icon="food">
-              {/* <DishCards /> */}
+              <DishCards />
             </Slider>
             <Slider topic="Most Popular Dishes" icon="food">
-              {/* <DishCards /> */}
+              <DishCards />
             </Slider>
             <Slider topic="Most Loved Restaurants" icon="store">
               <RestaurantCards />
@@ -43,10 +43,10 @@ const Home = () => {
               <RestaurantCards />
             </Slider>
             <Slider topic="User's Reviews" icon="star">
-              {/* <ReviewCards /> */}
+              <ReviewCards />
             </Slider>
             <Slider topic="Editor's Top Picks" icon="star">
-              {/* <ReviewCards /> */}
+              <ReviewCards />
             </Slider>
           </Container>
         </Ref>

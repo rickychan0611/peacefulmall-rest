@@ -74,7 +74,7 @@ const TopBar = () => {
           height: 60,
           top: 0
         }}>
-        <Menu.Item header as="div" onClick={() => router.push('/')}>
+        <Menu.Item header as="div" style={{cursor: "pointer"}} onClick={() => router.push('/')}>
           <Image size="mini" src="/logo-p.png" />
           <h4 style={{ color: '#4ab976', margin: 0 }}>
             Peaceful Mall

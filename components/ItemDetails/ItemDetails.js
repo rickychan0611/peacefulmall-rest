@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedItem as itemAtom, selections as selectionsAtom } from '../../data/atoms.js';
-
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 import { selectedStore as selectedStoreAtom } from '../../data/storeAtoms.js';
 
@@ -13,13 +12,15 @@ import BottomAddBar from '../../components/BottomAddBar';
 import _ from 'lodash';
 import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
-const ItemDetails = ({ setOpen }) => {
+const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   const isDesktop = useDesktopMediaQuery();
   const router = useRouter();
+
   const [item, setItem] = useRecoilState(itemAtom);
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const [selectedStore, setSelectedStore] = useRecoilState(selectedStoreAtom);
+
   const [value, setValue] = useState({ option: 'option0', value: 0 });
   const [qty, setQty] = useState(1);
 
@@ -30,6 +31,8 @@ const ItemDetails = ({ setOpen }) => {
   const price = 10;
   const store = selections.restaurant;
   console.log(store)
+  console.log("item",item)
+
   const addItem = (total) => {
     //if a restaurant's name is equal to the current resturant, update the object
     //if not, replace the whole orderItem array. Add restaurant to currentRestaurant
@@ -45,12 +48,17 @@ const ItemDetails = ({ setOpen }) => {
       localStorage.setItem('orderItems', JSON.stringify(updatedItems));
       return updatedItems;
     });
+    !fromRestaurantPage && item.restaurant != undefined && router.push('/store/'+ item.restaurant.slug + "#top")
   };
 
   return (
     <>
-      <div onClick={() => handleClose()} style={{ cursor: 'pointer', margin: 10 }}>
-        <Icon name="arrow left" size="large" /> {selectedStore.name}
+      <div style={{ cursor: 'pointer', margin: 10, fontSize: 18 }}
+      onClick={() => {
+        !fromRestaurantPage && item.restaurant != undefined && router.push('/store/'+ item.restaurant.slug + "#top")
+        handleClose()
+        }}  >
+        <Icon name="arrow left" size="large" /> {!fromRestaurantPage && item.restaurant != undefined && "View more items at " + item.restaurant.name}
       </div>
       <Container>
         <h2>{item.name}</h2>

@@ -58,16 +58,16 @@ const Home = () => {
             <Slider topic="Most Popular Dishes" icon="food">
               <DishCards />
             </Slider>
-            <Slider topic="Most Loved Restaurants" icon="store">
+            <Slider topic="Most Loved Restaurants" icon="star">
               <RestaurantCards />
             </Slider>
-            <Slider topic="Fastest Near you" icon="store">
+            <Slider topic="Fastest Near you" icon="star">
               <RestaurantCards />
             </Slider>
-            <Slider topic="Weekly Top 10" icon="store">
+            <Slider topic="Weekly Top 10" icon="star">
               <RestaurantCards />
             </Slider>
-            <Slider topic="Peaceful Mall Featured" icon="store">
+            <Slider topic="Peaceful Mall Featured" icon="star">
               <RestaurantCards />
             </Slider>
             <Slider topic="User's Reviews" icon="star">

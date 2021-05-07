@@ -32,8 +32,8 @@ const RestaurantCards = ({topic}) => {
                 {/* <Description>{item.description}</Description> */}
                 <Description>Location: {r.neighborhood}</Description>
                 <Description>Style: {r.cuisine_type}</Description>
-                <Description>Price Range: {toIcons(r.price_range, "💲")}</Description>
-                <Description>Reviews: {toIcons(r.overall_rating, "⭐")} ({r.reviews.length})</Description>
+                <Description>Price Range: 💲💲💲💲</Description>
+                <Description>Reviews: ⭐⭐⭐⭐⭐ (34)</Description>
               </Card>
             );
           })}

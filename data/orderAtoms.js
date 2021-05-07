@@ -33,7 +33,7 @@ export const orderDetails = selector({
         discount: 0,
         total: subtotal + taxes,
         store: items[0] && items[0].store,
-        deliveryAddress: user.deliveryAddress,
+        deliveryAddress: user ? user.deliveryAddress: "",
         shippingMethod: get(shippingMethod)
       }
     )

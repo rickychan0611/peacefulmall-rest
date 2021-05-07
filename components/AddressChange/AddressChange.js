@@ -101,9 +101,9 @@ const AddressChange = ({ setOpen }) => {
       <Divider />
       {user &&
         user.addresses[0] &&
-        user.addresses.map((address) => {
+        user.addresses.map((address, index) => {
           return (
-            <>
+            <div key={index}>
               <Container>
                 <Row
                   onClick={() => {
@@ -155,7 +155,7 @@ const AddressChange = ({ setOpen }) => {
                   </Form>
                 </Segment>
               </Modal>
-            </>
+            </div>
           );
         })}
       <Divider />

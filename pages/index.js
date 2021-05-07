@@ -1,5 +1,7 @@
 import { useState, useEffect, createRef } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+
 import { Container, Image, Ref, Visibility, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
 import DishCards from '../components/DishCards';
@@ -11,10 +13,36 @@ import Slider from '../components/Slider';
 import ReviewCards from '../components/ReviewCards';
 import CheckOutListPusher from '../components/CheckOutListPusher';
 
-const Home = () => {
-  const [calculations, setCalculations] = useState({});
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { selections as selectionsAtom } from '../data/atoms.js';
+import { stores as storesAtom } from '../data/storeAtoms.js';
 
+const Home = () => {
+  const stores = useRecoilValue(storesAtom);
   let contextRef = createRef();
+  
+  //get stores from server when component is loaded
+  useEffect(async () => {
+    const getAllStores = await axios.post('http://test3.suqingxun.com/api/shop', {
+      parameters: { type: 'all' }
+    });
+    console.log('getAllStores', getAllStores.data);
+
+    const product = await axios.post('http://test3.suqingxun.com/api/product', {
+      parameters: { 
+        'type':'popular',
+        'count':3,
+      }
+    });
+    console.log('product', product.data);
+
+    const getproductinshop = await axios.post('http://test3.suqingxun.com/api/getproductinshop', {
+      parameters: { 
+        'shop_id':'2'
+       }
+    });
+    console.log('getproductinshop', getproductinshop.data);
+  }, []);
 
   return (
     <>

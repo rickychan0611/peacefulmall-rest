@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-import { data } from '../../data/restaurants';
-import { useRouter } from 'next/router'
-import Link from 'next/link'
+import { data } from '../../data/restaurants-old';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
@@ -16,7 +16,6 @@ const RestaurantCards = ({topic}) => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const stores = useRecoilValue(storesAtom);
   const [dishes, setDishes] = useState([]);
-
 
   return (
     <>

@@ -133,7 +133,7 @@ const TopBar = () => {
               />
             </>
           )}
-          <Transition animation="jiggle" duration={600} visible={jiggle}>
+          {/* <Transition animation="jiggle" duration={600} visible={jiggle}> */}
             <div style={{ marginTop: 5 }}>
               {showCheckoutButton &&
                 <Menu.Item>
@@ -151,7 +151,7 @@ const TopBar = () => {
                 </Menu.Item>
               }
             </div>
-          </Transition>
+          {/* </Transition> */}
         </Menu.Menu>
       </Menu>
     </div>

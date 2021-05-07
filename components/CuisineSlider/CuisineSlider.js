@@ -59,14 +59,13 @@ const Container = styled(ScrollContainer)`
   overflow: auto;
   white-space: nowrap;
   background-color: white;
-  padding-top: 10px;
 `;
 const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: ${p => !p.isDesktop ? "100px" : "130px"};
-  padding-top: 10px;
+  height: ${p => !p.isDesktop ? "120px" : "130px"};
+  padding-top: ${p => !p.isDesktop ? "10px" : "10px"};
 `;
 const CatCard = styled.div`
   display: inline-block;

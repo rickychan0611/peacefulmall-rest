@@ -1,26 +1,37 @@
 import { Button, Container, Icon, Image, Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
+import { useMobileMediaQuery } from '../../components/Responsive/Responsive';
 
-const SearchBanner = ( {hide} ) => (
-  <BannerContainer className={hide}>
-    {/* <BannerImage src="/rest-banner.jpg" /> */}
-    <InputContainer style={{ display: 'flex' }}>
-    <Icon size='large' name='map marker alternate' style={{color: "white"}}/>
-      <InputWrapper style={{ borderRadius: "5px 0 0 5px", borderRight: '1px solid #b8b8b8' }}>
-        <Label style={{ margin: 0 }}>Near</Label>
-        <StyledInput placeholder="Vanoucver, B,C" />
-      </InputWrapper>
-      <InputWrapper>
-        <Label style={{ margin: 0 }}>Find</Label>
-        <StyledInput placeholder="Restaurant, Style, place..." />
-      </InputWrapper>
-      <Button
-        icon="search"
-        style={{ backgroundColor: 'white', color: 'red', width: 40, height: 43, borderRadius: "0 5px 5px 0" }}
-      />
-    </InputContainer>
-  </BannerContainer>
-);
+const SearchBanner = ({ hide }) => {
+  const isMobile = useMobileMediaQuery();
+
+  return (
+    <BannerContainer className={hide}>
+      {/* <BannerImage src="/rest-banner.jpg" /> */}
+      <InputContainer style={{ display: 'flex' }}>
+        {!isMobile && <Icon size="large" name="map marker alternate" style={{ color: 'white' }} />}
+        <InputWrapper style={{ borderRadius: '5px 0 0 5px', borderRight: '1px solid #b8b8b8' }}>
+          <Label style={{ margin: 0 }}>Near</Label>
+          <StyledInput placeholder="Vanoucver, B,C" />
+        </InputWrapper>
+        <InputWrapper>
+          <Label style={{ margin: 0 }}>Find</Label>
+          <StyledInput placeholder="Restaurant, Style, place..." />
+        </InputWrapper>
+        <Button
+          icon="search"
+          style={{
+            backgroundColor: 'white',
+            color: 'red',
+            width: 40,
+            height: 43,
+            borderRadius: '0 5px 5px 0'
+          }}
+        />
+      </InputContainer>
+    </BannerContainer>
+  );
+};
 
 const BannerContainer = styled.div`
   width: 100vw;
@@ -29,8 +40,8 @@ const BannerContainer = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
-  background: rgb(150,178,235);
-  background: radial-gradient(circle, rgba(150,178,235,1) 21%, rgba(215,10,52,1) 100%);
+  background: rgb(150, 178, 235);
+  background: radial-gradient(circle, rgba(150, 178, 235, 1) 21%, rgba(215, 10, 52, 1) 100%);
 `;
 
 const BannerImage = styled(Image)`

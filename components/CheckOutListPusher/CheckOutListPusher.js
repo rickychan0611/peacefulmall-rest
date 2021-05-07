@@ -10,7 +10,7 @@ const CheckOutListPusher = ({ children }) => {
     <>
       <Sidebar.Pushable style={{ transform: 'none'}}>
         <CheckOutList />
-        <Sidebar.Pusher>
+        <Sidebar.Pusher dimmed={openCheckOutList} >
           {children}
           </Sidebar.Pusher>
       </Sidebar.Pushable>

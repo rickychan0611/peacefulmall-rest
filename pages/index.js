@@ -1,6 +1,7 @@
 import { useState, useEffect, createRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { useMobileMediaQuery } from '../components/Responsive/Responsive';
 
 import { Container, Image, Ref, Visibility, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
@@ -20,28 +21,24 @@ import { stores as storesAtom } from '../data/storeAtoms.js';
 const Home = () => {
   const stores = useRecoilValue(storesAtom);
   let contextRef = createRef();
-  
+  const isMobile = useMobileMediaQuery();
+
   //get stores from server when component is loaded
   useEffect(async () => {
-    const getAllStores = await axios.post('http://test3.suqingxun.com/api/shop', {
-      parameters: { type: 'all' }
-    });
-    console.log('getAllStores', getAllStores.data);
+    // const product = await axios.post('http://test3.suqingxun.com/api/product', {
+    //   parameters: { 
+    //     'type':'popular',
+    //     'count':3,
+    //   }
+    // });
+    // console.log('product', product.data);
 
-    const product = await axios.post('http://test3.suqingxun.com/api/product', {
-      parameters: { 
-        'type':'popular',
-        'count':3,
-      }
-    });
-    console.log('product', product.data);
-
-    const getproductinshop = await axios.post('http://test3.suqingxun.com/api/getproductinshop', {
-      parameters: { 
-        'shop_id':'2'
-       }
-    });
-    console.log('getproductinshop', getproductinshop.data);
+    // const getproductinshop = await axios.post('http://test3.suqingxun.com/api/getproductinshop', {
+    //   parameters: { 
+    //     'shop_id':'2'
+    //    }
+    // });
+    // console.log('getproductinshop', getproductinshop.data);
   }, []);
 
   return (
@@ -50,7 +47,7 @@ const Home = () => {
         <Image src="/banner.jpg" />
         <SearchBanner />
         <Ref innerRef={contextRef}>
-          <Container style={{ marginTop: '2em' }}>
+          <Container style={{ marginTop: '2em'}}>
             <CuisineSlider contextRef={contextRef} />
             <Slider topic="Discounted Dishes" icon="food">
               <DishCards />
@@ -61,13 +58,13 @@ const Home = () => {
             <Slider topic="Most Loved Restaurants" icon="star">
               <RestaurantCards />
             </Slider>
-            <Slider topic="Fastest Near you" icon="star">
+            <Slider topic="Fastest Near you" icon="store">
               <RestaurantCards />
             </Slider>
-            <Slider topic="Weekly Top 10" icon="star">
+            <Slider topic="Weekly Top 10" icon="store">
               <RestaurantCards />
             </Slider>
-            <Slider topic="Peaceful Mall Featured" icon="star">
+            <Slider topic="Peaceful Mall Featured" icon="store">
               <RestaurantCards />
             </Slider>
             <Slider topic="User's Reviews" icon="star">

@@ -61,6 +61,7 @@ const AddButton = styled.div`
   font-weight: bold;
   padding: 10px 25px 10px 25px;
   border-radius: 25px;
+  cursor: pointer;
 `;
 const QtyContainer = styled.div`
   margin: 0 10px 0 10px;
@@ -68,6 +69,7 @@ const QtyContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
+  cursor: pointer;
 `;
 const QtyNum = styled.h3`
   margin: 0;

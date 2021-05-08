@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Head from 'next/head'
 import '../.semantic/dist/semantic.min.css';
 import './styles.css';
 import { CookiesProvider, useCookies } from 'react-cookie';
@@ -47,7 +48,10 @@ function MyApp({ Component, pageProps }) {
     <RecoilRoot>
       <CookiesProvider>
         <InitApp>
-          <>
+          <Head>
+            <title>Peaceful Mall Restaurant</title>
+            <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+          </Head>
             <TopBar />
             <div className="contents" style={{ paddingTop: 60, width: "100vw" }}>
               <SideMenu>
@@ -56,7 +60,6 @@ function MyApp({ Component, pageProps }) {
                 </CheckOutListPusher>
               </SideMenu>
             </div>
-          </>
         </InitApp>
       </CookiesProvider>
     </RecoilRoot>

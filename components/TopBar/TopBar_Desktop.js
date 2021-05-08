@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { Button, Dropdown, Menu, Transition, Image, Icon } from 'semantic-ui-react';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -73,28 +74,17 @@ const TopBar_Desktop = () => {
   }, [showCheckoutButton]);
 
   return (
-    <div>
-      <Menu
-        style={{
-          borderRadius: 0,
-          position: 'fixed',
-          zIndex: 1000,
-          backgroundColor: 'white',
-          width: '100vw',
-          height: 60,
-          top: 0
-        }}>
-        <Menu.Item header as="div" style={{ cursor: 'pointer' }} onClick={() => router.push('/')}>
+    <>
+        <Row style={{ cursor: 'pointer' }} onClick={() => router.push('/')}>
           <Image size="mini" src="/logo-p.png" />
           <h4 style={{ color: '#4ab976', margin: 0 }}>
             Peaceful Mall
             <span style={{ color: '#ff614d' }}> | Restaurants</span>
           </h4>
-        </Menu.Item>
-        <Menu.Menu position="right">
+        </Row>
+        <Row>
           {!user ? (
             <>
-              <Menu.Item>
                 <Button
                   inverted
                   style={{ backgroundColor: '#ff614d', marginRight: 10, color: 'white' }}
@@ -107,21 +97,20 @@ const TopBar_Desktop = () => {
                   onClick={() => router.push('/sign-in')}>
                   Sign in
                 </Button>
-              </Menu.Item>
             </>
           ) : (
-            <Menu.Item
+            <div
               onClick={() => {
                 setOpenSideMenu(!openSideMenu);
               }}>
               <h4 style={{ margin: 0 }}>Hi, {user.firstName} &nbsp; &nbsp;</h4>
               <Icon name="bars" size="large" style={{ color: '#707070', margin: 0 }} />
-            </Menu.Item>
+            </div>
           )}
           <Transition animation="jiggle" duration={600} visible={jiggle}>
             <div style={{ marginTop: 5 }}>
               {showCheckoutButton && (
-                <Menu.Item>
+                <div>
                   <Button
                     style={{
                       backgroundColor: '#ff614d',
@@ -133,14 +122,20 @@ const TopBar_Desktop = () => {
                     onClick={() => setOpenCheckOutList(!openCheckOutList)}>
                     <Icon name="shop" /> {orderItems && orderItems.length}
                   </Button>
-                </Menu.Item>
+                </div>
               )}
             </div>
           </Transition>
-        </Menu.Menu>
-      </Menu>
-    </div>
+        </Row>
+    </>
   );
 };
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items:center;
+`;
 
 export default TopBar_Desktop;

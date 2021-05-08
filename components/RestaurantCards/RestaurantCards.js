@@ -13,16 +13,27 @@ import { stores as storesAtom, popularStores as popularStoresAtom } from '../../
 const RestaurantCards = ({ topic }) => {
   const router = useRouter();
   const [selections, setSelections] = useRecoilState(selectionsAtom);
-   const stores = useRecoilValue(storesAtom);
+  const stores = useRecoilValue(storesAtom);
   // const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const Loader = () => (
     <>
-      <Placeholder style={{ height: 250, width: 250, margin: "0 0 0 0px" }} />
-      <Placeholder style={{ height: 250, width: 250, margin: "0 0 0 20px" }} />
-      <Placeholder style={{ height: 250, width: 250, margin: "0 0 0 20px" }} />
-      <Placeholder style={{ height: 250, width: 250, margin: "0 0 0 20px" }} />
+    {_.times(10, (i)=> {
+      return (
+      <Card
+        key={i}
+        onClick={() => {
+          //store selected store in selections.restaurant
+          setSelections((prev) => ({ ...prev, restaurant: r.slug }));
+          router.push('/store/' + r.slug + '#top');
+        }}>
+        {/* <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} /> */}
+        <Placeholder style={{ height: 250, width: 250, margin: '0 0 0 0px' }}>
+        </Placeholder>
+      </Card>
+      )
+      })}
     </>
   );
 

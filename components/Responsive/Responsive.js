@@ -15,6 +15,6 @@ export const MobileView = ({ children }) => {
 
 export const useDesktopMediaQuery = () => useMediaQuery({ query: '(min-width: 900px)' });
 
-export const useTableMediaQuery = () => useMediaQuery({ query: '(min-width: 501px, max-width: 901px)' });
+export const useTableMediaQuery = () => useMediaQuery({ query: '(min-width: 501px, max-width: 899px)' });
 
 export const useMobileMediaQuery = () => useMediaQuery({ query: '(max-width: 500px)' });

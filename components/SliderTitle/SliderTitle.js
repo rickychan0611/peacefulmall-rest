@@ -63,7 +63,8 @@ const Container = styled.div`
 `;
 const Title = styled.h2`
   font-size: ${p=> p.isMobile ? "5.7vw" : ""};
-  color: black;
+  color: ${p=> p.isMobile ? "red" : "black"};
+  /* color: black; */
   margin: 0 10px 0 0;
   display: flex;
   align-items: center;

@@ -1,13 +1,11 @@
-import { useState } from 'react';
+import useIsMobile from '../../util/useIsMobile';
 import styled from 'styled-components';
 
-import { useMobileMediaQuery } from '../../components/Responsive/Responsive';
 import TopBar_Mobile from './TopBar_Mobile.js';
 import TopBar_Desktop from './TopBar_Desktop.js';
-import { useEffect } from 'react';
 
 const TopBar = () => {
-  const isMobile = useMobileMediaQuery();
+  const isMobile = useIsMobile();
 
   return (
     <Container>

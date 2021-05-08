@@ -1,15 +1,14 @@
-import { Divider, Label, Icon, Grid } from 'semantic-ui-react';
+import { Label, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { useMobileMediaQuery } from '../../components/Responsive/Responsive';
+import useIsMobile from '../../util/useIsMobile';
 
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
 
-const SliderTitle = ({ title, dishChildren, hideViewAll, icon }) => {
+const SliderTitle = ({ title, hideViewAll, icon }) => {
+  const isMobile = useIsMobile();
   const [selections, setSelections] = useRecoilState(selectionsAtom);
-  const isMobile = useMobileMediaQuery();
-
   const router = useRouter();
 
   return (

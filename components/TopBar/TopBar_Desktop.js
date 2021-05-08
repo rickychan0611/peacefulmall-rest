@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { Button, Dropdown, Menu, Transition, Image, Icon } from 'semantic-ui-react';
+import { Button, Transition, Image, Icon } from 'semantic-ui-react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   openSideMenu as openSideMenuAtom,
@@ -75,58 +75,54 @@ const TopBar_Desktop = () => {
 
   return (
     <>
-        <Row style={{ cursor: 'pointer' }} onClick={() => router.push('/')}>
-          <Image size="mini" src="/logo-p.png" />
-          <h4 style={{ color: '#4ab976', margin: 0 }}>
-            Peaceful Mall
+      <Row style={{ cursor: 'pointer' }} onClick={() => router.push('/')}>
+        <Image size="mini" src="/logo-p.png" />
+        <h4 style={{ color: '#4ab976', margin: 0 }}>
+          Peaceful Mall
             <span style={{ color: '#ff614d' }}> | Restaurants</span>
-          </h4>
-        </Row>
-        <Row>
-          {!user ? (
-            <>
-                <Button
-                  inverted
-                  style={{ backgroundColor: '#ff614d', marginRight: 10, color: 'white' }}
-                  onClick={() => router.push('/sign-up')}>
-                  Sign up
+        </h4>
+      </Row>
+      <Row>
+        {!user ? (
+          <>
+            <Button
+              inverted
+              style={{ backgroundColor: '#ff614d', marginRight: 10, color: 'white' }}
+              onClick={() => router.push('/sign-up')}>
+              Sign up
                 </Button>
-                <Button
-                  compact
-                  style={{ backgroundColor: 'white' }}
-                  onClick={() => router.push('/sign-in')}>
-                  Sign in
+            <Button
+              compact
+              style={{ backgroundColor: 'white' }}
+              onClick={() => router.push('/sign-in')}>
+              Sign in
                 </Button>
-            </>
-          ) : (
-            <div
-              onClick={() => {
-                setOpenSideMenu(!openSideMenu);
-              }}>
-              <h4 style={{ margin: 0 }}>Hi, {user.firstName} &nbsp; &nbsp;</h4>
-              <Icon name="bars" size="large" style={{ color: '#707070', margin: 0 }} />
-            </div>
+          </>
+        ) : (
+          <Row
+            onClick={() => {
+              setOpenSideMenu(!openSideMenu);
+            }}>
+            <h4 style={{ margin: 0 }}>Hi, {user.firstName} &nbsp; &nbsp;</h4>
+            <Icon name="bars" size="large" style={{ color: '#707070', marginRight: 20 }} />
+          </Row>
+        )}
+        <Transition animation="jiggle" duration={600} visible={jiggle}>
+          {showCheckoutButton && (
+            <Button
+              style={{
+                backgroundColor: '#ff614d',
+                marginRight: 10,
+                color: 'white',
+                width: 80,
+                borderRadius: 30
+              }}
+              onClick={() => setOpenCheckOutList(!openCheckOutList)}>
+              <Icon name="shop" /> {orderItems && orderItems.length}
+            </Button>
           )}
-          <Transition animation="jiggle" duration={600} visible={jiggle}>
-            <div style={{ marginTop: 5 }}>
-              {showCheckoutButton && (
-                <div>
-                  <Button
-                    style={{
-                      backgroundColor: '#ff614d',
-                      marginRight: 10,
-                      color: 'white',
-                      width: 80,
-                      borderRadius: 30
-                    }}
-                    onClick={() => setOpenCheckOutList(!openCheckOutList)}>
-                    <Icon name="shop" /> {orderItems && orderItems.length}
-                  </Button>
-                </div>
-              )}
-            </div>
-          </Transition>
-        </Row>
+        </Transition>
+      </Row>
     </>
   );
 };

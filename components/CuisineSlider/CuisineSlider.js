@@ -1,5 +1,4 @@
-import { useState, useEffect, createRef } from 'react';
-import {useDesktopMediaQuery } from '../../components/Responsive/Responsive';
+import useIsMobile from '../../util/useIsMobile';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { Sticky } from 'semantic-ui-react';
@@ -25,25 +24,21 @@ const data = [
 ];
 
 const CuisineSlider = ({ contextRef }) => {
-  const [selections, setSelections] = useRecoilState(selectionsAtom);
-  const desktop = useDesktopMediaQuery();
-  const [isDesktop, setIsDesktop] = useState(false);
+  const isMobile = useIsMobile();
 
-  useEffect(() => {
-    setIsDesktop(desktop)
-  },[desktop]);
-  
+  const [selections, setSelections] = useRecoilState(selectionsAtom);
+
   return (
     <div style={{cursor: "pointer"}}>
       <SliderTitle title="Choose a Cuisine Style" icon="leaf"/>
       <Sticky offset={50} context={contextRef}>
-        <Container isDesktop={isDesktop} horizontal nativeMobileScroll hideScrollbars={!isDesktop}>
-          <ItemWrapper isDesktop={isDesktop}>
+        <Container isMobile={isMobile} horizontal nativeMobileScroll hideScrollbars={isMobile}>
+          <ItemWrapper isMobile={isMobile}>
           {data.map((item, i) => {
             return (
-              <CatCard isDesktop={isDesktop} key={i} onClick={() => setSelections(prev => ({...prev, cuisine: item.name}))} key={i}>
-                <Image isDesktop={isDesktop} src={`/${item.img}`} />
-                <Text isDesktop={isDesktop}>{item.name.toUpperCase()}</Text>
+              <CatCard isMobile={isMobile} key={i} onClick={() => setSelections(prev => ({...prev, cuisine: item.name}))} key={i}>
+                <Image isMobile={isMobile} src={`/${item.img}`} />
+                <Text isMobile={isMobile}>{item.name.toUpperCase()}</Text>
               </CatCard>
             );
           })}
@@ -64,14 +59,14 @@ const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: ${p => !p.isDesktop ? "120px" : "130px"};
-  padding-top: ${p => !p.isDesktop ? "10px" : "10px"};
+  height: ${p => p.isMobile ? "120px" : "130px"};
+  padding-top: 10px;
 `;
 const CatCard = styled.div`
   display: inline-block;
   position: relative;
   margin-right: 15px;
-  width: ${p => !p.isDesktop ? "100px" : "110px"};
+  width: ${p => p.isMobile ? "100px" : "110px"};
 `;
 const Image = styled.img`
   width: 100%;
@@ -82,9 +77,9 @@ const Text = styled.div`
   background-color: rgba(0, 0, 0, 0.55);
   text-shadow: 0px 0px 10px black;
   position: absolute;
-  padding: ${p => !p.isDesktop ? "3px" : "7px"};
-  bottom: ${p => !p.isDesktop ?  "25px" : "5px"};
-  font-size: ${p => !p.isDesktop ? ".9rem" : "1rem"};
+  padding: ${p => p.isMobile ? "3px" : "7px"};
+  bottom: ${p => p.isMobile ?  "25px" : "5px"};
+  font-size: ${p => p.isMobile ? ".9rem" : "1rem"};
   width: 100%;
   text-align: center;
   font-weight: 600;

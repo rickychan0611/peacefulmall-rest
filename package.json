@@ -1,8 +1,8 @@
 {
-  "name": "nextjs-semantic",
-  "description": "Next.js + Fomantic-UI + Styled Components",
-  "version": "4.0.1",
-  "author": "Martín M.",
+  "name": "peacefulmall-restaurant",
+  "description": "Peaceful Mall Restaurant",
+  "version": "0.0.1",
+  "author": "Ricky Chan",
   "license": "MIT",
   "scripts": {
     "dev": "next",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@react-google-maps/api": "^2.1.1",
-    "@zeit/next-css": "^1.0.1",
+    "@react-hook/window-size": "^3.0.7",
     "axios": "^0.21.1",
     "lodash": "^4.17.21",
     "next": "^10.0.4",
@@ -26,8 +26,6 @@
     "react-cookie": "^4.0.3",
     "react-dom": "^17.0.1",
     "react-indiana-drag-scroll": "^2.0.1",
-    "react-responsive": "^8.2.0",
-    "react-scroll": "^1.8.2",
     "recoil": "^0.2.0",
     "semantic-ui-react": "^2.0.1",
     "styled-components": "^5.2.1",

@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { data } from '../../data/restaurants-old';
-import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import Link from 'next/link'
 
 import { useRecoilState } from 'recoil';
@@ -11,7 +10,6 @@ import {
 } from '../../data/atoms.js';
 
 const ReviewCards = () => {
-  const isDesktop = useDesktopMediaQuery();
   const [dishes, setDishes] = useState([]);
 
   const [selections, setSelections] = useRecoilState(selectionsAtom);

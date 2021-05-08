@@ -4,14 +4,12 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { selectedItem as itemAtom } from '../../data/atoms.js';
 import { Grid, Divider, Icon } from 'semantic-ui-react';
-import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import ItemModal from '../ItemModal/';
 
 const MenuItem = ({ item, isVCard }) => {
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useRecoilState(itemAtom);
   const IMG_URL = `/img/food (${Math.floor(Math.random() * (86 - 1) + 1)}).jpg`;
-  const isDesktop = useDesktopMediaQuery();
 
   const [qty, setQty] = useState(0);
   const [open, setOpen] = useState(false);

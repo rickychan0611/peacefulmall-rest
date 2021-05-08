@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Divider, Form, Button, Icon, Transition } from 'semantic-ui-react';
-import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom';
 import { useEffect } from 'react';
@@ -10,7 +9,6 @@ import validation from '../../util/validation';
 
 const Profile = () => {
   const router = useRouter();
-  const isDesktop = useDesktopMediaQuery();
   const [user, setUser] = useRecoilState(userAtom);
 
   const [editedUser, setEditedUser] = useState("")

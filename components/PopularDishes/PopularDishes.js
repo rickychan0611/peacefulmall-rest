@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { data } from '../../data/restaurants-old';
-import {useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
 import { useRecoilState } from 'recoil';
 import  { selections as selectionsAtom }  from '../../data/atoms.js';
@@ -12,7 +11,6 @@ import MenuItem from '../MenuItem';
 const PopularDishes = ({topic, featured}) => {
   const [dishes, setDishes] = useState([]);
   const [selections, setSelections] = useRecoilState(selectionsAtom);
-  const isDesktop = useDesktopMediaQuery();
 
   useEffect(() => {
     let temp = [];

@@ -3,7 +3,6 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import { data } from '../../data/restaurants-old';
 import ItemModal from '../ItemModal/';
-import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom, selectedItem as itemAtom } from '../../data/atoms.js';
@@ -12,7 +11,6 @@ import { Button, Label, Segment } from 'semantic-ui-react';
 import { restaurants } from '../../data/restaurants'
 
 const DishCards = ({ topic, featured }) => {
-  const isDesktop = useDesktopMediaQuery();
   const [dishes, setDishes] = useState([]);
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const [selectedItem, setSelectedItem] = useRecoilState(itemAtom);

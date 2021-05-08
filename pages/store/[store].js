@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
-import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectedItem, selections as selectionsAtom } from '../../data/atoms';
@@ -23,7 +22,6 @@ const store = () => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const selectedStore = useRecoilValue(selectedStoreAtom);
   const router = useRouter();
-  const isDesktop = useDesktopMediaQuery();
   const [hide, setHide] = useState(false);
 
   useEffect(() => {

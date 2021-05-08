@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Segment, Header, Form, Icon, Divider, Modal, TextArea, Button } from 'semantic-ui-react';
-import { useDesktopMediaQuery } from '../Responsive/Responsive';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom.js';
 import { useEffect } from 'react';
@@ -11,7 +10,6 @@ import { set } from 'lodash';
 
 const AddressChange = ({ setOpen }) => {
   const router = useRouter();
-  const isDesktop = useDesktopMediaQuery();
   const [user, setUser] = useRecoilState(userAtom);
   const [selectedAddress, setSelectedAddress] = useState({
     id: '',

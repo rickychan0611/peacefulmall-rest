@@ -3,7 +3,6 @@ import { useEffect, useState, createRef } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
-import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
 import styled from 'styled-components';
 import { Segment, Label, Sticky, Ref } from 'semantic-ui-react';
@@ -31,7 +30,6 @@ const catNames = [
 const RestaurantMenu = () => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const router = useRouter();
-  const isDesktop = useDesktopMediaQuery();
   const contextRef = createRef();
 
   return (

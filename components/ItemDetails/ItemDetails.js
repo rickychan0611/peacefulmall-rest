@@ -10,10 +10,8 @@ import { selectedStore as selectedStoreAtom } from '../../data/storeAtoms.js';
 import { Form, Grid, Icon, Radio } from 'semantic-ui-react';
 import BottomAddBar from '../../components/BottomAddBar';
 import _ from 'lodash';
-import { useDesktopMediaQuery } from '../../components/Responsive/Responsive';
 
 const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
-  const isDesktop = useDesktopMediaQuery();
   const router = useRouter();
 
   const [item, setItem] = useRecoilState(itemAtom);

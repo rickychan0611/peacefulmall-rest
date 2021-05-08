@@ -1,7 +1,6 @@
 import { useState, useEffect, createRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useMobileMediaQuery } from '../components/Responsive/Responsive';
 
 import { Container, Image, Ref, Visibility, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
@@ -21,7 +20,6 @@ import { stores as storesAtom } from '../data/storeAtoms.js';
 const Home = () => {
   const stores = useRecoilValue(storesAtom);
   let contextRef = createRef();
-  const isMobile = useMobileMediaQuery();
 
   //get stores from server when component is loaded
   useEffect(async () => {

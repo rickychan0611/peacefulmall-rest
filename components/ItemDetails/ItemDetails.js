@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import useIsMobile from '../../util/useIsMobile'
 import styled from 'styled-components';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -13,7 +14,7 @@ import _ from 'lodash';
 
 const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   const router = useRouter();
-
+  const isMobile = useIsMobile();
   const [item, setItem] = useRecoilState(itemAtom);
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
   const [selections, setSelections] = useRecoilState(selectionsAtom);
@@ -23,7 +24,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   const [qty, setQty] = useState(1);
 
   const handleClose = () => {
-    isDesktop ? setOpen(false) : router.back();
+    !isMobile ? setOpen(false) : router.back();
   };
 
   const price = 10;

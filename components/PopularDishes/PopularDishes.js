@@ -45,7 +45,7 @@ const PopularDishes = ({topic, featured}) => {
 
     <ItemModal open={open} setOpen={setOpen} fromRestaurantPage={true}/>
 
-    <ItemWrapper isDesktop={isDesktop}>
+    <ItemWrapper>
         {dishes[0] &&
           dishes.map((item, i) => {
             return (
@@ -62,7 +62,6 @@ const ItemWrapper = styled.div`
   flex-direction: column;
   flex-wrap: wrap;
   height: 360px;
-  /* height: ${p => p.isDesktop ? "330px" : "330px"}; */
   padding-top: 10px;
   align-items: stretch;
   /* overflow-x: scroll; */

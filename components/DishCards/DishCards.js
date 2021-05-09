@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import useIsMobile from '../../util/useIsMobile'
 import _ from 'lodash';
 import styled from 'styled-components';
 import { data } from '../../data/restaurants-old';
@@ -11,6 +12,7 @@ import { Button, Label, Segment } from 'semantic-ui-react';
 import { restaurants } from '../../data/restaurants'
 
 const DishCards = ({ topic, featured }) => {
+  const isMobile = useIsMobile();
   const [dishes, setDishes] = useState([]);
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const [selectedItem, setSelectedItem] = useRecoilState(itemAtom);
@@ -62,7 +64,7 @@ const DishCards = ({ topic, featured }) => {
     console.log(item);
     setSelectedItem(item);
 
-    isDesktop ? setOpen(true) : router.push('/item/' + item);
+    !isMobile ? setOpen(true) : router.push('/item/' + item);
   };
 
   return (

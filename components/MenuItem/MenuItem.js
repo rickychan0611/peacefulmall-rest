@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+import useIsMobile from '../../util/useIsMobile'
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { selectedItem as itemAtom } from '../../data/atoms.js';
@@ -7,6 +8,7 @@ import { Grid, Divider, Icon } from 'semantic-ui-react';
 import ItemModal from '../ItemModal/';
 
 const MenuItem = ({ item, isVCard }) => {
+  const isMobile = useIsMobile();
   const router = useRouter();
   const [selectedItem, setSelectedItem] = useRecoilState(itemAtom);
   const IMG_URL = `/img/food (${Math.floor(Math.random() * (86 - 1) + 1)}).jpg`;
@@ -18,7 +20,7 @@ const MenuItem = ({ item, isVCard }) => {
     console.log(item);
     setSelectedItem({ ...item, img: IMG_URL });
 
-    isDesktop ? setOpen(true) : router.push('/item/' + item);
+    !isMobile ? setOpen(true) : router.push('/item/' + item);
   };
 
   const H_Card = () => {

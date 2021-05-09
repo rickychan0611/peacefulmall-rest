@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import useIsMobile from '../../util/useIsMobile'
 import _ from 'lodash';
 import styled from 'styled-components';
@@ -12,6 +13,7 @@ import { Button, Label, Segment } from 'semantic-ui-react';
 import { restaurants } from '../../data/restaurants'
 
 const DishCards = ({ topic, featured }) => {
+  const router = useRouter();
   const isMobile = useIsMobile();
   const [dishes, setDishes] = useState([]);
   const [selections, setSelections] = useRecoilState(selectionsAtom);

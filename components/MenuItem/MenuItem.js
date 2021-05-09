@@ -20,13 +20,14 @@ const MenuItem = ({ item, isVCard }) => {
     console.log(item);
     setSelectedItem({ ...item, img: IMG_URL });
 
-    !isMobile ? setOpen(true) : router.push('/item/' + item);
+    setOpen(true)
+    // !isMobile ? setOpen(true) : router.push('/item/' + item);
   };
 
   const H_Card = () => {
     return (
       <>
-        <ItemModal open={open} setOpen={setOpen} />
+        <ItemModal open={open} setOpen={setOpen}/>
 
         <HCardContainer
           onClick={() => {
@@ -56,7 +57,8 @@ const MenuItem = ({ item, isVCard }) => {
   const V_Card = () => {
     return (
       <>
-        <ItemModal open={open} setOpen={setOpen} />
+        <ItemModal open={open} setOpen={setOpen}/>
+
         <VCardContainer onClick={() => route(item)}>
           <div>
             <Img src={IMG_URL} />

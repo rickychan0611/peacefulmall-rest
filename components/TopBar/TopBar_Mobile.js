@@ -28,14 +28,11 @@ const TopBar = () => {
 
   return (
     <>
-      <Icon
-        name="bars"
-        size="large"
-        style={{
-          color: '#707070'
-        }}
-        onClick={() => setOpenSideMenu(!openSideMenu)}
-      />
+      <div style={{ color: '#707070', }}
+        onClick={() => setOpenSideMenu(!openSideMenu)}>
+        <Icon name="bars" size="large" />
+        <Icon name="user circle outline" size="large" />
+      </div>
       <Logo onClick={() => router.push('/')}>
         <Image size="mini" src="/logo-p.png" />
         <h4 style={{ color: '#4ab976', margin: 0 }}>Peaceful Mall</h4>

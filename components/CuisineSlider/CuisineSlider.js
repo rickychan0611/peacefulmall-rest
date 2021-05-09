@@ -44,7 +44,6 @@ const CuisineSlider = ({ contextRef }) => {
           })}
           </ItemWrapper>
         </Container>
-        <div style={{backgroundColor: "white", height: "20px", marginTop: -3, marginBottom: 30}}/>
       </Sticky>
     </div>
   );
@@ -54,19 +53,20 @@ const Container = styled(ScrollContainer)`
   overflow: auto;
   white-space: nowrap;
   background-color: white;
+  margin-bottom: 30px;
 `;
 const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: ${p => p.isMobile ? "120px" : "130px"};
-  padding-top: 10px;
+  height: ${p => p.isMobile ? "106px" : "130px"};
+  padding: 10px;
 `;
 const CatCard = styled.div`
   display: inline-block;
   position: relative;
-  margin-right: 15px;
-  width: ${p => p.isMobile ? "100px" : "110px"};
+  margin-right: ${p => p.isMobile ? "10px" : "15px"};
+  width: ${p => p.isMobile ? "86px" : "110px"};
 `;
 const Image = styled.img`
   width: 100%;
@@ -74,12 +74,12 @@ const Image = styled.img`
 `;
 const Text = styled.div`
   color: white;
-  background-color: rgba(0, 0, 0, 0.55);
+  background-color: rgba(0, 0, 0, 0.5);
   text-shadow: 0px 0px 10px black;
   position: absolute;
   padding: ${p => p.isMobile ? "3px" : "7px"};
-  bottom: ${p => p.isMobile ?  "25px" : "5px"};
-  font-size: ${p => p.isMobile ? ".9rem" : "1rem"};
+  bottom: 3px;
+  font-size: ${p => p.isMobile ? ".8rem" : "1rem"};
   width: 100%;
   text-align: center;
   font-weight: 600;

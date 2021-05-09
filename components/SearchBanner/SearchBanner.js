@@ -1,7 +1,9 @@
 import { Button, Container, Icon, Image, Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
+import useIsMobile from '../../util/useIsMobile';
 
 const SearchBanner = ({ hide }) => {
+const isMobile = useIsMobile();
 
   return (
     <BannerContainer className={hide}>

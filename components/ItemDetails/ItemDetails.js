@@ -65,7 +65,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
           handleClose()
         }}  >
           <Image src='/avatar-placeholder.png' avatar size="mini" />&nbsp;&nbsp;
-          {selectedStore.name}
+          {selectedStore && selectedStore.name}
         </StoreHeader>
         <h2>{item.name}</h2>
         <Img src={item.img} />

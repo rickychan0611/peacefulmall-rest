@@ -4,11 +4,12 @@ import styled from 'styled-components';
 import { data } from '../../data/restaurants-old';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Placeholder } from 'semantic-ui-react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
 import { stores as storesAtom, popularStores as popularStoresAtom } from '../../data/storeAtoms.js';
+
+import PlaceHolder_Card from '../PlaceHolder_Card/';
 
 const RestaurantCards = ({ topic }) => {
   const router = useRouter();
@@ -17,39 +18,19 @@ const RestaurantCards = ({ topic }) => {
   // const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const Loader = () => (
-    <>
-    {_.times(10, (i)=> {
-      return (
-      <Card
-        key={i}
-        onClick={() => {
-          //store selected store in selections.restaurant
-          setSelections((prev) => ({ ...prev, restaurant: r.slug }));
-          router.push('/store/' + r.slug + '#top');
-        }}>
-        {/* <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} /> */}
-        <Placeholder style={{ height: 250, width: 250, margin: '0 0 0 0px' }}>
-        </Placeholder>
-      </Card>
-      )
-      })}
-    </>
-  );
-
   useEffect(async () => {
     const getAllStores = await axios.post('http://test3.suqingxun.com/api/shop', {
       parameters: { type: 'all' }
     });
     // setStores(getAllStores.data);
     setLoading(false);
-    console.log('getAllStores', getAllStores.data);
+    // console.log('getAllStores', getAllStores.data);
   }, []);
 
   return (
     <>
       {loading ? (
-        <Loader />
+        <PlaceHolder_Card />
       ) : (
         <>
           {stores[0] &&

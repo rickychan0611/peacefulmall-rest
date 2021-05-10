@@ -2,21 +2,22 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import { useRouter } from 'next/router';
+import toSlug from '../../../util/toSlug';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { selectedItem, selections as selectionsAtom } from '../../data/atoms';
-import { selectedStore as selectedStoreAtom } from '../../data/storeAtoms';
+import { selectedItem, selections as selectionsAtom } from '../../../data/atoms';
+import { selectedStore as selectedStoreAtom } from '../../../data/storeAtoms';
 
 import { Grid, Container, Dimmer, Loader } from 'semantic-ui-react';
-import SearchBanner from '../../components/SearchBanner';
-import Slider from '../../components/Slider';
-import PopularDishes from '../../components/PopularDishes/';
-import RestaurantSideBar from '../../components/RestaurantSideBar';
-import RestaurantMenu from '../../components/RestaurantMenu';
-import Footer from '../../components/Footer';
-import ReviewFeed from '../../components/ReviewFeed/index.js';
+import SearchBanner from '../../../components/SearchBanner';
+import Slider from '../../../components/Slider';
+import PopularDishes from '../../../components/PopularDishes';
+import RestaurantSideBar from '../../../components/RestaurantSideBar';
+import RestaurantMenu from '../../../components/RestaurantMenu';
+import Footer from '../../../components/Footer';
+import ReviewFeed from '../../../components/ReviewFeed/index.js';
 
-import { restaurants } from '../../data/restaurants';
+import { restaurants } from '../../../data/restaurants';
 
 const store = () => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);

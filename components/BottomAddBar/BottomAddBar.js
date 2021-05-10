@@ -30,7 +30,7 @@ const BottomAddBar = ({ qty, setQty, option, price, addItem, setOpen }) => {
         <QtyContainer>
           <AddButton onClick={() => {
             addItem(total())
-            setOpen(false)
+            // setOpen(false)
           }}>ADD - ${total()}</AddButton>
         </QtyContainer>
       </BottomBar>

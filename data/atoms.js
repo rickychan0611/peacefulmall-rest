@@ -25,9 +25,14 @@ export const openCheckOutList = atom({
   default: false
 });
 
-export const selectedItem = atom({
-  key: 'selectedItem',
-  default: {}
+export const currentItem = atom({
+  key: 'currentItem',
+  default: null
+});
+
+export const currentStore = atom({
+  key: 'currentStore',
+  default: null
 });
 
 export const scrolling = atom({
@@ -38,4 +43,9 @@ export const scrolling = atom({
 export const showCheckoutButton = atom({
   key: 'showCheckoutButton',
   default: true
+});
+
+export const slidersStates = atom({
+  key: 'slidersStates',
+  default: null
 });

@@ -10,6 +10,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentItem as currentItemAtom,
   currentStore as currentStoreAtom,
+  currentCat as currentCatAtom,
   selections as selectionsAtom
 } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';

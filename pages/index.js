@@ -25,20 +25,7 @@ const Home = () => {
 
   //get stores from server when component is loaded
   useEffect(async () => {
-    // const product = await axios.post('https://test3.suqingxun.com/api/product', {
-    //   parameters: { 
-    //     'type':'all',
-    //     'count':3,
-    //   }
-    // });
-    // console.log('product', product.data);
-
-    // const getproductinshop = await axios.post('http://test3.suqingxun.com/api/getproductinshop', {
-    //   parameters: { 
-    //     'shop_id':'2'
-    //    }
-    // });
-    // console.log('getproductinshop', getproductinshop.data);
+    console.log(contextRef)
   }, []);
 
   return (
@@ -50,10 +37,10 @@ const Home = () => {
           <Container style={{ marginTop: '2em'}}>
             <CuisineSlider contextRef={contextRef} />
             <Slider topic="Discounted Dishes" icon="food">
-              <DishCards plat_category="all" type="discount"/>
+              <DishCards type="discount"/>
             </Slider>
             <Slider topic="Most Popular Dishes" icon="food">
-              <DishCards plat_category={"all"} type="popular"/>
+              <DishCards type="popular"/>
             </Slider>
             {/* <Slider topic="Most Loved Restaurants" icon="star">
               <RestaurantCards />

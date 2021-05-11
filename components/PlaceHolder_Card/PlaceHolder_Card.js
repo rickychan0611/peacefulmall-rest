@@ -3,12 +3,12 @@ import styled from 'styled-components';
 
 import { Placeholder } from 'semantic-ui-react';
 
-const PlaceHolder_Card = () => (
+const PlaceHolder_Card = ({size}) => (
   <>
     {_.times(10, (i) => {
       return (
         <Card key={i}>
-          <Placeholder style={{ height: 250, width: 250, margin: '0 0 0 0px' }}></Placeholder>
+          <Placeholder style={{ height: size, width: size }}></Placeholder>
         </Card>
       );
     })}
@@ -16,10 +16,12 @@ const PlaceHolder_Card = () => (
 );
 
 const Card = styled.div`
-  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
   position: relative;
   margin: 10px;
-  width: 250px;
+  width: 100%;
   cursor: pointer;
 `;
 

@@ -9,46 +9,47 @@ import { useRecoilState } from 'recoil';
 import {
   currentStore as currentStoreAtom,
   currentItem as currentItemAtom,
-  currentCat as currentCatAtom,
+  currentCat as currentCatAtom
 } from '../../data/atoms.js';
-import { Button, Label, Segment } from 'semantic-ui-react';
+import { Button, Label } from 'semantic-ui-react';
 
 import { HOST_URL } from '../../env';
 import PlaceHolder_Card from '../PlaceHolder_Card/';
 
-const DishCards = ({ plat_category, type, topic, featured }) => {
+const DishCards = ({ type }) => {
   const router = useRouter();
   const [dishes, setDishes] = useState([]);
   const isMobile = useIsMobile();
-  // const [selections, setSelections] = useRecoilState(selectionsAtom);
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentStore, setCurrentStore] = useRecoilState(currentStoreAtom);
   const [currentCat, setCurrentcat] = useRecoilState(currentCatAtom);
-  const [open, setOpen] = useState(false);
   const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
 
   //get products from server when component is loaded
   useEffect(async () => {
-      console.log("plat_category reload", currentCat ? currentCat.id : "all")
-      const getProducts = await axios.get(HOST_URL + '/api/products', {
-        params: {
-          plat_category: currentCat ? currentCat.id : "all",
-          type,
-          count: '20'
-        }
-      });
-      setProducts(getProducts.data);
-      setLoading(false);
+    setLoading(true);
+    console.log('plat_category reload', currentCat ? currentCat.id : 'all');
+    const getProducts = await axios.get(HOST_URL + '/api/products', {
+      params: {
+        plat_category: currentCat ? currentCat.id : 'all',
+        type,
+        count: '20'
+      }
+    });
+    console.log('getProducts.data', getProducts.data);
+    setProducts(getProducts.data);
+    setLoading(false);
   }, [currentCat]);
 
   return (
     <>
-      {!products ? (
-        <PlaceHolder_Card />
+      {loading ? (
+        <PlaceHolder_Card size={302} />
       ) : (
         <>
-          {products[0] &&
+          {products &&
+            products[0] &&
             products.map((item, i) => {
               return (
                 <Card
@@ -58,7 +59,6 @@ const DishCards = ({ plat_category, type, topic, featured }) => {
                     // then open item's page by using item's id
                     setCurrentItem(item);
                     setCurrentStore(item.shop);
-                    // setSelectedStore
                     router.push('/item/' + item.id);
                   }}>
                   <Label

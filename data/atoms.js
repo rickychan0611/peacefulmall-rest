@@ -37,8 +37,14 @@ export const currentStore = atom({
 
 export const currentCat = atom({
   key: 'currentCat',
-  default: "all"
+  default: null
 });
+
+export const sliderCats = atom({
+  key: 'sliderCats',
+  default: null
+});
+
 
 export const scrolling = atom({
   key: 'scrolling',

@@ -1,24 +1,59 @@
+import { useState, useEffect, useRef } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import SliderTitle from '../SliderTitle';
 import useIsMobile from '../../util/useIsMobile';
 
-const Slider = ({topic, children, icon, hideViewAll}) => {
+const Slider = ({ topic, children, icon, hideViewAll }) => {
   const isMobile = useIsMobile();
+  const sliderRef = useRef(null);
+
+  useEffect(async () => {
+
+    //Slider scroll back horizontally when a category is selected
+    if (sliderRef.current) {
+      let left = sliderRef.current.scrollLeft;
+      const scrollBack = () => {
+        if (left <= 0) {
+          clearInterval(scroll)
+        }
+        console.log('left', left);
+        left = left - 30;
+        sliderRef.current.scrollTo(left, 0)
+      };
+      let scroll = setInterval(() => {
+        scrollBack();
+      });
+    }
+
+  });
 
   return (
-    <>
-      <SliderTitle title={topic} icon={icon} dishChildren={children} hideViewAll={hideViewAll}/>
-      <Container horizontal nativeMobileScroll hideScrollbars={isMobile}
-      style={{zIndex: 1000}}>
+    <div>
+      <SliderTitle title={topic} icon={icon} dishChildren={children} hideViewAll={hideViewAll} />
+      <ScrollContainer
+        className={topic}
+        horizontal
+        nativeMobileScroll
+        hideScrollbars={isMobile}
+        innerRef={sliderRef}
+        style={{
+          overflow: 'auto',
+          whiteSpace: 'nowrap',
+          display: 'flex',
+          marginBottom: 50,
+          zIndex: 100
+        }}>
+        {/* <Container> */}
         {children}
-      </Container>
-    </>
+        {/* </Container> */}
+      </ScrollContainer>
+    </div>
   );
 };
 
-const Container = styled(ScrollContainer)`
+const Container = styled.div`
   overflow: auto;
   white-space: nowrap;
   display: flex;

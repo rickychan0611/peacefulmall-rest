@@ -1,12 +1,21 @@
+import { useEffect, useState } from 'react';
 import useIsMobile from '../../util/useIsMobile';
 import _ from 'lodash';
 import styled from 'styled-components';
-import { Sticky } from 'semantic-ui-react';
+import { Sticky, Dimmer, Loader } from 'semantic-ui-react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import SliderTitle from '../SliderTitle';
+import axios from 'axios';
+import { HOST_URL } from '../../env';
 
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
+import {
+  currentItem as currentItemAtom,
+  currentStore as currentStoreAtom,
+  currentCat as currentCatAtom
+} from '../../data/atoms.js';
+import PlaceHolder_Card from '../PlaceHolder_Card';
 
 const data = [
   { name: 'Cantonese', img: 'canton-thumb.jpg' },
@@ -25,27 +34,51 @@ const data = [
 
 const CuisineSlider = ({ contextRef }) => {
   const isMobile = useIsMobile();
-
   const [selections, setSelections] = useRecoilState(selectionsAtom);
+  const [currentCat, setCurrentCat] = useRecoilState(currentCatAtom);
+  const [cat, setCat] = useState();
+
+  useEffect(async () => {
+    const query = await axios.get(HOST_URL + '/api/getplatcat');
+    console.log(query.data);
+    setCat(query.data);
+  }, []);
 
   return (
-    <div style={{cursor: "pointer"}}>
-      <SliderTitle title="Choose a Cuisine Style" icon="leaf"/>
-      <Sticky offset={50} context={contextRef}>
-        <Container isMobile={isMobile} horizontal nativeMobileScroll hideScrollbars={isMobile}>
-          <ItemWrapper isMobile={isMobile}>
-          {data.map((item, i) => {
-            return (
-              <CatCard isMobile={isMobile} key={i} onClick={() => setSelections(prev => ({...prev, cuisine: item.name}))} key={i}>
-                <Image isMobile={isMobile} src={`/${item.img}`} />
-                <Text isMobile={isMobile}>{item.name.toUpperCase()}</Text>
-              </CatCard>
-            );
-          })}
-          </ItemWrapper>
-        </Container>
-      </Sticky>
-    </div>
+    <>
+      {!cat ? (
+        "Loading..."
+      ) : (
+        <>
+          <div style={{ cursor: 'pointer' }}>
+            <SliderTitle title="Choose a Cuisine Style" icon="leaf" />
+            <Sticky offset={50} context={contextRef}>
+              <Container
+                isMobile={isMobile}
+                horizontal
+                nativeMobileScroll
+                hideScrollbars={isMobile}>
+                <ItemWrapper isMobile={isMobile}>
+                  {cat.map((item, i) => {
+                    return (
+                      <CatCard
+                        isMobile={isMobile}
+                        key={i}
+                        onClick={() => setCurrentCat(item)}
+                        key={i}>
+                        <Image isMobile={isMobile} 
+                        src={item.image ? `${HOST_URL}/storage/${item.image}` : `/no-image.png`} />
+                        <Text isMobile={isMobile}>{item.category_name.toUpperCase()}</Text>
+                      </CatCard>
+                    );
+                  })}
+                </ItemWrapper>
+              </Container>
+            </Sticky>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 
@@ -57,19 +90,20 @@ const Container = styled(ScrollContainer)`
 `;
 const ItemWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  height: ${p => p.isMobile ? "106px" : "130px"};
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: ${(p) => (p.isMobile ? '106px' : '130px')};
   padding: 10px;
 `;
 const CatCard = styled.div`
   display: inline-block;
   position: relative;
-  margin-right: ${p => p.isMobile ? "10px" : "15px"};
-  width: ${p => p.isMobile ? "86px" : "110px"};
+  margin-right: ${(p) => (p.isMobile ? '10px' : '15px')};
+  width: ${(p) => (p.isMobile ? '86px' : '110px')};
 `;
 const Image = styled.img`
-  width: 100%;
+  width: ${(p) => (p.isMobile ? '86px' : '110px')};
+  height: ${(p) => (p.isMobile ? '86px' : '110px')};
   object-fit: cover;
 `;
 const Text = styled.div`
@@ -77,9 +111,9 @@ const Text = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
   text-shadow: 0px 0px 10px black;
   position: absolute;
-  padding: ${p => p.isMobile ? "3px" : "7px"};
-  bottom: 3px;
-  font-size: ${p => p.isMobile ? ".8rem" : "1rem"};
+  padding: ${(p) => (p.isMobile ? '3px' : '7px')};
+  bottom: 0px;
+  font-size: ${(p) => (p.isMobile ? '.8rem' : '1rem')};
   width: 100%;
   text-align: center;
   font-weight: 600;

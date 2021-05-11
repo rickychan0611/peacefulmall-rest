@@ -58,17 +58,17 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   useEffect(async () => {
     setLoading(true);
     const product_id = router.query.item_id;
-    const query = () => axios.get(HOST_URL + '/api/singleproduct', {
-      params: {
-        product_id
-      }
-    });
+    const query = () =>
+      axios.get(HOST_URL + '/api/singleproduct', {
+        params: {
+          product_id
+        }
+      });
 
-      if (item && item.id !== +product_id) {
-        setLoading(false);
-      }
-    else if (!item && product_id) {
-      const getProduct = await query()
+    if (item && item.id !== +product_id) {
+      setLoading(false);
+    } else if (!item && product_id) {
+      const getProduct = await query();
       setCurrentItem(getProduct.data);
       setCurrentStore(getProduct.data.shop);
       setLoading(false);

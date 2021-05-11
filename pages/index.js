@@ -13,6 +13,7 @@ import Slider from '../components/Slider';
 import ReviewCards from '../components/ReviewCards';
 import CheckOutListPusher from '../components/CheckOutListPusher';
 
+import { currentCat as currentCatAtom } from '../data/atoms.js';
 import { useRecoilState, useRecoilValue } from 'recoil';
 // import { selections as selectionsAtom } from '../data/atoms.js';
 import { stores as storesAtom } from '../data/storeAtoms.js';
@@ -20,6 +21,7 @@ import { stores as storesAtom } from '../data/storeAtoms.js';
 const Home = () => {
   const stores = useRecoilValue(storesAtom);
   let contextRef = createRef();
+  const [currentCat, setCurrentCat] = useRecoilState(currentCatAtom);
 
   //get stores from server when component is loaded
   useEffect(async () => {
@@ -51,7 +53,7 @@ const Home = () => {
               <DishCards plat_category="all" type="discount"/>
             </Slider>
             <Slider topic="Most Popular Dishes" icon="food">
-              <DishCards plat_category="all"  type="popular"/>
+              <DishCards plat_category={"all"} type="popular"/>
             </Slider>
             {/* <Slider topic="Most Loved Restaurants" icon="star">
               <RestaurantCards />

@@ -4,8 +4,6 @@ import axios from 'axios';
 import useIsMobile from '../../util/useIsMobile';
 import _ from 'lodash';
 import styled from 'styled-components';
-import { data } from '../../data/restaurants-old';
-import ItemModal from '../ItemModal/';
 
 import { useRecoilState } from 'recoil';
 import {
@@ -13,8 +11,6 @@ import {
   currentItem as currentItemAtom,
 } from '../../data/atoms.js';
 import { Button, Label, Segment } from 'semantic-ui-react';
-
-import { restaurants } from '../../data/restaurants';
 
 import { HOST_URL } from '../../env';
 import PlaceHolder_Card from '../PlaceHolder_Card/';
@@ -32,6 +28,7 @@ const DishCards = ({ plat_category, type, topic, featured }) => {
 
   //get products from server when component is loaded
   useEffect(async () => {
+    console.log("plat_category reload", plat_category)
     if (!products) {
       const getProducts = await axios.get(HOST_URL + '/api/products', {
         params: {
@@ -43,7 +40,7 @@ const DishCards = ({ plat_category, type, topic, featured }) => {
       setProducts(getProducts.data);
       setLoading(false);
     }
-  }, []);
+  }, [plat_category]);
 
   return (
     <>

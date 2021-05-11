@@ -5,10 +5,17 @@ import useIsMobile from '../../util/useIsMobile';
 
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
+import {
+  currentItem as currentItemAtom,
+  currentStore as currentStoreAtom,
+  currentCat as currentCatAtom
+} from '../../data/atoms.js';
 
 const SliderTitle = ({ title, hideViewAll, icon }) => {
   const isMobile = useIsMobile();
   const [selections, setSelections] = useRecoilState(selectionsAtom);
+  const [currentCat, setCurrentCat] = useRecoilState(currentCatAtom);
+
   const router = useRouter();
 
   return (
@@ -20,6 +27,7 @@ const SliderTitle = ({ title, hideViewAll, icon }) => {
             {title}
           </Title>
         </Container>
+
         <a
           style={{ cursor: 'pointer' }}
           onClick={() => {
@@ -31,12 +39,13 @@ const SliderTitle = ({ title, hideViewAll, icon }) => {
           }}>
           {!hideViewAll && 'View All >'}
         </a>
+
       </SpaceBetween>
       <Row>
-        {selections.cuisine !== "all" &&
+        {currentCat && currentCat.category_name &&
           <>
-            Showing: {selections.cuisine} only&nbsp;	&nbsp;	
-            <Icon name="times circle" color="grey" onClick={() => setSelections((prev) => ({ ...prev, cuisine: 'all' }))} />
+            Showing: {currentCat.category_name} &nbsp;	&nbsp;	
+            <Icon name="times circle" color="grey" onClick={() => setCurrentCat(null)} />
           </>
         }
       </Row>

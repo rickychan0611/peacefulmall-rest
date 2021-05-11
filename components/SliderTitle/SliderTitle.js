@@ -6,15 +6,15 @@ import useIsMobile from '../../util/useIsMobile';
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
 import {
-  currentItem as currentItemAtom,
-  currentStore as currentStoreAtom,
-  currentCat as currentCatAtom
+  currentCat as currentCatAtom,
+  catChange as catChangeAtom
 } from '../../data/atoms.js';
 
 const SliderTitle = ({ title, hideViewAll, icon }) => {
   const isMobile = useIsMobile();
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const [currentCat, setCurrentCat] = useRecoilState(currentCatAtom);
+  const [catChange, setCatChange] = useRecoilState(catChangeAtom);
 
   const router = useRouter();
 
@@ -46,7 +46,10 @@ const SliderTitle = ({ title, hideViewAll, icon }) => {
         {currentCat && currentCat.category_name &&
           <ShowingButton>
             Showing : {currentCat.category_name} &nbsp;	&nbsp;	
-            <Icon name="times" color="white" onClick={() => setCurrentCat(null)} />
+            <Icon name="times" color="white" onClick={() => {
+              setCatChange(true)
+              setCurrentCat(null)
+              }} />
           </ShowingButton>
         }
       </Showing>

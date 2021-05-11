@@ -10,7 +10,10 @@ import { HOST_URL } from '../../env';
 import PlaceHolder_Card from '../PlaceHolder_Card/';
 
 import { useRecoilState } from 'recoil';
-import { currentCat as currentCatAtom, sliderCats as sliderCatsAtom } from '../../data/atoms.js';
+import { currentCat as currentCatAtom, 
+  sliderCats as sliderCatsAtom,
+  catChange as scatChangeAtom
+ } from '../../data/atoms.js';
 
 // const data = [
 //   { name: 'Cantonese', img: 'canton-thumb.jpg' },
@@ -31,6 +34,7 @@ const CuisineSlider = ({ contextRef }) => {
   const isMobile = useIsMobile();
   const [currentCat, setCurrentCat] = useRecoilState(currentCatAtom);
   const [sliderCats, setSliderCats] = useRecoilState(sliderCatsAtom);
+  const [catChange, setCatChange] = useRecoilState(scatChangeAtom);
 
   useEffect(async () => {
     if (!sliderCats) {
@@ -66,7 +70,9 @@ const CuisineSlider = ({ contextRef }) => {
                         selected={item.id === (currentCat ? currentCat.id : 'all')}
                         isMobile={isMobile}
                         key={i}
-                        onClick={() => setCurrentCat(item)}
+                        onClick={() => {
+                          setCatChange(true)
+                          setCurrentCat(item)}}
                         key={i}>
                         <Image
                           isMobile={isMobile}

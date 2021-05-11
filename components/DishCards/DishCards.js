@@ -29,7 +29,7 @@ const DishCards = ({ type }) => {
   //get products from server when component is loaded
   useEffect(async () => {
     setLoading(true);
-    console.log('plat_category reload', currentCat ? currentCat.id : 'all');
+    // console.log('plat_category reload', currentCat ? currentCat.id : 'all');
     const getProducts = await axios.get(HOST_URL + '/api/products', {
       params: {
         plat_category: currentCat ? currentCat.id : 'all',
@@ -37,7 +37,7 @@ const DishCards = ({ type }) => {
         count: '20'
       }
     });
-    console.log('getProducts.data', getProducts.data);
+    // console.log('getProducts.data', getProducts.data);
     setProducts(getProducts.data);
     setLoading(false);
   }, [currentCat]);

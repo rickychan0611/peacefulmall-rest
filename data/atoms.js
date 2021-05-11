@@ -60,3 +60,12 @@ export const slidersStates = atom({
   key: 'slidersStates',
   default: null
 });
+
+export const sliderPosition = atom({
+  key: 'sliderPosition',
+  default: {}
+});
+export const catChange = atom({
+  key: 'catChange',
+  default: false
+});

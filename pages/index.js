@@ -24,9 +24,9 @@ const Home = () => {
   const [currentCat, setCurrentCat] = useRecoilState(currentCatAtom);
 
   //get stores from server when component is loaded
-  useEffect(async () => {
-    console.log(contextRef)
-  }, []);
+  // useEffect(async () => {
+  //   console.log(contextRef)
+  // }, []);
 
   return (
     <>

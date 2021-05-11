@@ -48,6 +48,7 @@ const Slider = ({ topic, children, icon, hideViewAll }) => {
     // After passing BACK button, scroll back to previous poistion by remembering the
     // current.scrollLeft position in siderPositionAtom , only happens once when slider is loaded
     // siderPosition is saved when ScrollContainer is clicked.
+    console.log(sliderRef)
     sliderRef.current.scrollTo(sliderPosition[id], 0);
   }, []);
 
@@ -62,13 +63,16 @@ const Slider = ({ topic, children, icon, hideViewAll }) => {
         hideScrollbars={isMobile}
         innerRef={sliderRef}
         style={{
-          overflow: 'auto',
+          // overflow: 'auto',
           whiteSpace: 'nowrap',
           display: 'flex',
+          flexDiection: 'row',
+          flexWrap: 'nowrap',
           marginBottom: 50,
           zIndex: 100
         }}
         onClick={() => {
+          console.log("sliderRef.current.scrollLeft", sliderRef.current.scrollLeft)
           setSliderPosition((prev) => ({ ...prev, [id]: sliderRef.current.scrollLeft }));
         }}>
         {children}

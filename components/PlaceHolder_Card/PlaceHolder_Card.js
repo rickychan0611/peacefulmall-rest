@@ -5,7 +5,7 @@ import { Placeholder } from 'semantic-ui-react';
 
 const PlaceHolder_Card = ({size}) => (
   <>
-    {_.times(10, (i) => {
+    {_.times(50, (i) => {
       return (
         <Card key={i}>
           <Placeholder style={{ height: size, width: size }}></Placeholder>

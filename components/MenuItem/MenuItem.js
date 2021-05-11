@@ -3,14 +3,14 @@ import { useRouter } from 'next/router';
 import useIsMobile from '../../util/useIsMobile'
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
-import { selectedItem as itemAtom } from '../../data/atoms.js';
+import { currentItem as itemAtom } from '../../data/atoms.js';
 import { Grid, Divider, Icon } from 'semantic-ui-react';
 import ItemModal from '../ItemModal/';
 
 const MenuItem = ({ item, isVCard }) => {
   const isMobile = useIsMobile();
   const router = useRouter();
-  const [selectedItem, setSelectedItem] = useRecoilState(itemAtom);
+  const [, setCurrentItem] = useRecoilState(itemAtom);
   const IMG_URL = `/img/food (${Math.floor(Math.random() * (86 - 1) + 1)}).jpg`;
 
   const [qty, setQty] = useState(0);
@@ -18,7 +18,7 @@ const MenuItem = ({ item, isVCard }) => {
 
   const route = (item) => {
     console.log(item);
-    setSelectedItem({ ...item, img: IMG_URL });
+    setCurrentItem({ ...item, img: IMG_URL });
 
     setOpen(true)
     // !isMobile ? setOpen(true) : router.push('/item/' + item);

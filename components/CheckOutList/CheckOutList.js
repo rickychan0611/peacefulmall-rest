@@ -28,8 +28,6 @@ const CheckOutList = () => {
     return counter.toFixed(2)
   }
 
-  console.log(orderItems)
-
   return (
     <SidebarContainer
       animation="overlay"

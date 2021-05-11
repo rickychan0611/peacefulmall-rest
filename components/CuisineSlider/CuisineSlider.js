@@ -9,7 +9,7 @@ import axios from 'axios';
 import { HOST_URL } from '../../env';
 
 import { useRecoilState } from 'recoil';
-import { selections as selectionsAtom } from '../../data/atoms.js';
+import { currentCat, selections as selectionsAtom } from '../../data/atoms.js';
 import {
   currentItem as currentItemAtom,
   currentStore as currentStoreAtom,
@@ -52,7 +52,7 @@ const CuisineSlider = ({ contextRef }) => {
         <>
           <div style={{ cursor: 'pointer' }}>
             <SliderTitle title="Choose a Cuisine Style" icon="leaf" />
-            <Sticky offset={50} context={contextRef}>
+            <Sticky offset={60} context={contextRef}>
               <Container
                 isMobile={isMobile}
                 horizontal
@@ -62,6 +62,7 @@ const CuisineSlider = ({ contextRef }) => {
                   {cat.map((item, i) => {
                     return (
                       <CatCard
+                        selected={item.id === (currentCat ? currentCat.id : "all")}
                         isMobile={isMobile}
                         key={i}
                         onClick={() => setCurrentCat(item)}
@@ -86,6 +87,7 @@ const Container = styled(ScrollContainer)`
   overflow: auto;
   white-space: nowrap;
   background-color: white;
+  padding-bottom: 10px;
   margin-bottom: 30px;
 `;
 const ItemWrapper = styled.div`
@@ -98,8 +100,11 @@ const ItemWrapper = styled.div`
 const CatCard = styled.div`
   display: inline-block;
   position: relative;
-  margin-right: ${(p) => (p.isMobile ? '10px' : '15px')};
+  margin-right: ${(p) => (p.isMobile ? '15px' : '17px')};
   width: ${(p) => (p.isMobile ? '86px' : '110px')};
+  outline: ${(p) =>  p.selected ? '#e7f78e solid 4px' : 0};
+  box-shadow: ${(p) =>  p.selected ? '0px 0px 10px #302f2f' : 0};
+
 `;
 const Image = styled.img`
   width: ${(p) => (p.isMobile ? '86px' : '110px')};

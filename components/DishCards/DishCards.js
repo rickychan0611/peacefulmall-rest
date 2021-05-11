@@ -9,6 +9,7 @@ import { useRecoilState } from 'recoil';
 import {
   currentStore as currentStoreAtom,
   currentItem as currentItemAtom,
+  currentCat as currentCatAtom,
 } from '../../data/atoms.js';
 import { Button, Label, Segment } from 'semantic-ui-react';
 
@@ -22,25 +23,24 @@ const DishCards = ({ plat_category, type, topic, featured }) => {
   // const [selections, setSelections] = useRecoilState(selectionsAtom);
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentStore, setCurrentStore] = useRecoilState(currentStoreAtom);
+  const [currentCat, setCurrentcat] = useRecoilState(currentCatAtom);
   const [open, setOpen] = useState(false);
   const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
 
   //get products from server when component is loaded
   useEffect(async () => {
-    console.log("plat_category reload", plat_category)
-    if (!products) {
+      console.log("plat_category reload", currentCat ? currentCat.id : "all")
       const getProducts = await axios.get(HOST_URL + '/api/products', {
         params: {
-          plat_category,
+          plat_category: currentCat ? currentCat.id : "all",
           type,
           count: '20'
         }
       });
       setProducts(getProducts.data);
       setLoading(false);
-    }
-  }, [plat_category]);
+  }, [currentCat]);
 
   return (
     <>

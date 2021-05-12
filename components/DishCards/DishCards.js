@@ -7,7 +7,7 @@ import styled from 'styled-components';
 
 import { useRecoilState } from 'recoil';
 import {
-  currentStore as currentStoreAtom,
+  currentShop as currentShopAtom,
   currentItem as currentItemAtom,
   currentCat as currentCatAtom
 } from '../../data/atoms.js';
@@ -21,7 +21,7 @@ const DishCards = ({ type }) => {
   const [dishes, setDishes] = useState([]);
   const isMobile = useIsMobile();
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
-  const [currentStore, setCurrentStore] = useRecoilState(currentStoreAtom);
+  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [currentCat, setCurrentcat] = useRecoilState(currentCatAtom);
   const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -58,7 +58,7 @@ const DishCards = ({ type }) => {
                     // when click, save item in selectedItem Atom and selectedStore Atom.
                     // then open item's page by using item's id
                     setCurrentItem(item);
-                    setCurrentStore(item.shop);
+                    setCurrentShop(item.shop);
                     router.push('/item/' + item.id);
                   }}>
                   <Label

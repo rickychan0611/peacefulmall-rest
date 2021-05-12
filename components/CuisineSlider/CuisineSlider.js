@@ -99,7 +99,7 @@ const Container = styled(ScrollContainer)`
   white-space: nowrap;
   background-color: white;
   /* padding-bottom: 10px; */
-  /* margin-bottom: 25px; */
+  margin-bottom: 25px;
 `;
 const ItemWrapper = styled.div`
   display: flex;

@@ -8,7 +8,7 @@ import toSlug from '../../util/toSlug';
 
 import { useRecoilState } from 'recoil';
 import {
-  currentStore as currentStoreAtom,
+  currentShop as currentShopAtom,
   currentItem as currentItemAtom,
   currentCat as currentCatAtom
 } from '../../data/atoms.js';
@@ -22,7 +22,7 @@ const ShopCards = ({ type }) => {
   const [dishes, setDishes] = useState([]);
   const isMobile = useIsMobile();
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
-  const [currentStore, setCurrentStore] = useRecoilState(currentStoreAtom);
+  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [currentCat, setCurrentcat] = useRecoilState(currentCatAtom);
   const [shops, setShops] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -38,7 +38,6 @@ const ShopCards = ({ type }) => {
         count: '20'
       }
     });
-    console.log('getShops.data', getShops.data);
     setShops(getShops.data);
     setLoading(false);
   }, [currentCat]);
@@ -57,8 +56,8 @@ const ShopCards = ({ type }) => {
                   key={i}
                   onClick={() => {
                     //store selected store in selections.restaurant
-                    setCurrentStore(shop)
-                    router.push('/shop/' + toSlug(shop.name) + '/' + shop.id + '#top');
+                    setCurrentShop(shop)
+                    router.push('/shop/' + toSlug(shop.name) + '/' + shop.id);
                   }}>
                   {/* <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} /> */}
                   

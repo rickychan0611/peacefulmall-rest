@@ -1,34 +1,26 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
-import useIsMobile from '../../util/useIsMobile'
+import useIsMobile from '../../util/useIsMobile';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { currentItem as itemAtom } from '../../data/atoms.js';
-import { Grid, Divider, Icon } from 'semantic-ui-react';
-import ItemModal from '../ItemModal/';
+import { Divider, Icon } from 'semantic-ui-react';
 
-const MenuItem = ({ item, isVCard }) => {
+const MenuItem = ({ item, smallCard }) => {
   const isMobile = useIsMobile();
   const router = useRouter();
   const [, setCurrentItem] = useRecoilState(itemAtom);
   const IMG_URL = `/img/food (${Math.floor(Math.random() * (86 - 1) + 1)}).jpg`;
 
-  const [qty, setQty] = useState(0);
-  const [open, setOpen] = useState(false);
-
   const route = (item) => {
     console.log(item);
-    setCurrentItem({ ...item, img: IMG_URL });
+    setCurrentItem(item);
 
-    setOpen(true)
-    // !isMobile ? setOpen(true) : router.push('/item/' + item);
+    router.push('/item/' + item.id);
   };
 
   const H_Card = () => {
     return (
       <>
-        <ItemModal open={open} setOpen={setOpen}/>
-
         <HCardContainer
           onClick={() => {
             route(item);
@@ -39,35 +31,36 @@ const MenuItem = ({ item, isVCard }) => {
             <div>
               <H_Img src={IMG_URL} />
             </div>
-            <div style={{ padding: "0px 10px" }}>
-              <H4>{item.name}</H4>
+            <div style={{ padding: '0px 10px' }}>
+              <Name>{item.name}</Name>
               <Description>{item.description}</Description>
               <Wrapper>
-                <H4>${item.price}</H4>
-                <PlusSign><Icon name="plus circle" color="red" /></PlusSign>
+                <Price>${item.price}</Price>
+                <PlusSign>
+                  <Icon name="plus circle" color="red" />
+                </PlusSign>
               </Wrapper>
             </div>
           </Wrapper>
-
         </HCardContainer>
       </>
     );
   };
 
-  const V_Card = () => {
+  const Small_Card = () => {
     return (
       <>
-        <ItemModal open={open} setOpen={setOpen}/>
-
         <VCardContainer onClick={() => route(item)}>
           <div>
             <Img src={IMG_URL} />
-          <H4 style={{ padding: "0 5px" }}>{item.name}</H4>
+            <Name style={{ padding: '0 5px' }}>{item.name}</Name>
           </div>
-          <div style={{ padding: "0 5px" }}>
+          <div style={{ padding: '0 5px' }}>
             <Wrapper>
-              <H4>$14.00</H4>
-              <PlusSign><Icon name="plus circle" color="red" /></PlusSign>
+              <Price>$14.00</Price>
+              <PlusSign>
+                <Icon name="plus circle" color="red" />
+              </PlusSign>
             </Wrapper>
           </div>
         </VCardContainer>
@@ -75,16 +68,16 @@ const MenuItem = ({ item, isVCard }) => {
     );
   };
 
-  return <>{isVCard ? <V_Card /> : <H_Card />}</>;
+  return <>{smallCard ? <Small_Card /> : <H_Card />}</>;
 };
 const Wrapper = styled.div`
-  display : flex;
+  display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
-  `;
+`;
 const VCardContainer = styled.div`
-  display : flex;
+  display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   position: relative;
@@ -96,9 +89,19 @@ const VCardContainer = styled.div`
   border-bottom: solid 1px #e9e9e9;
   cursor: pointer;
 `;
-const H4 = styled.h4`
+const Price = styled.h5`
   margin: 0;
   white-space: initial;
+`;
+const Name = styled.div`
+  font-size: 1.1rem;
+  font-weight: bold;
+  overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: initial;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
 `;
 const PlusSign = styled.div`
   margin: 0;

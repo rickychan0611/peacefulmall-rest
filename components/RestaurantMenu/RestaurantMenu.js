@@ -44,7 +44,9 @@ const RestaurantMenu = () => {
                   color="black"
                   key={i}
                   style={{ margin: 5, padding: "10px 15px 10px 15px", cursor: 'pointer'}}
-                  onClick={() => router.push('/store/' + router.query.store + '#' + i)}>
+                  onClick={() => {
+                    router.push('/shop/' + router.query.slug + '/' + router.query.shop_id + '#' + i)
+                    }}>
                   {item}
                 </Label>
               );

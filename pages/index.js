@@ -6,7 +6,6 @@ import { Container, Image, Ref, Visibility, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
 import DishCards from '../components/DishCards';
 import ShopCards from '../components/ShopCards';
-import RestaurantCards from '../components/RestaurantCards';
 import TopBar from '../components/TopBar';
 import SearchBanner from '../components/SearchBanner';
 import Footer from '../components/Footer';
@@ -47,13 +46,13 @@ const Home = () => {
               <ShopCards />
             </Slider>
             {/* <Slider topic="Fastest Near you" icon="store">
-              <RestaurantCards />
+              <ShopCards />
             </Slider>
             <Slider topic="Weekly Top 10" icon="store">
-              <RestaurantCards />
+              <ShopCards />
             </Slider>
             <Slider topic="Peaceful Mall Featured" icon="store">
-              <RestaurantCards />
+              <ShopCards />
             </Slider>
             <Slider topic="User's Reviews" icon="star">
               <ReviewCards />

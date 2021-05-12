@@ -9,7 +9,7 @@ import axios from 'axios';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentItem as currentItemAtom,
-  currentStore as currentStoreAtom,
+  currentShop as currentShopAtom,
   currentCat as currentCatAtom,
   selections as selectionsAtom
 } from '../../data/atoms.js';
@@ -25,7 +25,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   const isMobile = useIsMobile();
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
   const [item, setCurrentItem] = useRecoilState(currentItemAtom);
-  const [currentStore, setCurrentStore] = useRecoilState(currentStoreAtom);
+  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [loading, setLoading] = useState(true);
 
   const [value, setValue] = useState({ option: 'option0', value: 0 });
@@ -40,12 +40,12 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
 
     setOrderItems((prev) => {
       //if a prev store's name is equal to the current store, update the object
-      if (prev[0] && prev[0].shop.id === currentStore.id) {
-        updatedItems = [{ ...item, option: value, qty, total, store: currentStore }, ...prev];
+      if (prev[0] && prev[0].shop.id === currentShop.id) {
+        updatedItems = [{ ...item, option: value, qty, total, store: currentShop }, ...prev];
       }
-      //if not, replace the whole orderItem object. Add store to currentStore
+      //if not, replace the whole orderItem object. Add store to currentShop
       else {
-        updatedItems = [{ ...item, option: value, qty, total, store: currentStore }];
+        updatedItems = [{ ...item, option: value, qty, total, store: currentShop }];
       }
       localStorage.setItem('orderItems', JSON.stringify(updatedItems));
       return updatedItems;
@@ -55,25 +55,29 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   };
 
   //If currentItem is empty, get the product by url id from server
-  //then, setCurrentItem and setCurrentStore
+  //then, setCurrentItem and setCurrentShop
   useEffect(async () => {
-    setLoading(true);
     const product_id = router.query.item_id;
-    const query = () =>
-      axios.get(HOST_URL + '/api/singleproduct', {
-        params: {
-          product_id
-        }
-      });
+    setLoading(true);
 
-    if (item && item.id !== +product_id) {
+    if (!item && product_id) {
+      try {
+        const getProduct = await axios.get(HOST_URL + '/api/singleproduct', {
+          params: {
+            product_id
+          }
+        });
+        setCurrentItem(getProduct.data);
+        setCurrentShop(getProduct.data.shop);
+        setLoading(false);
+        console.log('NO product', getProduct.data);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+        router.push('/404');
+      }
+    } else if (item && item.id !== +product_id) {
       setLoading(false);
-    } else if (!item && product_id) {
-      const getProduct = await query();
-      setCurrentItem(getProduct.data);
-      setCurrentStore(getProduct.data.shop);
-      setLoading(false);
-      console.log('NO product', getProduct.data);
     }
   }, [router.query.item_id]);
 
@@ -101,16 +105,12 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
                   // handleClose();
                 }}>
                 <Image
-                  src={
-                    item.shop.logo
-                      ? HOST_URL + '/storage/' + item.shop.logo
-                      : '/avatar-placeholder.png'
-                  }
+                  src={item.logo ? HOST_URL + '/storage/' + item.logo : '/avatar-placeholder.png'}
                   avatar
                   size="mini"
                 />
                 &nbsp;&nbsp;
-                {item.shop.name}
+                {item.name}
               </StoreHeader>
               <h2>{item.name}</h2>
 

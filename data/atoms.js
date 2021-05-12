@@ -30,8 +30,13 @@ export const currentItem = atom({
   default: null
 });
 
-export const currentStore = atom({
-  key: 'currentStore',
+export const currentShop = atom({
+  key: 'currentShop',
+  default: null
+});
+
+export const currentShopProducts = atom({
+  key: 'currentShopProducts',
   default: null
 });
 

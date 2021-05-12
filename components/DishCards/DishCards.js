@@ -34,7 +34,7 @@ const DishCards = ({ type }) => {
       params: {
         plat_category: currentCat ? currentCat.id : 'all',
         type,
-        count: '20'
+        count: '100'
       }
     });
     // console.log('getProducts.data', getProducts.data);

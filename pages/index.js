@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Container, Image, Ref, Visibility, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
 import DishCards from '../components/DishCards';
+import ShopCards from '../components/ShopCards';
 import RestaurantCards from '../components/RestaurantCards';
 import TopBar from '../components/TopBar';
 import SearchBanner from '../components/SearchBanner';
@@ -42,10 +43,10 @@ const Home = () => {
             <Slider topic="Most Popular Dishes" icon="food">
               <DishCards type="popular"/>
             </Slider>
-            {/* <Slider topic="Most Loved Restaurants" icon="star">
-              <RestaurantCards />
+            <Slider topic="Most Loved Restaurants" icon="star">
+              <ShopCards />
             </Slider>
-            <Slider topic="Fastest Near you" icon="store">
+            {/* <Slider topic="Fastest Near you" icon="store">
               <RestaurantCards />
             </Slider>
             <Slider topic="Weekly Top 10" icon="store">

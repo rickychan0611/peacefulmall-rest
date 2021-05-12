@@ -48,7 +48,6 @@ const Slider = ({ topic, children, icon, hideViewAll }) => {
     // After passing BACK button, scroll back to previous poistion by remembering the
     // current.scrollLeft position in siderPositionAtom , only happens once when slider is loaded
     // siderPosition is saved when ScrollContainer is clicked.
-    console.log(sliderRef)
     sliderRef.current.scrollTo(sliderPosition[id], 0);
   }, []);
 

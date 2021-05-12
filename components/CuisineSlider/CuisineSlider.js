@@ -71,6 +71,8 @@ const CuisineSlider = ({ contextRef }) => {
                         isMobile={isMobile}
                         key={i}
                         onClick={() => {
+                          //** setCatChange to true to allow slider slide back to the beginning */
+                          //** slider scrolling position stays while catChange is false */
                           setCatChange(true)
                           setCurrentCat(item)}}
                         key={i}>

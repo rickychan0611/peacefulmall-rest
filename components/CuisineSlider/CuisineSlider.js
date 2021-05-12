@@ -57,7 +57,7 @@ const CuisineSlider = ({ contextRef }) => {
         <>
           <div style={{ cursor: 'pointer' }}>
             <SliderTitle title="Choose a Cuisine Style" icon="leaf" />
-            <Sticky offset={60} context={contextRef}>
+            <Sticky offset={65} context={contextRef}>
               <Container
                 isMobile={isMobile}
                 horizontal
@@ -98,8 +98,8 @@ const Container = styled(ScrollContainer)`
   overflow: auto;
   white-space: nowrap;
   background-color: white;
-  padding-bottom: 10px;
-  margin-bottom: 30px;
+  /* padding-bottom: 10px; */
+  /* margin-bottom: 25px; */
 `;
 const ItemWrapper = styled.div`
   display: flex;
@@ -111,20 +111,24 @@ const ItemWrapper = styled.div`
 const CatCard = styled.div`
   display: inline-block;
   position: relative;
-  margin-right: ${(p) => (p.isMobile ? '15px' : '17px')};
-  width: ${(p) => (p.isMobile ? '86px' : '110px')};
-  outline: ${(p) => (p.selected ? '#ffffff solid 3px' : 0)};
-  box-shadow: ${(p) => (p.selected ? '0px 4px 20px #5e5d5d' : 0)};
+  margin-right: ${(p) => (p.isMobile ? '10px' : '17px')};
+  width: ${(p) => (p.isMobile ? '90px' : '110px')};
+  /* outline: ${(p) => (p.selected ? '#ffffff solid 3px' : 0)}; */
+  box-shadow: ${(p) => (p.selected ? '0px 0px 8px 2px #8a8787' : 0)};
+  border-radius: 10px;
+  border: 2px solid white;
 `;
 const Image = styled.img`
-  width: ${(p) => (p.isMobile ? '86px' : '110px')};
-  height: ${(p) => (p.isMobile ? '61px' : '85px')};
+  width: ${(p) => (p.isMobile ? '86px' : '106px')};
+  height: ${(p) => (p.isMobile ? '82px' : '106px')};
   object-fit: cover;
+  border-radius: 10px;
+
 `;
 const Text = styled.div`
   color: white;
-  background-color: #5695d1;
-  /* text-shadow: 0px 0px 4px black; */
+  background-color: rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 2px black;
   position: absolute;
   padding: ${(p) => (p.isMobile ? '3px' : '3px')};
   bottom: 0px;
@@ -133,6 +137,7 @@ const Text = styled.div`
   text-align: center;
   font-weight: 600;
   white-space: initial;
+  border-radius: 0px 0px 10px 10px;
 `;
 
 export default CuisineSlider;

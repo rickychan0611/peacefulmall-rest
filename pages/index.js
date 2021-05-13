@@ -45,7 +45,7 @@ const Home = () => {
             <Slider topic="Most Loved Restaurants" icon="star">
               <ShopCards />
             </Slider>
-            {/* <Slider topic="Fastest Near you" icon="store">
+            <Slider topic="Fastest Near you" icon="store">
               <ShopCards />
             </Slider>
             <Slider topic="Weekly Top 10" icon="store">
@@ -59,7 +59,7 @@ const Home = () => {
             </Slider>
             <Slider topic="Editor's Top Picks" icon="star">
               <ReviewCards />
-            </Slider> */}
+            </Slider>
           </Container>
         </Ref>
         <Footer />
@@ -67,14 +67,5 @@ const Home = () => {
     </>
   );
 };
-
-const StyledContainer = styled.div`
-  max-width: 1000px;
-  margin: 0 auto;
-
-  div {
-    margin: 10px 0 10px 0;
-  }
-`;
 
 export default Home;

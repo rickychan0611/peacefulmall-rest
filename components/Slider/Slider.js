@@ -50,7 +50,7 @@ const Slider = ({ topic, children, icon, hideViewAll, marginBottom, hideScrollba
   }, []);
 
   return (
-    <div style={{ backgroundColor: "white" }}>
+    <div style={{ backgroundColor: "white", marginBottom: 40 }}>
       <SliderTitle title={topic} icon={icon} dishChildren={children} hideViewAll={hideViewAll} />
       <ScrollContainer
         className={topic}

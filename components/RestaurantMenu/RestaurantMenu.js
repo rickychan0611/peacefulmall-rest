@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
@@ -102,7 +102,7 @@ const MenuItemsWrapper = styled.div`
 const CatTitle = styled.div`
   font-size: 24px;
   font-weight: bold;
-  scroll-margin-top: 240px;
+  scroll-margin-top: 160px;
   padding-bottom: 10px;
 `;
 export default RestaurantMenu;

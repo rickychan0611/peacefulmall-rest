@@ -4,7 +4,7 @@ import { Icon } from 'semantic-ui-react';
 import { useRecoilState } from 'recoil';
 import { openSideMenu as openSideMenuAtom } from '../../data/atoms.js';
 
-const BottomAppBar = () => {
+const BottomNavBar = () => {
   const router = useRouter();
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
 
@@ -23,7 +23,7 @@ const BottomAppBar = () => {
         <Icon name="star" size="large"/>
         <Label>Reviews</Label>
       </IconWrapper>
-      <IconWrapper>
+      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "#articles")}}>
         <Icon name="newspaper" size="large"/>
         <Label>Articles</Label>
       </IconWrapper>
@@ -63,4 +63,4 @@ const Label = styled.div`
   font-size: 12px;
   font-weight: bold;
 `;
-export default BottomAppBar;
+export default BottomNavBar;

@@ -12,7 +12,9 @@ import Slider from '../Slider';
 import PopularDishes from '../PopularDishes';
 import RestaurantMenu from '../RestaurantMenu';
 import ReviewFeed from '../ReviewFeed';
-import BottomAppBar from '../BottomAppBar';
+import BottomNavBar from '../BottomNavBar';
+import ShopInfo from '../ShopSideBar/ShopInfo'
+import ShopArticleList from '../ShopSideBar/ShopArticleList'
 
 const Shop_Mobile = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
@@ -21,6 +23,13 @@ const Shop_Mobile = () => {
   return (
     <div style={{marginTop: -70}}>
       <Section id="shopTop" style={{height: 70}} ></Section>
+      
+      {currentShop.images && currentShop.images[0] ? (
+        <Img src={HOST_URL + '/storage/' + JSON.parse(currentShop.images)[0]} />
+      ) : (
+        <Img src="/no-image.png" />
+      )}
+
       <Wrapper>
         {currentShop.logo ? (
           <Avatar src={HOST_URL + '/storage/' + currentShop.logo} />
@@ -33,6 +42,14 @@ const Shop_Mobile = () => {
       </Wrapper>
       <Description style={{ marginBottom: 20 }}>{currentShop.description}</Description>
 
+
+      <Section id="shopInfo" >
+        <ShopInfo shop={currentShop} />
+      </Section>
+      <br />
+      <hr />
+      <br />
+
       <Slider topic="Popular Items" hideViewAll>
         {currentShopProducts ? (
           <PopularDishes products={currentShopProducts} />
@@ -40,24 +57,34 @@ const Shop_Mobile = () => {
           <div style={{marginBottom: 30}}>No item found.</div>
         )}
       </Slider>
-
+      
+      <hr />
+      <br />
       <Section id="fullMenu" >
-        <RestaurantMenu store={currentShop} />
+        <RestaurantMenu />
       </Section>
-
       <br />
       <hr />
       <br />
+      {/* <Slider topic="Other Restaurants you may like" hideViewAll>
+        <PopularDishes products={currentShopProducts}/>
+      </Slider> */}
+      {/* <br />
+      <hr />
+      <br /> */}
       <Section id="reviews">
         <ReviewFeed />
       </Section>
       <br />
       <hr />
       <br />
-      <Slider topic="Restaurants you may like" hideViewAll>
-        {/* <PopularDishes /> */}
-      </Slider>
-      <BottomAppBar />
+      <Section id="articles">
+        <ShopArticleList />
+      </Section>
+      <br />
+      <hr />
+      <br />
+      <BottomNavBar />
 
     </div>
   );
@@ -73,6 +100,14 @@ const Wrapper = styled.div`
   align-items: center;
   margin-bottom: 5px;
 `;
+
+const Img = styled.img`
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  margin-bottom: 10px;
+`;
+
 const Avatar = styled.img`
   display: flex;
   justify-content: center;

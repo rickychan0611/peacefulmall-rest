@@ -56,8 +56,8 @@ const CuisineSlider = ({ contextRef }) => {
       ) : (
         <>
           <div style={{ cursor: 'grab' }}>
-            <SliderTitle title="Choose a Cuisine Style" icon="leaf" />
-            <Sticky offset={65} context={contextRef}>
+            <SliderTitle title="Choose a Cuisine Style" icon="leaf" hideViewAll/>
+            <Sticky offset={60} context={contextRef}>
               <Container
                 isMobile={isMobile}
                 horizontal

@@ -88,7 +88,12 @@ const Shop_Mobile = () => {
 };
 
 const Section = styled.div`
-  scroll-margin-top: 80px;
+  /* scroll-margin-top: 80px; */
+  :before {
+    content:"";
+    display:block;
+    height:80px; /* fixed header height*/
+    margin:-80px 0 0; /* negative fixed header height */
 `;
 const Wrapper = styled.div`
   display: flex;

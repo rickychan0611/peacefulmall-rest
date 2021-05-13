@@ -72,7 +72,13 @@ const Shop_Desktop = () => {
 };
 
 const Section = styled.div`
-  scroll-margin-top: 240px;
+  /* scroll-margin-top: 240px; */
+  :before {
+    content:"";
+    display:block;
+    height:240px; /* fixed header height*/
+    margin:-240px 0 0; /* negative fixed header height */
+  }
 `;
 const Wrapper = styled.div`
   display: flex;

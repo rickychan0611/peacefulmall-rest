@@ -37,7 +37,7 @@ const RestaurantMenu = () => {
     <Ref innerRef={contextRef}>
       <div>
         {/* Menu cat slider*/}
-        <Sticky offset={isMobile ? 20 : 90} context={contextRef}>
+        <Sticky offset={isMobile ? 20 : 70} context={contextRef}>
           <Slider topic="Full Menu" marginBottom={20} hideScrollbar hideViewAll>
             <CatWrapper>
               {catNames.map((item, i) => {
@@ -63,7 +63,7 @@ const RestaurantMenu = () => {
         {catNames.map((item, i) => {
           return (
               <MenuContainer key={i}>
-                <CatTitle id={i}>{item}</CatTitle>
+                <CatTitle id={i} isMobile={isMobile}><div className="jumptarget">{item}</div></CatTitle>
                 {/* <hr/> */}
                 <MenuItemsWrapper isMobile={isMobile}>
                   {_.times(11, (i) => (
@@ -102,8 +102,14 @@ const MenuItemsWrapper = styled.div`
 const CatTitle = styled.div`
   font-size: 24px;
   font-weight: bold;
-  scroll-margin-top: 160px;
-  scroll-snap-margin-top: 160px;
+  /* scroll-margin-top: 160px;
+  scroll-snap-margin-top: 160px; */
   padding-bottom: 10px;
+  .jumptarget::before {
+    content:"";
+    display:block;
+    height: ${p => p.isMobile ? "160px" : "240px"}; /* fixed header height*/
+    margin: ${p => p.isMobile ? "-160px 0 0" : "-240px 0 0"}; /* negative fixed header height */
+  }
 `;
 export default RestaurantMenu;

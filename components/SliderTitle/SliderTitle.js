@@ -28,7 +28,7 @@ const SliderTitle = ({ title, hideViewAll, icon }) => {
           </Title>
         </Container>
 
-        <a
+        {/* <a
           style={{ cursor: 'pointer' }}
           onClick={() => {
             setSelections((prev) => ({ ...prev, category: title }));
@@ -38,7 +38,7 @@ const SliderTitle = ({ title, hideViewAll, icon }) => {
             });
           }}>
           {!hideViewAll && 'View All >'}
-        </a>
+        </a> */}
 
       </SpaceBetween>
 

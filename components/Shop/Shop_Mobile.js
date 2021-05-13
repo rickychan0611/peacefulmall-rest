@@ -42,14 +42,12 @@ const Shop_Mobile = () => {
       </Wrapper>
       <Description style={{ marginBottom: 20 }}>{currentShop.description}</Description>
 
-
       <Section id="shopInfo" >
         <ShopInfo shop={currentShop} />
       </Section>
       <br />
       <hr />
       <br />
-
       <Slider topic="Popular Items" hideViewAll>
         {currentShopProducts ? (
           <PopularDishes products={currentShopProducts} />
@@ -57,7 +55,6 @@ const Shop_Mobile = () => {
           <div style={{marginBottom: 30}}>No item found.</div>
         )}
       </Slider>
-      
       <hr />
       <br />
       <Section id="fullMenu" >

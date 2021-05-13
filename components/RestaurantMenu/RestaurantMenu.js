@@ -103,6 +103,7 @@ const CatTitle = styled.div`
   font-size: 24px;
   font-weight: bold;
   scroll-margin-top: 160px;
+  scroll-snap-margin-top: 160px;
   padding-bottom: 10px;
 `;
 export default RestaurantMenu;

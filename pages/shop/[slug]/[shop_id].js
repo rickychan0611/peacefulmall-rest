@@ -44,24 +44,24 @@ const shop = () => {
       }
     }
   }, [router, router.query.shop_id]);
-  
+
   useEffect(async () => {
     console.log('currentShopProducts', currentShopProducts);
-      if (router.query.shop_id && !currentShopProducts) {
-        try {
-          console.log('getShopProducts from server...');
-          const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {
-            params: {
-              shop_id: router.query.shop_id,
-              category_id: 'all'
-            }
-          });
-          console.log('getShopProducts.data', getShopProducts.data);
-          setCurrentShopProducts(getShopProducts.data);
-        } catch (err) {
-          console.log("err" + err);
-        }
+    if (router.query.shop_id && !currentShopProducts) {
+      try {
+        console.log('getShopProducts from server...');
+        const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {
+          params: {
+            shop_id: router.query.shop_id,
+            category_id: 'all'
+          }
+        });
+        console.log('getShopProducts.data', getShopProducts.data);
+        setCurrentShopProducts(getShopProducts.data);
+      } catch (err) {
+        console.log('err' + err);
       }
+    }
   }, [router, router.query]);
 
   return (

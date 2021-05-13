@@ -8,7 +8,6 @@ const BottomNavBar = () => {
   const router = useRouter();
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
 
-  console.log(router)
   return (
     <Container>
       <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "#shopTop")}}>

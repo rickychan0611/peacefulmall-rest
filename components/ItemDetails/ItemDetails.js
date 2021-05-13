@@ -37,21 +37,21 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   //update orderItems and localstorage, and then redirect to store's page
   const addItem = (total) => {
     let updatedItems;
-
+    console.log("orderItems", orderItems)
     setOrderItems((prev) => {
       //if a prev store's name is equal to the current store, update the object
       if (prev[0] && prev[0].shop.id === currentShop.id) {
-        updatedItems = [{ ...item, option: value, qty, total, store: currentShop }, ...prev];
+        updatedItems = [{ ...item, option: value, qty, total, shop: currentShop }, ...prev];
       }
       //if not, replace the whole orderItem object. Add store to currentShop
       else {
-        updatedItems = [{ ...item, option: value, qty, total, store: currentShop }];
+        updatedItems = [{ ...item, option: value, qty, total, shop: currentShop }];
       }
       localStorage.setItem('orderItems', JSON.stringify(updatedItems));
       return updatedItems;
     });
 
-    router.push('/store/' + toSlug(item.shop.name) + '/' + item.shop.id + '#top');
+    router.push('/shop/' + toSlug(currentShop.name) + '/' + currentShop.id + '#fullMenu');
   };
 
   //If currentItem is empty, get the product by url id from server
@@ -71,6 +71,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
         setCurrentShop(getProduct.data.shop);
         setLoading(false);
         console.log('NO product', getProduct.data);
+        console.log('NO currentShop', getProduct.data.shop);
       } catch (err) {
         console.log(err);
         setLoading(false);
@@ -105,12 +106,12 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
                   // handleClose();
                 }}>
                 <Image
-                  src={item.logo ? HOST_URL + '/storage/' + item.logo : '/avatar-placeholder.png'}
+                  src={currentShop.logo ? HOST_URL + '/storage/' + currentShop.logo : '/avatar-placeholder.png'}
                   avatar
                   size="mini"
                 />
                 &nbsp;&nbsp;
-                {item.name}
+                {currentShop.name}
               </StoreHeader>
               <h2>{item.name}</h2>
 

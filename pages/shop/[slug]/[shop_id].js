@@ -5,12 +5,12 @@ import Head from 'next/head';
 import axios from 'axios';
 import styled from 'styled-components';
 import { HOST_URL } from '../../../env';
-import  { useIsMobile, useIsTablet, useIsDesktop } from '../../../util/useScreenSize';
+import { useIsMobile, useIsTablet, useIsDesktop } from '../../../util/useScreenSize';
 
 import { useRecoilState } from 'recoil';
 import {
   currentShop as currentShopAtom,
-  currentShopProducts as currentShopProductsAtom,
+  currentShopProducts as currentShopProductsAtom
 } from '../../../data/atoms';
 
 import SearchBanner from '../../../components/SearchBanner';
@@ -32,7 +32,7 @@ const shop = () => {
   useEffect(async () => {
     console.log('currentShopProducts', currentShopProducts);
 
-    if (router.query.shop_id && !currentShop && !currentShopProducts) {
+    if (router.query.shop_id && !currentShop) {
       try {
         console.log('qetting shop from server...');
         const getSingleShop = await axios.get(HOST_URL + '/api/singleshop', {
@@ -40,37 +40,28 @@ const shop = () => {
         });
         console.log('getSingleShop.data', getSingleShop.data);
         setCurrentShop(getSingleShop.data);
-
-        console.log('getShopProducts from server...');
-        const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {
-          params: {
-            shop_id: router.query.shop_id,
-            category_id: 'all'
-          }
-        });
-        console.log('getShopProducts.data', getShopProducts.data);
-        setCurrentShopProducts(getShopProducts.data);
-
       } catch (err) {
         console.log(err);
         // router.push('/404');
       }
 
-      // try {
-      //   console.log('getShopProducts from server...');
-      //   const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {
-      //     params: {
-      //       shop_id: router.query.shop_id,
-      //       category_id: 'all'
-      //     }
-      //   });
-      //   console.log('getShopProducts.data', getShopProducts.data);
-      //   setCurrentShopProducts(getShopProducts.data);
-      // } catch (err) {
-      //   console.log(err);
-      // }
+      if (router.query.shop_id && !currentShopProducts) {
+        try {
+          console.log('getShopProducts from server...');
+          const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {
+            params: {
+              shop_id: router.query.shop_id,
+              category_id: 'all'
+            }
+          });
+          console.log('getShopProducts.data', getShopProducts.data);
+          setCurrentShopProducts(getShopProducts.data);
+        } catch (err) {
+          console.log(err);
+        }
+      }
     }
-  }, [router]);
+  }, [router, router.query.shop_id]);
 
   return (
     <div>
@@ -83,16 +74,20 @@ const shop = () => {
         </SearchBannerWrapper>
       )}
 
-      <Container style={{ 
-        marginTop: isMobile ? '0px' : isTablet ? '80px' : '140px' }}>
+      <Container
+        style={{
+          marginTop: isMobile ? '0px' : isTablet ? '80px' : '140px'
+        }}>
         {!currentShop || currentShop === 'not found' ? (
           <div style={{ height: '80vh' }}>
             <Dimmer inverted active={!currentShop}>
               <Loader active content="Loading" />
             </Dimmer>
           </div>
+        ) : isDesktop ? (
+          <Shop_Desktop />
         ) : (
-          isDesktop ? <Shop_Desktop /> : <Shop_Mobile /> 
+          <Shop_Mobile />
         )}
       </Container>
       {currentShop && <Footer />}

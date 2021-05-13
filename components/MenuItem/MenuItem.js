@@ -25,7 +25,7 @@ const MenuItem = ({ item, smallCard }) => {
           onClick={() => {
             route(item);
           }}>
-          <Divider />
+          {/* <hr /> */}
 
           <Wrapper>
             <div>
@@ -75,6 +75,7 @@ const Wrapper = styled.div`
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
+  margin-top: 5px;
 `;
 const VCardContainer = styled.div`
   display: flex;
@@ -109,6 +110,8 @@ const PlusSign = styled.div`
 `;
 const HCardContainer = styled.div`
   cursor: pointer;
+  margin: 15px 0 5px 0;
+  max-width: 380px;
 `;
 const H_Img = styled.img`
   width: 90px;

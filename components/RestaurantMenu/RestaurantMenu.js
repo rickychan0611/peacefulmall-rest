@@ -1,9 +1,7 @@
-
-import { useEffect, useState, createRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
-
 import styled from 'styled-components';
 import { Segment, Label, Sticky, Ref } from 'semantic-ui-react';
 
@@ -11,6 +9,8 @@ import MenuItem from '../../components/MenuItem/MenuItem.js';
 
 import _ from 'lodash';
 import dishes from '../../data/dishes';
+import Slider from '../Slider/Slider.js';
+import useIsMobile from '../../util/useIsMobile.js';
 
 const catNames = [
   'Soup',
@@ -30,85 +30,81 @@ const catNames = [
 const RestaurantMenu = () => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const router = useRouter();
-  const contextRef = createRef();
+  const contextRef = useRef();
+  const isMobile = useIsMobile();
 
   return (
     <Ref innerRef={contextRef}>
-      <Container>
-        <Title>Full Menu</Title>
-        <Sticky offset={115} context={contextRef}>
-          <CatWrapper>
-            {catNames.map((item, i) => {
-              return (
-                <Label
-                  color="black"
-                  key={i}
-                  style={{ margin: 5, padding: "10px 15px 10px 15px", cursor: 'pointer'}}
-                  onClick={() => {
-                    router.push('/shop/' + router.query.slug + '/' + router.query.shop_id + '#' + i)
+      <div>
+        {/* Menu cat slider*/}
+        <Sticky offset={isMobile ? 20 : 90} context={contextRef}>
+          <Slider topic="Full Menu" marginBottom={20} hideScrollbar hideViewAll>
+            <CatWrapper>
+              {catNames.map((item, i) => {
+                return (
+                  <Label
+                    color="black"
+                    key={i}
+                    style={{ margin: 5, padding: '10px 15px 10px 15px', cursor: 'pointer', textAlign: "left" }}
+                    onClick={() => {
+                      router.push(
+                        '/shop/' + router.query.slug + '/' + router.query.shop_id + '#' + i
+                      );
                     }}>
-                  {item}
-                </Label>
-              );
-            })}
-          </CatWrapper>
+                    {item}
+                  </Label>
+                );
+              })}
+            </CatWrapper>
+          </Slider>
         </Sticky>
 
+        {/* Menu cards*/}
         {catNames.map((item, i) => {
           return (
-            <div style={{ padding: 5 }} key={i}>
-              <Segment raised>
+              <MenuContainer key={i}>
                 <CatTitle id={i}>{item}</CatTitle>
-                <ItemWrapper>
+                <hr/>
+                <MenuItemsWrapper isMobile={isMobile}>
                   {_.times(11, (i) => (
-                    <div key={i} style={{ width: "48%" }}>
+                    <div key={i}>
                       <MenuItem item={dishes[0]} />
                     </div>
                   ))}
-                </ItemWrapper>
-              </Segment>
-            </div>
+                </MenuItemsWrapper>
+              </MenuContainer>
           );
         })}
         <br />
-      </Container>
+      </div>
     </Ref>
   );
 };
 
-const Title = styled.h2`
-  color: black;
-  margin: 0 10px 10px 0;
-  display: flex;
-  align-items: center;
-`;
-const Container = styled.div`
-`;
+
 const MenuContainer = styled.div`
-  // overflow-y: scroll;
-  // height: 67vh;
-  // scroll-behavior: smooth;
+margin-bottom: 30px;
 `;
+
 const CatWrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   width: 100%;
   background-color: white;
   padding: 10px 0;
+  max-height: 104px;
 `;
-const ItemWrapper = styled.div`
+const MenuItemsWrapper = styled.div`
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: ${p => p.isMobile ? "column" : "row"};
+  flex-wrap: ${p => p.isMobile ? "nowrap" : "wrap"};;
   justify-content: space-between;
 `;
 const CatTitle = styled.div`
-  /* margin-top: 20px; */
-  /* padding-top: 240px;
-  margin-top: -240px; */
   font-size: 24px;
   font-weight: bold;
   scroll-margin-top: 240px;
+  padding-bottom: 10px;
 `;
 export default RestaurantMenu;

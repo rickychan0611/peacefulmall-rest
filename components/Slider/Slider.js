@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from 'react';
-import _ from 'lodash';
-import styled from 'styled-components';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import SliderTitle from '../SliderTitle';
 import useIsMobile from '../../util/useIsMobile';
@@ -11,7 +9,7 @@ import {
   catChange as scatChangeAtom
 } from '../../data/atoms.js';
 
-const Slider = ({ topic, children, icon, hideViewAll }) => {
+const Slider = ({ topic, children, icon, hideViewAll, marginBottom, hideScrollbar }) => {
   const isMobile = useIsMobile();
   const sliderRef = useRef(null);
   const [currentCat, setCurrentcat] = useRecoilState(currentCatAtom);
@@ -52,22 +50,22 @@ const Slider = ({ topic, children, icon, hideViewAll }) => {
   }, []);
 
   return (
-    <div>
+    <div style={{ backgroundColor: "white" }}>
       <SliderTitle title={topic} icon={icon} dishChildren={children} hideViewAll={hideViewAll} />
       <ScrollContainer
         className={topic}
         id={topic}
         horizontal
         nativeMobileScroll
-        hideScrollbars={isMobile}
+        hideScrollbars={isMobile || hideScrollbar === true}
         innerRef={sliderRef}
         style={{
-          // overflow: 'auto',
+          overflow: 'auto',
           whiteSpace: 'nowrap',
           display: 'flex',
           flexDiection: 'row',
           flexWrap: 'nowrap',
-          marginBottom: 50,
+          marginBottom: marginBottom ? marginBottom : isMobile ? 0 : 50,
           zIndex: 100
         }}
         onClick={() => {

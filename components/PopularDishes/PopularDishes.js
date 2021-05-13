@@ -9,8 +9,6 @@ import ItemModal from '../ItemModal';
 import MenuItem from '../MenuItem';
 
 const PopularDishes = ({topic, featured, products}) => {
-  const [dishes, setDishes] = useState([]);
-  const [selections, setSelections] = useRecoilState(selectionsAtom);
 
   // useEffect(() => {
   //   let temp = [];
@@ -49,7 +47,7 @@ const PopularDishes = ({topic, featured, products}) => {
         {products && products[0] &&
           [...products, ...products].map((item, i) => {
             return (
-              <MenuItem item={item} smallCard key={i}/>
+              <MenuItem item={item} smallCard key={i} is1Row={products.length < 10}/>
             );
           })}
     </ItemWrapper>
@@ -61,39 +59,9 @@ const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 360px;
+  height: ${(p) => (p.is1Row ? '180px' : '360px')};
   padding-top: 10px;
   align-items: stretch;
-  /* overflow-x: scroll; */
-`;
-
-const Card = styled.div`
-  display: inline-block;
-  position: relative;
-  margin: 5px;
-  width: 130px;
-  height: 165px;
-`;
-const Img = styled.img`
-  width: 130px;
-  height: 100px;
-  object-fit: cover;
-`;
-const Name = styled.div`
-  font-size: .9rem;
-  font-weight: bold;
-  overflow: hidden;
-  /* text-overflow: ellipsis; */
-  white-space: initial;
-`;
-const Description = styled.div`
-  font-size: 1rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-const Price = styled.div`
-  font-size: .9rem;
-  font-weight: bold;
 `;
 
 export default PopularDishes;

@@ -5,7 +5,7 @@ import Head from 'next/head';
 import axios from 'axios';
 import styled from 'styled-components';
 import { HOST_URL } from '../../../env';
-import useIsMobile from '../../../util/useIsMobile';
+import  { useIsMobile, useIsTablet, useIsDesktop } from '../../../util/useScreenSize';
 
 import { useRecoilState } from 'recoil';
 import {
@@ -24,6 +24,8 @@ const shop = () => {
   const router = useRouter();
   const hide = useState(false);
   const isMobile = useIsMobile();
+  const isDesktop = useIsDesktop();
+  const isTablet = useIsTablet();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
 
@@ -38,12 +40,7 @@ const shop = () => {
         });
         console.log('getSingleShop.data', getSingleShop.data);
         setCurrentShop(getSingleShop.data);
-      } catch (err) {
-        console.log(err);
-        // router.push('/404');
-      }
 
-      try {
         console.log('getShopProducts from server...');
         const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {
           params: {
@@ -53,9 +50,25 @@ const shop = () => {
         });
         console.log('getShopProducts.data', getShopProducts.data);
         setCurrentShopProducts(getShopProducts.data);
+
       } catch (err) {
         console.log(err);
+        // router.push('/404');
       }
+
+      // try {
+      //   console.log('getShopProducts from server...');
+      //   const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {
+      //     params: {
+      //       shop_id: router.query.shop_id,
+      //       category_id: 'all'
+      //     }
+      //   });
+      //   console.log('getShopProducts.data', getShopProducts.data);
+      //   setCurrentShopProducts(getShopProducts.data);
+      // } catch (err) {
+      //   console.log(err);
+      // }
     }
   }, [router]);
 
@@ -64,14 +77,14 @@ const shop = () => {
       <Head>
         <title>{currentShop && currentShop.name} - Peaceful Mall Restaurants</title>
       </Head>
-      {/* {currentShop && (
+      {currentShop && !isMobile && (
         <SearchBannerWrapper>
           <SearchBanner hide={hide} />
         </SearchBannerWrapper>
-      )} */}
+      )}
 
       <Container style={{ 
-        paddingTop: isMobile ? '20px' : '150px' }}>
+        marginTop: isMobile ? '0px' : isTablet ? '80px' : '140px' }}>
         {!currentShop || currentShop === 'not found' ? (
           <div style={{ height: '80vh' }}>
             <Dimmer inverted active={!currentShop}>
@@ -79,7 +92,7 @@ const shop = () => {
             </Dimmer>
           </div>
         ) : (
-          isMobile ? <Shop_Mobile /> : <Shop_Desktop />
+          isDesktop ? <Shop_Desktop /> : <Shop_Mobile /> 
         )}
       </Container>
       {currentShop && <Footer />}
@@ -90,7 +103,7 @@ const shop = () => {
 const SearchBannerWrapper = styled.div`
   z-index: 1000;
   position: fixed;
-  top: 64px;
+  top: 62px;
   .active {
     visibility: visible;
     transition: all 200ms ease-in;

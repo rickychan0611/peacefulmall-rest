@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import useIsMobile from '../../util/useIsMobile';
+import  { useIsMobile } from '../../util/useScreenSize';
 import _ from 'lodash';
 import styled from 'styled-components';
 import toSlug from '../../util/toSlug';

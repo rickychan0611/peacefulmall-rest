@@ -1,4 +1,4 @@
-import useIsMobile from '../../util/useIsMobile';
+import  { useIsMobile } from '../../util/useScreenSize';
 import styled from 'styled-components';
 
 import TopBar_Mobile from './TopBar_Mobile.js';
@@ -23,8 +23,8 @@ const Container = styled.div`
   display: relative;
   z-index: 1000;
   background-color: white;
-  width: 100vw;
-  height: 60;
+  width: 100%;
+  height: 63px;
   top: 0;
 `;
 const SpaceBetween = styled.div`

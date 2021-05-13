@@ -87,9 +87,8 @@ const Avatar = styled.img`
   border: solid 2px white;
   height: 60px;
   width: 60px;
-  padding: 5px;
   object-fit: contain;
-  box-shadow: 0px 0px 5px 3px #dddddd;
+  box-shadow: 0px 0px 5px#a5a5a5;
   margin-right: 20px;
 `;
 const Title = styled.h1`

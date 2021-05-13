@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import { HOST_URL } from '../../env';
 
 import { useRecoilState } from 'recoil';
 import {
@@ -8,65 +8,63 @@ import {
   currentShopProducts as currentShopProductsAtom,
 } from '../../data/atoms';
 
-import { Grid } from 'semantic-ui-react';
 import Slider from '../Slider';
 import PopularDishes from '../PopularDishes';
-import ShopSideBar from '../ShopSideBar';
 import RestaurantMenu from '../RestaurantMenu';
-import ReviewFeed from '../ReviewFeed/index.js';
-import axios from 'axios';
-import { HOST_URL } from '../../env';
+import ReviewFeed from '../ReviewFeed';
+import BottomAppBar from '../BottomAppBar';
 
 const Shop_Mobile = () => {
-  const router = useRouter();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
 
   return (
-    <>
-          <div>
-            <Wrapper>
-              {currentShop.logo ? (
-                <Avatar src={HOST_URL + '/storage/' + currentShop.logo} />
-              ) : (
-                <Avatar src="/avatar-placeholder.png" />
-              )}
-              <div style={{ width: 'calc(100% - 50px)' }}>
-                <Title>{currentShop.name}</Title>
-              </div>
-            </Wrapper>
-            <Description style={{ marginBottom: 20 }}>{currentShop.description}</Description>
+    <div style={{marginTop: -70}}>
+      <Section id="shopTop" style={{height: 70}} ></Section>
+      <Wrapper>
+        {currentShop.logo ? (
+          <Avatar src={HOST_URL + '/storage/' + currentShop.logo} />
+        ) : (
+          <Avatar src="/avatar-placeholder.png" />
+        )}
+        <div style={{ width: 'calc(100% - 50px)' }}>
+          <Title>{currentShop.name}</Title>
+        </div>
+      </Wrapper>
+      <Description style={{ marginBottom: 20 }}>{currentShop.description}</Description>
 
-            <Slider topic="Popular Items" hideViewAll>
-              {currentShopProducts ? (
-                <PopularDishes products={currentShopProducts} />
-              ) : (
-                'No item found.'
-              )}
-            </Slider>
+      <Slider topic="Popular Items" hideViewAll>
+        {currentShopProducts ? (
+          <PopularDishes products={currentShopProducts} />
+        ) : (
+          <div style={{marginBottom: 30}}>No item found.</div>
+        )}
+      </Slider>
 
-            <RestaurantMenu store={currentShop} />
-            
-            <br />
-            <hr />
-            <br />
-            <Section id="reviews">
-              <ReviewFeed />
-            </Section>
-            <br />
-            <hr />
-            <br />
-            <Slider topic="Restaurants you may like" hideViewAll>
-              {/* <PopularDishes /> */}
-            </Slider>
-          </div>
- 
-    </>
+      <Section id="fullMenu" >
+        <RestaurantMenu store={currentShop} />
+      </Section>
+
+      <br />
+      <hr />
+      <br />
+      <Section id="reviews">
+        <ReviewFeed />
+      </Section>
+      <br />
+      <hr />
+      <br />
+      <Slider topic="Restaurants you may like" hideViewAll>
+        {/* <PopularDishes /> */}
+      </Slider>
+      <BottomAppBar />
+
+    </div>
   );
 };
 
 const Section = styled.div`
-  scroll-margin-top: 240px;
+  scroll-margin-top: 80px;
 `;
 const Wrapper = styled.div`
   display: flex;
@@ -80,12 +78,12 @@ const Avatar = styled.img`
   justify-content: center;
   align-items: center;
   border-radius: 50px;
-  border: solid 2px white;
-  height:35px;
-  width: 35px;
-  object-fit: contain;
-  box-shadow: 0px 0px 5px 3px #dddddd;
+  height: 40px;
+  width: 40px;
   margin-right: 5px;
+  object-fit: contain;
+  /* box-shadow: 0px 0px 5px 3px #dddddd; */
+  /* border: solid 1px white; */
 `;
 const Title = styled.h1`
   font-size: 7vw;

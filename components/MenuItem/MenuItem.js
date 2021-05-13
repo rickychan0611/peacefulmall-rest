@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import useIsMobile from '../../util/useIsMobile';
+import  { useIsMobile } from '../../util/useScreenSize';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { currentItem as itemAtom } from '../../data/atoms.js';
@@ -21,12 +21,10 @@ const MenuItem = ({ item, smallCard }) => {
   const H_Card = () => {
     return (
       <>
-        <HCardContainer
+        <HCardContainer isMobile={isMobile}
           onClick={() => {
             route(item);
           }}>
-          {/* <hr /> */}
-
           <Wrapper>
             <div>
               <H_Img src={IMG_URL} />
@@ -110,8 +108,10 @@ const PlusSign = styled.div`
 `;
 const HCardContainer = styled.div`
   cursor: pointer;
-  margin: 15px 0 5px 0;
-  max-width: 380px;
+  width: ${p => p.isMobile ? "100%" : "calc(50% - 10px)"};
+  border-top: 1px solid #dadada;
+  padding-top: 10px;
+  padding-bottom: 15px;
 `;
 const H_Img = styled.img`
   width: 90px;

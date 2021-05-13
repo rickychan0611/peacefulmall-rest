@@ -10,7 +10,7 @@ import MenuItem from '../../components/MenuItem/MenuItem.js';
 import _ from 'lodash';
 import dishes from '../../data/dishes';
 import Slider from '../Slider/Slider.js';
-import useIsMobile from '../../util/useIsMobile.js';
+import  { useIsMobile } from '../../util/useScreenSize.js';
 
 const catNames = [
   'Soup',
@@ -64,12 +64,10 @@ const RestaurantMenu = () => {
           return (
               <MenuContainer key={i}>
                 <CatTitle id={i}>{item}</CatTitle>
-                <hr/>
+                {/* <hr/> */}
                 <MenuItemsWrapper isMobile={isMobile}>
                   {_.times(11, (i) => (
-                    <div key={i}>
-                      <MenuItem item={dishes[0]} />
-                    </div>
+                      <MenuItem item={dishes[0]} key={i}/>
                   ))}
                 </MenuItemsWrapper>
               </MenuContainer>

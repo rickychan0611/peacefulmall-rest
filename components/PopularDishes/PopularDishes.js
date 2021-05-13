@@ -43,13 +43,17 @@ const PopularDishes = ({topic, featured, products}) => {
 
     {/* <ItemModal open={open} setOpen={setOpen} fromRestaurantPage={true}/> */}
 
-    <ItemWrapper>
-        {products && products[0] &&
+    <ItemWrapper isARow={products.length < 10} noItem={products.length === 0}>
+      {/* {products.length} */}
+        {products && products[0] ?
           [...products, ...products].map((item, i) => {
             return (
-              <MenuItem item={item} smallCard key={i} is1Row={products.length < 10}/>
+              <MenuItem item={item} smallCard key={i}/>
             );
-          })}
+          })
+          :
+          <div>No item found</div>
+          }
     </ItemWrapper>
     </>
   );
@@ -59,7 +63,7 @@ const ItemWrapper = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: ${(p) => (p.is1Row ? '180px' : '360px')};
+  height: ${(p) => (p.noItem ? '60px' : p.isARow ? '180px' : '360px')};
   padding-top: 10px;
   align-items: stretch;
 `;

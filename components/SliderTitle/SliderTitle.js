@@ -1,7 +1,7 @@
 import { Label, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import useIsMobile from '../../util/useIsMobile';
+import  { useIsMobile } from '../../util/useScreenSize';
 
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';

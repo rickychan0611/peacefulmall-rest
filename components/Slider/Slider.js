@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import SliderTitle from '../SliderTitle';
-import useIsMobile from '../../util/useIsMobile';
+import  { useIsMobile } from '../../util/useScreenSize';
 import { useRecoilState } from 'recoil';
 import {
   currentCat as currentCatAtom,
@@ -66,7 +66,11 @@ const Slider = ({ topic, children, icon, hideViewAll, marginBottom, hideScrollba
           flexDiection: 'row',
           flexWrap: 'nowrap',
           marginBottom: marginBottom ? marginBottom : isMobile ? 0 : 50,
-          zIndex: 100
+          zIndex: 100,
+          cursor: "grabbing",
+          width: "100%",
+          // marginLeft: -10,
+          // marginRight: -10
         }}
         onClick={() => {
           console.log("sliderRef.current.scrollLeft", sliderRef.current.scrollLeft)

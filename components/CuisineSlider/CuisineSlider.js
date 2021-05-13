@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useIsMobile from '../../util/useIsMobile';
+import  { useIsMobile } from '../../util/useScreenSize';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { Sticky } from 'semantic-ui-react';
@@ -55,7 +55,7 @@ const CuisineSlider = ({ contextRef }) => {
         </div>
       ) : (
         <>
-          <div style={{ cursor: 'pointer' }}>
+          <div style={{ cursor: 'grab' }}>
             <SliderTitle title="Choose a Cuisine Style" icon="leaf" />
             <Sticky offset={65} context={contextRef}>
               <Container

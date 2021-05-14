@@ -33,7 +33,7 @@ const Home = () => {
       <CheckOutListPusher>
         <Image src="/banner.jpg" />
         <SearchBanner />
-        <Ref innerRef={contextRef}>
+        {/* <Ref innerRef={contextRef}>
           <Container style={{ marginTop: '2em'}}>
             <CuisineSlider contextRef={contextRef} />
             <Slider topic="Discounted Dishes" icon="food">
@@ -61,7 +61,7 @@ const Home = () => {
               <ReviewCards />
             </Slider>
           </Container>
-        </Ref>
+        </Ref> */}
         <Footer />
       </CheckOutListPusher>
     </>

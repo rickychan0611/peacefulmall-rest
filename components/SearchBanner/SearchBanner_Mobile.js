@@ -2,12 +2,16 @@ import { useState } from 'react';
 import { Button, Container, Icon, Image, Divider, Dropdown } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useIsMobile } from '../../util/useScreenSize';
+import { useRecoilState } from 'recoil';
+import { currentPosition as currentPositionAtom } from '../../data/atoms';
+import useCurrentPosition from '../../util/useCurrentPosition';
 
 const SearchBanner_Mobile = ({ hide }) => {
   const isMobile = useIsMobile();
   const [openLocationSearch, setOpenLocationSearch] = useState(false);
   const [openMyLocation, setOpenMyLocation] = useState(false);
-
+  const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
+  const position = useCurrentPosition()
   return (
     <>
       <BannerContainer className={hide}>
@@ -40,10 +44,12 @@ const SearchBanner_Mobile = ({ hide }) => {
               />
               {openMyLocation && (
                 <LocationDropDown>
-                  <div style={{ color: '#5959df' }}>
+                  <div style={{ color: '#5959df' }} 
+                  onClick={() => {position()}}>
                     <Icon name="location arrow" />
                     My current Location
                   </div>
+                  {JSON.stringify(currentPosition)}
                 </LocationDropDown>
               )}
             </div>

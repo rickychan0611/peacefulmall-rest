@@ -74,3 +74,7 @@ export const catChange = atom({
   key: 'catChange',
   default: false
 });
+export const currentPosition = atom({
+  key: 'currentPosition',
+  default: null
+});

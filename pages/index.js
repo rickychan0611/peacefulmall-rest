@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router'
-import { Button, Icon, Message, Divider, Dropdown } from 'semantic-ui-react';
+import { Icon, Message } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useIsMobile, useIsDesktop } from '../util/useScreenSize';
 import { useRecoilState } from 'recoil';
@@ -11,11 +11,11 @@ import GooglePlacesAutocomplete, {
 } from 'react-google-places-autocomplete';
 import { MAP_API } from '../env';
 
-const home = ({ hide }) => {
+const home = () => {
   const router = useRouter();
   const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
-  const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
+  const [ , setCurrentPosition] = useRecoilState(currentPositionAtom);
   const [value, setValue] = useState(null);
   const [err, setErr] = useState(null);
 
@@ -43,7 +43,8 @@ const home = ({ hide }) => {
       <Container isDesktop={isDesktop}>
         <Text isMobile={isMobile}>We Deliver the Best Food to You!</Text>
         <InputIconWrapper>
-          <Label style={{ borderRadius: ' 25px 0 0 25px' }} onClick={() => handleSubmit()}>
+          <Label
+            onClick={() => handleSubmit()}>
             <Icon name="map marker alternate" />
           </Label>
           <div style={{ position: 'relative', width: '100%' }} >
@@ -75,12 +76,14 @@ const home = ({ hide }) => {
           </div>
         </InputIconWrapper>
         <Column>
-        <SignButton
-          style={{ backgroundColor: '#ff614d', color: 'white', borderRadius: 25, width: "80vw", maxWidth: 300 }}
-          onClick={() => handleSubmit()}>
-          GO!
+          <SignButton
+            style={{}}
+            onClick={() => handleSubmit()}>
+            GO!
         </SignButton>
-        {err && <Message compact negative size="mini" style={{ width: "70vw", maxWidth: 390, textAlign: "center" }}>Error: {err}</Message>}
+          {err && <Message compact negative size="mini"
+            style={{ width: "70vw", maxWidth: 390, textAlign: "center" }}>
+            Error: {err}</Message>}
         </Column>
       </Container>
     </>
@@ -118,20 +121,29 @@ const Text = styled.div`
   line-height: normal;
   margin-bottom: 50px;
 `;
-const SignButton = styled(Button)`
+const SignButton = styled.div`
   width: 200px;
-  box-shadow: 0 0 15px white;
+  box-shadow: 0 0 15px #804747;
+  background-color:#ff614d;
+  color: white; 
+  border-radius: 25px; 
+  width: 80vw;
+  max-width: 300px;
+  padding: 8px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
 `;
 const Label = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin: 0 5px 0 0; */
   color: grey;
   padding: 0 0 0 6px;
   height: 42px;
   font-size: 18px;
   background-color: #ffffff;
+  border-radius: 25px 0 0 25px;
 `;
 
 const InputIconWrapper = styled.div`
@@ -146,18 +158,6 @@ const InputIconWrapper = styled.div`
   box-shadow: 0 0 15px black;
   width: 80vw;
   max-width: 500px;
-`;
-
-const InputBox = styled.input`
-  outline: none;
-  border-radius: 25px;
-  border: 0;
-  display: inline-block;
-  font-size: 16px;
-  width: 80vw;
-  height: 42px;
-  padding: 0 0 0 6px;
-  margin-left: 5px;
 `;
 
 export default home;

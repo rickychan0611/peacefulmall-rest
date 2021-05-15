@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router'
-import { Button, Icon, Image, Divider, Dropdown } from 'semantic-ui-react';
+import { Button, Icon, Message, Divider, Dropdown } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { useIsMobile } from '../util/useScreenSize';
+import { useIsMobile, useIsDesktop } from '../util/useScreenSize';
 import { useRecoilState } from 'recoil';
 import { currentPosition as currentPositionAtom } from '../data/atoms';
 import GooglePlacesAutocomplete, {
@@ -14,27 +14,40 @@ import { MAP_API } from '../env';
 const home = ({ hide }) => {
   const router = useRouter();
   const isMobile = useIsMobile();
+  const isDesktop = useIsDesktop();
   const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
   const [value, setValue] = useState(null);
+  const [err, setErr] = useState(null);
 
   const handleSubmit = () => {
-    geocodeByAddress(value.label)
-      .then((results) => getLatLng(results[0]))
-      .then(({ lat, lng }) => {
-        setCurrentPosition({ lat, lng, address: value.label });
-        router.push('/home')
-        console.log('Successfully got latitude and longitude', { lat, lng });
-      });
+    setErr()
+    if (!value) {
+      setErr("Please enter an address")
+    }
+    else {
+      geocodeByAddress(value.label)
+        .then((results) => getLatLng(results[0]))
+        .then(({ lat, lng }) => {
+          setCurrentPosition({ lat, lng, address: value.label });
+          router.push('/home')
+          console.log('Successfully got latitude and longitude', { lat, lng });
+        })
+        .catch((error) => {
+          setErr(error)
+        })
+    }
   };
 
   return (
     <>
-      <Container>
-        <Text>We Deliver the Best Food to You!</Text>
+      <Container isDesktop={isDesktop}>
+        <Text isMobile={isMobile}>We Deliver the Best Food to You!</Text>
         <InputIconWrapper>
-          <div style={{ position: 'relative', width: '100%' }}>
+          <div style={{ position: 'relative', width: '100%' }}
+          >
             <GooglePlacesAutocomplete
               apiKey={MAP_API}
+              minLengthAutocomplete={4}
               autocompletionRequest={{
                 componentRestrictions: {
                   country: ['ca']
@@ -58,32 +71,37 @@ const home = ({ hide }) => {
               }}
             />
           </div>
-          <Label style={{ borderRadius: ' 0 25px 25px 0' }} onClick={() => handleSubmit()}>
+          {/* <Label style={{ borderRadius: ' 0 25px 25px 0' }} onClick={() => handleSubmit()}>
             <Icon name="arrow right" />
-          </Label>
+          </Label> */}
         </InputIconWrapper>
+        <Column>
         <SignButton
-          style={{ backgroundColor: '#ff614d', color: 'white', borderRadius: 25, margin: 25 }}
-          onClick={() => router.push('/sign-up')}>
-          Sign up
+          style={{ backgroundColor: '#ff614d', color: 'white', borderRadius: 25, width: "80vw", maxWidth: 300 }}
+          onClick={() => handleSubmit()}>
+          GO!
         </SignButton>
-        <SignButton
-          style={{ backgroundColor: '#ff614d', color: 'white', borderRadius: 25 }}
-          onClick={() => router.push('/sign-in')}>
-          Sign in
-        </SignButton>
+        {err && <Message compact negative size="mini" style={{ width: "70vw", maxWidth: 390, textAlign: "center" }}>Error: {err}</Message>}
+        </Column>
       </Container>
     </>
   );
 };
 
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  margin-bottom: 90px;
+`;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
-  background-image: url('/slash-mobile.jpg');
+  background-image: ${p => p.isDesktop ? "url('/slash-desktop.jpeg')" : "url('/slash-mobile.jpg')"};
   background-size: cover;
   background-repeat: no-repeat;
   width: 100vw;
@@ -92,14 +110,14 @@ const Container = styled.div`
   padding-bottom: 30px;
 `;
 const Text = styled.div`
-  font-size: 3rem;
+  font-size: ${p => p.isMobile ? "3rem" : "4rem"};
   font-weight: bold;
   color: white;
   text-shadow: 0 0 15px black;
   text-align: center;
   padding: 0px 20px 0px 20px;
   line-height: normal;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 `;
 const SignButton = styled(Button)`
   width: 200px;
@@ -125,9 +143,10 @@ const InputIconWrapper = styled.div`
   height: 42px;
   border-radius: 25px;
   padding: 10px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   box-shadow: 0 0 15px black;
   width: 80vw;
+  max-width: 500px;
 `;
 
 const InputBox = styled.input`

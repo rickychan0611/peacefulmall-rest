@@ -4,14 +4,12 @@ import styled from 'styled-components';
 import { useIsMobile } from '../../util/useScreenSize';
 import { useRecoilState } from 'recoil';
 import { currentPosition as currentPositionAtom } from '../../data/atoms';
-import useCurrentPosition from '../../util/useCurrentPosition';
 
 const SearchBanner_Mobile = ({ hide }) => {
   const isMobile = useIsMobile();
   const [openLocationSearch, setOpenLocationSearch] = useState(false);
   const [openMyLocation, setOpenMyLocation] = useState(false);
   const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
-  const position = useCurrentPosition()
   return (
     <>
       <BannerContainer className={hide}>

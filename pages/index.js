@@ -43,8 +43,10 @@ const home = ({ hide }) => {
       <Container isDesktop={isDesktop}>
         <Text isMobile={isMobile}>We Deliver the Best Food to You!</Text>
         <InputIconWrapper>
-          <div style={{ position: 'relative', width: '100%' }}
-          >
+          <Label style={{ borderRadius: ' 25px 0 0 25px' }} onClick={() => handleSubmit()}>
+            <Icon name="map marker alternate" />
+          </Label>
+          <div style={{ position: 'relative', width: '100%' }} >
             <GooglePlacesAutocomplete
               apiKey={MAP_API}
               minLengthAutocomplete={4}
@@ -71,9 +73,6 @@ const home = ({ hide }) => {
               }}
             />
           </div>
-          {/* <Label style={{ borderRadius: ' 0 25px 25px 0' }} onClick={() => handleSubmit()}>
-            <Icon name="arrow right" />
-          </Label> */}
         </InputIconWrapper>
         <Column>
         <SignButton

@@ -170,6 +170,7 @@ const BackButton = styled.div`
   z-index: 10;
   padding: 10px;
   margin: 0 0 0 0;
+  cursor: pointer;
 `;
 const Wrapper = styled.div`
   display: flex;

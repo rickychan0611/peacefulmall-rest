@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
-import  { useIsMobile } from '../../util/useScreenSize';
+import { HOST_URL } from '../../env';
+import { useIsMobile } from '../../util/useScreenSize';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { currentItem as itemAtom } from '../../data/atoms.js';
@@ -21,13 +22,15 @@ const MenuItem = ({ item, smallCard }) => {
   const H_Card = () => {
     return (
       <>
-        <HCardContainer isMobile={isMobile}
+        <HCardContainer
+          isMobile={isMobile}
           onClick={() => {
             route(item);
           }}>
           <Wrapper>
             <div>
-              <H_Img src={IMG_URL} />
+              {item.images && <H_Img src={HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />}
+              {/* <H_Img src={IMG_URL} /> */}
             </div>
             <div style={{ padding: '0px 10px' }}>
               <Name>{item.name}</Name>
@@ -93,14 +96,15 @@ const Price = styled.h5`
   white-space: initial;
 `;
 const Name = styled.div`
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: bold;
+  margin-bottom: 5px;
   overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: initial;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  white-space: initial;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 const PlusSign = styled.div`
   margin: 0;
@@ -108,7 +112,7 @@ const PlusSign = styled.div`
 `;
 const HCardContainer = styled.div`
   cursor: pointer;
-  width: ${p => p.isMobile ? "100%" : "calc(50% - 10px)"};
+  width: ${(p) => (p.isMobile ? '100%' : 'calc(50% - 10px)')};
   border-top: 1px solid #dadada;
   padding-top: 10px;
   padding-bottom: 15px;

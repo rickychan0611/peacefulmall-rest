@@ -17,6 +17,7 @@ import SearchBanner from '../../../components/SearchBanner';
 import Shop_Desktop from '../../../components/Shop/Shop_Desktop';
 import Shop_Mobile from '../../../components/Shop/Shop_Mobile';
 import Footer from '../../../components/Footer';
+import CurrentAddress from '../../../components/CurrentAddress';
 
 // import { restaurants } from '../../../data/restaurants';
 
@@ -69,10 +70,13 @@ const shop = () => {
       <Head>
         <title>{currentShop && currentShop.name} - Peaceful Mall Restaurants</title>
       </Head>
-      {currentShop && !isMobile && (
+      {currentShop && !isMobile ? (
         <SearchBannerWrapper>
           <SearchBanner hide={hide} />
+          <CurrentAddress />
         </SearchBannerWrapper>
+      ) : (
+        <CurrentAddress />
       )}
 
       <Container

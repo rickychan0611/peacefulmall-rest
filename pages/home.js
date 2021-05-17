@@ -13,6 +13,7 @@ import Footer from '../components/Footer';
 import Slider from '../components/Slider';
 import ReviewCards from '../components/ReviewCards';
 import CheckOutListPusher from '../components/CheckOutListPusher';
+import CurrentAddress from '../components/CurrentAddress';
 
 import { currentCat as currentCatAtom } from '../data/atoms.js';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -33,23 +34,7 @@ const Home = () => {
         <Image src="/banner.jpg" />
         <SearchBanner />
 
-        {currentPosition && (
-          <>
-          <CurrentAddressContainer isMobile={isMobile}>
-            <div>
-              <Icon name="map marker alternate" size="large" style={{marginRight: 10}}/>
-            </div>
-            <div style={{ textAlign: 'left' }}>
-              <span style={{ fontSize: 12 }}>Your current address:</span>
-              <br /> 
-              <Address>{currentPosition.address}</Address>
-            </div>
-            <div>
-              <Icon name="chevron down" style={{marginLeft: 10}} />
-            </div>
-          </CurrentAddressContainer>
-          </>
-        )}
+        <CurrentAddress />
 
         <Ref innerRef={contextRef}>
           <Container style={{ marginTop: '2em' }}>

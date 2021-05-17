@@ -21,8 +21,8 @@ const Shop_Mobile = () => {
   const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
 
   return (
-    <div style={{marginTop: -70}}>
-      <Section id="shopTop" style={{height: 70}} ></Section>
+    <div style={{marginTop: -100}}>
+      <Section id="shopTop" style={{height: 100}} ></Section>
       
       {currentShop.images && currentShop.images[0] ? (
         <Img src={HOST_URL + '/storage/' + JSON.parse(currentShop.images)[0]} />

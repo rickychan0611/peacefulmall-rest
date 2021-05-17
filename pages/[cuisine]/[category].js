@@ -9,6 +9,7 @@ import { Card, Image, Icon, Grid, Container } from 'semantic-ui-react';
 import SearchBanner from '../../components/SearchBanner/SearchBanner.js';
 import TopBar from '../../components/TopBar/TopBar.js';
 import DishCards from '../../components/DishCards/DishCards.js';
+import CurrentAddress from '../../components/CurrentAddress/CurrentAddress.js';
 
 const category = () => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
@@ -47,6 +48,7 @@ const category = () => {
     <>
       <SearchBanner />
       <Container style={{ marginTop: 50 }}>
+      <CurrentAddress />
         <SliderTitle title={router.query.category + ' - ' + router.query.cuisine} hideViewAll />
         <Grid stackable doubling columns={4}>
             <DishCards />

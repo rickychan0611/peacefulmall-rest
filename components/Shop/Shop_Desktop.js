@@ -51,7 +51,7 @@ const Shop_Desktop = () => {
               )}
             </Slider>
 
-            <RestaurantMenu store={currentShop} />
+            <RestaurantMenu currentShop={currentShop} currentShopProducts={currentShopProducts}/>
             <br />
             <hr />
             <br />

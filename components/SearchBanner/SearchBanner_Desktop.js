@@ -1,29 +1,57 @@
 import { useState } from 'react';
-import { Button, Container, Icon, Image, Divider, Dropdown } from 'semantic-ui-react';
+import { Container, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useIsMobile } from '../../util/useScreenSize';
+import GooglePlacesAutocomplete, {
+  geocodeByAddress,
+  getLatLng
+} from 'react-google-places-autocomplete';
+import { MAP_API } from '../../env';
 
 const SearchBanner_Desktop = ({ hide }) => {
   const isMobile = useIsMobile();
   const [ openMyLocation, setOpenMyLocation ] = useState(false)
+  const [value, setValue] = useState();
 
   return (
     <BannerContainer className={hide}>
       {/* <BannerImage src="/rest-banner.jpg" /> */}
       <InputContainer style={{ display: 'flex' }}>
-        <InputWrapper style={{ borderRadius: '5px 0 0 5px', borderRight: '1px solid #999696' }}>
+        <InputWrapper style={{ 
+          borderRadius: '5px 0 0 5px', 
+          borderRight: '1px solid #999696',
+         }}>
           <Label style={{ borderRadius: '5px 0 0 5px' }}>
             <Icon name="map marker alternate" />
           </Label>
-          <div style={{position: 'relative'}}>
-            <StyledInput placeholder="Enter a location: address, city..." 
-            onClick={()=>setOpenMyLocation(true)}
-            onBlur={()=>setOpenMyLocation(false)}
+          
+          <GooglePlacesAutocomplete
+              apiKey={MAP_API}
+              minLengthAutocomplete={4}
+              autocompletionRequest={{
+                componentRestrictions: {
+                  country: ['ca']
+                }
+              }}
+              selectProps={{
+                placeholder: 'Enter your address',
+                value,
+                onChange: setValue,
+                styles: {
+                  input: (provided) => ({
+                    ...provided,
+                    border: 'none',
+                    width: '33vw'
+                  }),
+                  control: (provided) => ({
+                    ...provided,
+                    borderColor: 'white',
+                    boxShadow: 'none'
+                  })
+                }
+              }}
             />
-            {openMyLocation && <LocationDropDown>
-              <div style={{color: "#5959df"}}><Icon name="location arrow" />My current Location</div>
-            </LocationDropDown>}
-          </div>
+
         </InputWrapper>
 
         <InputWrapper style={{ borderRadius: ' 0 5px 5px 0' }}>
@@ -40,16 +68,6 @@ const SearchBanner_Desktop = ({ hide }) => {
   );
 };
 
-const LocationDropDown = styled.div`
-  position: absolute;
-  z-index: 100000;
-  background-color: white;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  color: grey;
-  box-shadow: 0 0 10px grey;
-`;
 const BannerContainer = styled.div`
   width: 100vw;
   height: 50px;

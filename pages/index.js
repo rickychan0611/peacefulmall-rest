@@ -30,6 +30,7 @@ const home = () => {
         .then(({ lat, lng }) => {
           setCurrentPosition({ lat, lng, address: value.label });
           router.push('/home')
+          localStorage.setItem('currentPosition', JSON.stringify({ lat, lng, address: value.label }))
           console.log('Successfully got latitude and longitude', { lat, lng });
         })
         .catch((error) => {
@@ -133,6 +134,7 @@ const SignButton = styled.div`
   text-align: center;
   font-weight: bold;
   font-size: 16px;
+  cursor: pointer;
 `;
 const Label = styled.div`
   display: flex;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import  { useIsMobile } from '../../util/useScreenSize';
+import { useIsMobile } from '../../util/useScreenSize';
 import _ from 'lodash';
 import styled from 'styled-components';
 import { Sticky } from 'semantic-ui-react';
@@ -10,10 +10,11 @@ import { HOST_URL } from '../../env';
 import PlaceHolder_Card from '../PlaceHolder_Card/';
 
 import { useRecoilState } from 'recoil';
-import { currentCat as currentCatAtom, 
+import {
+  currentCat as currentCatAtom,
   sliderCats as sliderCatsAtom,
   catChange as scatChangeAtom
- } from '../../data/atoms.js';
+} from '../../data/atoms.js';
 
 // const data = [
 //   { name: 'Cantonese', img: 'canton-thumb.jpg' },
@@ -38,16 +39,20 @@ const CuisineSlider = ({ contextRef }) => {
 
   useEffect(async () => {
     if (!sliderCats) {
-      const query = await axios.get(HOST_URL + '/api/getplatcat');
-      console.log(query.data);
-      setSliderCats(query.data);
+      try {
+        const query = await axios.get(HOST_URL + '/api/getplatcat');
+        console.log(query.data);
+        setSliderCats(query.data);
+      } catch (err) {
+        console.log(err);
+      }
     }
   }, []);
 
   return (
     <>
       {!sliderCats ? (
-        <div style={{marginBottom: 20}}>
+        <div style={{ marginBottom: 20 }}>
           <SliderTitle title="Choose a Cuisine Style" icon="leaf" />
           <ItemWrapper isMobile={isMobile}>
             <PlaceHolder_Card size={106} />
@@ -56,7 +61,7 @@ const CuisineSlider = ({ contextRef }) => {
       ) : (
         <>
           <div style={{ cursor: 'grab' }}>
-            <SliderTitle title="Choose a Cuisine Style" icon="leaf" hideViewAll/>
+            <SliderTitle title="Choose a Cuisine Style" icon="leaf" hideViewAll />
             <Sticky offset={60} context={contextRef}>
               <Container
                 isMobile={isMobile}
@@ -73,8 +78,9 @@ const CuisineSlider = ({ contextRef }) => {
                         onClick={() => {
                           //** setCatChange to true to allow slider slide back to the beginning */
                           //** slider scrolling position stays while catChange is false */
-                          setCatChange(true)
-                          setCurrentCat(item)}}
+                          setCatChange(true);
+                          setCurrentCat(item);
+                        }}
                         key={i}>
                         <Image
                           isMobile={isMobile}
@@ -123,11 +129,10 @@ const Image = styled.img`
   height: ${(p) => (p.isMobile ? '82px' : '106px')};
   object-fit: cover;
   border-radius: 10px;
-
 `;
 const Text = styled.div`
   color: white;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   text-shadow: 2px 2px 2px black;
   position: absolute;
   padding: ${(p) => (p.isMobile ? '3px' : '3px')};

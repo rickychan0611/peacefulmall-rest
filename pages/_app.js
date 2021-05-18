@@ -15,6 +15,7 @@ import SideMenu from '../components/SideMenu';
 import CheckOutListPusher from '../components/CheckOutListPusher';
 import TopBar from '../components/TopBar';
 import GooglePlacesAutocomplete, { geocodeByLatLng } from 'react-google-places-autocomplete';
+import {MAP_API} from '../env'
 
 const InitApp = ({ children }) => {
   const router = useRouter();
@@ -37,33 +38,34 @@ const InitApp = ({ children }) => {
     // console.log(currentPosition);
 
     // if (!localStoragePosition) {
-      function showPosition(position) {
-        console.log(
-          'Latitude: ' + position.coords.latitude + 'Longitude: ' + position.coords.longitude
-        );
-        geocodeByLatLng({ lat: position.coords.latitude, lng: position.coords.longitude })
-          .then((results) => {
-            setCurrentPosition({
-              address: results[2].formatted_address,
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            });
-            console.log(results);
-          })
-          .catch((error) => console.error(error));
-      }
+    function showPosition(position) {
+      console.log(
+        'Latitude: ' + position.coords.latitude + 'Longitude: ' + position.coords.longitude
+      );
+      geocodeByLatLng({ lat: position.coords.latitude, lng: position.coords.longitude })
+        .then((results) => {
+          setCurrentPosition({
+            address: results[2].formatted_address,
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          });
+          console.log(results);
+        })
+        .catch((error) => console.error(error));
+    }
 
-      function error(err) {
-        console.log(err)
-        alert("Please enable geolocation of your browser, so that we can find restaurants close to you :)")
-      }
+    function error(err) {
+      console.log(err);
+      alert(
+        'Please enable geolocation of your browser, so that we can find restaurants close to you :)'
+      );
+    }
 
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, error);
-      } 
-      else {
-        console.log("blocked")
-      }
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition, error);
+    } else {
+      console.log('blocked');
+    }
 
     // } else {
     //   console.log(localStoragePosition);
@@ -97,6 +99,10 @@ function MyApp({ Component, pageProps }) {
           <Head>
             <title>Peaceful Mall Restaurant</title>
             <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+            <script
+              type="text/javascript"
+              src={"https://maps.googleapis.com/maps/api/js?key=" + MAP_API + "&libraries=places"}
+            />
           </Head>
           <TopBar />
           <div className="contents" style={{ paddingTop: 60, width: '100vw' }}>

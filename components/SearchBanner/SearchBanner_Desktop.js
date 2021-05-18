@@ -6,7 +6,6 @@ import GooglePlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from 'react-google-places-autocomplete';
-import { MAP_API } from '../../env';
 
 const SearchBanner_Desktop = ({ hide }) => {
   const isMobile = useIsMobile();
@@ -26,8 +25,6 @@ const SearchBanner_Desktop = ({ hide }) => {
           </Label>
           
           <GooglePlacesAutocomplete
-              apiKey={MAP_API}
-              minLengthAutocomplete={4}
               autocompletionRequest={{
                 componentRestrictions: {
                   country: ['ca']

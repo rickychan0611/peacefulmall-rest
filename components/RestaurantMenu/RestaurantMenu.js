@@ -48,58 +48,67 @@ const RestaurantMenu = ({ currentShop, currentShopProducts }) => {
       <div>
         {/* Menu cat slider*/}
         <Sticky offset={isMobile ? 20 : 120} context={contextRef}>
-          <Slider topic="Full Menu" marginBottom={20} hideScrollbar hideViewAll>
+          <Slider topic="Full Menu" marginBottom={20} hideViewAll>
             <CatWrapper>
-              {currentShop &&
+              {currentShop && currentShop.shop_categories &&
                 currentShop.shop_categories.map((item, i) => {
-                  return (
-                    <Label
-                      color="black"
-                      key={item.id}
-                      style={{
-                        margin: 5,
-                        padding: '10px 15px 10px 15px',
-                        cursor: 'pointer',
-                        textAlign: 'left'
-                      }}
-                      onClick={() => {
-                        router.push(
-                          '/shop/' + router.query.slug + '/' + router.query.shop_id + '#' + item.id
-                        );
-                      }}>
-                      {item.category_name}
-                    </Label>
-                  );
+                  if (item.category_name !== 'Popular Items') {
+                    return (
+                      <Label
+                        color="black"
+                        key={item.id}
+                        style={{
+                          margin: 5,
+                          padding: '10px 15px 10px 15px',
+                          cursor: 'pointer',
+                          textAlign: 'left'
+                        }}
+                        onClick={() => {
+                          router.push(
+                            '/shop/' +
+                              router.query.slug +
+                              '/' +
+                              router.query.shop_id +
+                              '#' +
+                              item.id
+                          );
+                        }}>
+                        {item.category_name}
+                      </Label>
+                    );
+                  }
                 })}
             </CatWrapper>
           </Slider>
         </Sticky>
 
         {/* Menu cards*/}
-        {currentShop &&
+        {currentShop && currentShop.shop_categories && currentShop.shop_categories[0] &&
           currentShop.shop_categories.map((cat, i) => {
             let isEmpty = true;
+            if (cat.category_name !== 'Popular Items') {
+              return (
+                <MenuContainer key={i}>
+                  <CatTitle id={cat.id} isMobile={isMobile}>
+                    <div className="jumptarget">{cat.category_name}</div>
+                  </CatTitle>
+                  {/* <hr/> */}
+                  <MenuItemsWrapper isMobile={isMobile}>
+                    {currentShopProducts &&
+                      currentShopProducts.map((product) => {
+                        if (
+                          product.shop_categories.findIndex((item) => item.id === cat.id) !== -1
+                        ) {
+                          isEmpty = false;
+                          return <MenuItem item={product} key={product.id} />;
+                        }
+                      })}
+                  </MenuItemsWrapper>
 
-            return (
-              <MenuContainer key={i}>
-                <CatTitle id={cat.id} isMobile={isMobile}>
-                  <div className="jumptarget">{cat.category_name}</div>
-                </CatTitle>
-                {/* <hr/> */}
-                <MenuItemsWrapper isMobile={isMobile}>
-                  {currentShopProducts &&
-                    currentShopProducts.map((product) => {
-                      if (product.shop_categories.findIndex((item) => item.id === cat.id) !== -1) {
-                        isEmpty = false;
-                        return <MenuItem item={product} key={product.id} />;
-                      }
-                    })}
-                </MenuItemsWrapper>
-
-                {isEmpty && <div style={{ borderTop: '1px solid #dadada' }}>No item found.</div>}
-
-              </MenuContainer>
-            );
+                  {isEmpty && <div style={{ borderTop: '1px solid #dadada' }}>No item found.</div>}
+                </MenuContainer>
+              );
+            }
           })}
         <br />
       </div>
@@ -136,9 +145,9 @@ const CatTitle = styled.div`
   .jumptarget::before {
     content: '';
     display: block;
-    height: ${(p) => (p.isMobile ? '190px' : '270px')}; /* anchor fixed header height*/
+    height: ${(p) => (p.isMobile ? '190px' : '290px')}; /* anchor fixed header height*/
     margin: ${(p) =>
-      p.isMobile ? '-190px 0 0' : '-270px 0 0'}; /* anchor negative fixed header height */
+      p.isMobile ? '-190px 0 0' : '-290px 0 0'}; /* anchor negative fixed header height */
   }
 `;
 export default RestaurantMenu;

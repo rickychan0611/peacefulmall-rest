@@ -1,13 +1,11 @@
-import { useState, useEffect, createRef } from 'react';
+import { createRef } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { useIsMobile } from '../util/useScreenSize';
 
 import { Container, Image, Ref, Icon, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
 import DishCards from '../components/DishCards';
 import ShopCards from '../components/ShopCards';
-import TopBar from '../components/TopBar';
 import SearchBanner from '../components/SearchBanner';
 import Footer from '../components/Footer';
 import Slider from '../components/Slider';
@@ -15,18 +13,8 @@ import ReviewCards from '../components/ReviewCards';
 import CheckOutListPusher from '../components/CheckOutListPusher';
 import CurrentAddress from '../components/CurrentAddress';
 
-import { currentCat as currentCatAtom } from '../data/atoms.js';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentPosition as currentPositionAtom } from '../data/atoms';
-import { stores as storesAtom } from '../data/storeAtoms.js';
-import { fromPairs } from 'lodash-es';
-
 const Home = () => {
-  const isMobile = useIsMobile();
-  const stores = useRecoilValue(storesAtom);
   let contextRef = createRef();
-  const [value, setValue] = useState();
-  const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
 
   return (
     <>

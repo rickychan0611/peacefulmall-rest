@@ -22,7 +22,8 @@ const home = () => {
   const handleSubmit = () => {
     setErr()
     if (!value) {
-      setErr("Please enter an address")
+      // setErr("Please enter an address")
+      router.push('/home')
     }
     else {
       geocodeByAddress(value.label)
@@ -34,7 +35,8 @@ const home = () => {
           console.log('Successfully got latitude and longitude', { lat, lng });
         })
         .catch((error) => {
-          setErr(error)
+          router.push('/home')
+          // setErr(error)
         })
     }
   };
@@ -51,7 +53,7 @@ const home = () => {
           <div style={{ position: 'relative', width: '100%' }} >
             <GooglePlacesAutocomplete
               apiKey={MAP_API}
-              minLengthAutocomplete={4}
+              // minLengthAutocomplete={3}
               autocompletionRequest={{
                 componentRestrictions: {
                   country: ['ca']

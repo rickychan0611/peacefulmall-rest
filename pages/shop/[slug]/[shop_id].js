@@ -31,6 +31,7 @@ const shop = () => {
   const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
 
   useEffect(async () => {
+    console.log('currentShop!!!', currentShop)
     if (router.query.shop_id && !currentShop) {
       try {
         console.log('qetting shop from server...');
@@ -47,7 +48,8 @@ const shop = () => {
   }, [router, router.query.shop_id]);
 
   useEffect(async () => {
-    console.log('currentShopProducts', currentShopProducts);
+    console.log('currentShopProducts!!!', currentShopProducts);
+
     if (router.query.shop_id && !currentShopProducts) {
       try {
         console.log('getShopProducts from server...');

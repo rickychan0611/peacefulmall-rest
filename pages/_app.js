@@ -14,7 +14,7 @@ import { currentPosition as currentPositionAtom } from '../data/atoms';
 import SideMenu from '../components/SideMenu';
 import CheckOutListPusher from '../components/CheckOutListPusher';
 import TopBar from '../components/TopBar';
-import { route } from 'next/dist/next-server/server/router';
+import GooglePlacesAutocomplete, { geocodeByLatLng } from 'react-google-places-autocomplete';
 
 const InitApp = ({ children }) => {
   const router = useRouter();
@@ -33,9 +33,42 @@ const InitApp = ({ children }) => {
     orderItems ? setOrderItems(JSON.parse(orderItems)) : setOrderItems([]);
 
     //currentPosition localstorage
-    const currentPosition = localStorage.getItem('currentPosition');
-    console.log(currentPosition);
-    // currentPosition ? setCurrentPosition(JSON.parse(currentPosition)) : router.push('/');
+    const localStoragePosition = localStorage.getItem('currentPosition');
+    // console.log(currentPosition);
+
+    // if (!localStoragePosition) {
+      function showPosition(position) {
+        console.log(
+          'Latitude: ' + position.coords.latitude + 'Longitude: ' + position.coords.longitude
+        );
+        geocodeByLatLng({ lat: position.coords.latitude, lng: position.coords.longitude })
+          .then((results) => {
+            setCurrentPosition({
+              address: results[2].formatted_address,
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            });
+            console.log(results);
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function error(err) {
+        console.log(err)
+        alert("Please enable geolocation of your browser, so that we can find restaurants close to you :)")
+      }
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, error);
+      } 
+      else {
+        console.log("blocked")
+      }
+
+    // } else {
+    //   console.log(localStoragePosition);
+    //   setCurrentPosition(JSON.parse(localStoragePosition));
+    // }
 
     //check user cookie
     if (cookies.userToken !== '123456789') {

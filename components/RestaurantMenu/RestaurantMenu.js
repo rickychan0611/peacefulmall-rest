@@ -1,14 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
-import { useRecoilState } from 'recoil';
-import { selections as selectionsAtom } from '../../data/atoms.js';
 import styled from 'styled-components';
 import { Segment, Label, Sticky, Ref } from 'semantic-ui-react';
 
-import MenuItem from '../../components/MenuItem/MenuItem.js';
+import { useRecoilState } from 'recoil';
+import {
+  currentShop as currentShopAtom,
+  currentShopProducts as currentShopProductsAtom
+} from '../../data/atoms';
 
-import _ from 'lodash';
-import dishes from '../../data/dishes';
+import MenuItem from '../../components/MenuItem/MenuItem.js';
 import Slider from '../Slider/Slider.js';
 import { useIsMobile } from '../../util/useScreenSize.js';
 
@@ -27,12 +28,13 @@ import { useIsMobile } from '../../util/useScreenSize.js';
 //   'Beverages'
 // ];
 
-const RestaurantMenu = ({ currentShop, currentShopProducts }) => {
-  const [selections, setSelections] = useRecoilState(selectionsAtom);
+const RestaurantMenu = () => {
   const router = useRouter();
   const contextRef = useRef();
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
+  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
+  const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
 
   useEffect(() => {
     // console.log(currentShop && currentShop.shop_categories);
@@ -47,11 +49,12 @@ const RestaurantMenu = ({ currentShop, currentShopProducts }) => {
     <Ref innerRef={contextRef}>
       <div>
         {/* Menu cat slider*/}
-        <Sticky offset={isMobile ? 20 : 120} context={contextRef}>
+        <Sticky offset={isMobile ? 20 : 78} context={contextRef}>
           <Slider topic="Full Menu" marginBottom={20} hideViewAll>
             <CatWrapper>
-              {currentShop && currentShop.shop_categories &&
+              {currentShop && currentShop.shop_categories && currentShop.shop_categories[0] && 
                 currentShop.shop_categories.map((item, i) => {
+
                   if (item.category_name !== 'Popular Items') {
                     return (
                       <Label
@@ -145,9 +148,9 @@ const CatTitle = styled.div`
   .jumptarget::before {
     content: '';
     display: block;
-    height: ${(p) => (p.isMobile ? '190px' : '290px')}; /* anchor fixed header height*/
+    height: ${(p) => (p.isMobile ? '190px' : '250px')}; /* anchor fixed header height*/
     margin: ${(p) =>
-      p.isMobile ? '-190px 0 0' : '-290px 0 0'}; /* anchor negative fixed header height */
+      p.isMobile ? '-190px 0 0' : '-250px 0 0'}; /* anchor negative fixed header height */
   }
 `;
 export default RestaurantMenu;

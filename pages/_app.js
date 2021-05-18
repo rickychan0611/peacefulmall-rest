@@ -35,7 +35,7 @@ const InitApp = ({ children }) => {
     //currentPosition localstorage
     const currentPosition = localStorage.getItem('currentPosition');
     console.log(currentPosition);
-    currentPosition ? setCurrentPosition(JSON.parse(currentPosition)) : router.push('/');
+    // currentPosition ? setCurrentPosition(JSON.parse(currentPosition)) : router.push('/');
 
     //check user cookie
     if (cookies.userToken !== '123456789') {

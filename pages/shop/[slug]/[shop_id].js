@@ -32,7 +32,7 @@ const shop = () => {
 
   useEffect(async () => {
     console.log('currentShop!!!', currentShop)
-    if (router.query.shop_id && !currentShop) {
+    if (router.query.shop_id) {
       try {
         console.log('qetting shop from server...');
         const getSingleShop = await axios.get(HOST_URL + '/api/singleshop', {
@@ -50,7 +50,7 @@ const shop = () => {
   useEffect(async () => {
     console.log('currentShopProducts!!!', currentShopProducts);
 
-    if (router.query.shop_id && !currentShopProducts) {
+    if (router.query.shop_id) {
       try {
         console.log('getShopProducts from server...');
         const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {

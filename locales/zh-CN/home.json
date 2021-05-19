@@ -26,5 +26,15 @@
     "Reviews" : "评价",
     "Name" : "店名",
     "ReadMore" : "阅读更多...",
-    "showing" : "正显示"
+    "showing" : "正显示",
+    "signUPAccount" : "注册帐户",
+    "AlreadyRegistered" : "已注册？",
+    "LogInAccount" : "登录帐户",
+    "FirstName" : "名字",
+    "LastName" : "姓氏",
+    "Email" : "电邮地址",
+    "Phone" : "电话号码（10位数字）",
+    "Password" : "密码",
+    "ConfirmPassword" : "确认密码",
+    "NewtoPeacefulMall": "是新来和平广场吗？"
 }

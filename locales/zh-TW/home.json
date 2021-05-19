@@ -26,5 +26,16 @@
   "Reviews":"評價",
   "Name":"店名",
   "ReadMore":"閱讀更多...",
-  "showing" : "正顯示"
+  "showing" : "正顯示",
+  "signUPAccount" : "註冊帳戶",
+  "AlreadyRegistered" : "已註冊？",
+  "LogInAccount" : "登錄帳戶",
+  "FirstName" : "名字",
+  "LastName" : "姓氏",
+  "Email" : "電郵地址",
+  "Phone" : "電話號碼（10位數字）",
+  "Password" : "密碼",
+  "ConfirmPassword" : "確認密碼",
+  "NewtoPeacefulMall": "新來到和平廣場嗎？"
+
 }

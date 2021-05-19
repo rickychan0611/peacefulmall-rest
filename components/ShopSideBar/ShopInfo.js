@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Grid, List, Header, Modal } from 'semantic-ui-react';
+import useTranslation from 'next-translate/useTranslation';
 
 import { HOST_URL } from '../../env';
 
 const ShopInfo = ({ shop }) => {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation('shop')
 
   return (
     <>
@@ -33,43 +35,43 @@ const ShopInfo = ({ shop }) => {
             <List.Header as="a">
               {shop.address_line}, {shop.address_city}, {shop.address_province}
             </List.Header>
-            <List.Description>Click to View Map</List.Description>
+            <List.Description><a>{t`Click to View Map`}</a></List.Description>
           </List.Content>
         </List.Item>
         <br />
         <List.Item>
           <List.Icon name="clock" />
           <List.Content>
-            <List.Header as="a">Hours</List.Header>
+            <List.Header as="a">{t`Hours`}</List.Header>
             <List.Description>
               <table style={{ marginLeft: -4 }}>
                 <tbody>
                   <tr>
-                    <td>Monday</td>
+                    <td>{t`Monday`}</td>
                     <td>11a.m.–9:.m.</td>
                   </tr>
                   <tr>
-                    <td>Tuesday</td>
+                    <td>{t`Tuesday`}</td>
                     <td>11a.m.–9:30p.m.</td>
                   </tr>
                   <tr>
-                    <td>Wednesday</td>
+                    <td>{t`Wednesday`}</td>
                     <td>11a.m.–9:30p.m.</td>
                   </tr>
                   <tr>
-                    <td>Thursday</td>
+                    <td>{t`Thursday`}</td>
                     <td>11a.m.–9:30p.m.</td>
                   </tr>
                   <tr>
-                    <td>Friday</td>
+                    <td>{t`Friday`}</td>
                     <td>11a.m.–9:30p.m.</td>
                   </tr>
                   <tr>
-                    <td>Saturday</td>
+                    <td>{t`Saturday`}</td>
                     <td>11a.m.–9:30p.m.</td>
                   </tr>
                   <tr>
-                    <td>Sunday</td>
+                    <td>{t`Sunday`}</td>
                     <td>11a.m.–9:30p.m.</td>
                   </tr>
                 </tbody>
@@ -81,7 +83,7 @@ const ShopInfo = ({ shop }) => {
         <List.Item>
           <List.Icon name="phone" />
           <List.Content>
-            <List.Header as="a">Phone</List.Header>
+            <List.Header as="a">{t`Phone`}</List.Header>
             <List.Description>(604) 879-9878</List.Description>
           </List.Content>
         </List.Item>
@@ -89,7 +91,7 @@ const ShopInfo = ({ shop }) => {
         <List.Item>
           <List.Icon name="food" />
           <List.Content>
-            <List.Header as="a">Cuisines</List.Header>
+            <List.Header as="a">{t`CuisineStyle`}</List.Header>
             <List.Description>{shop.cuisine_type}</List.Description>
           </List.Content>
         </List.Item>
@@ -97,7 +99,7 @@ const ShopInfo = ({ shop }) => {
         <List.Item>
           <List.Icon name="globe" />
           <List.Content>
-            <List.Header as="a">Website</List.Header>
+            <List.Header as="a">{t`Website`}</List.Header>
             <List.Description>
               <a href={shop.website} target="_blank">
                 {shop.website}

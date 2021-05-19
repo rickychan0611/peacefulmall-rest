@@ -4,11 +4,11 @@ import { Grid, List, Header, Modal } from 'semantic-ui-react';
 
 import { HOST_URL } from '../../env';
 
-const ShopArticleList = ({ shop }) => {
+const ShopArticleList = ({ t }) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-    <Header>Featured Articles</Header>
+    <Header>{t && t`FeaturedArticles`}</Header>
       <hr />
       <Img
         src={`https://source.unsplash.com/featured/?dinning, steak${Math.floor(

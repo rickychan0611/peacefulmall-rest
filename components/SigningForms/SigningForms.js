@@ -10,6 +10,7 @@ import { useCookies } from 'react-cookie';
 
 import { useRecoilState } from 'recoil';
 import { user as userAtom, userdata } from '../../data/userAtom';
+import useTranslation from 'next-translate/useTranslation';
 
 const SigningForms = ({ signUp }) => {
   const router = useRouter();
@@ -19,6 +20,7 @@ const SigningForms = ({ signUp }) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies, setCookie, removeCookie] = useCookies();
+  const { t } = useTranslation('home');
 
   const handleSignUp = async () => {
     console.log("Signing UP..")
@@ -69,31 +71,31 @@ const SigningForms = ({ signUp }) => {
   return (
     <Grid textAlign='center' style={{ height: '90vh' }} verticalAlign='middle'>
       <Grid.Column style={{ maxWidth: 450 }}>
-        <Header as='h2' textAlign='center' style={{ color: "#4ab976" }}>
-          {signUp ? "Sign up an account" : "Log in to your account"}
+        <Header as='h2' textAlign='center' style={{ color: "#292929" }}>
+          {signUp ? t("signUPAccount") : t("LogInAccount")}
         </Header>
         <Form size='large' onSubmit={handleSubmit}>
           <Segment stacked>
             {signUp && <>
-              <Form.Input fluid icon='user' iconPosition='left' placeholder='Fist Name'
+              <Form.Input fluid icon='user' iconPosition='left' placeholder={t("FirstName")}
                 required
                 value={inputs.firstName}
                 onChange={e => handleChange(e, "firstName")}
               />
-              <Form.Input fluid icon='user' iconPosition='left' placeholder='Last Name'
+              <Form.Input fluid icon='user' iconPosition='left' placeholder={t("LastName")}
                 required
                 value={inputs.lastName}
                 onChange={e => handleChange(e, "lastName")}
               />
             </>}
-            <Form.Input fluid icon='mail' iconPosition='left' placeholder='E-mail address'
+            <Form.Input fluid icon='mail' iconPosition='left' placeholder={t("Email")}
               required
               value={inputs.email}
               onChange={e => handleChange(e, "email")}
               error={err.email}
             />
             {signUp &&
-              <Form.Input fluid icon='phone' iconPosition='left' placeholder='Phone Number (10 digits only)'
+              <Form.Input fluid icon='phone' iconPosition='left' placeholder={t("Phone")}
                 required
                 value={inputs.phone}
                 onChange={e => handleChange(e, "phone")}
@@ -106,7 +108,7 @@ const SigningForms = ({ signUp }) => {
                 fluid
                 icon='lock'
                 iconPosition='left'
-                placeholder='Password'
+                placeholder={t("Password")}
                 type={showPassword ? 'text' : 'password'}
                 label={{
                   content: <Icon name={showPassword ? 'eye' : 'eye slash'} />,
@@ -129,7 +131,7 @@ const SigningForms = ({ signUp }) => {
                   fluid
                   icon='lock'
                   iconPosition='left'
-                  placeholder='Confirm Password'
+                  placeholder={t("ConfirmPassword")}
                   type={showPassword ? 'text' : 'password'}
                   label={{
                     content: <Icon name={showPassword ? 'eye' : 'eye slash'} />,
@@ -147,17 +149,17 @@ const SigningForms = ({ signUp }) => {
             }
             <Button type='submit'
               // loading={loading}
-              style={{ backgroundColor: "#4ab976", color: "white" }}
+              style={{ backgroundColor: "#ff614d", color: "white" }}
               fluid size='large'
-              content={!loading ? signUp ? "Sign Up" : "Log In" : <Icon name="spinner" loading />}
+              content={!loading ? signUp ? t("signUPAccount") : t("LogInAccount") : <Icon name="spinner" loading />}
             >
             </Button>
             <Message negative size='mini' hidden={!err.submit}>{err.submit}</Message>
           </Segment>
         </Form>
         {signUp ?
-          <Message>Already Registered? <Link href='/sign-in'>Sign In</Link> </Message> :
-          <Message>New to Peaceful Mall? <Link href='/sign-up'>Sign Up</Link> </Message>
+          <Message>{t("AlreadyRegistered")}<Link href='/sign-in'>{t("LogInAccount")}</Link> </Message> :
+          <Message>{t("NewtoPeacefulMall")}<Link href='/sign-up'>{t("signUPAccount")}</Link> </Message>
         }
       </Grid.Column>
     </Grid>

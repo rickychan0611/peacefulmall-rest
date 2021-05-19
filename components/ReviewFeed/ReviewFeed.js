@@ -2,9 +2,9 @@ import React from 'react'
 import { Feed, Icon } from 'semantic-ui-react'
 import styled from 'styled-components';
 
-const ReviewFeed = () => (
+const ReviewFeed = ({t}) => (
   <>
-   <Title>Reviews</Title>
+   <Title>{t && t`Reviews`}</Title>
   <Feed>
     <Feed.Event>
       <Feed.Label>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { Segment, Label, Sticky, Ref } from 'semantic-ui-react';
+import { Label, Sticky } from 'semantic-ui-react';
 
 import { useRecoilState } from 'recoil';
 import {
@@ -13,24 +13,8 @@ import MenuItem from '../../components/MenuItem/MenuItem.js';
 import Slider from '../Slider/Slider.js';
 import { useIsMobile } from '../../util/useScreenSize.js';
 
-// const catNames = [
-//   'Soup',
-//   'Cold Dishes',
-//   'Rice Dishes',
-//   'Beef & Lamb',
-//   'Pork',
-//   'Chicken',
-//   'Seafood',
-//   'Vegetables',
-//   'Soup Noodles',
-//   'Stir-Fried',
-//   'Dim Sum',
-//   'Beverages'
-// ];
-
-const RestaurantMenu = () => {
+const RestaurantMenu = ( {contextRef, t} ) => {
   const router = useRouter();
-  const contextRef = useRef();
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
@@ -46,11 +30,10 @@ const RestaurantMenu = () => {
   }, [currentShop]);
 
   return (
-    <Ref innerRef={contextRef}>
-      <div>
+      <div style={{position: "relative"}}>
         {/* Menu cat slider*/}
-        <Sticky offset={isMobile ? 20 : 78} context={contextRef}>
-          <Slider topic="Full Menu" marginBottom={20} hideViewAll>
+        <Sticky offset={isMobile ? 20 : 80} context={contextRef}>
+          <Slider topic={t && t`FullMenu`} hideViewAll>
             <CatWrapper>
               {currentShop && currentShop.shop_categories && currentShop.shop_categories[0] && 
                 currentShop.shop_categories.map((item, i) => {
@@ -115,7 +98,6 @@ const RestaurantMenu = () => {
           })}
         <br />
       </div>
-    </Ref>
   );
 };
 

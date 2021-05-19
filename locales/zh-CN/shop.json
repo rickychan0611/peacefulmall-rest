@@ -1,0 +1,18 @@
+{
+    "PopularItems" : "人气美食",
+    "FullMenu" : "全部菜式",
+    "Reviews" : "用户评价",
+    "FeaturedArticles" : "推荐文章",
+    "Click to View Map" : "点击查看地图",
+    "Hours": "营业时间",
+    "Monday" : "星期一",
+    "Tuesday" :"星期二",
+    "Wednesday":"星期三",
+    "Thursday": "星期四",
+    "Friday":"星期五",
+    "Saturday": "星期六",
+    "Sunday":"星期日",
+    "Phone":"电话",
+    "CuisineStyle":"餐厅类别",
+    "Website":"网址"
+}

@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
 import { useRecoilState } from 'recoil';
 import {
   currentShop as currentShopAtom,
-  currentShopProducts as currentShopProductsAtom,
+  currentShopProducts as currentShopProductsAtom
 } from '../../data/atoms';
 
-import { Grid } from 'semantic-ui-react';
+import { Grid, Ref } from 'semantic-ui-react';
 import Slider from '../Slider';
 import PopularDishes from '../PopularDishes';
 import ShopSideBar from '../ShopSideBar';
@@ -16,14 +16,17 @@ import RestaurantMenu from '../RestaurantMenu';
 import ReviewFeed from '../ReviewFeed/index.js';
 import axios from 'axios';
 import { HOST_URL } from '../../env';
+import useTranslation from 'next-translate/useTranslation';
 
 const Shop_Desktop = () => {
+  const { t } = useTranslation('shop');
   const router = useRouter();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
+  const contextRef = useRef();
 
   return (
-    <>
+    <div>
       <Grid>
         <Grid.Column width={4} style={{ paddingBottom: 100 }}>
           <ShopSideBar shop={currentShop} />
@@ -43,7 +46,7 @@ const Shop_Desktop = () => {
               </div>
             </Wrapper>
 
-            <Slider topic="Popular Items" hideViewAll>
+            <Slider topic={t('PopularItems')} hideViewAll>
               {currentShopProducts ? (
                 <PopularDishes products={currentShopProducts} />
               ) : (
@@ -51,33 +54,35 @@ const Shop_Desktop = () => {
               )}
             </Slider>
 
-            <RestaurantMenu currentShop={currentShop} currentShopProducts={currentShopProducts}/>
+            <Ref innerRef={contextRef}>
+              <RestaurantMenu t={t} contextRef={contextRef} currentShop={currentShop} currentShopProducts={currentShopProducts} />
+            </Ref>
             <br />
             <hr />
             <br />
             <Section id="reviews">
-              <ReviewFeed />
+              <ReviewFeed t={t} />
             </Section>
             <br />
             <hr />
             <br />
-            <Slider topic="Restaurants you may like" hideViewAll>
-              {/* <PopularDishes /> */}
-            </Slider>
+            {/* <Slider topic="Restaurants you may like" hideViewAll> */}
+            {/* <PopularDishes /> */}
+            {/* </Slider> */}
           </div>
         </Grid.Column>
       </Grid>
-    </>
+    </div>
   );
 };
 
 const Section = styled.div`
   /* scroll-margin-top: 240px; */
   :before {
-    content:"";
-    display:block;
-    height:240px; /* fixed header height*/
-    margin:-240px 0 0; /* negative fixed header height */
+    content: '';
+    display: block;
+    height: 240px; /* fixed header height*/
+    margin: -240px 0 0; /* negative fixed header height */
   }
 `;
 const Wrapper = styled.div`

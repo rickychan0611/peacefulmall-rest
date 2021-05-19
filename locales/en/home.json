@@ -1,8 +1,11 @@
 {
     "title": "Peaceful Mall",
     "subTitle": "Restaurants",
+    "home": "home",
     "signIn": "Sign in",
     "signUp": "Sign up",
+    "signOut": "Sign Out",
+    "account":"Account",
     "hi": "hi",
     "enterAddress" : "Enter your address",
     "inputEg": "eg: restaurant, style, place",

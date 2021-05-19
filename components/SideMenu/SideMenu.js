@@ -6,12 +6,19 @@ import styled from "styled-components";
 import { user as userAtom } from '../../data/userAtom.js';
 import {  useCookies } from 'react-cookie';
 import { locales, changeLocale } from '../TopBar/TopBar';
+import useTranslation from 'next-translate/useTranslation';
 
 const SidebarMenu = () => {
   const router = useRouter();
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies, setCookie, removeCookie] = useCookies();
+  const { t } = useTranslation('home');
+
+  const handleClick = (name) => {
+    router.push(name)
+    setOpenSideMenu(false)  
+  }
 
   return (
     <Sidebar
@@ -27,27 +34,28 @@ const SidebarMenu = () => {
         boxShadow: "10px 0px 25px rgba(0, 0, 0, .3)",
         padding: "80px 10px 10px 10px",
       }}
-      onClick={() => setOpenSideMenu(false)}
     >
       <Icon name="close" size="large"
-        style={{ marginLeft: 10, marginBottom: 20, cursor: "pointer" }} />
-      <Menu.Item onClick={() => router.push('/')}>
+        style={{ marginLeft: 10, marginBottom: 20, cursor: "pointer" }} 
+        onClick={() => setOpenSideMenu(false)}
+        />
+      <Menu.Item onClick={() => handleClick('/')}>
         <Icon name="home" size="large" />
-        <H4>Home </H4>
+        <H4>{t('home')}</H4>
       </Menu.Item>
       {!user ? <>
-        <Menu.Item onClick={() => router.push('/sign-in')}>
+        <Menu.Item onClick={() => handleClick('/sign-in')}>
           <Icon name="sign in" size="large" />
-          <H4>Sign In</H4>
+          <H4>{t('signIn')}</H4>
         </Menu.Item>
-        <Menu.Item onClick={() => router.push('/sign-up')}>
+        <Menu.Item onClick={() => handleClick('/sign-up')}>
           <Icon name="signup" size="large" />
-          <H4>Sign Up</H4>
+          <H4>{t('signUp')}</H4>
         </Menu.Item>
       </> : <>
-        <Menu.Item onClick={() => router.push('/consumer/edit-profile')}>
+        <Menu.Item onClick={() => handleClick('/consumer/edit-profile')}>
           <Icon name="user circle" size="large" />
-          <H4>Account</H4>
+          <H4>{t('account')}</H4>
           <p style={{ margin: 0, color: "grey" }}>{user.firstName + " " + user.lastName}</p>
         </Menu.Item>
         <Menu.Item onClick={() => {
@@ -57,7 +65,7 @@ const SidebarMenu = () => {
           router.push('/')
         }}>
           <Icon name="sign out" size="large" />
-          <H4>Sign Out</H4>
+          <H4>{t('signOut')}</H4>
         </Menu.Item>
       </>}
       <Menu.Item >

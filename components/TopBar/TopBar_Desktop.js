@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { Button, Transition, Image, Icon } from 'semantic-ui-react';
+import { Button, Transition, Image, Icon, Dropdown } from 'semantic-ui-react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   openSideMenu as openSideMenuAtom,
@@ -10,53 +10,9 @@ import {
 } from '../../data/atoms.js';
 import { user as userAtom } from '../../data/userAtom';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
+import { CookiesProvider, useCookies } from 'react-cookie';
 
-// const options = [
-//   {
-//     key: 'Vancouver',
-//     text: 'Vancouver',
-//     value: 'Vancouver',
-//     content: 'Vancouver'
-//   },
-//   {
-//     key: 'Richmond',
-//     text: 'Richmond',
-//     value: 'Richmond',
-//     content: 'Richmond'
-//   },
-//   {
-//     key: 'Burnaby',
-//     text: 'Burnaby',
-//     value: 'Burnaby',
-//     content: 'Burnaby'
-//   },
-//   {
-//     key: 'Surrey',
-//     text: 'Surrey',
-//     value: 'Surrey',
-//     content: 'Surrey'
-//   },
-//   {
-//     key: 'Coquitlam',
-//     text: 'Coquitlam',
-//     value: 'Coquitlam',
-//     content: 'Coquitlam'
-//   }
-// ];
-
-// {
-//   /* <Menu.Item header>
-//             <Icon size="large" name="map marker alternate" style={{ color: '#ff614d' }} />
-//             <Dropdown
-//               inline
-//               header="Choose a location"
-//               options={options}
-//               defaultValue={options[0].value}
-//             />
-//           </Menu.Item> */
-// }
-
-const TopBar_Desktop = () => {
+const TopBar_Desktop = ({t, locales, changeLocale}) => {
   const router = useRouter();
   const user = useRecoilValue(userAtom);
   const orderItems = useRecoilValue(orderItemsAtom);
@@ -64,6 +20,7 @@ const TopBar_Desktop = () => {
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   const [jiggle, setJiggle] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   useEffect(() => {
     setJiggle(!jiggle);
@@ -78,8 +35,8 @@ const TopBar_Desktop = () => {
       <Row style={{ cursor: 'pointer' }} onClick={() => router.push('/')}>
         <Image size="mini" src="/logo-p.png" />
         <h4 style={{ color: '#4ab976', margin: 0 }}>
-          Peaceful Mall
-            <span style={{ color: '#ff614d' }}> | Restaurants</span>
+          {t('title')}
+          <span style={{ color: '#ff614d' }}> | {t('subTitle')}</span>
         </h4>
       </Row>
       <Row>
@@ -89,14 +46,14 @@ const TopBar_Desktop = () => {
               inverted
               style={{ backgroundColor: '#ff614d', marginRight: 10, color: 'white' }}
               onClick={() => router.push('/sign-up')}>
-              Sign up
-                </Button>
+              {t("signUp")}
+            </Button>
             <Button
               compact
               style={{ backgroundColor: 'white' }}
               onClick={() => router.push('/sign-in')}>
-              Sign in
-                </Button>
+              {t("signIn")}
+            </Button>
           </>
         ) : (
           <Row
@@ -107,6 +64,18 @@ const TopBar_Desktop = () => {
             <Icon name="bars" size="large" style={{ color: '#707070', marginRight: 20 }} />
           </Row>
         )}
+
+        <Row>
+          <Dropdown
+            button
+            options={locales}
+            defaultValue={cookies.NEXT_LOCALE ? cookies.NEXT_LOCALE : locales[0].value}
+            direction="left"
+            style={{ backgroundColor: '#dedede', margin: '0 20px 0 10px' }}
+            onChange={changeLocale}
+          />
+        </Row>
+
         <Transition animation="jiggle" duration={600} visible={jiggle}>
           {showCheckoutButton && (
             <Button
@@ -131,7 +100,7 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  align-items:center;
+  align-items: center;
 `;
 
 export default TopBar_Desktop;

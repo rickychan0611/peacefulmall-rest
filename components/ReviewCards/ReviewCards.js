@@ -3,6 +3,7 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import { data } from '../../data/restaurants-old';
 import Link from 'next/link'
+import useTranslation from 'next-translate/useTranslation'
 
 import { useRecoilState } from 'recoil';
 import {
@@ -11,6 +12,7 @@ import {
 
 const ReviewCards = () => {
   const [dishes, setDishes] = useState([]);
+  const {t} = useTranslation('home')
 
   const [selections, setSelections] = useRecoilState(selectionsAtom);
 
@@ -72,11 +74,11 @@ const ReviewCards = () => {
                   soothing. Great place to hang, and the food is like how it's advertised, clean and
                   delicate and very healthy.
                 </Review>
-                <Description>Read more...</Description>
+                <Description>{t("ReadMore")}</Description>
                 <br></br>
-                <Description>Name: Restaurant Name</Description>
-                <Description>Location: Vacnouver</Description>
-                <Description>Style: Chinese</Description>
+                <Description>{t("Name")}: Restaurant Name</Description>
+                <Description>{t("location")}: Vacnouver</Description>
+                <Description>{t("style")}: Chinese</Description>
               </Card>
             </Link>
           );

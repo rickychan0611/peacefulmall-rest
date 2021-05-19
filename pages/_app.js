@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import '../.semantic/dist/semantic.min.css';
 import './styles.css';
 import { CookiesProvider, useCookies } from 'react-cookie';
+import setLanguage from 'next-translate/setLanguage'
 
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { appReady as appReadyAtom } from '../data/atoms';

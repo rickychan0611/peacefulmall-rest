@@ -2,6 +2,7 @@ import { Label, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import  { useIsMobile } from '../../util/useScreenSize';
+import useTranslation from 'next-translate/useTranslation';
 
 import { useRecoilState } from 'recoil';
 import { selections as selectionsAtom } from '../../data/atoms.js';
@@ -15,6 +16,7 @@ const SliderTitle = ({ title, hideViewAll, icon }) => {
   const [selections, setSelections] = useRecoilState(selectionsAtom);
   const [currentCat, setCurrentCat] = useRecoilState(currentCatAtom);
   const [catChange, setCatChange] = useRecoilState(catChangeAtom);
+  const { t } = useTranslation('home');
 
   const router = useRouter();
 
@@ -45,7 +47,7 @@ const SliderTitle = ({ title, hideViewAll, icon }) => {
       <Showing>
         {currentCat && currentCat.category_name &&
           <ShowingButton>
-            Showing : {currentCat.category_name} &nbsp;	&nbsp;	
+            {t("showing")} : {currentCat.category_name} &nbsp;	&nbsp;	
             <Icon name="times" color="white" onClick={() => {
               setCatChange(true)
               setCurrentCat(null)

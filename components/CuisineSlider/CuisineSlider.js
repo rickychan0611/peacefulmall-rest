@@ -8,6 +8,7 @@ import SliderTitle from '../SliderTitle';
 import axios from 'axios';
 import { HOST_URL } from '../../env';
 import PlaceHolder_Card from '../PlaceHolder_Card/';
+import useTranslation from 'next-translate/useTranslation';
 
 import { useRecoilState } from 'recoil';
 import {
@@ -31,11 +32,12 @@ import {
 //   { name: 'Mexcian', img: 'mexcian-thumb.jpg' }
 // ];
 
-const CuisineSlider = ({ contextRef }) => {
+const CuisineSlider = ({ contextRef  }) => {
   const isMobile = useIsMobile();
   const [currentCat, setCurrentCat] = useRecoilState(currentCatAtom);
   const [sliderCats, setSliderCats] = useRecoilState(sliderCatsAtom);
   const [catChange, setCatChange] = useRecoilState(scatChangeAtom);
+  const { t } = useTranslation('home');
 
   useEffect(async () => {
     if (!sliderCats) {
@@ -53,7 +55,7 @@ const CuisineSlider = ({ contextRef }) => {
     <>
       {!sliderCats ? (
         <div style={{ marginBottom: 20 }}>
-          <SliderTitle title="Choose a Cuisine Style" icon="leaf" />
+          <SliderTitle title={t("chooseAStyle")} icon="leaf" />
           <ItemWrapper isMobile={isMobile}>
             <PlaceHolder_Card size={106} />
           </ItemWrapper>
@@ -61,7 +63,7 @@ const CuisineSlider = ({ contextRef }) => {
       ) : (
         <>
           <div style={{ cursor: 'grab' }}>
-            <SliderTitle title="Choose a Cuisine Style" icon="leaf" hideViewAll />
+            <SliderTitle title={t("chooseAStyle")} icon="leaf" hideViewAll />
             <Sticky offset={60} context={contextRef}>
               <Container
                 isMobile={isMobile}

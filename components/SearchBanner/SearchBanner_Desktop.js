@@ -6,11 +6,13 @@ import GooglePlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from 'react-google-places-autocomplete';
+import useTranslation from 'next-translate/useTranslation';
 
 const SearchBanner_Desktop = ({ hide }) => {
   const isMobile = useIsMobile();
   const [ openMyLocation, setOpenMyLocation ] = useState(false)
   const [value, setValue] = useState();
+  const { t } = useTranslation('home');
 
   return (
     <BannerContainer className={hide}>
@@ -31,7 +33,7 @@ const SearchBanner_Desktop = ({ hide }) => {
                 }
               }}
               selectProps={{
-                placeholder: 'Enter your address',
+                placeholder: t("enterAddress"),
                 value,
                 onChange: setValue,
                 styles: {
@@ -54,8 +56,8 @@ const SearchBanner_Desktop = ({ hide }) => {
         <InputWrapper style={{ borderRadius: ' 0 5px 5px 0' }}>
           <StyledInput
             style={{ borderRadius: ' 0 5px 5px 0', marginRight: 5 }}
-            placeholder="eg: restaurant, style, place..."
-          />
+            placeholder={t("inputEg")}
+            />
           <Label style={{ borderRadius: ' 0 5px 5px 0' }}>
             <Icon name="search" />
           </Label>
@@ -115,6 +117,9 @@ const StyledInput = styled.input`
   width: 33vw;
   height: 38px;
   padding: 0 0 0 6px;
+  ::placeholder {
+  font-size: 13px;
+}
 `;
 
 export default SearchBanner_Desktop;

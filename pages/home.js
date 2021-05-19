@@ -1,6 +1,7 @@
 import { createRef } from 'react';
 import styled from 'styled-components';
 import { useIsMobile } from '../util/useScreenSize';
+import useTranslation from 'next-translate/useTranslation';
 
 import { Container, Image, Ref, Icon, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
@@ -15,6 +16,7 @@ import CurrentAddress from '../components/CurrentAddress';
 
 const Home = () => {
   let contextRef = createRef();
+  const { t } = useTranslation('home');
 
   return (
     <>
@@ -27,28 +29,28 @@ const Home = () => {
         <Ref innerRef={contextRef}>
           <Container style={{ marginTop: '2em' }}>
             <CuisineSlider contextRef={contextRef} />
-            <Slider topic="Discounted Dishes" icon="food">
+            <Slider topic={t("discountedDishes")} icon="food">
               <DishCards type="discount" />
             </Slider>
-            <Slider topic="Most Popular Dishes" icon="food">
+            <Slider topic={t("mostPopular")} icon="food">
               <DishCards type="popular" />
             </Slider>
-            <Slider topic="Most Loved Restaurants" icon="star">
+            <Slider topic={t("mostLoved")} icon="star">
               <ShopCards />
             </Slider>
-            <Slider topic="Fastest Near you" icon="store">
+            <Slider topic={t("fastest")} icon="store">
               <ShopCards />
             </Slider>
-            <Slider topic="Weekly Top 10" icon="store">
+            <Slider topic={t("Weekly")} icon="store">
               <ShopCards />
             </Slider>
-            <Slider topic="Peaceful Mall Featured" icon="store">
+            <Slider topic={t("Featured")} icon="store">
               <ShopCards />
             </Slider>
-            <Slider topic="User's Reviews" icon="star">
+            <Slider topic={t("UserReviews")} icon="star">
               <ReviewCards />
             </Slider>
-            <Slider topic="Editor's Top Picks" icon="star">
+            <Slider topic={t("EditorPicks")} icon="star">
               <ReviewCards />
             </Slider>
           </Container>

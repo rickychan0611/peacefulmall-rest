@@ -13,6 +13,7 @@ import {
   currentCat as currentCatAtom
 } from '../../data/atoms.js';
 import { Button, Label } from 'semantic-ui-react';
+import useTranslation from 'next-translate/useTranslation';
 
 import { HOST_URL } from '../../env';
 import PlaceHolder_Card from '../PlaceHolder_Card';
@@ -26,6 +27,7 @@ const ShopCards = ({ type }) => {
   const [currentCat, setCurrentcat] = useRecoilState(currentCatAtom);
   const [shops, setShops] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation('home');
 
   //get products from server when component is loaded
   useEffect(async () => {
@@ -69,10 +71,10 @@ const ShopCards = ({ type }) => {
 
                   <Name>{shop.name}</Name>
                   {/* <Description>{item.description}</Description> */}
-                  <Description>Location: {shop.address_city}</Description>
-                  <Description>Style: {"shop.cuisine_type"}</Description>
-                  <Description>Price Range: 💲💲💲💲</Description>
-                  <Description>Reviews: ⭐⭐⭐⭐⭐ (34)</Description>
+                  <Description>{t('location')}: {shop.address_city}</Description>
+                  <Description>{t('style')}: {"shop.cuisine_type"}</Description>
+                  <Description>{t('PriceRange')}: 💲💲💲💲</Description>
+                  <Description>{t('Reviews')}: ⭐⭐⭐⭐⭐ (34)</Description>
                 </Card>
               );
             })}

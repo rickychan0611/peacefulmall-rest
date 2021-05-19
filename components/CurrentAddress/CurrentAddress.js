@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { useIsMobile } from '../../util/useScreenSize';
 import { useIsDesktop } from '../../util/useScreenSize';
+import useTranslation from 'next-translate/useTranslation';
 
 import { Icon } from 'semantic-ui-react';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -10,6 +11,7 @@ const CurrentAddress = () => {
   const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
   const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
+  const { t } = useTranslation('home');
 
   return (
     <>
@@ -21,7 +23,7 @@ const CurrentAddress = () => {
             </div>
             <div style={{ textAlign: 'left' }}>
               <Address isMobile={isMobile}>
-                <span style={{ fontSize: 12 }}>Your current address: </span>
+                <span style={{ fontSize: 12 }}>{t("currentAddress")}</span>
                 {isMobile && <br/>}
                 <span> {currentPosition.address} </span>
               </Address>

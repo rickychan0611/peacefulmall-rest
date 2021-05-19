@@ -4,6 +4,7 @@ import axios from 'axios';
 import  { useIsMobile } from '../../util/useScreenSize';
 import _ from 'lodash';
 import styled from 'styled-components';
+import useTranslation from 'next-translate/useTranslation';
 
 import { useRecoilState } from 'recoil';
 import {
@@ -25,6 +26,7 @@ const DishCards = ({ type }) => {
   const [currentCat, setCurrentcat] = useRecoilState(currentCatAtom);
   const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation('home');
 
   //get products from server when component is loaded
   useEffect(async () => {
@@ -93,7 +95,7 @@ const DishCards = ({ type }) => {
                   )}
                   <Description>by: {item.shop.name}</Description>
                   <Button basic size="tiny" style={{ marginTop: 5, padding: 10, color: 'red' }}>
-                    Order Now!{' '}
+                    {t('OrderNow')}
                   </Button>
                 </Card>
                 // </Segment>

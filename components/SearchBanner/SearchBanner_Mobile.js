@@ -4,9 +4,11 @@ import styled from 'styled-components';
 import { useIsMobile } from '../../util/useScreenSize';
 import { useRecoilState } from 'recoil';
 import { currentPosition as currentPositionAtom } from '../../data/atoms';
+import useTranslation from 'next-translate/useTranslation';
 
 const SearchBanner_Mobile = ({ hide }) => {
   const isMobile = useIsMobile();
+  const { t } = useTranslation('home');
   const [openLocationSearch, setOpenLocationSearch] = useState(false);
   const [openMyLocation, setOpenMyLocation] = useState(false);
   const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
@@ -16,7 +18,7 @@ const SearchBanner_Mobile = ({ hide }) => {
         <InputContainer style={{ display: 'flex' }}>
           <InputWrapper style={{}}>
             <StyledInput
-              placeholder="eg: restaurant, style, place..."
+              placeholder={t("enterAddress")}
               onClick={() => setOpenLocationSearch(true)}
               onBlur={() => setOpenMyLocation(false)}
             />
@@ -37,7 +39,7 @@ const SearchBanner_Mobile = ({ hide }) => {
             <div style={{ position: 'relative' }}>
               <StyledInput
               style={{width: "calc(80vw - 28px"}}
-                placeholder="Enter a location: address, city..."
+                placeholder={t("inputEg")}
                 onClick={() => setOpenMyLocation(true)}
               />
               {openMyLocation && (

@@ -2,53 +2,40 @@ import { useIsMobile } from '../../util/useScreenSize';
 import styled from 'styled-components';
 import useTranslation from 'next-translate/useTranslation';
 import setLanguage from 'next-translate/setLanguage';
-import { useRouter } from 'next/router';
-import { CookiesProvider, useCookies } from 'react-cookie';
 
 import TopBar_Mobile from './TopBar_Mobile.js';
 import TopBar_Desktop from './TopBar_Desktop.js';
-import { useEffect } from 'react';
+
+export const locales = [
+  {
+    key: 'en',
+    text: 'ENG',
+    value: 'en'
+  },
+  {
+    key: 'zh-CN',
+    text: '简体',
+    value: 'zh-CN'
+  },
+  {
+    key: 'zh-TW',
+    text: '繁體',
+    value: 'zh-TW'
+  }
+];
+
+export const changeLocale = async (e, { value }) => {
+  console.log(value);
+  await setLanguage(value);
+  const date = new Date();
+  const expireMs = 100 * 365 * 24 * 60 * 60 * 1000; // 100 days
+  date.setTime(date.getTime() + expireMs);
+  document.cookie = `NEXT_LOCALE=${value};expires=${date.toUTCString()};path=/`;
+};
 
 const TopBar = () => {
   const isMobile = useIsMobile();
   const { t } = useTranslation('home');
-  const { locale, defaultLocale } = useRouter();
-  const [cookies, setCookie, removeCookie] = useCookies();
-
-  const locales = [
-    {
-      key: 'en',
-      text: 'ENG',
-      value: 'en'
-    },
-    {
-      key: 'zh-CN',
-      text: '简体',
-      value: 'zh-CN'
-    },
-    {
-      key: 'zh-TW',
-      text: '繁體',
-      value: 'zh-TW'
-    }
-  ];
-
-  function persistLocaleCookie() {
-      const date = new Date();
-      const expireMs = 100 * 365 * 24 * 60 * 60 * 1000; // 100 days
-      date.setTime(date.getTime() + expireMs);
-      document.cookie = `NEXT_LOCALE=${locale};expires=${date.toUTCString()};path=/`;
-      // setCookie("NEXT_LOCALE", locale)
-  }
-
-  const changeLocale = async (e, { value }) => {
-    console.log(value);
-    await setLanguage(value);
-    const date = new Date();
-    const expireMs = 100 * 365 * 24 * 60 * 60 * 1000; // 100 days
-    date.setTime(date.getTime() + expireMs);
-    document.cookie = `NEXT_LOCALE=${value};expires=${date.toUTCString()};path=/`;
-  };
 
   return (
     <Container>

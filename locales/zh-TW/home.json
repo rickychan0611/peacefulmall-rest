@@ -11,7 +11,7 @@
 "discountedDishes":"今天特價菜色",
 "mostPopular":"最受歡迎的菜肴",
 "mostLoved":"最受歡迎的餐廳",
-"fastest":"在您附近附近的餐廳",
+"fastest":"在您附近最快的餐廳",
 "Weekly":"每週前10名餐廳",
 "Featured":"和平商場精選餐廳",
 "UserReviews":"用戶評語",
@@ -20,7 +20,7 @@
 "location":"地點",
 "style":"風格",
 "PriceRange":"價格範圍",
-"Reviews":"評論",
+"Reviews":"評價",
 "Name":"店名",
 "ReadMore":"閱讀更多...",
 "showing" : "正顯示"

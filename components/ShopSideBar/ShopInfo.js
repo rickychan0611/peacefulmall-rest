@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Grid, List, Header, Modal } from 'semantic-ui-react';
 import useTranslation from 'next-translate/useTranslation';
+import {useIsMobile} from '../../util/useScreenSize';
 
 import { HOST_URL } from '../../env';
 
 const ShopInfo = ({ shop }) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('shop')
+  const isMobile = useIsMobile();
 
   return (
     <>
@@ -27,7 +29,7 @@ const ShopInfo = ({ shop }) => {
               src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBugBL6F0x-jyq_4l-6OS1i8Du6yv9bH-s&q=${shop.latitude},${shop.longitude}`}></iframe>
           </Modal.Content>
         </Modal>
-        <Img src={HOST_URL + '/storage/' + JSON.parse(shop.images)[0]} />
+        {!isMobile && <Img src={HOST_URL + '/storage/' + JSON.parse(shop.images)[0]} />}
       <List style={{ padding: 10 }}>
         <List.Item onClick={() => setOpen(true)}>
           <List.Icon name="map marker alternate" style={{ margiTop: 30 }} />

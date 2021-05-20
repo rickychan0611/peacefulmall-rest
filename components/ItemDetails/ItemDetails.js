@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { HOST_URL } from '../../env';
 import toSlug from '../../util/toSlug';
 import axios from 'axios';
+import Loader from '../Loader';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -15,7 +16,7 @@ import {
 } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 
-import { Form, Grid, Icon, Radio, Image, Dimmer, Loader } from 'semantic-ui-react';
+import { Form, Grid, Icon, Radio, Image } from 'semantic-ui-react';
 import BottomAddBar from '../../components/BottomAddBar';
 import _ from 'lodash';
 import { useEffect } from 'react';
@@ -85,11 +86,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   return (
     <>
       {!item ? (
-        <div style={{ height: '80vh' }}>
-          <Dimmer inverted active={loading}>
-            <Loader active content="Loading" />
-          </Dimmer>
-        </div>
+        <Loader loading={loading} />
       ) : (
         <>
           <BackButton

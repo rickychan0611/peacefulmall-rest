@@ -3,6 +3,7 @@
     "defaultLocale": "en",
     "pages": {
       "*": ["home"],
-      "rgx:^/shop" : ["shop"]
+      "rgx:^/shop" : ["shop"],
+      "rgx:^/consumer" : ["orders"]
     }
   }

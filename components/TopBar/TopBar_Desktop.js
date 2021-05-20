@@ -10,7 +10,6 @@ import {
 } from '../../data/atoms.js';
 import { user as userAtom } from '../../data/userAtom';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
-import { CookiesProvider, useCookies } from 'react-cookie';
 
 const TopBar_Desktop = ({t, locales, changeLocale}) => {
   const router = useRouter();
@@ -20,7 +19,6 @@ const TopBar_Desktop = ({t, locales, changeLocale}) => {
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   const [jiggle, setJiggle] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies();
 
   useEffect(() => {
     setJiggle(!jiggle);
@@ -60,7 +58,7 @@ const TopBar_Desktop = ({t, locales, changeLocale}) => {
             onClick={() => {
               setOpenSideMenu(!openSideMenu);
             }}>
-            <h4 style={{ margin: 0 }}>Hi, {user.firstName} &nbsp; &nbsp;</h4>
+            <h4 style={{ margin: 0 }}>Hi, {user.name} &nbsp; &nbsp;</h4>
             <Icon name="bars" size="large" style={{ color: '#707070', marginRight: 20 }} />
           </Row>
         )}
@@ -69,10 +67,10 @@ const TopBar_Desktop = ({t, locales, changeLocale}) => {
           <Dropdown
             button
             options={locales}
-            defaultValue={cookies.NEXT_LOCALE ? cookies.NEXT_LOCALE : locales[0].value}
             direction="left"
             style={{ backgroundColor: '#dedede', margin: '0 20px 0 10px' }}
             onChange={changeLocale}
+            value={router.locale}
           />
         </Row>
 

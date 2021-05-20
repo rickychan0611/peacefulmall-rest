@@ -96,7 +96,7 @@ const Price = styled.h5`
   white-space: initial;
 `;
 const Name = styled.div`
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: bold;
   margin-bottom: 5px;
   overflow: hidden;

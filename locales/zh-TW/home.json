@@ -36,6 +36,7 @@
   "Phone" : "電話號碼（10位數字）",
   "Password" : "密碼",
   "ConfirmPassword" : "確認密碼",
-  "NewtoPeacefulMall": "新來到和平廣場嗎？"
-
+  "NewtoPeacefulMall": "新來到和平廣場嗎？",
+  "userName" : "用户名",
+  "Orders" : "查閱訂單"
 }

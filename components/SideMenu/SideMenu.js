@@ -39,10 +39,12 @@ const SidebarMenu = () => {
         style={{ marginLeft: 10, marginBottom: 20, cursor: "pointer" }} 
         onClick={() => setOpenSideMenu(false)}
         />
+
       <Menu.Item onClick={() => handleClick('/')}>
         <Icon name="home" size="large" />
         <H4>{t('home')}</H4>
       </Menu.Item>
+
       {!user ? <>
         <Menu.Item onClick={() => handleClick('/sign-in')}>
           <Icon name="sign in" size="large" />
@@ -53,33 +55,43 @@ const SidebarMenu = () => {
           <H4>{t('signUp')}</H4>
         </Menu.Item>
       </> : <>
+        
+        <Menu.Item onClick={() => handleClick('/consumer/orders')}>
+          <Icon name="file alternate outline" size="large" />
+          <H4>{t('Orders')}</H4>
+        </Menu.Item>
+
         <Menu.Item onClick={() => handleClick('/consumer/edit-profile')}>
           <Icon name="user circle" size="large" />
           <H4>{t('account')}</H4>
-          <p style={{ margin: 0, color: "grey" }}>{user.firstName + " " + user.lastName}</p>
+          <p style={{ margin: 0, color: "grey" }}>{user.name}</p>
         </Menu.Item>
+
         <Menu.Item onClick={() => {
           removeCookie('userToken')
           localStorage.removeItem('user')
           setUser(null)
+          setOpenSideMenu(false)
           router.push('/')
         }}>
           <Icon name="sign out" size="large" />
           <H4>{t('signOut')}</H4>
         </Menu.Item>
       </>}
+
       <Menu.Item >
         <Row>
           {/* <H4>Language</H4> */}
           {locales.map((item) => {
             // console.log("item", activeItem)
             return (
-              <LocaleBtn selected={router.locale === item.value}
+              <LocaleBtn key={item.key} selected={router.locale === item.value}
               onClick={()=>changeLocale(true,{value : item.value})}>{item.text}</LocaleBtn>
             )
           })}
         </Row>
       </Menu.Item>
+
     </Sidebar>
   );
 };

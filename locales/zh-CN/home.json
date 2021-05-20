@@ -32,9 +32,12 @@
     "LogInAccount" : "登录帐户",
     "FirstName" : "名字",
     "LastName" : "姓氏",
+    "userName" : "用户名",
     "Email" : "电邮地址",
     "Phone" : "电话号码（10位数字）",
     "Password" : "密码",
     "ConfirmPassword" : "确认密码",
-    "NewtoPeacefulMall": "是新来和平广场吗？"
+    "NewtoPeacefulMall": "是新来和平广场吗？",
+    "Orders" : "查阅订单"
+
 }

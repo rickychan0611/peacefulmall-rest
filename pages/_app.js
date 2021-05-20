@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import '../.semantic/dist/semantic.min.css';
 import './styles.css';
 import { CookiesProvider, useCookies } from 'react-cookie';
-import setLanguage from 'next-translate/setLanguage'
-
+import axios from 'axios';
+import {HOST_URL} from '../env';
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { appReady as appReadyAtom } from '../data/atoms';
 import { user as userAtom, userdata } from '../data/userAtom';
@@ -16,7 +16,7 @@ import SideMenu from '../components/SideMenu';
 import CheckOutListPusher from '../components/CheckOutListPusher';
 import TopBar from '../components/TopBar';
 import GooglePlacesAutocomplete, { geocodeByLatLng } from 'react-google-places-autocomplete';
-import {MAP_API} from '../env'
+import { MAP_API } from '../env';
 
 const InitApp = ({ children }) => {
   const router = useRouter();
@@ -74,16 +74,20 @@ const InitApp = ({ children }) => {
     // }
 
     //check user cookie
-    if (cookies.userToken !== '123456789') {
+
+    if (!cookies.userToken) {
       console.log('cookies not found');
       setUser();
       localStorage.removeItem('user');
       setAppReady(true);
-    } else if (cookies.userToken === '123456789') {
+    } else if (cookies.userToken) {
       //login user and store user in localstorage
-      console.log('Signing IN from localStorage');
-      // setUser(userdata)
-      setUser(JSON.parse(localStorage.getItem('user')));
+      const getUser = await axios.get(HOST_URL + '/api/user/info', {
+        headers: { Authorization: cookies.userToken }
+      });
+      console.log(getUser.data);
+      localStorage.setItem('user', JSON.stringify(getUser.data));
+      setUser(getUser.data);
 
       setAppReady(true);
     }
@@ -102,7 +106,7 @@ function MyApp({ Component, pageProps }) {
             <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
             <script
               type="text/javascript"
-              src={"https://maps.googleapis.com/maps/api/js?key=" + MAP_API + "&libraries=places"}
+              src={'https://maps.googleapis.com/maps/api/js?key=' + MAP_API + '&libraries=places'}
             />
           </Head>
           <TopBar />

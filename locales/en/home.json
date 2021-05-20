@@ -1,7 +1,7 @@
 {
     "title": "Peaceful Mall",
     "subTitle": "Restaurants",
-    "home": "home",
+    "home": "Home",
     "signIn": "Sign in",
     "signUp": "Sign up",
     "signOut": "Sign Out",
@@ -38,5 +38,6 @@
     "Password" : "Password",
     "ConfirmPassword" : "Confirm Password",
     "NewtoPeacefulMall": "New to Peaceful Mall? ",
-    "Orders" : "Orders"
+    "Orders" : "Orders",
+    "Menu" : "Menu"
 }

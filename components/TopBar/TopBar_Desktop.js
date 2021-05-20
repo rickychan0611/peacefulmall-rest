@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { Button, Transition, Image, Icon, Dropdown } from 'semantic-ui-react';
+import { Button, Transition, Image, Icon, Dropdown, Menu } from 'semantic-ui-react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   openSideMenu as openSideMenuAtom,
@@ -10,8 +10,9 @@ import {
 } from '../../data/atoms.js';
 import { user as userAtom } from '../../data/userAtom';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
+import useTranslation from 'next-translate/useTranslation';
 
-const TopBar_Desktop = ({t, locales, changeLocale}) => {
+const TopBar_Desktop = ({ locales, changeLocale }) => {
   const router = useRouter();
   const user = useRecoilValue(userAtom);
   const orderItems = useRecoilValue(orderItemsAtom);
@@ -19,6 +20,7 @@ const TopBar_Desktop = ({t, locales, changeLocale}) => {
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   const [jiggle, setJiggle] = useState(false);
+  const { t } = useTranslation('home');
 
   useEffect(() => {
     setJiggle(!jiggle);
@@ -54,25 +56,47 @@ const TopBar_Desktop = ({t, locales, changeLocale}) => {
             </Button>
           </>
         ) : (
-          <Row
-            onClick={() => {
-              setOpenSideMenu(!openSideMenu);
-            }}>
-            <h4 style={{ margin: 0 }}>Hi, {user.name} &nbsp; &nbsp;</h4>
-            <Icon name="bars" size="large" style={{ color: '#707070', marginRight: 20 }} />
-          </Row>
+          <>
+            <Item
+              onClick={() => {
+                setOpenSideMenu(!openSideMenu)
+              }}>
+              <Icon name="file alternate outline" size="large" />
+              <H4>{t('Menu')}</H4>
+            </Item>
+
+            <Item
+              onClick={() => {
+                router.push('/consumer/edit-profile')
+              }}>
+              <Icon name="user circle" size="large" />
+              <H4>Hi, {user.name}</H4>
+            </Item>
+
+            {/* <Row
+              onClick={() => {
+                setOpenSideMenu(!openSideMenu);
+              }}>
+
+              <h4 style={{ margin: 0 }}>Hi, {user.name} &nbsp; &nbsp;</h4>
+              <Icon name="user circle" size="large" style={{ color: '#707070', marginRight: 20 }} />
+
+
+
+            </Row> */}
+          </>
         )}
 
-        <Row>
+        <Item>
           <Dropdown
-            button
+            // button
             options={locales}
             direction="left"
-            style={{ backgroundColor: '#dedede', margin: '0 20px 0 10px' }}
+            style={{ margin: '0 20px 0 10px' }}
             onChange={changeLocale}
             value={router.locale}
           />
-        </Row>
+        </Item>
 
         <Transition animation="jiggle" duration={600} visible={jiggle}>
           {showCheckoutButton && (
@@ -99,6 +123,21 @@ const Row = styled.div`
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
+`;
+const Item = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  border-left: 1px solid #cacaca;
+  height: 100%;
+  padding: 10px 20px 10px 20px;
+  cursor: pointer;
+`;
+const H4 = styled.h4`
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export default TopBar_Desktop;

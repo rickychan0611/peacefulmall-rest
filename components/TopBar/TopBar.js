@@ -59,6 +59,7 @@ const Container = styled.div`
   width: 100%;
   height: 63px;
   top: 0;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
 `;
 const SpaceBetween = styled.div`
   display: flex;

@@ -103,7 +103,7 @@ function MyApp({ Component, pageProps }) {
         <InitApp>
           <Head>
             <title>Peaceful Mall Restaurant</title>
-            <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+            <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
             <script
               type="text/javascript"
               src={'https://maps.googleapis.com/maps/api/js?key=' + MAP_API + '&libraries=places'}

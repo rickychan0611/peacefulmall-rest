@@ -27,25 +27,25 @@ const Profile = () => {
     setLoading(true)
     setErr({})
     validation(editedUser)
-    .then(async(res) => {
-      console.log(res)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // if successful
-      setUser(editedUser)
-      setVisible(true)
-      setDisableSave(true)
-      setLoading(false)
-    })
-    .catch((err)=>{
-      console.log(err)
-      setLoading(false)
-      setErr(prev => ({ ...prev, ...err}))
-    })
+      .then(async (res) => {
+        console.log(res)
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        // if successful
+        setUser(editedUser)
+        setVisible(true)
+        setDisableSave(true)
+        setLoading(false)
+      })
+      .catch((err) => {
+        console.log(err)
+        setLoading(false)
+        setErr(prev => ({ ...prev, ...err }))
+      })
   }
 
   useEffect(() => {
-    !localStorage.getItem('user') && router.push('/sign-in') 
-  },[])
+    !localStorage.getItem('user') && router.push('/sign-in')
+  }, [])
 
   useEffect(() => {
     setEditedUser(user)
@@ -60,59 +60,61 @@ const Profile = () => {
   }, [editedUser])
 
   return (
-    <>{user && editedUser && <CenteredFlex>
-      <h1>Profile</h1>
-      <Divider />
-      <Form onSubmit={handleSave}>
-        <Form.Group widths='equal'>
-          <Form.Input fluid required
-            label='First name'
-            placeholder='First name'
-            value={editedUser.firstName}
-            onChange={(e) => handleChange(e, "firstName")} 
-            error={err.firstName}
-            />
+    <div style={{ height: "100vh" }}>
+      {user && editedUser &&
+        <CenteredFlex>
+          <h1>Profile</h1>
+          <Divider />
+          <Form onSubmit={handleSave}>
+            <Form.Group widths='equal'>
+              <Form.Input fluid required
+                label='First name'
+                placeholder='First name'
+                value={editedUser.firstName}
+                onChange={(e) => handleChange(e, "firstName")}
+                error={err.firstName}
+              />
 
-          <Form.Input fluid required
-            label='Last name'
-            placeholder='Last name'
-            value={editedUser.lastName}
-            onChange={(e) => handleChange(e, "lastName")} 
-            error={err.lastName}
-            />
-        </Form.Group>
+              <Form.Input fluid required
+                label='Last name'
+                placeholder='Last name'
+                value={editedUser.lastName}
+                onChange={(e) => handleChange(e, "lastName")}
+                error={err.lastName}
+              />
+            </Form.Group>
 
-        <Form.Group widths='equal'>
-          <Form.Input fluid required
-            label='Email'
-            placeholder='Email'
-            value={editedUser.email}
-            onChange={(e) => handleChange(e, "email")} 
-            error={err.email}
-            />
+            <Form.Group widths='equal'>
+              <Form.Input fluid required
+                label='Email'
+                placeholder='Email'
+                value={editedUser.email}
+                onChange={(e) => handleChange(e, "email")}
+                error={err.email}
+              />
 
-          <Form.Input fluid required
-            label='Phone Number'
-            placeholder='Phone Number'
-            value={editedUser.phone}
-            onChange={(e) => handleChange(e, "phone")} 
-            error={err.phone}
-            />
-        </Form.Group>
+              <Form.Input fluid required
+                label='Phone Number'
+                placeholder='Phone Number'
+                value={editedUser.phone}
+                onChange={(e) => handleChange(e, "phone")}
+                error={err.phone}
+              />
+            </Form.Group>
 
-        <ButtonWrapper>
-          <Button 
-          content={loading ? <Icon name="spinner" loading style={{margin: 0, width: 30}}/> : "Save"} 
-          disabled={disableSave} color="red"
-            // onClick={() => handleSave()}
-          />
-          <Transition animation='swing right' duration={{hide: 0, show: 1000}} visible={visible}>
-            <div><Icon name="check" color="green" /> saved!</div>
-            </Transition>
-        </ButtonWrapper>
-      </Form>
-    </CenteredFlex>
-    }</>
+            <ButtonWrapper>
+              <Button
+                content={loading ? <Icon name="spinner" loading style={{ margin: 0, width: 30 }} /> : "Save"}
+                disabled={disableSave} color="red"
+              // onClick={() => handleSave()}
+              />
+              <Transition animation='swing right' duration={{ hide: 0, show: 1000 }} visible={visible}>
+                <div><Icon name="check" color="green" /> saved!</div>
+              </Transition>
+            </ButtonWrapper>
+          </Form>
+        </CenteredFlex>
+      }</div>
   );
 };
 

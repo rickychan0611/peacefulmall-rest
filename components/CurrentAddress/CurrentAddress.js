@@ -74,7 +74,7 @@ const AddAddressContainer = styled.div`
 const AddAddressMenu = styled.div`
   background-color: white;
   justify-content: center;
-  width: 100%;
+  width: 94%;
   max-width: 500px;
   border: 1px solid #adadad;
   border-radius: 0px 0px 15px 15px;

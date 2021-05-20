@@ -12,7 +12,7 @@ import moment from 'moment';
 import useTranslation from 'next-translate/useTranslation';
 
 const orders = () => {
-  const { t } = useTranslation('orders')
+  const { t } = useTranslation('orders');
   const router = useRouter();
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [loading, setLoading] = useState(true);
@@ -55,8 +55,10 @@ const orders = () => {
                         </P>
                         <Name>Peaceful Restaurant</Name>
                         <P>
-                          {order.order_items.length} items: {" "} 
-                          {order.order_items.map((item, i) => (i === 0 ? "" : ", ") + item.product_name)}
+                          {order.order_items.length} items:{' '}
+                          {order.order_items.map((item, i) => {
+                            return <span key={i}>{(i === 0 ? '' : ', ') + item.product_name}</span>
+                          })}
                         </P>
                       </div>
                       <div>

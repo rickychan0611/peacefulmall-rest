@@ -7,6 +7,7 @@ import GooglePlacesAutocomplete, {
   getLatLng
 } from 'react-google-places-autocomplete';
 import useTranslation from 'next-translate/useTranslation';
+import LocationInput from '../LocationInput';
 
 const SearchBanner_Desktop = ({ hide }) => {
   const isMobile = useIsMobile();
@@ -18,6 +19,7 @@ const SearchBanner_Desktop = ({ hide }) => {
     <BannerContainer className={hide}>
       {/* <BannerImage src="/rest-banner.jpg" /> */}
       <InputContainer style={{ display: 'flex' }}>
+
         <InputWrapper style={{ 
           borderRadius: '5px 0 0 5px', 
           borderRight: '1px solid #999696',
@@ -26,30 +28,7 @@ const SearchBanner_Desktop = ({ hide }) => {
             <Icon name="map marker alternate" />
           </Label>
           
-          <GooglePlacesAutocomplete
-              autocompletionRequest={{
-                componentRestrictions: {
-                  country: ['ca']
-                }
-              }}
-              selectProps={{
-                placeholder: t("enterAddress"),
-                value,
-                onChange: setValue,
-                styles: {
-                  input: (provided) => ({
-                    ...provided,
-                    border: 'none',
-                    width: '33vw'
-                  }),
-                  control: (provided) => ({
-                    ...provided,
-                    borderColor: 'white',
-                    boxShadow: 'none'
-                  })
-                }
-              }}
-            />
+          <LocationInput />
 
         </InputWrapper>
 
@@ -104,7 +83,7 @@ const InputWrapper = styled.div`
   justify-content: center;
   background-color: white;
   height: 38px;
-
+  /* max-width: 450px; */
   /* padding: 10px; */
 `;
 

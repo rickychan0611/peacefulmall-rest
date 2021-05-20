@@ -1,4 +1,4 @@
-import { useIsMobile } from '../../util/useScreenSize';
+import { useIsDesktop } from '../../util/useScreenSize';
 import styled from 'styled-components';
 import useTranslation from 'next-translate/useTranslation';
 import setLanguage from 'next-translate/setLanguage';
@@ -34,13 +34,13 @@ export const changeLocale = async (e, { value }) => {
 };
 
 const TopBar = () => {
-  const isMobile = useIsMobile();
+  const isDesktop = useIsDesktop();
   const { t } = useTranslation('home');
 
   return (
     <Container>
       <SpaceBetween>
-        {isMobile ? (
+        {!isDesktop ? (
           <TopBar_Mobile t={t} changeLocale={changeLocale} locales={locales} />
         ) : (
           <TopBar_Desktop t={t} changeLocale={changeLocale} locales={locales} />

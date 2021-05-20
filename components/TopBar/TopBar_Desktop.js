@@ -67,6 +67,14 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
 
             <Item
               onClick={() => {
+                router.push('/')
+              }}>
+              <Icon name="home" size="large" />
+              <H4>{t('home')}</H4>
+            </Item>
+
+            <Item
+              onClick={() => {
                 router.push('/consumer/edit-profile')
               }}>
               <Icon name="user circle" size="large" />

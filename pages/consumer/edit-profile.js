@@ -2,13 +2,14 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { Divider, Form, Button, Icon, Transition, Modal, Header } from 'semantic-ui-react';
+import { Divider, Form, Button, Icon, Transition, Modal, Header, Loader } from 'semantic-ui-react';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom';
 import { useEffect } from 'react';
 import validation from '../../util/validation';
 import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
+import { get } from 'http';
 
 const Profile = () => {
   const router = useRouter();
@@ -49,20 +50,101 @@ const Profile = () => {
   };
 
   const handleEditAddressChange = (e, name) => {
-    setSelectedAddress((prev) => ({ ...prev, [name]: e.target.value, type: "edit", address_id: selectedAddress.id }));
+    setSelectedAddress((prev) => ({ ...prev, [name]: e.target.value }));
   };
 
-  const handleAddressSubmit = async (e, name) => {
-    console.log(selectedAddress);
+  const getAddresses = async () => {
     try {
-    const result = await axios.post(HOST_URL + '/api/user/address/set', selectedAddress, {
+      const result = await axios.get(HOST_URL + '/api/user/address', {
+        headers: { Authorization: cookies.userToken }
+      });
+      const sorted = result.data.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)))
+      console.log(sorted);
+      setAddresses(sorted);
+      setLoading(false)
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const handleAddressSubmit = async () => {
+    console.log(selectedAddress);
+    setLoading(true)
+    try {
+      if (selectedAddress.type === "create") { cancelCurrentDefault() }
+      const result = await axios.post(HOST_URL + '/api/user/address/set', selectedAddress, {
+        headers: { Authorization: cookies.userToken },
+      });
+      console.log(result);
+      getAddresses();
+      setLoading(false)
+      setOpenEdit(false)
+    } catch (err) {
+      console.log(err)
+      setLoading(false)
+    }
+  };
+
+  const delectAddress = async (id) => {
+    setLoading(true)
+
+    try {
+      const result = await axios.post(HOST_URL + '/api/user/address/set',
+        {
+          type: "delete",
+          address_id: id,
+        }, {
+        headers: { Authorization: cookies.userToken },
+      });
+      console.log(result);
+      getAddresses();
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const cancelCurrentDefault = async () => {
+    const index = addresses && addresses.findIndex(item => item.default_status === 1)
+    await axios.post(HOST_URL + '/api/user/address/set',
+      {
+        type: "edit",
+        address_id: addresses[index].id,
+        default_status: 0
+      }, {
       headers: { Authorization: cookies.userToken },
     });
-    console.log(result)
-  }catch (err) {
-    console.log(err)
   }
+
+  const setDefault = async (id) => {
+    console.log(selectedAddress);
+    setLoading(true)
+
+    try {
+      ////// switch current default_status to 0
+      cancelCurrentDefault()
+
+      ////// switch selected address default_status to 1
+      const result = await axios.post(HOST_URL + '/api/user/address/set',
+        {
+          type: "edit",
+          address_id: id,
+          default_status: 1
+        }, {
+        headers: { Authorization: cookies.userToken },
+      });
+
+
+      console.log(result);
+      getAddresses();
+    } catch (err) {
+      console.log(err)
+      setLoading(false)
+    }
   };
+
+  useEffect(() => {
+    getAddresses()
+  }, []);
 
   useEffect(() => {
     !localStorage.getItem('user') && router.push('/sign-in');
@@ -72,30 +154,18 @@ const Profile = () => {
     setEditedUser(user);
   }, [user]);
 
-  useEffect(async () => {
-    try {
-      const result = await axios.get(HOST_URL + '/api/user/address', {
-        headers: { Authorization: cookies.userToken }
-      });
-      console.log(result.data);
-      setAddresses(result.data);
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
-
   useEffect(() => {
     editedUser &&
-    editedUser.first_name === user.first_name &&
-    editedUser.last_name === user.last_name &&
-    editedUser.phone === user.phone &&
-    editedUser.email === user.email
+      editedUser.first_name === user.first_name &&
+      editedUser.last_name === user.last_name &&
+      editedUser.phone === user.phone &&
+      editedUser.email === user.email
       ? setDisableSave(true)
       : setDisableSave(false);
   }, [editedUser]);
 
   return (
-    <div style={{ height: '100vh' }}>
+    <div>
       {/* Edit address model */}
       <Modal
         closeIcon
@@ -103,7 +173,7 @@ const Profile = () => {
         open={openEdit}
         onClose={() => setOpenEdit(false)}
         onOpen={() => setOpenEdit(true)}>
-        <Header content="Edit Address" />
+        <Header content={selectedAddress && selectedAddress.type.toUpperCase()} />
         <Modal.Content>
           <Form onSubmit={handleSave}>
             <Form.Input
@@ -122,7 +192,7 @@ const Profile = () => {
               required
               label="Phone Number"
               placeholder="Phone Number"
-              value={selectedAddress && selectedAddress.name}
+              value={selectedAddress && selectedAddress.phone}
               onChange={(e) => {
                 handleEditAddressChange(e, 'phone');
               }}
@@ -153,6 +223,17 @@ const Profile = () => {
             <Form.Input
               fluid
               required
+              label="Province"
+              placeholder="Province"
+              value={selectedAddress && selectedAddress.province}
+              onChange={(e) => {
+                handleEditAddressChange(e, 'province');
+              }}
+              error={err.first_name}
+            />
+            <Form.Input
+              fluid
+              required
               label="Country"
               placeholder="Country"
               value={selectedAddress && selectedAddress.country}
@@ -176,10 +257,10 @@ const Profile = () => {
         </Modal.Content>
         <Modal.Actions>
           <Button color="red" onClick={() => setOpenEdit(false)}>
-            <Icon name="remove" /> No
+            <Icon name="remove" /> Cancel
           </Button>
-          <Button color="green" onClick={() => handleAddressSubmit(false)}>
-            <Icon name="checkmark" /> Yes
+          <Button color="green" onClick={() => handleAddressSubmit(false)} loading={loading}>
+            <Icon name="checkmark" /> Submit
           </Button>
         </Modal.Actions>
       </Modal>
@@ -232,57 +313,18 @@ const Profile = () => {
                 error={err.phone}
               />
             </Form.Group>
-
-            <h3>Address Book</h3>
-            <AddressContainer>
-              {addresses &&
-                addresses[0] &&
-                addresses.map((address, i) => {
-                  return (
-                    <AddressCard>
-                      <h4>
-                        {address.name}
-                        <br />
-                        {address.phone}
-                      </h4>
-                      <p>
-                        {address.detail_address}
-                        <br />
-                        {address.city}
-                        <br />
-                        {address.province} <br />
-                        {address.post_code}
-                        <br />
-                        {address.country}
-                      </p>
-                      <Row>
-                        <AddressButton>Default</AddressButton>
-                        <AddressButton
-                          onClick={() => {
-                            setSelectedAddress(address);
-                            setOpenEdit(true);
-                          }}>
-                          Edit
-                        </AddressButton>
-                        <AddressButton>Delete</AddressButton>
-                      </Row>
-                    </AddressCard>
-                  );
-                })}
-            </AddressContainer>
-
             <ButtonWrapper>
               <Button
                 content={
                   loading ? (
                     <Icon name="spinner" loading style={{ margin: 0, width: 30 }} />
                   ) : (
-                    'Save'
+                    'Save Changes'
                   )
                 }
                 disabled={disableSave}
                 color="red"
-                // onClick={() => handleSave()}
+              // onClick={() => handleSave()}
               />
               <Transition
                 animation="swing right"
@@ -294,48 +336,120 @@ const Profile = () => {
               </Transition>
             </ButtonWrapper>
           </Form>
+
+          <h3>Address Book</h3>
+          <Divider />
+          <a style={{ marginBottom: 10, color: "green" }}
+            onClick={() => {
+              setOpenEdit(true)
+              setSelectedAddress({ type: "create", default_status: 1 })
+            }}>
+            <Icon name="plus circle" />
+            Add a new address</a><br/>
+          <AddressContainer>
+            {addresses &&
+              addresses[0] &&
+              addresses.map((address, i) => {
+                return (
+                  <AddressCard default={address.default_status} key={i}>
+                    <h4>
+                      {address.name}
+                      <br />
+                      {address.phone}
+                    </h4>
+                    <p>
+                      {address.detail_address}
+                      <br />
+                      {address.city}
+                      <br />
+                      {address.province} <br />
+                      {address.post_code}
+                      <br />
+                      {address.country}
+                    </p>
+                    <Row>
+                      <AddressButton
+                        default={address.default_status}
+                        onClick={() => {
+                          setSelectedAddress({ type: "edit", address_id: address.id })
+                          address.default_status !== 1 && setDefault(address.id)
+                        }}
+                      >
+                        {loading && selectedAddress.address_id === address.id &&
+                          selectedAddress.type === "edit" ? <Icon loading name='spinner' /> : "Default"}
+                      </AddressButton>
+
+                      <AddressButton
+                        onClick={() => {
+                          setSelectedAddress({ ...address, type: "edit", address_id: address.id });
+                          setOpenEdit(true);
+                        }}>
+                        Edit
+                        </AddressButton>
+
+                      <AddressButton style={{
+                        color: address.default_status === 1 && "lightGrey"
+                      }}
+                        onClick={() => {
+                          setSelectedAddress({ ...address, type: "delete", address_id: address.id });
+                          address.default_status !== 1 && delectAddress(address.id)
+                        }}
+                      >
+                        {loading && selectedAddress.address_id === address.id &&
+                          selectedAddress.type === "delete" ? <Icon loading name='spinner' /> : "Delete"}
+                      </AddressButton>
+                    </Row>
+                  </AddressCard>
+                );
+              })}
+          </AddressContainer>
+
         </CenteredFlex>
       )}
     </div>
   );
 };
 
-const AddressContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-bottom: 20px;
-`;
 const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  display: inline-flex;
+  flex-flow: row nowrap;
   justify-content: space-between;
+  gap: 5px;
+`;
+const AddressContainer = styled.div`
+  display: inline-flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  gap: 10px;
+`;
+const AddressCard = styled.div`
+  display: flex;
+  flex: 1;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  padding: 15px;
+  border-radius: 10px;
+  border:  ${p => p.default === 1 ? "2px solid #f8cd98" : "1px solid #d3d1d1"};
+  max-width: 207px;
 `;
 const AddressButton = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: center;
+  align-items: center;
   padding: 5px 8px 5px 8px;
   border-radius: 5px;
   border: 1px solid #d3d1d1;
   cursor: pointer;
   font-size: 12px;
-  background-color: #e4e3e3;
-`;
-const AddressCard = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  min-width: 200px;
-  max-width: 20vw;
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #d3d1d1;
-  margin-right: 10px;
-  margin-bottom: 10px;
+  background-color: ${p => p.default === 1 ? "#f5b743" : "#e4e3e3"};
+  color: ${p => p.default === 1 ? "white" : "black"};
+  font-weight: bold;
+  flex: 1;
+  min-width: 56px;
 `;
 const CenteredFlex = styled.div`
   margin: 20px auto;

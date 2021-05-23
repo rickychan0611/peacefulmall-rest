@@ -1,22 +1,70 @@
+import { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
+import AddressEditModal from '../AddressEditModal';
+import { HOST_URL } from '../../env';
+import { useCookies } from 'react-cookie';
 
-const AddressBook = (
-  {
-    loading,
-    addresses,
-    setOpenEdit,
-    selectedAddress,
-    setSelectedAddress,
-    deleteAddressQuery,
-    setDefaultQuery
+const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddressesQuery }) => {
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [err, setErr] = useState(null);
+  const [cookies] = useCookies(null);
+
+  const query = async (body) => {
+    setLoading(true)
+    try {
+      await axios.post(HOST_URL + '/api/user/address/set', body, {
+        headers: { Authorization: cookies.userToken },
+      });
+      await getAddressesQuery();
+      setLoading(false)
+      setOpen(false)
+    } catch (err) {
+      console.log(err)
+      setLoading(false)
+    }
   }
-) => {
+
+  const saveAddressQuery = async () => {
+    //// both create and edit address use this query.
+    //// if type is "create", remove current default address.
+    selectedAddress.type === "create" && removeCurrentDefaultQuery()
+    query(selectedAddress)
+  };
+
+
+  const deleteAddressQuery = async (id) => {
+    query({ type: "delete", address_id: id })
+  }
+
+  const removeCurrentDefaultQuery = async () => {
+    const index = addresses && addresses.findIndex(item => item.default_status === 1)
+    query({ type: "edit", address_id: addresses[index].id, default_status: 0 })
+  }
+
+  const setDefaultQuery = async (id) => {
+    removeCurrentDefaultQuery()
+    query({ type: "edit", address_id: id, default_status: 1 })
+  };
+
+
   return (
     <>
-      <a style={{ marginBottom: 10, color: "green", cursor:"pointer" }}
+      <AddressEditModal
+        open={open}
+        setOpen={setOpen}
+        loading={loading}
+        saveAddressQuery={saveAddressQuery}
+        err={err}
+        selectedAddress={selectedAddress}
+        setSelectedAddress={setSelectedAddress}
+      />
+
+      <a style={{ marginBottom: 10, color: "green", cursor: "pointer" }}
         onClick={() => {
-          setOpenEdit(true)
+          setOpen(true)
           setSelectedAddress({ type: "create", default_status: 1 })
         }}>
         <Icon name="plus circle" />
@@ -57,7 +105,7 @@ const AddressBook = (
                   <AddressButton
                     onClick={() => {
                       setSelectedAddress({ ...address, type: "edit", address_id: address.id });
-                      setOpenEdit(true);
+                      setOpen(true);
                     }}>
                     Edit
                         </AddressButton>

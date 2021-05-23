@@ -10,7 +10,6 @@ import validation from '../../util/validation';
 import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 
-import AddressEditModal from '../../components/AddressEditModal';
 import ProfileForm from '../../components/ProfileForm';
 import AddressBook from '../../components/AddressBook';
 
@@ -21,12 +20,10 @@ const Profile = () => {
   const [editedUser, setEditedUser] = useState(null);
   const [disableSave, setDisableSave] = useState(true);
   const [visible, setVisible] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState(null);
   const [addresses, setAddresses] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [openEdit, setOpenEdit] = useState(false);
 
   const saveUserQuery = () => {
     setLoading(true);
@@ -61,78 +58,7 @@ const Profile = () => {
       console.log(err);
     }
   }
-
-  const saveAddressQuery = async () => {
-    console.log(selectedAddress);
-    setLoading(true)
-    try {
-      if (selectedAddress.type === "create") { cancelCurrentDefaultQuery() }
-      const result = await axios.post(HOST_URL + '/api/user/address/set', selectedAddress, {
-        headers: { Authorization: cookies.userToken },
-      });
-      console.log(result);
-      await getAddressesQuery();
-      setLoading(false)
-      setOpenEdit(false)
-    } catch (err) {
-      console.log(err)
-      setLoading(false)
-    }
-  };
-
-  const deleteAddressQuery = async (id) => {
-    setLoading(true)
-    try {
-      const result = await axios.post(HOST_URL + '/api/user/address/set',
-        {
-          type: "delete",
-          address_id: id,
-        }, {
-        headers: { Authorization: cookies.userToken },
-      });
-      console.log(result);
-      await getAddressesQuery();
-      setLoading(false)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const cancelCurrentDefaultQuery = async () => {
-    const index = addresses && addresses.findIndex(item => item.default_status === 1)
-    await axios.post(HOST_URL + '/api/user/address/set',
-      {
-        type: "edit",
-        address_id: addresses[index].id,
-        default_status: 0
-      }, {
-      headers: { Authorization: cookies.userToken },
-    });
-  }
-
-  const setDefaultQuery = async (id) => {
-    console.log(selectedAddress);
-    setLoading(true)
-
-    try {
-      cancelCurrentDefaultQuery()
-      await axios.post(HOST_URL + '/api/user/address/set',
-        {
-          type: "edit",
-          address_id: id,
-          default_status: 1
-        }, {
-        headers: { Authorization: cookies.userToken },
-      });
-
-      await getAddressesQuery();
-      setLoading(false)
-
-    } catch (err) {
-      console.log(err)
-      setLoading(false)
-    }
-  };
+  
 
   useEffect(() => {
     if (!localStorage.getItem('user')) router.push('/sign-in')
@@ -157,16 +83,6 @@ const Profile = () => {
   return (
     <div>
 
-      <AddressEditModal
-        openEdit={openEdit}
-        setOpenEdit={setOpenEdit}
-        loading={loading}
-        saveAddressQuery={saveAddressQuery}
-        err={err}
-        selectedAddress={selectedAddress}
-        setSelectedAddress={setSelectedAddress}
-      />
-
       {user && editedUser && (
         <Container>
           <h1>Profile</h1>
@@ -185,13 +101,10 @@ const Profile = () => {
           <h3>Address Books</h3>
           <Divider />
           <AddressBook
-            setOpenEdit={setOpenEdit}
+            addresses={addresses}
             selectedAddress={selectedAddress}
             setSelectedAddress={setSelectedAddress}
-            addresses={addresses}
-            loading={loading}
-            setDefaultQuery={setDefaultQuery}
-            deleteAddressQuery={deleteAddressQuery}
+            getAddressesQuery={getAddressesQuery}
           />
 
         </Container>

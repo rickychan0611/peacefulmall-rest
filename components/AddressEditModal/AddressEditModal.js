@@ -32,8 +32,8 @@ const formItems = [
 ]
 
 const AddressEditModal = ({
-  openEdit,
-  setOpenEdit,
+  open,
+  setOpen,
   loading,
   saveAddressQuery,
   err,
@@ -49,7 +49,7 @@ const AddressEditModal = ({
   return (
     <Modal
       size="mini"
-      open={openEdit}
+      open={open}
     >
       <Header content={selectedAddress && selectedAddress.type.toUpperCase()} />
       <Modal.Content>
@@ -69,7 +69,7 @@ const AddressEditModal = ({
         </Form>
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={() => !loading && setOpenEdit(false)}>
+        <Button onClick={() => !loading && setOpen(false)}>
           <Icon name="remove" /> Cancel
           </Button>
         <Button style={{ backgroundColor: "#ff614d", color: "white" }} onClick={() => !loading && saveAddressQuery(false)}>

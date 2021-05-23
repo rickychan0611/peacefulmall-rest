@@ -11,17 +11,20 @@ import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { get } from 'http';
 
+import AddressEditModal from '../../components/AddressEditModal';
+
 const Profile = () => {
   const router = useRouter();
   const [user, setUser] = useRecoilState(userAtom);
-  const [cookies] = useCookies();
+  const [cookies] = useCookies(null);
   const [editedUser, setEditedUser] = useState('');
   const [disableSave, setDisableSave] = useState(true);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState({});
-  const [addresses, setAddresses] = useState();
-  const [selectedAddress, setSelectedAddress] = useState();
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState(null);
+  const [addresses, setAddresses] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
 
   const handleChange = (e, name) => {
@@ -61,7 +64,7 @@ const Profile = () => {
       const sorted = result.data.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)))
       console.log(sorted);
       setAddresses(sorted);
-      setLoading(false)
+      return
     } catch (err) {
       console.log(err);
     }
@@ -76,7 +79,7 @@ const Profile = () => {
         headers: { Authorization: cookies.userToken },
       });
       console.log(result);
-      getAddresses();
+      await getAddresses();
       setLoading(false)
       setOpenEdit(false)
     } catch (err) {
@@ -85,7 +88,7 @@ const Profile = () => {
     }
   };
 
-  const delectAddress = async (id) => {
+  const deleteAddress = async (id) => {
     setLoading(true)
 
     try {
@@ -97,7 +100,8 @@ const Profile = () => {
         headers: { Authorization: cookies.userToken },
       });
       console.log(result);
-      getAddresses();
+      await getAddresses();
+      setLoading(false)
     } catch (err) {
       console.log(err)
     }
@@ -133,9 +137,10 @@ const Profile = () => {
         headers: { Authorization: cookies.userToken },
       });
 
-
       console.log(result);
-      getAddresses();
+      await getAddresses();
+      setLoading(false)
+
     } catch (err) {
       console.log(err)
       setLoading(false)
@@ -143,11 +148,8 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    getAddresses()
-  }, []);
-
-  useEffect(() => {
-    !localStorage.getItem('user') && router.push('/sign-in');
+    if (!localStorage.getItem('user')) router.push('/sign-in')
+    else getAddresses()
   }, []);
 
   useEffect(() => {
@@ -166,104 +168,17 @@ const Profile = () => {
 
   return (
     <div>
-      {/* Edit address model */}
-      <Modal
-        closeIcon
-        size="mini"
-        open={openEdit}
-        onClose={() => setOpenEdit(false)}
-        onOpen={() => setOpenEdit(true)}>
-        <Header content={selectedAddress && selectedAddress.type.toUpperCase()} />
-        <Modal.Content>
-          <Form onSubmit={handleSave}>
-            <Form.Input
-              fluid
-              required
-              label="Receiver's name"
-              placeholder="Receiver's name"
-              value={selectedAddress && selectedAddress.name}
-              onChange={(e) => {
-                handleEditAddressChange(e, 'name');
-              }}
-              error={err.first_name}
-            />
-            <Form.Input
-              fluid
-              required
-              label="Phone Number"
-              placeholder="Phone Number"
-              value={selectedAddress && selectedAddress.phone}
-              onChange={(e) => {
-                handleEditAddressChange(e, 'phone');
-              }}
-              error={err.first_name}
-            />
-            <Form.Input
-              fluid
-              required
-              label="Address"
-              placeholder="Address"
-              value={selectedAddress && selectedAddress.detail_address}
-              onChange={(e) => {
-                handleEditAddressChange(e, 'detail_address');
-              }}
-              error={err.first_name}
-            />
-            <Form.Input
-              fluid
-              required
-              label="City"
-              placeholder="City"
-              value={selectedAddress && selectedAddress.city}
-              onChange={(e) => {
-                handleEditAddressChange(e, 'city');
-              }}
-              error={err.first_name}
-            />
-            <Form.Input
-              fluid
-              required
-              label="Province"
-              placeholder="Province"
-              value={selectedAddress && selectedAddress.province}
-              onChange={(e) => {
-                handleEditAddressChange(e, 'province');
-              }}
-              error={err.first_name}
-            />
-            <Form.Input
-              fluid
-              required
-              label="Country"
-              placeholder="Country"
-              value={selectedAddress && selectedAddress.country}
-              onChange={(e) => {
-                handleEditAddressChange(e, 'country');
-              }}
-              error={err.first_name}
-            />
-            <Form.Input
-              fluid
-              required
-              label="Post Code"
-              placeholder="Post Code"
-              value={selectedAddress && selectedAddress.post_code}
-              onChange={(e) => {
-                handleEditAddressChange(e, 'post_code');
-              }}
-              error={err.first_name}
-            />
-          </Form>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button color="red" onClick={() => setOpenEdit(false)}>
-            <Icon name="remove" /> Cancel
-          </Button>
-          <Button color="green" onClick={() => handleAddressSubmit(false)} loading={loading}>
-            <Icon name="checkmark" /> Submit
-          </Button>
-        </Modal.Actions>
-      </Modal>
+
+      <AddressEditModal
+        openEdit={openEdit}
+        setOpenEdit={setOpenEdit}
+        loading={loading}
+        handleAddressSubmit={handleAddressSubmit}
+        handleEditAddressChange={handleEditAddressChange}
+        handleSave={handleSave}
+        err={err}
+        selectedAddress={selectedAddress}
+      />
 
       {user && editedUser && (
         <CenteredFlex>
@@ -278,7 +193,7 @@ const Profile = () => {
                 placeholder="First name"
                 value={editedUser.first_name}
                 onChange={(e) => handleChange(e, 'first_name')}
-                error={err.first_name}
+                error={err && err.first_name}
               />
 
               <Form.Input
@@ -288,7 +203,7 @@ const Profile = () => {
                 placeholder="Last name"
                 value={editedUser.last_name}
                 onChange={(e) => handleChange(e, 'last_name')}
-                error={err.last_name}
+                error={err && err.last_name}
               />
             </Form.Group>
 
@@ -300,7 +215,7 @@ const Profile = () => {
                 placeholder="Email"
                 value={editedUser.email}
                 onChange={(e) => handleChange(e, 'email')}
-                error={err.email}
+                error={err && err.email}
               />
 
               <Form.Input
@@ -310,13 +225,13 @@ const Profile = () => {
                 placeholder="Phone Number"
                 value={editedUser.phone}
                 onChange={(e) => handleChange(e, 'phone')}
-                error={err.phone}
+                error={err && err.phone}
               />
             </Form.Group>
             <ButtonWrapper>
               <Button
                 content={
-                  loading ? (
+                  saving ? (
                     <Icon name="spinner" loading style={{ margin: 0, width: 30 }} />
                   ) : (
                     'Save Changes'
@@ -345,7 +260,7 @@ const Profile = () => {
               setSelectedAddress({ type: "create", default_status: 1 })
             }}>
             <Icon name="plus circle" />
-            Add a new address</a><br/>
+            Add a new address</a><br />
           <AddressContainer>
             {addresses &&
               addresses[0] &&
@@ -371,7 +286,7 @@ const Profile = () => {
                       <AddressButton
                         default={address.default_status}
                         onClick={() => {
-                          setSelectedAddress({ type: "edit", address_id: address.id })
+                          !loading && setSelectedAddress({ type: "edit", address_id: address.id })
                           address.default_status !== 1 && setDefault(address.id)
                         }}
                       >
@@ -391,8 +306,8 @@ const Profile = () => {
                         color: address.default_status === 1 && "lightGrey"
                       }}
                         onClick={() => {
-                          setSelectedAddress({ ...address, type: "delete", address_id: address.id });
-                          address.default_status !== 1 && delectAddress(address.id)
+                          !loading && setSelectedAddress({ ...address, type: "delete", address_id: address.id });
+                          address.default_status !== 1 && deleteAddress(address.id)
                         }}
                       >
                         {loading && selectedAddress.address_id === address.id &&
@@ -429,7 +344,7 @@ const AddressCard = styled.div`
   flex: 1;
   flex-flow: column nowrap;
   justify-content: space-between;
-  padding: 15px;
+  padding: ${p => p.default === 1 ? "14px" : "15px"};
   border-radius: 10px;
   border:  ${p => p.default === 1 ? "2px solid #f8cd98" : "1px solid #d3d1d1"};
   max-width: 207px;

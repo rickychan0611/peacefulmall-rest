@@ -2,22 +2,23 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { Divider, Form, Button, Icon, Transition, Modal, Header, Loader } from 'semantic-ui-react';
+import { Divider, Icon } from 'semantic-ui-react';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom';
 import { useEffect } from 'react';
 import validation from '../../util/validation';
 import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
-import { get } from 'http';
 
 import AddressEditModal from '../../components/AddressEditModal';
+import ProfileForm from '../../components/ProfileForm';
+import AddressBook from '../../components/AddressBook';
 
 const Profile = () => {
   const router = useRouter();
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies] = useCookies(null);
-  const [editedUser, setEditedUser] = useState('');
+  const [editedUser, setEditedUser] = useState(null);
   const [disableSave, setDisableSave] = useState(true);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,14 +28,9 @@ const Profile = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [openEdit, setOpenEdit] = useState(false);
 
-  const handleChange = (e, name) => {
-    setVisible(false);
-    setEditedUser((prev) => ({ ...prev, [name]: e.target.value }));
-  };
-
-  const handleSave = () => {
+  const saveUserQuery = () => {
     setLoading(true);
-    setErr({});
+    setErr(null);
     validation(editedUser)
       .then(async (res) => {
         console.log(res);
@@ -52,11 +48,7 @@ const Profile = () => {
       });
   };
 
-  const handleEditAddressChange = (e, name) => {
-    setSelectedAddress((prev) => ({ ...prev, [name]: e.target.value }));
-  };
-
-  const getAddresses = async () => {
+  const getAddressesQuery = async () => {
     try {
       const result = await axios.get(HOST_URL + '/api/user/address', {
         headers: { Authorization: cookies.userToken }
@@ -70,16 +62,16 @@ const Profile = () => {
     }
   }
 
-  const handleAddressSubmit = async () => {
+  const saveAddressQuery = async () => {
     console.log(selectedAddress);
     setLoading(true)
     try {
-      if (selectedAddress.type === "create") { cancelCurrentDefault() }
+      if (selectedAddress.type === "create") { cancelCurrentDefaultQuery() }
       const result = await axios.post(HOST_URL + '/api/user/address/set', selectedAddress, {
         headers: { Authorization: cookies.userToken },
       });
       console.log(result);
-      await getAddresses();
+      await getAddressesQuery();
       setLoading(false)
       setOpenEdit(false)
     } catch (err) {
@@ -88,9 +80,8 @@ const Profile = () => {
     }
   };
 
-  const deleteAddress = async (id) => {
+  const deleteAddressQuery = async (id) => {
     setLoading(true)
-
     try {
       const result = await axios.post(HOST_URL + '/api/user/address/set',
         {
@@ -100,14 +91,14 @@ const Profile = () => {
         headers: { Authorization: cookies.userToken },
       });
       console.log(result);
-      await getAddresses();
+      await getAddressesQuery();
       setLoading(false)
     } catch (err) {
       console.log(err)
     }
   }
 
-  const cancelCurrentDefault = async () => {
+  const cancelCurrentDefaultQuery = async () => {
     const index = addresses && addresses.findIndex(item => item.default_status === 1)
     await axios.post(HOST_URL + '/api/user/address/set',
       {
@@ -119,16 +110,13 @@ const Profile = () => {
     });
   }
 
-  const setDefault = async (id) => {
+  const setDefaultQuery = async (id) => {
     console.log(selectedAddress);
     setLoading(true)
 
     try {
-      ////// switch current default_status to 0
-      cancelCurrentDefault()
-
-      ////// switch selected address default_status to 1
-      const result = await axios.post(HOST_URL + '/api/user/address/set',
+      cancelCurrentDefaultQuery()
+      await axios.post(HOST_URL + '/api/user/address/set',
         {
           type: "edit",
           address_id: id,
@@ -137,8 +125,7 @@ const Profile = () => {
         headers: { Authorization: cookies.userToken },
       });
 
-      console.log(result);
-      await getAddresses();
+      await getAddressesQuery();
       setLoading(false)
 
     } catch (err) {
@@ -149,7 +136,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (!localStorage.getItem('user')) router.push('/sign-in')
-    else getAddresses()
+    else getAddressesQuery()
   }, []);
 
   useEffect(() => {
@@ -157,6 +144,7 @@ const Profile = () => {
   }, [user]);
 
   useEffect(() => {
+    ///// disable save changes button
     editedUser &&
       editedUser.first_name === user.first_name &&
       editedUser.last_name === user.last_name &&
@@ -173,209 +161,50 @@ const Profile = () => {
         openEdit={openEdit}
         setOpenEdit={setOpenEdit}
         loading={loading}
-        handleAddressSubmit={handleAddressSubmit}
-        handleEditAddressChange={handleEditAddressChange}
-        handleSave={handleSave}
+        saveAddressQuery={saveAddressQuery}
         err={err}
         selectedAddress={selectedAddress}
+        setSelectedAddress={setSelectedAddress}
       />
 
       {user && editedUser && (
-        <CenteredFlex>
+        <Container>
           <h1>Profile</h1>
           <Divider />
-          <Form onSubmit={handleSave}>
-            <Form.Group widths="equal">
-              <Form.Input
-                fluid
-                required
-                label="First name"
-                placeholder="First name"
-                value={editedUser.first_name}
-                onChange={(e) => handleChange(e, 'first_name')}
-                error={err && err.first_name}
-              />
+          <ProfileForm
+            editedUser={editedUser}
+            setEditedUser={setEditedUser}
+            setVisible={setVisible}
+            saveUserQuery={saveUserQuery}
+            err={err}
+            saving={saving}
+            disableSave={disableSave}
+            visible={visible}
+          />
 
-              <Form.Input
-                fluid
-                required
-                label="Last name"
-                placeholder="Last name"
-                value={editedUser.last_name}
-                onChange={(e) => handleChange(e, 'last_name')}
-                error={err && err.last_name}
-              />
-            </Form.Group>
-
-            <Form.Group widths="equal">
-              <Form.Input
-                fluid
-                required
-                label="Email"
-                placeholder="Email"
-                value={editedUser.email}
-                onChange={(e) => handleChange(e, 'email')}
-                error={err && err.email}
-              />
-
-              <Form.Input
-                fluid
-                required
-                label="Phone Number"
-                placeholder="Phone Number"
-                value={editedUser.phone}
-                onChange={(e) => handleChange(e, 'phone')}
-                error={err && err.phone}
-              />
-            </Form.Group>
-            <ButtonWrapper>
-              <Button
-                content={
-                  saving ? (
-                    <Icon name="spinner" loading style={{ margin: 0, width: 30 }} />
-                  ) : (
-                    'Save Changes'
-                  )
-                }
-                disabled={disableSave}
-                color="red"
-              // onClick={() => handleSave()}
-              />
-              <Transition
-                animation="swing right"
-                duration={{ hide: 0, show: 1000 }}
-                visible={visible}>
-                <div>
-                  <Icon name="check" color="green" /> saved!
-                </div>
-              </Transition>
-            </ButtonWrapper>
-          </Form>
-
-          <h3>Address Book</h3>
+          <h3>Address Books</h3>
           <Divider />
-          <a style={{ marginBottom: 10, color: "green" }}
-            onClick={() => {
-              setOpenEdit(true)
-              setSelectedAddress({ type: "create", default_status: 1 })
-            }}>
-            <Icon name="plus circle" />
-            Add a new address</a><br />
-          <AddressContainer>
-            {addresses &&
-              addresses[0] &&
-              addresses.map((address, i) => {
-                return (
-                  <AddressCard default={address.default_status} key={i}>
-                    <h4>
-                      {address.name}
-                      <br />
-                      {address.phone}
-                    </h4>
-                    <p>
-                      {address.detail_address}
-                      <br />
-                      {address.city}
-                      <br />
-                      {address.province} <br />
-                      {address.post_code}
-                      <br />
-                      {address.country}
-                    </p>
-                    <Row>
-                      <AddressButton
-                        default={address.default_status}
-                        onClick={() => {
-                          !loading && setSelectedAddress({ type: "edit", address_id: address.id })
-                          address.default_status !== 1 && setDefault(address.id)
-                        }}
-                      >
-                        {loading && selectedAddress.address_id === address.id &&
-                          selectedAddress.type === "edit" ? <Icon loading name='spinner' /> : "Default"}
-                      </AddressButton>
+          <AddressBook
+            setOpenEdit={setOpenEdit}
+            selectedAddress={selectedAddress}
+            setSelectedAddress={setSelectedAddress}
+            addresses={addresses}
+            loading={loading}
+            setDefaultQuery={setDefaultQuery}
+            deleteAddressQuery={deleteAddressQuery}
+          />
 
-                      <AddressButton
-                        onClick={() => {
-                          setSelectedAddress({ ...address, type: "edit", address_id: address.id });
-                          setOpenEdit(true);
-                        }}>
-                        Edit
-                        </AddressButton>
-
-                      <AddressButton style={{
-                        color: address.default_status === 1 && "lightGrey"
-                      }}
-                        onClick={() => {
-                          !loading && setSelectedAddress({ ...address, type: "delete", address_id: address.id });
-                          address.default_status !== 1 && deleteAddress(address.id)
-                        }}
-                      >
-                        {loading && selectedAddress.address_id === address.id &&
-                          selectedAddress.type === "delete" ? <Icon loading name='spinner' /> : "Delete"}
-                      </AddressButton>
-                    </Row>
-                  </AddressCard>
-                );
-              })}
-          </AddressContainer>
-
-        </CenteredFlex>
+        </Container>
       )}
     </div>
   );
 };
 
-const Row = styled.div`
-  display: inline-flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
-  gap: 5px;
-`;
-const AddressContainer = styled.div`
-  display: inline-flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  gap: 10px;
-`;
-const AddressCard = styled.div`
-  display: flex;
-  flex: 1;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-  padding: ${p => p.default === 1 ? "14px" : "15px"};
-  border-radius: 10px;
-  border:  ${p => p.default === 1 ? "2px solid #f8cd98" : "1px solid #d3d1d1"};
-  max-width: 207px;
-`;
-const AddressButton = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  padding: 5px 8px 5px 8px;
-  border-radius: 5px;
-  border: 1px solid #d3d1d1;
-  cursor: pointer;
-  font-size: 12px;
-  background-color: ${p => p.default === 1 ? "#f5b743" : "#e4e3e3"};
-  color: ${p => p.default === 1 ? "white" : "black"};
-  font-weight: bold;
-  flex: 1;
-  min-width: 56px;
-`;
-const CenteredFlex = styled.div`
+const Container = styled.div`
   margin: 20px auto;
   padding: 20px;
   max-width: 900px;
   border: solid 1px #d4d3d3;
-`;
-const ButtonWrapper = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
 `;
 
 export default Profile;

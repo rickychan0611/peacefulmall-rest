@@ -35,12 +35,17 @@ const AddressEditModal = ({
   openEdit,
   setOpenEdit,
   loading,
-  handleAddressSubmit,
-  handleEditAddressChange,
-  handleSave,
+  saveAddressQuery,
   err,
-  selectedAddress
+  selectedAddress,
+  setSelectedAddress
 }) => {
+
+  const handleChange = (e, name) => {
+    setSelectedAddress((prev) => ({ ...prev, [name]: e.target.value }));
+  };
+
+
   return (
     <Modal
       size="mini"
@@ -48,7 +53,7 @@ const AddressEditModal = ({
     >
       <Header content={selectedAddress && selectedAddress.type.toUpperCase()} />
       <Modal.Content>
-        <Form onSubmit={handleSave}>
+        <Form onSubmit={saveAddressQuery}>
           {formItems.map((item, i) => {
             return (
               <div key={i}>
@@ -59,7 +64,7 @@ const AddressEditModal = ({
                   placeholder={item.label}
                   value={selectedAddress && selectedAddress[item.key]}
                   onChange={(e) => {
-                    handleEditAddressChange(e, item.key);
+                    handleChange(e, item.key);
                   }}
                   error={err && err[item.key]}
                 />
@@ -69,11 +74,11 @@ const AddressEditModal = ({
         </Form>
       </Modal.Content>
       <Modal.Actions>
-        <Button color="red" onClick={() => !loading && setOpenEdit(false)}>
+        <Button onClick={() => !loading && setOpenEdit(false)}>
           <Icon name="remove" /> Cancel
           </Button>
-        <Button color="green" onClick={() => !loading && handleAddressSubmit(false)} loading={loading}>
-          <Icon name="checkmark" /> Submit
+        <Button style={{backgroundColor: "#ff614d", color: "white"}} onClick={() => !loading && saveAddressQuery(false)}>
+          {loading ? <><Icon loading name='spinner' />Saving</> : <><Icon name="checkmark" /> Save</>}
           </Button>
       </Modal.Actions>
     </Modal>

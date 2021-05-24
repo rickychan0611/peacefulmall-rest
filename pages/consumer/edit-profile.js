@@ -17,8 +17,6 @@ const Profile = () => {
   const router = useRouter();
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies] = useCookies(null);
-  const [editedUser, setEditedUser] = useState(null);
-  const [disableSave, setDisableSave] = useState(true);
   const [visible, setVisible] = useState(false);
   const [saving, setSaving] = useState(false);
   const [err, setErr] = useState(null);
@@ -59,58 +57,39 @@ const Profile = () => {
     }
   }
   
+useEffect(() => {
+  if (!localStorage.getItem('user')) router.push('/sign-in')
+  else getAddressesQuery()
+}, []);
 
-  useEffect(() => {
-    if (!localStorage.getItem('user')) router.push('/sign-in')
-    else getAddressesQuery()
-  }, []);
+return (
+  <div>
 
-  useEffect(() => {
-    setEditedUser(user);
-  }, [user]);
+    {user && (
+      <Container>
+        <h1>Profile</h1>
+        <Divider />
+        <ProfileForm
+          user={user}
+          setVisible={setVisible}
+          saveUserQuery={saveUserQuery}
+          saving={saving}
+          visible={visible}
+        />
 
-  useEffect(() => {
-    ///// disable save changes button
-    editedUser &&
-      editedUser.first_name === user.first_name &&
-      editedUser.last_name === user.last_name &&
-      editedUser.phone === user.phone &&
-      editedUser.email === user.email
-      ? setDisableSave(true)
-      : setDisableSave(false);
-  }, [editedUser]);
+        <h3>Address Books</h3>
+        <Divider />
+        <AddressBook
+          addresses={addresses}
+          selectedAddress={selectedAddress}
+          setSelectedAddress={setSelectedAddress}
+          getAddressesQuery={getAddressesQuery}
+        />
 
-  return (
-    <div>
-
-      {user && editedUser && (
-        <Container>
-          <h1>Profile</h1>
-          <Divider />
-          <ProfileForm
-            editedUser={editedUser}
-            setEditedUser={setEditedUser}
-            setVisible={setVisible}
-            saveUserQuery={saveUserQuery}
-            err={err}
-            saving={saving}
-            disableSave={disableSave}
-            visible={visible}
-          />
-
-          <h3>Address Books</h3>
-          <Divider />
-          <AddressBook
-            addresses={addresses}
-            selectedAddress={selectedAddress}
-            setSelectedAddress={setSelectedAddress}
-            getAddressesQuery={getAddressesQuery}
-          />
-
-        </Container>
-      )}
-    </div>
-  );
+      </Container>
+    )}
+  </div>
+);
 };
 
 const Container = styled.div`

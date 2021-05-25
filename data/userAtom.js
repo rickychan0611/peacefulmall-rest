@@ -54,5 +54,5 @@ export const userdata = {
 
 export const user = atom({
   key: 'user',
-  default: userdata
+  default: null
 });

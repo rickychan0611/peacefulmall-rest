@@ -17,31 +17,8 @@ const Profile = () => {
   const router = useRouter();
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies] = useCookies(null);
-  const [visible, setVisible] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [err, setErr] = useState(null);
   const [addresses, setAddresses] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
-
-  const saveUserQuery = () => {
-    setLoading(true);
-    setErr(null);
-    validation(editedUser)
-      .then(async (res) => {
-        console.log(res);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        // if successful
-        setUser(editedUser);
-        setVisible(true);
-        setDisableSave(true);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-        setErr((prev) => ({ ...prev, ...err }));
-      });
-  };
 
   const getAddressesQuery = async () => {
     try {
@@ -69,13 +46,7 @@ return (
       <Container>
         <h1>Profile</h1>
         <Divider />
-        <ProfileForm
-          user={user}
-          setVisible={setVisible}
-          saveUserQuery={saveUserQuery}
-          saving={saving}
-          visible={visible}
-        />
+        <ProfileForm />
 
         <h3>Address Books</h3>
         <Divider />

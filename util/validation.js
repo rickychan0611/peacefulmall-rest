@@ -16,8 +16,8 @@ const validation = (inputs) => {
     if (inputs.email && !validator.isEmail(inputs.email)) {
       reject({ email: "Email address is not valid" })
     }
-    if (inputs.phone && !inputs.phone.match(/^\d{10}$/)) {
-      reject({ phone: "10 digits number only. No symbols or letters" })
+    if (inputs.phone && !inputs.phone.match(/^\d{3}-\d{3}-\d{4}$/)) {
+      reject({ phone: "Must be 10 digits. eg. 604-123-4567" })
     }
 
     if (inputs.password && !schema.validate(inputs.password)) {

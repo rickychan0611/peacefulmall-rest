@@ -6,6 +6,7 @@ import AddressEditModal from '../AddressEditModal';
 import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { useIsMobile } from '../../util/useScreenSize';
+import useTranslation from 'next-translate/useTranslation';
 
 const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddressesQuery }) => {
   const [loading, setLoading] = useState(false);
@@ -13,6 +14,7 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
   const [err, setErr] = useState(null);
   const [cookies] = useCookies(null);
   const isMobile = useIsMobile();
+  const { t } = useTranslation('profile');
 
   const query = async (body) => {
     setLoading(true);
@@ -69,7 +71,7 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
           setSelectedAddress({ type: 'create', default_status: 1 });
         }}>
         <Icon name="plus circle" />
-        Add a new address
+        {t`AddAddress`}
       </a>
       <br />
       <AddressContainer>
@@ -77,7 +79,7 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
           addresses[0] &&
           addresses.map((address, i) => {
             return (
-              <AddressCard default={address.default_status} key={i}  isMobile={isMobile}>
+              <AddressCard default={address.default_status} key={i} isMobile={isMobile}>
                 <h4>
                   {address.name}
                   <br />
@@ -105,7 +107,7 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
                     selectedAddress.type === 'edit' ? (
                       <Icon loading name="spinner" />
                     ) : (
-                      'Default'
+                      t`Default`
                     )}
                   </AddressButton>
 
@@ -114,7 +116,7 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
                       setSelectedAddress({ ...address, type: 'edit', address_id: address.id });
                       setOpen(true);
                     }}>
-                    Edit
+                    {t`Edit`}
                   </AddressButton>
 
                   <AddressButton
@@ -131,7 +133,7 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
                     selectedAddress.type === 'delete' ? (
                       <Icon loading name="spinner" />
                     ) : (
-                      'Delete'
+                      t`Delete`
                     )}
                   </AddressButton>
                 </Row>

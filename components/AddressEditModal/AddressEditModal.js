@@ -1,35 +1,5 @@
 import { Form, Button, Icon, Modal, Header } from 'semantic-ui-react';
-
-const formItems = [
-  {
-    label: "Receiver's name",
-    key: "name",
-  },
-  {
-    label: "Phone Number",
-    key: "phone",
-  },
-  {
-    label: "Address",
-    key: "detail_address",
-  },
-  {
-    label: "City",
-    key: "city",
-  },
-  {
-    label: "Province",
-    key: "province",
-  },
-  {
-    label: "Post Code",
-    key: "post_code",
-  },
-  {
-    label: "Country",
-    key: "country",
-  },
-]
+import useTranslation from 'next-translate/useTranslation';
 
 const AddressEditModal = ({
   open,
@@ -41,17 +11,49 @@ const AddressEditModal = ({
   setSelectedAddress
 }) => {
 
+  const { t } = useTranslation('profile');
+
   const handleChange = (e, name) => {
     setSelectedAddress((prev) => ({ ...prev, [name]: e.target.value }));
   };
 
+  const formItems = [
+    {
+      label: t`Receiver's name`,
+      key: "name",
+    },
+    {
+      label: t`PhoneNumber`,
+      key: "phone",
+    },
+    {
+      label: t`Address`,
+      key: "detail_address",
+    },
+    {
+      label: t`City`,
+      key: "city",
+    },
+    {
+      label: t`Province`,
+      key: "province",
+    },
+    {
+      label: t`Post Code`,
+      key: "post_code",
+    },
+    {
+      label: t`Country`,
+      key: "country",
+    },
+  ]
 
   return (
     <Modal
       size="mini"
       open={open}
     >
-      <Header content={selectedAddress && selectedAddress.type.toUpperCase()} />
+      <Header content={selectedAddress && t(selectedAddress.type).toUpperCase()} />
       <Modal.Content>
         <Form onSubmit={saveAddressQuery}>
           {formItems.map((item, i) => <Form.Input
@@ -70,10 +72,10 @@ const AddressEditModal = ({
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={() => !loading && setOpen(false)}>
-          <Icon name="remove" /> Cancel
+          <Icon name="remove" /> {t`Cancel`}
           </Button>
         <Button style={{ backgroundColor: "#ff614d", color: "white" }} onClick={() => !loading && saveAddressQuery(false)}>
-          {loading ? <><Icon loading name='spinner' />Saving</> : <><Icon name="checkmark" /> Save</>}
+          {loading ? <><Icon loading name='spinner' />{t`Saving`}</> : <><Icon name="checkmark" /> {t`Save`}</>}
         </Button>
       </Modal.Actions>
     </Modal>

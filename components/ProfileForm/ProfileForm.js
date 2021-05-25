@@ -6,34 +6,13 @@ import SemanticDatepicker from 'react-semantic-ui-datepickers';
 import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
 import moment from 'moment';
 import validation from '../../util/validation';
-import InputMask from 'react-input-mask'
+import InputMask from 'react-input-mask';
 import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom';
+import useTranslation from 'next-translate/useTranslation';
 
-const formItems = [
-  {
-    label: 'First name',
-    key: 'first_name',
-    required: true
-  },
-  {
-    label: 'Last name',
-    key: 'last_name',
-    required: true
-  },
-  {
-    label: 'Phone Number',
-    key: 'phone',
-    required: true
-  },
-  {
-    label: 'Email',
-    key: 'email',
-    required: true
-  }
-];
 const ProfileForm = () => {
   const [loading, setLoading] = useState(false);
   const [editedUser, setEditedUser] = useState(null);
@@ -43,6 +22,30 @@ const ProfileForm = () => {
   const [user, setUser] = useRecoilState(userAtom);
   const [visible, setVisible] = useState(false);
   const [saving, setSaving] = useState(false);
+  const { t } = useTranslation('profile');
+
+  const formItems = [
+    {
+      label: t`FirstName`,
+      key: 'first_name',
+      required: true
+    },
+    {
+      label: t`LastName`,
+      key: 'last_name',
+      required: true
+    },
+    {
+      label: t`PhoneNumber`,
+      key: 'phone',
+      required: true
+    },
+    {
+      label: t`Email`,
+      key: 'email',
+      required: true
+    }
+  ];
 
   const handleChange = (e, name) => {
     if (name !== 'email') {
@@ -122,7 +125,7 @@ const ProfileForm = () => {
                   value={editedUser.phone}
                   children={
                     <InputMask
-                      mask='999-999-9999'
+                      mask="999-999-9999"
                       maskChar="_"
                       alwaysShowMask
                       placeholder={item.label}
@@ -153,12 +156,11 @@ const ProfileForm = () => {
                 loading ? (
                   <Icon name="spinner" loading style={{ margin: 0, width: 30 }} />
                 ) : (
-                  'Save Changes'
+                  t`Save Changes`
                 )
               }
               disabled={disableSave}
               color="red"
-              // onClick={() => saveUserQuery()}
             />
             {!disableSave && (
               <Button
@@ -167,7 +169,7 @@ const ProfileForm = () => {
                   setEditedUser(user);
                   setErr(null);
                 }}>
-                Reset
+                {t`Reset`}
               </Button>
             )}
             <Transition
@@ -176,7 +178,7 @@ const ProfileForm = () => {
               visible={visible}>
               <div>
                 &nbsp;&nbsp;&nbsp;
-                <Icon name="check" color="green" /> saved!
+                <Icon name="check" color="green" /> {t`saved`}
               </div>
             </Transition>
           </ButtonWrapper>

@@ -10,6 +10,7 @@ import { useCookies } from 'react-cookie';
 import { useIsDesktop } from '../../util/useScreenSize';
 import ProfileForm from '../../components/ProfileForm';
 import AddressBook from '../../components/AddressBook';
+import useTranslation from 'next-translate/useTranslation';
 
 const Profile = () => {
   const router = useRouter();
@@ -18,55 +19,55 @@ const Profile = () => {
   const [addresses, setAddresses] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const isDesktop = useIsDesktop();
+  const { t } = useTranslation('profile');
 
   const getAddressesQuery = async () => {
     try {
       const result = await axios.get(HOST_URL + '/api/user/address', {
         headers: { Authorization: cookies.userToken }
       });
-      const sorted = result.data.sort((a, b) => (new Date(b.created_at) - new Date(a.created_at)))
+      const sorted = result.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
       console.log(sorted);
       setAddresses(sorted);
-      return
+      return;
     } catch (err) {
       console.log(err);
     }
-  }
-  
-useEffect(() => {
-  if (!localStorage.getItem('user')) router.push('/sign-in')
-  else getAddressesQuery()
-}, []);
+  };
 
-return (
-  <div style={{minHeight: "calc(100vh - 80px)"}}>
+  useEffect(() => {
+    if (!localStorage.getItem('user')) router.push('/sign-in');
+    else getAddressesQuery();
+  }, []);
 
-    {user && (
-      <Container isDesktop={isDesktop}>
-        <h1>Profile</h1>
-        <Divider />
-        <ProfileForm />
+  return (
+    <div style={{ minHeight: 'calc(100vh - 80px)' }}>
+      {user && (
+        <Container isDesktop={isDesktop}>
+          <h1>{t`Profile`}</h1>
+          <Divider />
+          <ProfileForm t={t} />
 
-        <h3>Address Books</h3>
-        <Divider />
-        <AddressBook
-          addresses={addresses}
-          selectedAddress={selectedAddress}
-          setSelectedAddress={setSelectedAddress}
-          getAddressesQuery={getAddressesQuery}
-        />
-
-      </Container>
-    )}
-  </div>
-);
+          <h3>{t`Address Books`}</h3>
+          <Divider />
+          <AddressBook
+            t={t}
+            addresses={addresses}
+            selectedAddress={selectedAddress}
+            setSelectedAddress={setSelectedAddress}
+            getAddressesQuery={getAddressesQuery}
+          />
+        </Container>
+      )}
+    </div>
+  );
 };
 
 const Container = styled.div`
   margin: 20px auto;
   padding: 20px;
   max-width: 900px;
-  border: ${p => p.isDesktop && "solid 1px #d4d3d3"};
+  border: ${(p) => p.isDesktop && 'solid 1px #d4d3d3'};
 `;
 
 export default Profile;

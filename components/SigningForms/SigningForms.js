@@ -33,7 +33,7 @@ const SigningForms = ({ signUp }) => {
 
   const [inputs, setInputs] = useState({
     // confirmPassword: 'Ricric61',
-    email: 'qingxunsu@gmail.com',
+    email: 'ric0611@gmail.com',
     // name: 'Rickychan1',
     password: '123456',
     // phone: '1234567890'

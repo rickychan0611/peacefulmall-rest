@@ -6,34 +6,34 @@ import SemanticDatepicker from 'react-semantic-ui-datepickers';
 import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
 import moment from 'moment';
 import validation from '../../util/validation';
-import MaskInput from 'react-maskinput';
-import {HOST_URL} from '../../env';
+import InputMask from 'react-input-mask'
+import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom';
 
 const formItems = [
   {
-    label: "First name",
+    label: 'First name',
     key: 'first_name',
     required: true
   },
   {
-    label: "Last name",
+    label: 'Last name',
     key: 'last_name',
     required: true
   },
   {
-    label: "Email",
-    key: 'email',
+    label: 'Phone Number',
+    key: 'phone',
     required: true
   },
   {
-    label: "Phone Number",
-    key: 'phone',
+    label: 'Email',
+    key: 'email',
     required: true
   }
-]
+];
 const ProfileForm = () => {
   const [loading, setLoading] = useState(false);
   const [editedUser, setEditedUser] = useState(null);
@@ -45,33 +45,21 @@ const ProfileForm = () => {
   const [saving, setSaving] = useState(false);
 
   const handleChange = (e, name) => {
-    console.log(e.target.value)
-    setVisible(false);
-    setEditedUser((prev) => ({ ...prev, [name]: e.target.value }));
+    if (name !== 'email') {
+      let value = e.target.value;
+      setErr(null);
+      setVisible(false);
+      setEditedUser((prev) => ({ ...prev, [name]: value }));
+    }
   };
-
-  // const query = async (body) => {
-  //   try {
-  //     await axios.post(HOST_URL + '/api/user/eidt', body, {
-  //       headers: { Authorization: cookies.userToken },
-  //     });
-  //     await getAddressesQuery();
-  //     setLoading(false)
-  //     setOpen(false)
-  //   } catch (err) {
-  //     console.log(err)
-  //     setLoading(false)
-  //   }
-  // }
 
   const saveUserQuery = () => {
     setLoading(true);
     setErr(null);
     validation(editedUser)
       .then(async (res) => {
-        console.log(res);
         await axios.post(HOST_URL + '/api/user/edit', editedUser, {
-          headers: { Authorization: cookies.userToken },
+          headers: { Authorization: cookies.userToken }
         });
         // if successful
         setUser(editedUser);
@@ -80,7 +68,7 @@ const ProfileForm = () => {
         setLoading(false);
       })
       .catch((err) => {
-        console.log("err: ", err);
+        console.log('err: ', err);
         setLoading(false);
         setErr((prev) => ({ ...prev, ...err }));
       });
@@ -89,10 +77,10 @@ const ProfileForm = () => {
   useEffect(() => {
     ///// disable save changes button
     editedUser &&
-      editedUser.first_name === user.first_name &&
-      editedUser.last_name === user.last_name &&
-      editedUser.phone === user.phone &&
-      editedUser.email === user.email
+    editedUser.first_name === user.first_name &&
+    editedUser.last_name === user.last_name &&
+    editedUser.phone === user.phone &&
+    editedUser.email === user.email
       ? setDisableSave(true)
       : setDisableSave(false);
   }, [editedUser]);
@@ -101,37 +89,49 @@ const ProfileForm = () => {
     setEditedUser(user);
   }, [user]);
 
+  // useEffect(() => {
+  //   setEditedUser((prev) => prev);
+  //   editedUser.log('edituser', editedUser);
+  // }, [user]);
+
   return (
     <>
-      {editedUser &&
-        <Form>
+      {editedUser && (
+        <Form onSubmit={saveUserQuery}>
           <Form.Group widths="equal">
             {formItems.map((item, i) => {
-              return (
-                item.key !== "phone" ?
-                  <Form.Input
-                    key={i}
-                    fluid
-                    required={item.required}
-                    label={item.label}
-                    placeholder={item.label}
-                    value={editedUser[item.key]}
-                    onChange={(e) => !loading && handleChange(e, item.key)}
-                    error={err && err[item.key]}
-                  /> :
-                  <Form.Input
-                    key={i}
-                    fluid
-                    required={item.required}
-                    label={item.label}
-                    error={err && err[item.key]}
-                    children={
-                      <MaskInput mask={'000-000-0000'} size={10} placeholder={item.label}
-                        value={editedUser && editedUser[item.key] ? editedUser[item.key] : 0}
-                        onChange={(e) =>handleChange(e, item.key)}
-                      />}
-                  />
-              )
+              return item.key !== 'phone' ? (
+                <Form.Input
+                  key={i}
+                  fluid
+                  required
+                  label={item.label}
+                  placeholder={item.label}
+                  value={editedUser[item.key]}
+                  onChange={(e) => !loading && handleChange(e, item.key)}
+                  error={err && err[item.key]}
+                  disabled={item.key === 'email' ? true : false}
+                />
+              ) : (
+                <Form.Input
+                  key={i}
+                  fluid
+                  required
+                  label={item.label}
+                  error={err && err.phone}
+                  value={editedUser.phone}
+                  children={
+                    <InputMask
+                      mask='999-999-9999'
+                      maskChar="_"
+                      alwaysShowMask
+                      placeholder={item.label}
+                      value={editedUser.phone}
+                      onChange={(e) => handleChange(e, item.key)}
+                    />
+                  }
+                />
+              );
             })}
           </Form.Group>
 
@@ -147,8 +147,7 @@ const ProfileForm = () => {
           </Form.Group> */}
 
           <ButtonWrapper>
-            <Button onClick={() => !loading && setEditedUser(user)}>Cancel</Button>
-            <Button
+            <SubmitButton
               type="submit"
               content={
                 loading ? (
@@ -159,19 +158,30 @@ const ProfileForm = () => {
               }
               disabled={disableSave}
               color="red"
-              onClick={() => saveUserQuery()}
+              // onClick={() => saveUserQuery()}
             />
+            {!disableSave && (
+              <Button
+                type="reset"
+                onClick={() => {
+                  setEditedUser(user);
+                  setErr(null);
+                }}>
+                Reset
+              </Button>
+            )}
             <Transition
               animation="swing right"
               duration={{ hide: 0, show: 1000 }}
               visible={visible}>
               <div>
+                &nbsp;&nbsp;&nbsp;
                 <Icon name="check" color="green" /> saved!
-                </div>
+              </div>
             </Transition>
           </ButtonWrapper>
         </Form>
-      }
+      )}
     </>
   );
 };
@@ -182,4 +192,9 @@ const ButtonWrapper = styled.div`
   align-items: center;
 `;
 
+const SubmitButton = styled(Button)`
+  background-color: #ff614d;
+  color: white;
+  min-width: 127px;
+`;
 export default ProfileForm;

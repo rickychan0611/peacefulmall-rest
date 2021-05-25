@@ -16,11 +16,6 @@ export const locales = [
     key: 'zh-CN',
     text: '简体',
     value: 'zh-CN'
-  },
-  {
-    key: 'zh-TW',
-    text: '繁體',
-    value: 'zh-TW'
   }
 ];
 

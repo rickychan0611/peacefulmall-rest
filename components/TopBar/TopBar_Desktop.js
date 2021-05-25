@@ -11,16 +11,20 @@ import {
 import { user as userAtom } from '../../data/userAtom';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 import useTranslation from 'next-translate/useTranslation';
+import Dimmer from '../Dimmer';
+import {  useCookies } from 'react-cookie';
 
 const TopBar_Desktop = ({ locales, changeLocale }) => {
   const router = useRouter();
-  const user = useRecoilValue(userAtom);
+  const [user, setUser] = useRecoilState(userAtom);
   const orderItems = useRecoilValue(orderItemsAtom);
   const showCheckoutButton = useRecoilValue(showCheckoutButtonAtom);
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   const [jiggle, setJiggle] = useState(false);
   const { t } = useTranslation('home');
+  const [openDropdownMenu, setOpenDropdownMenu] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   useEffect(() => {
     setJiggle(!jiggle);
@@ -32,6 +36,8 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
 
   return (
     <>
+      {openDropdownMenu && <Dimmer state={openDropdownMenu} close={setOpenDropdownMenu} />}
+
       <Row style={{ cursor: 'pointer' }} onClick={() => router.push('/')}>
         <Image size="mini" src="/logo-p.png" />
         <h4 style={{ color: '#4ab976', margin: 0 }}>
@@ -46,28 +52,20 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
               inverted
               style={{ backgroundColor: '#ff614d', marginRight: 10, color: 'white' }}
               onClick={() => router.push('/sign-up')}>
-              {t("signUp")}
+              {t('signUp')}
             </Button>
             <Button
               compact
               style={{ backgroundColor: 'white' }}
               onClick={() => router.push('/sign-in')}>
-              {t("signIn")}
+              {t('signIn')}
             </Button>
           </>
         ) : (
           <>
             <Item
               onClick={() => {
-                setOpenSideMenu(!openSideMenu)
-              }}>
-              <Icon name="file alternate outline" size="large" />
-              <H4>{t('Menu')}</H4>
-            </Item>
-
-            <Item
-              onClick={() => {
-                router.push('/')
+                router.push('/');
               }}>
               <Icon name="home" size="large" />
               <H4>{t('home')}</H4>
@@ -75,11 +73,51 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
 
             <Item
               onClick={() => {
-                router.push('/consumer/edit-profile')
+                setOpenSideMenu(!openSideMenu);
               }}>
-              <Icon name="user circle" size="large" />
-              <H4>Hi, {user.name}</H4>
+              <Icon name="file alternate outline" size="large" />
+              <H4>{t('myOrder')}</H4>
             </Item>
+
+            {/* USER MENU */}
+            <div style={{ position: 'relative' }}>
+              <Item
+                onClick={() => {
+                  setOpenDropdownMenu('user');
+                }}>
+                <Icon name="user circle" size="large" />
+                <H4>Hi, {user.name}</H4>
+              </Item>
+
+              {openDropdownMenu === 'user' && (
+                <DropDownContainer>
+                  <DropDownMenu>
+                    <MenuItem
+                      className="front"
+                      onClick={() => {
+                        router.push('/consumer/edit-profile');
+                        setOpenDropdownMenu(false);
+                      }}>
+                      My Account
+                    </MenuItem>
+
+                    <MenuItem
+                      last
+                      className="last"
+                      onClick={() => {
+                        removeCookie('userToken')
+                        localStorage.removeItem('user')
+                        setUser(null)
+                        setOpenSideMenu(false)
+                        setOpenDropdownMenu(false);
+                        router.push('/')
+                      }}>
+                      Logout
+                    </MenuItem>
+                  </DropDownMenu>
+                </DropDownContainer>
+              )}
+            </div>
 
             {/* <Row
               onClick={() => {
@@ -147,5 +185,39 @@ const H4 = styled.h4`
   display: flex;
   justify-content: space-between;
 `;
-
+const DropDownContainer = styled.div`
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: 5px;
+  cursor: pointer;
+`;
+const DropDownMenu = styled.div`
+  background-color: white;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+  border: 1px solid #adadad;
+  border-radius: 0px 0px 15px 15px;
+  text-align: left;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  .front:hover {
+    background-color: #bebe51;
+  }
+  .last:hover {
+    background-color: #bebe51;
+    border-radius: 0px 0px 15px 15px;
+  }
+`;
+const MenuItem = styled.h4`
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 10px 15px 10px;
+  border-bottom: ${(p) => !p.last && '1px solid #b3b3b3'};
+  background-color: ${(p) => p.selected && '#bebe51'};
+  border-radius: ${(p) => p.selected && p.last && '0px 0px 15px 15px'};
+`;
 export default TopBar_Desktop;

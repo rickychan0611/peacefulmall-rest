@@ -71,8 +71,8 @@ const SidebarMenu = () => {
           removeCookie('userToken')
           localStorage.removeItem('user')
           setUser(null)
-          setOpenSideMenu(false)
           router.push('/')
+          setOpenSideMenu(false)
         }}>
           <Icon name="sign out" size="large" />
           <H4>{t('signOut')}</H4>
@@ -114,7 +114,7 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 `;
 const LocaleBtn = styled.div`
@@ -125,6 +125,8 @@ const LocaleBtn = styled.div`
   padding: 8px 15px 8px 15px;
   font-size: 12px;
   font-weight: bold;
+  min-width: 80px;
+  text-align: center;
 `;
 const H4 = styled.h4`
   margin: 0;

@@ -1,15 +1,13 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 import styled from 'styled-components';
 import { Divider, Icon } from 'semantic-ui-react';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom';
-import { useEffect } from 'react';
-import validation from '../../util/validation';
 import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
-
+import { useIsDesktop } from '../../util/useScreenSize';
 import ProfileForm from '../../components/ProfileForm';
 import AddressBook from '../../components/AddressBook';
 
@@ -19,6 +17,7 @@ const Profile = () => {
   const [cookies] = useCookies(null);
   const [addresses, setAddresses] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const isDesktop = useIsDesktop();
 
   const getAddressesQuery = async () => {
     try {
@@ -40,10 +39,10 @@ useEffect(() => {
 }, []);
 
 return (
-  <div>
+  <div style={{minHeight: "calc(100vh - 80px)"}}>
 
     {user && (
-      <Container>
+      <Container isDesktop={isDesktop}>
         <h1>Profile</h1>
         <Divider />
         <ProfileForm />
@@ -67,7 +66,7 @@ const Container = styled.div`
   margin: 20px auto;
   padding: 20px;
   max-width: 900px;
-  border: solid 1px #d4d3d3;
+  border: ${p => p.isDesktop && "solid 1px #d4d3d3"};
 `;
 
 export default Profile;

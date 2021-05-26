@@ -38,6 +38,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   //update orderItems and localstorage, and then redirect to store's page
   const addItem = (total) => {
     let updatedItems;
+    console.log("currentShop", currentShop)
     console.log("orderItems", orderItems)
     setOrderItems((prev) => {
       //if a prev store's name is equal to the current store, update the object
@@ -151,7 +152,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
               </Form>
             </Container>
           </Wrapper>
-          <BottomAddBar qty={qty} setQty={setQty} option={value} price={price} addItem={addItem} />
+          <BottomAddBar qty={qty} setQty={setQty} option={value} price={item.price} addItem={addItem} />
         </>
       )}
     </>

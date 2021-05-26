@@ -18,6 +18,8 @@ import TopBar from '../components/TopBar';
 import GooglePlacesAutocomplete, { geocodeByLatLng } from 'react-google-places-autocomplete';
 import { MAP_API } from '../env';
 
+import { validateAddress } from '../components/CurrentAddress/CurrentAddress';
+
 const InitApp = ({ children }) => {
   const router = useRouter();
   const [appReady, setAppReady] = useRecoilState(appReadyAtom);
@@ -30,7 +32,34 @@ const InitApp = ({ children }) => {
   // initial app
   useEffect(async () => {
     console.log('initiate');
+    //check user cookie
 
+    if (!cookies.userToken) {
+      console.log('cookies not found');
+      setUser();
+      localStorage.removeItem('user');
+      setAppReady(true);
+    } else if (cookies.userToken) {
+      //login user and store user in localstorage
+      const getUser = await axios.get(HOST_URL + '/api/user/info', {
+        headers: { Authorization: cookies.userToken }
+      });
+      console.log('USER DATA', getUser.data);
+
+      // if (getUser.data === 'token invalid') {
+      // removeCookie('userToken');
+      // localStorage.removeItem('user');
+      // setUser(null);
+      // setAddresses(null);
+      // router.push('/sign-in');
+      // setAppReady(true);
+      // } else {
+      localStorage.setItem('user', JSON.stringify(getUser.data));
+      setUser(getUser.data);
+      setAddresses(getUser.data.addresses);
+      setAppReady(true);
+      // }
+    }
     //orderItems localstorage
     const orderItems = localStorage.getItem('orderItems');
     orderItems ? setOrderItems(JSON.parse(orderItems)) : setOrderItems([]);
@@ -45,13 +74,16 @@ const InitApp = ({ children }) => {
         'Latitude: ' + position.coords.latitude + 'Longitude: ' + position.coords.longitude
       );
       geocodeByLatLng({ lat: position.coords.latitude, lng: position.coords.longitude })
-        .then((results) => {
-          setCurrentPosition({
-            address: results[2].formatted_address,
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
-          console.log(results);
+        .then(async (results) => {
+          console.log('GPS location: ', results);
+
+          const body = {
+            detail_address: results[2].address_components[0].long_name, 
+            city:  results[2].address_components[1].long_name
+          }
+
+          setCurrentPosition(body);
+          console.log('GPS location body: ', body);
         })
         .catch((error) => console.error(error));
     }
@@ -69,39 +101,11 @@ const InitApp = ({ children }) => {
       console.log('blocked');
     }
 
-    // } else {
+    // }
+    // else {
     //   console.log(localStoragePosition);
     //   setCurrentPosition(JSON.parse(localStoragePosition));
     // }
-
-    //check user cookie
-
-    if (!cookies.userToken) {
-      console.log('cookies not found');
-      setUser();
-      localStorage.removeItem('user');
-      setAppReady(true);
-    } else if (cookies.userToken) {
-      //login user and store user in localstorage
-      const getUser = await axios.get(HOST_URL + '/api/user/info', {
-        headers: { Authorization: cookies.userToken }
-      });
-      console.log('USER DATA', getUser.data);
-
-      // if (getUser.data === 'token invalid') {
-        // removeCookie('userToken');
-        // localStorage.removeItem('user');
-        // setUser(null);
-        // setAddresses(null);
-        // router.push('/sign-in');
-        // setAppReady(true);
-      // } else {
-        localStorage.setItem('user', JSON.stringify(getUser.data));
-        setUser(getUser.data);
-        setAddresses(getUser.data.addresses);
-        setAppReady(true);
-      // }
-    }
   }, []);
 
   return children;

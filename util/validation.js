@@ -11,7 +11,7 @@ var schema = new passwordValidator();
 //   .has().not().spaces()                           // Should not have spaces
 
 const validation = (inputs) => {
-  return new Promise((resolve, reject) => {1
+  return new Promise((resolve, reject) => {
     
     if (inputs.email && !validator.isEmail(inputs.email)) {
       reject({ email: "Email address is not valid" })

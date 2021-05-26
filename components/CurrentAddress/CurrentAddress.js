@@ -22,6 +22,45 @@ import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { user as userAtom } from '../../data/userAtom';
 
+export const validateAddress = (address, user) => {
+  return new Promise((resolve, reject) => {
+    let obj = { type: 'create', default_status: 1, name: user.first_name + ' ' + user.last_name };
+    console.log('address', address);
+    const street_number = address.findIndex((item) => item.types[0] === 'street_number');
+    if (street_number === -1) {
+      throw 'no street number';
+    }
+    const route = address.findIndex((item) => item.types[0] === 'route');
+    if (route === -1) {
+      throw 'no street name';
+    }
+    address.forEach((item, i) => {
+      console.log(item.types[0]);
+      let name = item.long_name;
+      if (item.types[0] === 'street_number') {
+        obj.detail_address = name;
+      }
+      if (item.types[0] === 'route') {
+        obj.detail_address = obj.detail_address + ' ' + name;
+      }
+      if (item.types[0] === 'locality') {
+        obj.city = name;
+      }
+      if (item.types[0] === 'administrative_area_level_1') {
+        obj.province = name;
+      }
+      if (item.types[0] === 'country') {
+        obj.country = name;
+      }
+      if (item.types[0] === 'postal_code') {
+        obj.post_code = name;
+      }
+    });
+    console.log('objobjobj', obj);
+    resolve(obj);
+  });
+};
+
 const CurrentAddress = () => {
   const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
@@ -44,34 +83,23 @@ const CurrentAddress = () => {
     setLoading(true);
     try {
       const results = await geocodeByAddress(value.label);
-      console.log('restult:', results);
-      const addadd = await axios.post(
-        HOST_URL + '/api/user/address/set',
-        {
-          type: 'create',
-          name: user.first_name + ' ' + user.last_name,
-          detail_address:
-            results[0].address_components[0].long_name && results[0].address_components[1].long_name
-              ? results[0].address_components[0].long_name +
-                ' ' +
-                results[0].address_components[1].long_name
-              : '',
-          city: results[0].address_components[2].long_name
-            ? results[0].address_components[2].long_name
-            : '',
-          province: results[0].address_components[4].long_name
-            ? results[0].address_components[4].long_name
-            : '',
-          country: results[0].address_components[5].long_name
-            ? results[0].address_components[5].long_name
-            : '',
-          post_code: results[0].address_components[6].long_name
-            ? results[0].address_components[6].long_name
-            : ''
-        },
-        { headers: { Authorization: cookies.userToken } }
-      );
-      console.log(addadd);
+      console.log('restult:', results[0]);
+
+      //?????get lag lng don't know how to use now
+      // const latLng = await getLatLng(results[0]).then(({ lat, lng }) => {
+      //   setCurrentPosition({ lat, lng, address: value.label });
+      //   // router.push('/home')
+      //   console.log('Successfully got latitude and longitude', { lat, lng });
+      //   return { lat, lng }
+      // });
+
+
+      const body = await validateAddress(results[0].address_components, user);
+
+      await axios.post(HOST_URL + '/api/user/address/set', body, {
+        headers: { Authorization: cookies.userToken }
+      });
+
       const newAddresses = await axios.get(HOST_URL + '/api/user/address', {
         headers: { Authorization: cookies.userToken }
       });
@@ -80,13 +108,6 @@ const CurrentAddress = () => {
       setOpenNew(false);
       colorChange();
 
-      // getLatLng(results[0])
-      // .then(({ lat, lng }) => {
-      //   setCurrentPosition({ lat, lng, address: value.label });
-      //   // router.push('/home')
-      //   localStorage.setItem('currentPosition', JSON.stringify({ lat, lng, address: value.label }))
-      //   console.log('Successfully got latitude and longitude', { lat, lng });
-      // })
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -103,10 +124,10 @@ const CurrentAddress = () => {
     }, 10);
   };
 
-  useEffect(() => {
-    console.log(color);
-    console.log('currentPosition');
-  }, [color]);
+  // useEffect(() => {
+  //   console.log(color);
+  //   console.log('currentPosition');
+  // }, [color]);
 
   return (
     <>
@@ -124,9 +145,10 @@ const CurrentAddress = () => {
                 {isMobile && <br />}
                 <span>
                   {' '}
-                  {useDefaultAddress
+                  {currentPosition.detail_address + ", " + currentPosition.city}{' '}
+                  {/* {useDefaultAddress
                     ? useDefaultAddress.detail_address + ', ' + useDefaultAddress.city
-                    : currentPosition.address}{' '}
+                    : currentPosition.address}{' '} */}
                 </span>
               </Address>
             </div>
@@ -151,9 +173,14 @@ const CurrentAddress = () => {
                     <>
                       <div
                         onClick={() => {
-                          setUseDefaultAddress(address);
+                          // setUseDefaultAddress(address);
+                          setCurrentPosition(address)
+                          localStorage.setItem('currentPosition', JSON.stringify(address));
                           setOpenAddressMenu(false);
-                          console.log("address", address.detail_address + ", " + address.city + ", " + address.province)
+                          console.log(
+                            'address',
+                            address.detail_address + ', ' + address.city + ', ' + address.province
+                          );
                         }}
                         style={{ backgroundColor: i === 0 && 'rgba(255, 241, 82,' + color + ')' }}>
                         <H4
@@ -164,7 +191,7 @@ const CurrentAddress = () => {
                             borderBottom: '1px solid #dbdbd7'
                           }}>
                           <Radio
-                            checked={address === useDefaultAddress}
+                            checked={address === currentPosition}
                             style={{ marginRight: 7 }}
                           />
                           {address.detail_address}, {address.city}
@@ -195,7 +222,7 @@ const CurrentAddress = () => {
                     <div style={{ color: 'red', marginTop: 5 }}>
                       Oops! The address you entered is not accurate enough.
                       <br />
-                      Try adding a place, a street or house number.
+                      Try adding a place, a street and house number.
                     </div>
                   )}
                 </>

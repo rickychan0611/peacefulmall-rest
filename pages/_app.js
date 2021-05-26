@@ -5,12 +5,12 @@ import '../.semantic/dist/semantic.min.css';
 import './styles.css';
 import { CookiesProvider, useCookies } from 'react-cookie';
 import axios from 'axios';
-import {HOST_URL} from '../env';
+import { HOST_URL } from '../env';
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { appReady as appReadyAtom } from '../data/atoms';
 import { user as userAtom, userdata } from '../data/userAtom';
 import { orderItems as orderItemsAtom } from '../data/orderAtoms.js';
-import { currentPosition as currentPositionAtom } from '../data/atoms';
+import { currentPosition as currentPositionAtom, addresses as addressAtom } from '../data/atoms';
 
 import SideMenu from '../components/SideMenu';
 import CheckOutListPusher from '../components/CheckOutListPusher';
@@ -24,6 +24,7 @@ const InitApp = ({ children }) => {
   const [user, setUser, userdata] = useRecoilState(userAtom);
   const [cookies, setCookie, removeCookie] = useCookies();
   const [, setOrderItems] = useRecoilState(orderItemsAtom);
+  const [addresses, setAddresses] = useRecoilState(addressAtom);
   const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
 
   // initial app
@@ -85,10 +86,10 @@ const InitApp = ({ children }) => {
       const getUser = await axios.get(HOST_URL + '/api/user/info', {
         headers: { Authorization: cookies.userToken }
       });
-      console.log(getUser.data);
+      console.log('USER DATA', getUser.data);
       localStorage.setItem('user', JSON.stringify(getUser.data));
       setUser(getUser.data);
-
+      setAddresses(getUser.data.addresses);
       setAppReady(true);
     }
   }, []);

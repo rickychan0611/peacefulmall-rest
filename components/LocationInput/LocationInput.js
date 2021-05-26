@@ -2,8 +2,8 @@ import { useState } from 'react';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import useTranslation from 'next-translate/useTranslation';
 
-const LocationInput = () => {
-  const [value, setValue] = useState();
+const LocationInput = ({value, setValue}) => {
+  // const [value, setValue] = useState();
   const { t } = useTranslation('home');
 
   return (

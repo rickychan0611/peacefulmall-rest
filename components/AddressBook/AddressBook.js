@@ -7,14 +7,17 @@ import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { useIsMobile } from '../../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
+import { RecoilRoot, useRecoilState } from 'recoil';
+import { addresses as addressAtom } from '../../data/atoms';
 
-const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddressesQuery }) => {
+const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [err, setErr] = useState(null);
   const [cookies] = useCookies(null);
   const isMobile = useIsMobile();
   const { t } = useTranslation('profile');
+  const [addresses, setAddresses] = useRecoilState(addressAtom);
 
   const query = async (body) => {
     setLoading(true);
@@ -32,9 +35,6 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
   };
 
   const saveAddressQuery = async () => {
-    //// both create and edit address use this query.
-    //// if type is "create", remove current default address.
-    selectedAddress.type === 'create' && removeCurrentDefaultQuery();
     query(selectedAddress);
   };
 
@@ -42,13 +42,7 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
     query({ type: 'delete', address_id: id });
   };
 
-  const removeCurrentDefaultQuery = async () => {
-    const index = addresses && addresses.findIndex((item) => item.default_status === 1);
-    query({ type: 'edit', address_id: addresses[index].id, default_status: 0 });
-  };
-
   const setDefaultQuery = async (id) => {
-    removeCurrentDefaultQuery();
     query({ type: 'edit', address_id: id, default_status: 1 });
   };
 
@@ -81,19 +75,15 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
             return (
               <AddressCard default={address.default_status} key={i} isMobile={isMobile}>
                 <h4>
-                  {address.name}
-                  <br />
-                  {address.phone}
+                  {address.name} <br />
+                  {address.detail_address ? address.detail_address : "N/A"}
                 </h4>
                 <p>
-                  {address.detail_address}
-                  <br />
-                  {address.city}
-                  <br />
-                  {address.province} <br />
-                  {address.post_code}
-                  <br />
-                  {address.country}
+                  <Row><div>City: </div><div style={{textAlign: "right"}}>{address.city ? address.city : "N/A"} </div></Row>
+                  <Row><div>Province: </div><div style={{textAlign: "right"}}>{address.province ? address.province : "N/A"} </div></Row>
+                  <Row><div>Postal Code: </div><div style={{textAlign: "right"}}>{address.post_code ? address.post_code : "N/A"} </div></Row>
+                  <Row><div>Coutry: </div><div style={{textAlign: "right"}}>{address.country ? address.country : "N/A"} </div></Row>
+                  <Row style={{fontWeight: "bold"}}><div>Tel: </div><div style={{textAlign: "right"}}>{address.phone ? address.phone : "N/A"} </div></Row>
                 </p>
                 <Row>
                   <AddressButton
@@ -121,12 +111,13 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
 
                   <AddressButton
                     style={{
-                      color: address.default_status === 1 && 'lightGrey'
+                      // color: address.default_status === 1 && 'lightGrey'
                     }}
                     onClick={() => {
                       !loading &&
                         setSelectedAddress({ ...address, type: 'delete', address_id: address.id });
-                      address.default_status !== 1 && deleteAddressQuery(address.id);
+                      // address.default_status !== 1 && 
+                      deleteAddressQuery(address.id);
                     }}>
                     {loading &&
                     selectedAddress.address_id === address.id &&
@@ -146,7 +137,7 @@ const AddressBook = ({ addresses, selectedAddress, setSelectedAddress, getAddres
 };
 
 const Row = styled.div`
-  display: inline-flex;
+  display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
   gap: 5px;

@@ -78,3 +78,11 @@ export const currentPosition = atom({
   key: 'currentPosition',
   default: null
 });
+export const addresses = atom({
+  key: 'addresses',
+  default: null
+});
+export const useDefaultAddress = atom({
+  key: 'useDefaultAddress',
+  default: false
+});

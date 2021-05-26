@@ -144,7 +144,7 @@ const SigningForms = ({ signUp }) => {
                 value={inputs.phone}
                 onChange={(e) => handleChange(e, 'phone')}
                 error={err.phone}
-                maxLength="10"
+                // maxLength="10"
               />
             )}
             <PasswordWrapper>

@@ -11,12 +11,13 @@ import { useIsDesktop } from '../../util/useScreenSize';
 import ProfileForm from '../../components/ProfileForm';
 import AddressBook from '../../components/AddressBook';
 import useTranslation from 'next-translate/useTranslation';
+import { addresses as addressAtom } from '../../data/atoms';
 
 const Profile = () => {
   const router = useRouter();
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies] = useCookies(null);
-  const [addresses, setAddresses] = useState(null);
+  const [addresses, setAddresses] = useRecoilState(addressAtom);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const isDesktop = useIsDesktop();
   const { t } = useTranslation('profile');
@@ -26,9 +27,9 @@ const Profile = () => {
       const result = await axios.get(HOST_URL + '/api/user/address', {
         headers: { Authorization: cookies.userToken }
       });
-      const sorted = result.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      console.log(sorted);
-      setAddresses(sorted);
+      // const sorted = result.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      console.log(result.data);
+      setAddresses(result.data);
       return;
     } catch (err) {
       console.log(err);

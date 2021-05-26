@@ -8,7 +8,7 @@ import { useCookies } from 'react-cookie';
 import { useIsMobile } from '../../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
 import { RecoilRoot, useRecoilState } from 'recoil';
-import { addresses as addressAtom } from '../../data/atoms';
+import { addresses as addressAtom, appReady as appReadyAtom } from '../../data/atoms';
 
 const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery }) => {
   const [loading, setLoading] = useState(false);
@@ -18,6 +18,7 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
   const isMobile = useIsMobile();
   const { t } = useTranslation('profile');
   const [addresses, setAddresses] = useRecoilState(addressAtom);
+  const [appReady, setAppReady] = useRecoilState(appReadyAtom);
 
   const query = async (body) => {
     setLoading(true);
@@ -69,7 +70,7 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
       </a>
       <br />
       <AddressContainer>
-        {addresses &&
+        {appReady && addresses &&
           addresses[0] &&
           addresses.map((address, i) => {
             return (

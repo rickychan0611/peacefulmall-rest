@@ -87,10 +87,20 @@ const InitApp = ({ children }) => {
         headers: { Authorization: cookies.userToken }
       });
       console.log('USER DATA', getUser.data);
-      localStorage.setItem('user', JSON.stringify(getUser.data));
-      setUser(getUser.data);
-      setAddresses(getUser.data.addresses);
-      setAppReady(true);
+
+      // if (getUser.data === 'token invalid') {
+        // removeCookie('userToken');
+        // localStorage.removeItem('user');
+        // setUser(null);
+        // setAddresses(null);
+        // router.push('/sign-in');
+        // setAppReady(true);
+      // } else {
+        localStorage.setItem('user', JSON.stringify(getUser.data));
+        setUser(getUser.data);
+        setAddresses(getUser.data.addresses);
+        setAppReady(true);
+      // }
     }
   }, []);
 

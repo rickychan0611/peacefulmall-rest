@@ -20,6 +20,7 @@ import { HOST_URL } from '../../env';
 
 import { useRecoilState } from 'recoil';
 import { user as userAtom, userdata } from '../../data/userAtom';
+import { addresses as addressAtom } from '../../data/atoms';
 import useTranslation from 'next-translate/useTranslation';
 
 const SigningForms = ({ signUp }) => {
@@ -30,6 +31,7 @@ const SigningForms = ({ signUp }) => {
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies, setCookie, removeCookie] = useCookies();
   const { t } = useTranslation('home');
+  const [addresses, setAddresses] = useRecoilState(addressAtom);
 
   const [inputs, setInputs] = useState({
     // confirmPassword: 'Ricric61',
@@ -45,13 +47,14 @@ const SigningForms = ({ signUp }) => {
       /*** Sign UP Query***/
       const response = await axios.post(HOST_URL + '/api/user/register', inputs);
       console.log(response);
-      setCookie('userToken', response.data, { maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
+      setCookie('userToken', response.data, {  path: "/", maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
       const getUser = await axios.get(HOST_URL + '/api/user/info', {
         headers: { Authorization: response.data }
       });
       console.log(getUser.data);
       localStorage.setItem('user', JSON.stringify(getUser.data));
       setUser(getUser.data);
+      setAddresses(getUser.data.addresses);
       router.push('/')
       setLoading(false);
     } catch (err) {
@@ -66,13 +69,14 @@ const SigningForms = ({ signUp }) => {
       /*** Sign UP Query***/
       const response = await axios.post(HOST_URL + '/api/user/login', {email: inputs.email, password: inputs.password});
       console.log(response);
-      setCookie('userToken', response.data, { maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
+      setCookie('userToken', response.data, { path: "/",  maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
       const getUser = await axios.get(HOST_URL + '/api/user/info', {
         headers: { Authorization: response.data }
       });
-      console.log(getUser.data);
       localStorage.setItem('user', JSON.stringify(getUser.data));
       setUser(getUser.data);
+      console.log(getUser.data);
+      setAddresses(getUser.data.addresses);
       router.push('/')
       setLoading(false);
     } catch (err) {

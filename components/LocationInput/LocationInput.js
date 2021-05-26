@@ -23,12 +23,12 @@ const LocationInput = ({value, setValue}) => {
               ...provided,
               border: 'none',
               width: '33vw',
+              textAlign : "left"
             }),
             control: (provided) => ({
               ...provided,
               borderColor: 'white',
               boxShadow: 'none',
-              maxWidth: 450
             })
           }
         }}

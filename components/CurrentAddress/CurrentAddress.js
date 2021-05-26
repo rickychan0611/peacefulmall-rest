@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { useIsMobile } from '../../util/useScreenSize';
@@ -30,30 +30,44 @@ const CurrentAddress = () => {
   const [openAddressMenu, setOpenAddressMenu] = useState(false);
   const [value, setValue] = useState(null);
   const [loading, setLoading] = useState(null);
-  const [openNew, setOpenNew] = useState(false);
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies] = useCookies(null);
   const [addresses, setAddresses] = useRecoilState(addressAtom);
   const [useDefaultAddress, setUseDefaultAddress] = useRecoilState(useDefaultAddressAtom);
+  const [openNew, setOpenNew] = useState(false);
+  const [color, setColor] = useState(0);
+  const [err, setErr] = useState(false);
 
   const addAddressQuery = async () => {
     console.log(value);
+    setErr(false);
     setLoading(true);
     try {
       const results = await geocodeByAddress(value.label);
+      console.log('restult:', results);
       const addadd = await axios.post(
         HOST_URL + '/api/user/address/set',
         {
           type: 'create',
           name: user.first_name + ' ' + user.last_name,
           detail_address:
-            results[0].address_components[0].long_name +
-            ' ' +
-            results[0].address_components[1].long_name,
-          city: results[0].address_components[2].long_name,
-          province: results[0].address_components[4].long_name,
-          country: results[0].address_components[5].long_name,
+            results[0].address_components[0].long_name && results[0].address_components[1].long_name
+              ? results[0].address_components[0].long_name +
+                ' ' +
+                results[0].address_components[1].long_name
+              : '',
+          city: results[0].address_components[2].long_name
+            ? results[0].address_components[2].long_name
+            : '',
+          province: results[0].address_components[4].long_name
+            ? results[0].address_components[4].long_name
+            : '',
+          country: results[0].address_components[5].long_name
+            ? results[0].address_components[5].long_name
+            : '',
           post_code: results[0].address_components[6].long_name
+            ? results[0].address_components[6].long_name
+            : ''
         },
         { headers: { Authorization: cookies.userToken } }
       );
@@ -63,28 +77,36 @@ const CurrentAddress = () => {
       });
       setAddresses(newAddresses.data);
       setLoading(false);
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-    }
-    // geocodeByAddress(value.label)
-    //     .then((results) => {
-    //       console.log("address::" , results[0])
-    //       console.log("address::" , results[0].address_components[0].long_name)
-    //       getLatLng(results[0])})
-    //     .then(({ lat, lng }) => {
-    //       setCurrentPosition({ lat, lng, address: value.label });
-    //       // router.push('/home')
-    //       localStorage.setItem('currentPosition', JSON.stringify({ lat, lng, address: value.label }))
-    //       console.log('Successfully got latitude and longitude', { lat, lng });
-    //     })
-    //     .catch((error) => {
-    //       console.log("resstuot" , error)
+      setOpenNew(false);
+      colorChange();
 
-    //       // router.push('/home')
-    //       // setErr(error)
-    //     })
+      // getLatLng(results[0])
+      // .then(({ lat, lng }) => {
+      //   setCurrentPosition({ lat, lng, address: value.label });
+      //   // router.push('/home')
+      //   localStorage.setItem('currentPosition', JSON.stringify({ lat, lng, address: value.label }))
+      //   console.log('Successfully got latitude and longitude', { lat, lng });
+      // })
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setErr(true);
+    }
   };
+
+  const colorChange = () => {
+    let i = 100;
+    const countDown = setInterval(() => {
+      i--;
+      setColor(i / 100);
+      if (i <= 0) clearInterval(countDown);
+    }, 10);
+  };
+
+  useEffect(() => {
+    console.log(color);
+    console.log('currentPosition');
+  }, [color]);
 
   return (
     <>
@@ -125,37 +147,60 @@ const CurrentAddress = () => {
               {addresses &&
                 addresses[0] &&
                 addresses.map((address, i) => {
-                  console.log(address);
                   return (
-                    <div onClick={() => {
-                      setUseDefaultAddress(address)
-                      setOpenAddressMenu(false)
-                      }}>
-                      <H4 style={{ padding: 5 }}>
-                        <Radio checked={address === useDefaultAddress} style={{marginRight: 7}}/>{address.detail_address},{' '}
-                        {address.city}
-                      </H4>
-                      <Divider />
-                    </div>
+                    <>
+                      <div
+                        onClick={() => {
+                          setUseDefaultAddress(address);
+                          setOpenAddressMenu(false);
+                          console.log("address", address.detail_address + ", " + address.city + ", " + address.province)
+                        }}
+                        style={{ backgroundColor: i === 0 && 'rgba(255, 241, 82,' + color + ')' }}>
+                        <H4
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: 10,
+                            borderBottom: '1px solid #dbdbd7'
+                          }}>
+                          <Radio
+                            checked={address === useDefaultAddress}
+                            style={{ marginRight: 7 }}
+                          />
+                          {address.detail_address}, {address.city}
+                        </H4>
+                      </div>
+                    </>
                   );
                 })}
             </ChooseAddressContainer>
-            <H4 style={{ marginBottom: 6 }} onClick={() => setOpenNew(!openNew)}>
-              <a>+ Add a new address</a>
-            </H4>
-            {openNew && (
-              <div>
-                <IuputWrapper>
-                  <LocationInput value={value} setValue={setValue} />
-                </IuputWrapper>
-                <Button
-                  onClick={() => {
-                    addAddressQuery();
-                  }}>
-                  Add address
-                </Button>
-              </div>
-            )}
+            <LocationInputContainer>
+              <H4 style={{ marginBottom: 6 }} onClick={() => setOpenNew(!openNew)}>
+                <a>+ Add a new address</a>
+              </H4>
+              {openNew && (
+                <>
+                  <IuputWrapper>
+                    <LocationInput value={value} setValue={setValue} />
+                  </IuputWrapper>
+                  <Button
+                    loading={loading}
+                    onClick={async () => {
+                      await addAddressQuery();
+                      setValue();
+                    }}>
+                    Add address
+                  </Button>
+                  {err && (
+                    <div style={{ color: 'red', marginTop: 5 }}>
+                      Oops! The address you entered is not accurate enough.
+                      <br />
+                      Try adding a place, a street or house number.
+                    </div>
+                  )}
+                </>
+              )}
+            </LocationInputContainer>
           </AddAddressMenu>
         </AddAddressContainer>
       )}
@@ -163,9 +208,11 @@ const CurrentAddress = () => {
   );
 };
 
+const LocationInputContainer = styled.div`
+  padding: 10px;
+`;
 const ChooseAddressContainer = styled.div`
   text-align: left;
-  padding-top: 5px;
 `;
 const IuputWrapper = styled.div`
   border: 1px solid #d4d4d4;
@@ -173,11 +220,10 @@ const IuputWrapper = styled.div`
 `;
 const AddAddressContainer = styled.div`
   position: absolute;
-  z-index: 10;
+  z-index: 10000;
   display: flex;
   justify-content: center;
   width: 100%;
-  padding-top: 5px;
 `;
 const AddAddressMenu = styled.div`
   background-color: white;
@@ -188,7 +234,6 @@ const AddAddressMenu = styled.div`
   border-radius: 0px 0px 15px 15px;
   text-align: center;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  padding: 10px;
 `;
 const CurrentAddressContainer = styled.div`
   display: flex;

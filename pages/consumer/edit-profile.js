@@ -52,8 +52,6 @@ const Profile = () => {
           <h3>{t`Address Books`}</h3>
           <Divider />
           <AddressBook
-            t={t}
-            addresses={addresses}
             selectedAddress={selectedAddress}
             setSelectedAddress={setSelectedAddress}
             getAddressesQuery={getAddressesQuery}

@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atom, selector } from 'recoil';
 
 export const appReady = atom({
   key: 'appReady',
@@ -86,3 +86,11 @@ export const useDefaultAddress = atom({
   key: 'useDefaultAddress',
   default: false
 });
+
+
+export const defaultAddress = selector({
+  key: 'defaultAddress',
+  get: ({get}) => {
+    return get(addresses) && get(addresses).find(item => item.default_status === 1)
+  }
+})

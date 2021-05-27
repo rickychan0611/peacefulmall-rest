@@ -10,22 +10,31 @@ import {
 import {
   appReady as appReadyAtom,
   showCheckoutButton as showCheckoutButtonAtom,
-  selections as selectionsAtom
+  selections as selectionsAtom,
+  currentPosition as currentPositionAtom,
+  defaultAddress as defaultAddressAtom
 } from '../data/atoms';
 
 import OrderItem from '../components/OrderItem/';
 import TotalAmountList from '../components/TotalAmountList/';
 import AddressChange from '../components/AddressChange/AddressChange.js';
+import AddressBook from '../components/AddressBook';
+import { useIsDesktop } from '../util/useScreenSize';
+import useTranslation from 'next-translate/useTranslation';
 
 const checkout = () => {
   const router = useRouter();
   const orderDetails = useRecoilValue(orderDetailsAtom);
   const selections = useRecoilValue(selectionsAtom);
+  const defaultAddress = useRecoilValue(defaultAddressAtom);
   const [deliveryTime, setDeliveryTime] = useState('ASAP');
   const appReady = useRecoilValue(appReadyAtom);
   const [, setShowCheckoutButton] = useRecoilState(showCheckoutButtonAtom);
   const [, setShippingMethod] = useRecoilState(shippingMethodAtom);
+  const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
   const [open, setOpen] = useState(false);
+  const isDesktop = useIsDesktop();
+  const { t } = useTranslation('profile');
 
   const EditButton = () => (
     <Edit
@@ -38,7 +47,7 @@ const checkout = () => {
   );
 
   useEffect(() => {
-    console.log("orderDetails!!!!!!!!!!!!!!!!!", orderDetails)
+    console.log('orderDetails!!!!!!!!!!!!!!!!!', orderDetails);
     // appReady && orderDetails && !orderDetails.orderItems[0] && router.push('/');
   }, [orderDetails]);
 
@@ -49,8 +58,18 @@ const checkout = () => {
 
   return (
     <>
-      <Modal closeIcon open={open} size="tiny" onClose={() => setOpen(false)}>
-        <AddressChange setOpen={setOpen} />
+      <Modal closeIcon open={open} onClose={() => setOpen(false)}>
+      <AddressModelContainer isDesktop={isDesktop}>
+
+          <h3>{t`Address Books`}</h3>
+          <Divider />
+          <AddressBook
+            // selectedAddress={selectedAddress}
+            // setSelectedAddress={setSelectedAddress}
+            // getAddressesQuery={getAddressesQuery}
+          />
+        </AddressModelContainer>
+        {/* <AddressChange setOpen={setOpen} /> */}
       </Modal>
 
       {orderDetails.shop && (
@@ -100,19 +119,19 @@ const checkout = () => {
                 <Header>Your Address</Header>
                 <H4>
                   <Icon name="point" />
-                  {}
-                  {/* {orderDetails.deliveryAddress.address1},&nbsp;
-                  {orderDetails.deliveryAddress.address2 &&
-                    orderDetails.deliveryAddress.address2 + ','}
-                  &nbsp;
-                  {orderDetails.deliveryAddress.city},&nbsp;
-                  {orderDetails.deliveryAddress.province},&nbsp;
-                  {orderDetails.deliveryAddress.country} */}
+                  {defaultAddress && (
+                    <>
+                      {defaultAddress.detail_address},&nbsp;
+                      {defaultAddress.city},&nbsp;
+                      {defaultAddress.province},&nbsp;
+                      {defaultAddress.country}
+                    </>
+                  )}
                   <EditButton />
                 </H4>
                 <H4>
                   <Icon name="smile outline" />
-                  {/* Instruction: {orderDetails.deliveryAddress.dropoff} */}
+                  Instruction: {/* {orderDetails.deliveryAddress.dropoff} */}
                   <EditButton />
                 </H4>
                 {/* <H4 style={{ marginLeft: 20 }}>{orderDetails.deliveryAddress.instructions}</H4> */}
@@ -216,5 +235,11 @@ const Column = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
+`;
+const AddressModelContainer = styled.div`
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 900px;
+  /* border: ${(p) => p.isDesktop && 'solid 1px #d4d3d3'}; */
 `;
 export default checkout;

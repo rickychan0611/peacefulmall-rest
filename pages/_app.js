@@ -66,6 +66,7 @@ const InitApp = ({ children }) => {
 
     //currentPosition localstorage
     const localStoragePosition = localStorage.getItem('currentPosition');
+    setCurrentPosition(localStoragePosition)
     // console.log(currentPosition);
 
     // if (!localStoragePosition) {
@@ -82,8 +83,8 @@ const InitApp = ({ children }) => {
             city:  results[2].address_components[1].long_name
           }
 
-          setCurrentPosition(body);
           console.log('GPS location body: ', body);
+          setCurrentPosition(body);
         })
         .catch((error) => console.error(error));
     }

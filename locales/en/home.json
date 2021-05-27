@@ -11,6 +11,7 @@
     "enterAddress" : "Enter your address",
     "inputEg": "eg: restaurant, style, place",
     "currentAddress": "Your current address:",
+    "chooseAddress": "Choose or add your address",
     "chooseAStyle": "Choose a Cuisine Style",
     "discountedDishes" : "Discounted Dishes",
     "mostPopular" : "Most Popular Dishes",

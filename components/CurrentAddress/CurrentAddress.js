@@ -22,16 +22,22 @@ import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { user as userAtom } from '../../data/userAtom';
 
-export const validateAddress = (address, user) => {
+export const validateAddress = (address, user, initial) => {
   return new Promise((resolve, reject) => {
-    let obj = { type: 'create', default_status: 1, name: user.first_name + ' ' + user.last_name };
+    let obj = !initial ? { 
+      type: 'create', 
+      default_status: 1,
+      name: user.first_name + ' ' + user.last_name 
+    } : 
+    {name: ""};
+
     console.log('address', address);
     const street_number = address.findIndex((item) => item.types[0] === 'street_number');
-    if (street_number === -1) {
+    if (street_number === -1 && !initial) {
       throw 'no street number';
     }
     const route = address.findIndex((item) => item.types[0] === 'route');
-    if (route === -1) {
+    if (route === -1 && !initial) {
       throw 'no street name';
     }
     address.forEach((item, i) => {
@@ -41,7 +47,7 @@ export const validateAddress = (address, user) => {
         obj.detail_address = name;
       }
       if (item.types[0] === 'route') {
-        obj.detail_address = obj.detail_address + ' ' + name;
+        obj.detail_address = obj.detail_address ? (obj.detail_address + ' ' + name) : name;
       }
       if (item.types[0] === 'locality') {
         obj.city = name;
@@ -93,7 +99,6 @@ const CurrentAddress = () => {
       //   return { lat, lng }
       // });
 
-
       const body = await validateAddress(results[0].address_components, user);
 
       await axios.post(HOST_URL + '/api/user/address/set', body, {
@@ -107,7 +112,6 @@ const CurrentAddress = () => {
       setLoading(false);
       setOpenNew(false);
       colorChange();
-
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -131,36 +135,36 @@ const CurrentAddress = () => {
 
   return (
     <>
-      {currentPosition && (
-        <>
-          <CurrentAddressContainer
-            isMobile={isMobile}
-            onClick={() => setOpenAddressMenu(!openAddressMenu)}>
-            <div>
-              <Icon name="map marker alternate" size="large" style={{ marginRight: 10 }} />
-            </div>
-            <div style={{ textAlign: 'left' }}>
-              <Address isMobile={isMobile}>
-                <span style={{ fontSize: 12 }}>{t('currentAddress')}</span>
-                {isMobile && <br />}
-                <span>
-                  {' '}
-                  {currentPosition.detail_address + ", " + currentPosition.city}{' '}
-                  {/* {useDefaultAddress
+      <>
+        <CurrentAddressContainer
+          isMobile={isMobile}
+          onClick={() => setOpenAddressMenu(!openAddressMenu)}>
+          <div>
+            <Icon name="map marker alternate" size="large" style={{ marginRight: 10 }} />
+          </div>
+          <div style={{ textAlign: 'left' }}>
+            <Address isMobile={isMobile}>
+              <span style={{ fontSize: 12 }}>
+                {currentPosition ? t('currentAddress') : t('chooseAddress')}
+                </span>
+              {isMobile && <br />}
+              <span>
+                {' '}
+                {currentPosition && currentPosition.detail_address + ', ' + currentPosition.city}{' '}
+                {/* {useDefaultAddress
                     ? useDefaultAddress.detail_address + ', ' + useDefaultAddress.city
                     : currentPosition.address}{' '} */}
-                </span>
-              </Address>
-            </div>
-            <div>
-              <Icon
-                name={openAddressMenu ? 'chevron up' : 'chevron down'}
-                style={{ marginLeft: 10 }}
-              />
-            </div>
-          </CurrentAddressContainer>
-        </>
-      )}
+              </span>
+            </Address>
+          </div>
+          <div>
+            <Icon
+              name={openAddressMenu ? 'chevron up' : 'chevron down'}
+              style={{ marginLeft: 10 }}
+            />
+          </div>
+        </CurrentAddressContainer>
+      </>
 
       {openAddressMenu && (
         <AddAddressContainer>
@@ -170,34 +174,30 @@ const CurrentAddress = () => {
                 addresses[0] &&
                 addresses.map((address, i) => {
                   return (
-                    <>
-                      <div
-                        onClick={() => {
-                          // setUseDefaultAddress(address);
-                          setCurrentPosition(address)
-                          localStorage.setItem('currentPosition', JSON.stringify(address));
-                          setOpenAddressMenu(false);
-                          console.log(
-                            'address',
-                            address.detail_address + ', ' + address.city + ', ' + address.province
-                          );
-                        }}
-                        style={{ backgroundColor: i === 0 && 'rgba(255, 241, 82,' + color + ')' }}>
-                        <H4
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            padding: 10,
-                            borderBottom: '1px solid #dbdbd7'
-                          }}>
-                          <Radio
-                            checked={address === currentPosition}
-                            style={{ marginRight: 7 }}
-                          />
-                          {address.detail_address}, {address.city}
-                        </H4>
-                      </div>
-                    </>
+                    <div
+                      key={i}
+                      onClick={() => {
+                        // setUseDefaultAddress(address);
+                        setCurrentPosition(address);
+                        localStorage.setItem('currentPosition', JSON.stringify(address));
+                        setOpenAddressMenu(false);
+                        console.log(
+                          'address',
+                          address.detail_address + ', ' + address.city + ', ' + address.province
+                        );
+                      }}
+                      style={{ backgroundColor: i === 0 && 'rgba(255, 241, 82,' + color + ')' }}>
+                      <H4
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          padding: 10,
+                          borderBottom: '1px solid #dbdbd7'
+                        }}>
+                        <Radio checked={address === currentPosition} style={{ marginRight: 7 }} />
+                        {address.detail_address}, {address.city}
+                      </H4>
+                    </div>
                   );
                 })}
             </ChooseAddressContainer>

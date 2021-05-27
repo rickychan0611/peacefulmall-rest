@@ -43,13 +43,13 @@ const checkout = () => {
   const [addresses, setAddresses] = useRecoilState(addressAtom);
   const [cookies] = useCookies(null);
 
-  const EditButton = () => (
+  const EditButton = ({add}) => (
     <Edit
       onClick={() => {
         setOpen(true);
       }}>
-      <Icon name="edit" />
-      edit
+      <Icon name= {add ? "plus": "edit"} />
+      {add ? "Choose or add an address" : "edit"}
     </Edit>
   );
 
@@ -78,18 +78,17 @@ const checkout = () => {
   }, []);
 
   const handleChange = (value, name, id) => {
-    console.log(value)
-    let temp = [...addresses]
-    temp = temp.map(item => item.id === id ? { ...item, [name]: value } : item);
-    console.log("temp", temp)
-    setAddresses(temp)
-  }
+    console.log(value);
+    let temp = [...addresses];
+    temp = temp.map((item) => (item.id === id ? { ...item, [name]: value } : item));
+    console.log('temp', temp);
+    setAddresses(temp);
+  };
 
   return (
     <>
       <Modal closeIcon open={open} onClose={() => setOpen(false)}>
         <AddressModelContainer isDesktop={isDesktop}>
-
           <h3>{t`Address Books`}</h3>
           <Divider />
           <AddressBook
@@ -150,22 +149,37 @@ const checkout = () => {
                   {/* <Icon name="point" /> */}
 
                   {/* /////-- default address is in Atoms selection   */}
-                  {defaultAddress && (
+                  {defaultAddress ? (
                     <>
                       {defaultAddress.detail_address},&nbsp;
                       {defaultAddress.city},&nbsp;
                       {defaultAddress.province},&nbsp;
                       {defaultAddress.country}
+                      <EditButton />
                     </>
+                  ) : (
+                    <EditButton add/>
                   )}
-                  <EditButton />
                 </H4>
-                <H4>Receiver: {defaultAddress.name.toUpperCase()} </H4>
+                <H4>Receiver: {defaultAddress && defaultAddress.name.toUpperCase()} </H4>
                 <Form>
                   <Form.Group widths="equal">
-                    <Form.Input label="Phone Number" placehold="Phone Number" value={defaultAddress && defaultAddress.phone}
-                      onChange={(e) => { handleChange(e.target.value, "phone", defaultAddress.id) }} />
-                    <Form.Input label="Apt / Unit Number" placehold="Apt / Unit Number" value={defaultAddress && defaultAddress.phone} />
+                    <Form.Input
+                      label="Phone Number"
+                      placehold="Phone Number"
+                      value={defaultAddress && defaultAddress.phone}
+                      onChange={(e) => {
+                        handleChange(e.target.value, 'phone', defaultAddress.id);
+                      }}
+                    />
+                    <Form.Input
+                      label="Apt / Unit Number"
+                      placehold="Apt / Unit Number"
+                      value={defaultAddress && defaultAddress.unit_number}
+                      onChange={(e) => {
+                        handleChange(e.target.value, 'unit_number', defaultAddress.id);
+                      }}
+                    />
                   </Form.Group>
                 </Form>
                 <H4 style={{ marginTop: 10 }}>
@@ -208,7 +222,7 @@ const checkout = () => {
             <Header>Payment method</Header>
             <Divider />
 
-            <CheckoutButton onClick={() => { }}>
+            <CheckoutButton onClick={() => {}}>
               <div>Place Order</div>
               <div>${orderDetails.total}</div>
             </CheckoutButton>

@@ -11,6 +11,7 @@
     "enterAddress" : "请输入地址",
     "inputEg": "寻找餐厅,菜色,风格,地点等...",
     "currentAddress": "您的当前位置：",
+    "chooseAddress": "请选取或添加您的地址",
     "chooseAStyle": "选择美食风格",
     "discountedDishes" : "今天特价菜色",
     "mostPopular" : "最受欢迎的菜肴",

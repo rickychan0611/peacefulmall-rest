@@ -29,16 +29,14 @@ const InitApp = ({ children }) => {
   const [addresses, setAddresses] = useRecoilState(addressAtom);
   const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
 
-  // initial app
-  useEffect(async () => {
-    console.log('initiate');
+  const initialUser = async () => {
     //check user cookie
-
     if (!cookies.userToken) {
       console.log('cookies not found');
       setUser();
       localStorage.removeItem('user');
       setAppReady(true);
+      return;
     } else if (cookies.userToken) {
       //login user and store user in localstorage
       const getUser = await axios.get(HOST_URL + '/api/user/info', {
@@ -58,55 +56,69 @@ const InitApp = ({ children }) => {
       setUser(getUser.data);
       setAddresses(getUser.data.addresses);
       setAppReady(true);
+      return;
       // }
     }
-    //orderItems localstorage
+  };
+
+  const initialOrder = () => {
+    //check orderItems localstorage
     const orderItems = localStorage.getItem('orderItems');
     orderItems ? setOrderItems(JSON.parse(orderItems)) : setOrderItems([]);
+  };
 
-    //currentPosition localstorage
+  const initialPosition = () => {
+    //check currentPosition localstorage
     const localStoragePosition = localStorage.getItem('currentPosition');
-    setCurrentPosition(localStoragePosition)
-    // console.log(currentPosition);
+    setCurrentPosition(JSON.parse(localStoragePosition));
 
-    // if (!localStoragePosition) {
-    function showPosition(position) {
-      console.log(
-        'Latitude: ' + position.coords.latitude + 'Longitude: ' + position.coords.longitude
-      );
-      geocodeByLatLng({ lat: position.coords.latitude, lng: position.coords.longitude })
-        .then(async (results) => {
-          console.log('GPS location: ', results);
+    //if currentPosition localstorage empty, get GPS position. 
+    if (!localStoragePosition) {
+      console.log('getting GPS location body');
 
-          const body = {
-            detail_address: results[2].address_components[0].long_name, 
-            city:  results[2].address_components[1].long_name
-          }
+      function showPosition(position) {
+        console.log(
+          'Latitude: ' + position.coords.latitude + 'Longitude: ' + position.coords.longitude
+        );
 
-          console.log('GPS location body: ', body);
-          setCurrentPosition(body);
-        })
-        .catch((error) => console.error(error));
+        geocodeByLatLng({ lat: position.coords.latitude, lng: position.coords.longitude })
+          .then(async (results) => {
+            console.log('GPS location: ', results);
+
+            const body = await validateAddress(results[0].address_components, user, true);
+
+            // const body = {
+            //   detail_address: results[2].address_components[0].long_name,
+            //   city: results[2].address_components[1].long_name,
+            //   name: ""
+            // };
+
+            console.log('GPS location body: ', body);
+            setCurrentPosition(body);
+          })
+          .catch((error) => console.error(error));
+      }
+
+      function error(err) {
+        console.log(err);
+        alert(
+          'Please enable geolocation of your browser, so that we can find restaurants close to you :)'
+        );
+      }
+
+      //Get location from browser, then send to show Poistion function above to get lag lnt and geocode
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, error);
+      } else {
+        console.log('GPS access deined');
+      }
     }
+  };
 
-    function error(err) {
-      console.log(err);
-      alert(
-        'Please enable geolocation of your browser, so that we can find restaurants close to you :)'
-      );
-    }
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPosition, error);
-    } else {
-      console.log('blocked');
-    }
-
-    // }
-    // else {
-    //   console.log(localStoragePosition);
-    //   setCurrentPosition(JSON.parse(localStoragePosition));
-    // }
+  useEffect(async () => {
+    await initialUser();
+    initialOrder();
+    initialPosition();
   }, []);
 
   return children;

@@ -43,13 +43,13 @@ const checkout = () => {
   const [addresses, setAddresses] = useRecoilState(addressAtom);
   const [cookies] = useCookies(null);
 
-  const EditButton = ({add}) => (
+  const EditButton = ({ add }) => (
     <Edit
       onClick={() => {
         setOpen(true);
       }}>
-      <Icon name= {add ? "plus": "edit"} />
-      {add ? "Choose or add an address" : "edit"}
+      <Icon name={add ? 'plus' : 'edit'} />
+      {add ? 'Choose or add an address' : 'edit'}
     </Edit>
   );
 
@@ -72,17 +72,39 @@ const checkout = () => {
     // appReady && orderDetails && !orderDetails.orderItems[0] && router.push('/');
   }, [orderDetails]);
 
-  useEffect(() => {
-    // setShowCheckoutButton(false);
-    // return () => setShowCheckoutButton(true);
-  }, []);
-
   const handleChange = (value, name, id) => {
     console.log(value);
     let temp = [...addresses];
     temp = temp.map((item) => (item.id === id ? { ...item, [name]: value } : item));
     console.log('temp', temp);
     setAddresses(temp);
+  };
+
+  const createOrderQuery = async () => {
+    console.log('placeOrderQuery', orderDetails);
+    console.log('defaultAddress', defaultAddress);
+    const body = {
+      shop_id: orderDetails.shop.id,
+      items: orderDetails.orderItems,
+      receiver_name: defaultAddress.name,
+      receiver_phone: defaultAddress.phone,
+      receiver_post_code: defaultAddress.post_code,
+      receiver_country: defaultAddress.country,
+      receiver_province: defaultAddress.province,
+      receiver_city: defaultAddress.city,
+      receiver_detail_address: defaultAddress.detail_address,
+      receiver_note: defaultAddress.note,
+    }
+    console.log('body', body);
+
+    try {
+      // const result = await axios.post(HOST_URL + '/api/user/order/create', body, {
+      //   headers: { Authorization: cookies.userToken }
+      // });
+      // console.log(result.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -158,7 +180,7 @@ const checkout = () => {
                       <EditButton />
                     </>
                   ) : (
-                    <EditButton add/>
+                    <EditButton add />
                   )}
                 </H4>
                 <H4>Receiver: {defaultAddress && defaultAddress.name.toUpperCase()} </H4>
@@ -187,6 +209,7 @@ const checkout = () => {
                   Instruction: {/* {orderDetails.deliveryAddress.dropoff} */}
                   <EditButton />
                 </H4>
+
                 {/* <H4 style={{ marginLeft: 20 }}>{orderDetails.deliveryAddress.instructions}</H4> */}
 
                 {/* <Header>Delivery Time</Header>
@@ -222,7 +245,10 @@ const checkout = () => {
             <Header>Payment method</Header>
             <Divider />
 
-            <CheckoutButton onClick={() => {}}>
+            <CheckoutButton
+              onClick={() => {
+                createOrderQuery();
+              }}>
               <div>Place Order</div>
               <div>${orderDetails.total}</div>
             </CheckoutButton>

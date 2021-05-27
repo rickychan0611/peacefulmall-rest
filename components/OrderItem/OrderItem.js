@@ -17,7 +17,7 @@ const OrderItem = ({ item, index }) => {
   return (
   <ItemContainer>
     <Qty>
-      <ItemText style={{ minWidth: "30px" }}>{item.qty} x</ItemText>
+      <ItemText style={{ minWidth: "30px" }}>{item.quantity} x</ItemText>
       <div>
         <ItemName>{item.name}</ItemName>
         {item.option.value !== 0 && <p>• {item.option.option + " " + "+$" + item.option.value}</p>}

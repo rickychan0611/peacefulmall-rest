@@ -30,7 +30,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   const [loading, setLoading] = useState(true);
 
   const [value, setValue] = useState({ option: 'option0', value: 0 });
-  const [qty, setQty] = useState(1);
+  const [quantity, setQty] = useState(1);
 
   const price = 10;
 
@@ -43,11 +43,11 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
     setOrderItems((prev) => {
       //if a prev store's name is equal to the current store, update the object
       if (prev[0] && prev[0].shop.id === currentShop.id) {
-        updatedItems = [{ ...item, option: value, qty, total, shop: currentShop }, ...prev];
+        updatedItems = [{ ...item, option: value, quantity, total, shop: currentShop }, ...prev];
       }
       //if not, replace the whole orderItem object. Add store to currentShop
       else {
-        updatedItems = [{ ...item, option: value, qty, total, shop: currentShop }];
+        updatedItems = [{ ...item, option: value, quantity, total, shop: currentShop }];
       }
       localStorage.setItem('orderItems', JSON.stringify(updatedItems));
       return updatedItems;
@@ -152,7 +152,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
               </Form>
             </Container>
           </Wrapper>
-          <BottomAddBar qty={qty} setQty={setQty} option={value} price={item.price} addItem={addItem} />
+          <BottomAddBar quantity={quantity} setQty={setQty} option={value} price={item.price} addItem={addItem} />
         </>
       )}
     </>

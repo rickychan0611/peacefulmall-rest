@@ -2,9 +2,9 @@ import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
 import _ from 'lodash';
 
-const BottomAddBar = ({ qty, setQty, option, price, addItem, setOpen }) => {
+const BottomAddBar = ({ quantity, setQty, option, price, addItem, setOpen }) => {
 
-  const total = () => (price + option.value) * qty
+  const total = () => (price + option.value) * quantity
 
   return (
     <>
@@ -14,15 +14,15 @@ const BottomAddBar = ({ qty, setQty, option, price, addItem, setOpen }) => {
             name="minus circle"
             size="large"
             onClick={() => {
-              qty > 1 && setQty(qty - 1);
+              quantity > 1 && setQty(quantity - 1);
             }}
           />
-          <QtyNum>{qty}</QtyNum>
+          <QtyNum>{quantity}</QtyNum>
           <Icon
             name="plus circle"
             size="large"
             onClick={() => {
-              setQty(qty + 1);
+              setQty(quantity + 1);
             }}
           />
         </QtyContainer>

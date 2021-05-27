@@ -18,6 +18,7 @@ export const orderDetails = selector({
   get: ({ get }) => {
     const items = get(orderItems);
     const user = get(userAtom);
+    console.log("Atom OrderItems", items)
     let subtotal = 0;
     items &&
       items[0] &&
@@ -28,19 +29,19 @@ export const orderDetails = selector({
     items &&
       items[0] &&
       items.forEach((item, index) => {
-        taxTotal = taxTotal + (item.total * item.tax.tax_rate / 100).toFixed(2);
+        taxTotal = taxTotal + (item.total * ((item.tax ? +item.tax.tax_rate : 12) / 100))
       });
 
     return {
       orderItems: items,
       subtotal,
-      taxTotal,
+      taxTotal : taxTotal.toFixed(2),
       shippingFee: 0,
       discount: 0,
       shop: items[0] && items[0].shop,
       deliveryAddress: user ? user.deliveryAddress : '',
       shippingMethod: get(shippingMethod),
-      total: subtotal + +taxTotal
+      total: (+subtotal + +taxTotal).toFixed(2)
     };
   }
 });

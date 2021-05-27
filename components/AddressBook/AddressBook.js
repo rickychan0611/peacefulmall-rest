@@ -98,7 +98,7 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
                     selectedAddress.type === 'edit' ? (
                       <Icon loading name="spinner" />
                     ) : (
-                      t`Default`
+                      address.default_status === 1 ? t`Selected` : t`Select`
                     )}
                   </AddressButton>
 

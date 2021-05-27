@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Button, Header, Icon, Divider, Modal } from 'semantic-ui-react';
+import axios from 'axios';
+import { Container, Button, Header, Icon, Divider, Modal, Input, Form } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import {
@@ -12,8 +13,11 @@ import {
   showCheckoutButton as showCheckoutButtonAtom,
   selections as selectionsAtom,
   currentPosition as currentPositionAtom,
-  defaultAddress as defaultAddressAtom
+  defaultAddress as defaultAddressAtom,
+  addresses as addressAtom
 } from '../data/atoms';
+import { HOST_URL } from '../env';
+import { useCookies } from 'react-cookie';
 
 import OrderItem from '../components/OrderItem/';
 import TotalAmountList from '../components/TotalAmountList/';
@@ -35,6 +39,9 @@ const checkout = () => {
   const [open, setOpen] = useState(false);
   const isDesktop = useIsDesktop();
   const { t } = useTranslation('profile');
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [addresses, setAddresses] = useRecoilState(addressAtom);
+  const [cookies] = useCookies(null);
 
   const EditButton = () => (
     <Edit
@@ -46,6 +53,20 @@ const checkout = () => {
     </Edit>
   );
 
+  const getAddressesQuery = async () => {
+    try {
+      const result = await axios.get(HOST_URL + '/api/user/address', {
+        headers: { Authorization: cookies.userToken }
+      });
+      // const sorted = result.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      console.log(result.data);
+      setAddresses(result.data);
+      return;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
     console.log('orderDetails!!!!!!!!!!!!!!!!!', orderDetails);
     // appReady && orderDetails && !orderDetails.orderItems[0] && router.push('/');
@@ -56,17 +77,25 @@ const checkout = () => {
     // return () => setShowCheckoutButton(true);
   }, []);
 
+  const handleChange = (value, name, id) => {
+    console.log(value)
+    let temp = [...addresses]
+    temp = temp.map(item => item.id === id ? { ...item, [name]: value } : item);
+    console.log("temp", temp)
+    setAddresses(temp)
+  }
+
   return (
     <>
       <Modal closeIcon open={open} onClose={() => setOpen(false)}>
-      <AddressModelContainer isDesktop={isDesktop}>
+        <AddressModelContainer isDesktop={isDesktop}>
 
           <h3>{t`Address Books`}</h3>
           <Divider />
           <AddressBook
-            // selectedAddress={selectedAddress}
-            // setSelectedAddress={setSelectedAddress}
-            // getAddressesQuery={getAddressesQuery}
+            selectedAddress={selectedAddress}
+            setSelectedAddress={setSelectedAddress}
+            getAddressesQuery={getAddressesQuery}
           />
         </AddressModelContainer>
         {/* <AddressChange setOpen={setOpen} /> */}
@@ -116,9 +145,11 @@ const checkout = () => {
 
             {orderDetails.shippingMethod === 'Delivery' && (
               <>
-                <Header>Your Address</Header>
+                <H4>Your Address: </H4>
                 <H4>
-                  <Icon name="point" />
+                  {/* <Icon name="point" /> */}
+
+                  {/* /////-- default address is in Atoms selection   */}
                   {defaultAddress && (
                     <>
                       {defaultAddress.detail_address},&nbsp;
@@ -129,7 +160,15 @@ const checkout = () => {
                   )}
                   <EditButton />
                 </H4>
-                <H4>
+                <H4>Receiver: {defaultAddress.name.toUpperCase()} </H4>
+                <Form>
+                  <Form.Group widths="equal">
+                    <Form.Input label="Phone Number" placehold="Phone Number" value={defaultAddress && defaultAddress.phone}
+                      onChange={(e) => { handleChange(e.target.value, "phone", defaultAddress.id) }} />
+                    <Form.Input label="Apt / Unit Number" placehold="Apt / Unit Number" value={defaultAddress && defaultAddress.phone} />
+                  </Form.Group>
+                </Form>
+                <H4 style={{ marginTop: 10 }}>
                   <Icon name="smile outline" />
                   Instruction: {/* {orderDetails.deliveryAddress.dropoff} */}
                   <EditButton />
@@ -169,7 +208,7 @@ const checkout = () => {
             <Header>Payment method</Header>
             <Divider />
 
-            <CheckoutButton onClick={() => {}}>
+            <CheckoutButton onClick={() => { }}>
               <div>Place Order</div>
               <div>${orderDetails.total}</div>
             </CheckoutButton>

@@ -28,7 +28,7 @@ const TotalAmountList = ({ orderDetails }) => {
           <span style={{ color: 'black' }}>Total:</span>
         </Content>
         <Price>
-          <span style={{ color: 'black' }}>${(orderDetails.total)}</span>
+          <span style={{ color: 'black' }}>${(+orderDetails.total)}</span>
         </Price>
       </TotalContainer>
     </>

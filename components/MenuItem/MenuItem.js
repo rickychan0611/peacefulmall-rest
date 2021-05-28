@@ -36,7 +36,16 @@ const MenuItem = ({ item, smallCard }) => {
               <Name>{item.name}</Name>
               <Description>{item.description}</Description>
               <Wrapper>
-                <Price>${item.price}</Price>
+                {item.promotion_price ? (
+                  <>
+                    <Price>
+                      <span style={{ textDecoration: 'line-through' }}>${item.price}</span>
+                      <span style={{ color: 'red', marginLeft: 5 }}>${item.promotion_price}</span>
+                    </Price>
+                  </>
+                ) : (
+                  <Price>${item.price}</Price>
+                )}
                 <PlusSign>
                   <Icon name="plus circle" color="red" />
                 </PlusSign>
@@ -58,7 +67,16 @@ const MenuItem = ({ item, smallCard }) => {
           </div>
           <div style={{ padding: '0 5px' }}>
             <Wrapper>
-              <Price>$14.00</Price>
+            {item.promotion_price ? (
+                  <>
+                    <Price>
+                      <span style={{ textDecoration: 'line-through', fontSize: 12 }}>${item.price}</span>
+                      <span style={{ color: 'red', marginLeft: 5 }}>${item.promotion_price}</span>
+                    </Price>
+                  </>
+                ) : (
+                  <Price>${item.price}</Price>
+                )}
               <PlusSign>
                 <Icon name="plus circle" color="red" />
               </PlusSign>

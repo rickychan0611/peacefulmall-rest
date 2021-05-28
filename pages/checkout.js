@@ -42,6 +42,8 @@ const checkout = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [addresses, setAddresses] = useRecoilState(addressAtom);
   const [cookies] = useCookies(null);
+  const [err, setErr] = useState();
+  const [loading, setLoading] = useState(false);
 
   const EditButton = ({ add }) => (
     <Edit
@@ -81,29 +83,44 @@ const checkout = () => {
   };
 
   const createOrderQuery = async () => {
+    setErr();
+    setLoading(true);
     console.log('placeOrderQuery', orderDetails);
     console.log('defaultAddress', defaultAddress);
-    const body = {
-      shop_id: orderDetails.shop.id,
-      items: orderDetails.orderItems,
-      receiver_name: defaultAddress.name,
-      receiver_phone: defaultAddress.phone,
-      receiver_post_code: defaultAddress.post_code,
-      receiver_country: defaultAddress.country,
-      receiver_province: defaultAddress.province,
-      receiver_city: defaultAddress.city,
-      receiver_detail_address: defaultAddress.detail_address,
-      receiver_note: defaultAddress.note,
-    }
-    console.log('body', body);
-
     try {
-      // const result = await axios.post(HOST_URL + '/api/user/order/create', body, {
-      //   headers: { Authorization: cookies.userToken }
-      // });
-      // console.log(result.data);
+      if (!defaultAddress) {
+        throw new Error('Missing address. Please add an address');
+      } else {
+        const body = {
+          shop_id: orderDetails.shop.id,
+          items: orderDetails.orderItems,
+          receiver_name: defaultAddress.name,
+          receiver_phone: defaultAddress.phone,
+          receiver_post_code: defaultAddress.post_code,
+          receiver_country: defaultAddress.country,
+          receiver_province: defaultAddress.province,
+          receiver_city: defaultAddress.city,
+          receiver_detail_address: defaultAddress.detail_address,
+          receiver_unit_number: defaultAddress.unit_number,
+          receiver_note: defaultAddress.note
+        };
+        console.log('body', body);
+        const result = await axios.post(HOST_URL + '/api/user/order/create', body, {
+          headers: { Authorization: cookies.userToken }
+        });
+        console.log(result.data);
+        if (result.data === "order create success"){
+          router.push('/consumer/order-success')
+        }
+        else {
+          throw new Error("Order failed. Please try again")
+        }
+        setLoading(false);
+      }
     } catch (err) {
       console.log(err);
+      setErr(err.message);
+      setLoading(false);
     }
   };
 
@@ -118,6 +135,13 @@ const checkout = () => {
             setSelectedAddress={setSelectedAddress}
             getAddressesQuery={getAddressesQuery}
           />
+          <Modal.Actions>
+            <Button
+              onClick={() => setOpen(false)}
+              style={{ backgroundColor: '#ff614d', color: 'white' }}>
+              <Icon name="check" /> Done
+            </Button>
+          </Modal.Actions>
         </AddressModelContainer>
         {/* <AddressChange setOpen={setOpen} /> */}
       </Modal>
@@ -166,11 +190,8 @@ const checkout = () => {
 
             {orderDetails.shippingMethod === 'Delivery' && (
               <>
-                <H4>Your Address: </H4>
+                <H4 >Your Address: {err && <span style={{color: err && "red"}}><Icon name="warning circle" />You must add an address</span>}</H4>
                 <H4>
-                  {/* <Icon name="point" /> */}
-
-                  {/* /////-- default address is in Atoms selection   */}
                   {defaultAddress ? (
                     <>
                       {defaultAddress.detail_address},&nbsp;
@@ -183,12 +204,12 @@ const checkout = () => {
                     <EditButton add />
                   )}
                 </H4>
-                <H4>Receiver: {defaultAddress && defaultAddress.name.toUpperCase()} </H4>
+                <H4>{defaultAddress && 'Receiver: ' + defaultAddress.name.toUpperCase()} </H4>
                 <Form>
                   <Form.Group widths="equal">
                     <Form.Input
                       label="Phone Number"
-                      placehold="Phone Number"
+                      placeholder="Phone Number"
                       value={defaultAddress && defaultAddress.phone}
                       onChange={(e) => {
                         handleChange(e.target.value, 'phone', defaultAddress.id);
@@ -196,19 +217,24 @@ const checkout = () => {
                     />
                     <Form.Input
                       label="Apt / Unit Number"
-                      placehold="Apt / Unit Number"
-                      value={defaultAddress && defaultAddress.unit_number}
+                      placeholder="Apt / Unit Number"
+                      value={defaultAddress ? defaultAddress.unit_number : ''}
                       onChange={(e) => {
                         handleChange(e.target.value, 'unit_number', defaultAddress.id);
                       }}
                     />
                   </Form.Group>
+                  <Form.Group widths="equal">
+                    <Form.Input
+                      label="Note / Delivery insturctions"
+                      placeholder="Eg. Call me upon arrival or buzz number"
+                      value={defaultAddress ? defaultAddress.note : ''}
+                      onChange={(e) => {
+                        handleChange(e.target.value, 'note', defaultAddress.id);
+                      }}
+                    />
+                  </Form.Group>
                 </Form>
-                <H4 style={{ marginTop: 10 }}>
-                  <Icon name="smile outline" />
-                  Instruction: {/* {orderDetails.deliveryAddress.dropoff} */}
-                  <EditButton />
-                </H4>
 
                 {/* <H4 style={{ marginLeft: 20 }}>{orderDetails.deliveryAddress.instructions}</H4> */}
 
@@ -234,7 +260,9 @@ const checkout = () => {
                 return <OrderItem item={item} index={i} key={i} />;
               })}
             <Divider />
-            <a onClick={() => router.push('/shop/' + orderDetails.orderItems[0].shop.id)}>
+            <a
+            style={{cursor: "pointer"}} 
+            onClick={() => router.push('/shop/' +  orderDetails.shop.name + "/" + orderDetails.shop.id + "#fullMenu")}>
               + Add more items
             </a>
             <Divider />
@@ -247,11 +275,18 @@ const checkout = () => {
 
             <CheckoutButton
               onClick={() => {
-                createOrderQuery();
+                !loading && createOrderQuery();
               }}>
-              <div>Place Order</div>
-              <div>${orderDetails.total}</div>
+              {!loading ? (
+                <>
+                  <div>Place Order</div>
+                  <div>${orderDetails.total}</div>
+                </>
+              ) : (
+                <div style={{ textAlign: 'center', width: "100%" }}><Icon name="spinner" loading /></div>
+              )}
             </CheckoutButton>
+            <div style={{ color: 'red', textAlign: 'center' }}>{err}</div>
           </OrdersContainer>
         </Container>
       )}
@@ -277,7 +312,7 @@ const Edit = styled.a`
 const CheckoutButton = styled.div`
   background-color: black;
   margin-top: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   color: white;
   border-radius: 30px;
   padding: 10px 20px;

@@ -23,7 +23,7 @@ export const orderDetails = selector({
     items &&
       items[0] &&
       items.forEach((item, index) => {
-        subtotal = subtotal + item.total;
+        subtotal = subtotal + ((item.promotion_price ? +item.promotion_price : +item.price) * item.quantity);
       });
     let taxTotal = 0;
     items &&

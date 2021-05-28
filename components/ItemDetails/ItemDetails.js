@@ -152,7 +152,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
               </Form>
             </Container>
           </Wrapper>
-          <BottomAddBar quantity={quantity} setQty={setQty} option={value} price={item.price} addItem={addItem} />
+          <BottomAddBar quantity={quantity} setQty={setQty} option={value} price={item.promotion_price === null ? item.price : item.promotion_price} addItem={addItem} />
         </>
       )}
     </>

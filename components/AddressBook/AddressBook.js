@@ -63,7 +63,8 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
         style={{ marginBottom: 10, color: 'green', cursor: 'pointer' }}
         onClick={() => {
           setOpen(true);
-          setSelectedAddress({ type: 'create', default_status: 1 });
+          console.log("addresses", addresses, addresses.length)
+          setSelectedAddress({ type: 'create', default_status: addresses.length === 0 ? 1 :0 });
         }}>
         <Icon name="plus circle" />
         {t`AddAddress`}

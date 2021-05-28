@@ -35,13 +35,13 @@ export const orderDetails = selector({
     return {
       orderItems: items,
       subtotal,
-      taxTotal : taxTotal.toFixed(2),
+      taxTotal : +(Math.round(taxTotal + "e+2")  + "e-2"),
       shippingFee: 0,
       discount: 0,
       shop: items[0] && items[0].shop,
       deliveryAddress: user ? user.deliveryAddress : '',
       shippingMethod: get(shippingMethod),
-      total: (+subtotal + +taxTotal).toFixed(2)
+      total:  +(Math.round((+subtotal + +taxTotal) + "e+2")  + "e-2")
     };
   }
 });

@@ -1,10 +1,8 @@
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
-import _ from 'lodash';
 
-const BottomAddBar = ({ quantity, setQty, option, price, addItem, setOpen }) => {
-
-  const total = () => (price + option.value) * quantity
+const BottomAddBar = ({ index, remove, setOpen, quantity, setQty, option, price, addItem, updateItem }) => {
+  const total = () => +(Math.round(((price + option.value) * quantity) + "e+2")  + "e-2") 
 
   return (
     <>
@@ -14,7 +12,7 @@ const BottomAddBar = ({ quantity, setQty, option, price, addItem, setOpen }) => 
             name="minus circle"
             size="large"
             onClick={() => {
-              quantity > 1 && setQty(quantity - 1);
+              updateItem ? updateItem(1, 'minus') : quantity > 1 && setQty(quantity - 1);
             }}
           />
           <QtyNum>{quantity}</QtyNum>
@@ -22,22 +20,38 @@ const BottomAddBar = ({ quantity, setQty, option, price, addItem, setOpen }) => 
             name="plus circle"
             size="large"
             onClick={() => {
-              setQty(quantity + 1);
+              updateItem ? updateItem(1, 'plus') : quantity > 0 && setQty(quantity + 1);
             }}
           />
         </QtyContainer>
 
         <QtyContainer>
-          <AddButton onClick={() => {
-            addItem(total())
-            // setOpen(false)
-          }}>ADD - ${total()}</AddButton>
+          <AddButton
+            onClick={() => {
+              if (updateItem) {
+                setOpen(false);
+              } else addItem(total());
+            }}>
+            {quantity > 0 && !updateItem && `ADD - $${total()}`}
+            {quantity > 0 && updateItem && `UPDATE - $${total()}`}
+          </AddButton>
         </QtyContainer>
+        {updateItem && <Remove onClick={() =>{
+          setOpen(false) 
+          remove(index)}}>
+            <Icon name="close" />Remove</Remove>}
       </BottomBar>
     </>
   );
 };
 
+const Remove = styled.p`
+  margin: 0 0 0 20px;
+  font-size: 12px;
+  font-weight: bold;
+  color: red;
+  cursor: pointer;
+`;
 const BottomBar = styled.div`
   position: fixed;
   bottom: 0px;

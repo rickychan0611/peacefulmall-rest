@@ -12,7 +12,6 @@ import {
  } from '../../data/orderAtoms.js';
 
 import OrderItem from '../OrderItem';
-import { Router } from 'next/router';
 
 const CheckOutList = () => {
   const router = useRouter();
@@ -20,19 +19,11 @@ const CheckOutList = () => {
   const orderDetails = useRecoilValue(orderDetailsAtom);
   const [orderItems, ] = useRecoilState(orderItemsAtom);
 
-  const total = () => {
-    let counter = 0
-    orderItems[0] && orderItems.forEach(item => {
-      counter = counter + item.total
-    })
-    return counter.toFixed(2)
-  }
-
   return (
     <SidebarContainer
       animation="overlay"
       direction="right"
-      onHide={() => setOpenCheckOutList(false)}
+      // onHide={() => setOpenCheckOutList(false)}
       width="wide"
       visible={openCheckOutList}
     >
@@ -48,13 +39,15 @@ const CheckOutList = () => {
               router.push('/checkout')
               setOpenCheckOutList(!openCheckOutList)}}>
             <H4>Checkout</H4>
-            <H4>${orderDetails.subtotal}</H4>
+            <H4>${orderDetails.subtotal.toFixed(2)}</H4>
           </CheckoutButton>
+
           {orderItems[0] && orderItems.map((item, i) => {
             return (
               <OrderItem item={item} index={i} key={i} />
             )
           })}
+
         </OrdersContainer>
         :
         <>
@@ -97,7 +90,7 @@ const H4 = styled.h4`
 const CheckoutButton = styled.div`
   background-color: #ff614d;
   margin-top: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   color: white;
   border-radius: 30px;
   padding: 10px 20px;

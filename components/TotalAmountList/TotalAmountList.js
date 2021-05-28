@@ -5,19 +5,19 @@ const TotalAmountList = ({ orderDetails }) => {
     <>
       <TotalContainer>
         <Content>Subtotal:</Content>
-        <Price>${orderDetails.subtotal}</Price>
+        <Price>${+orderDetails.subtotal.toFixed(2)}</Price>
       </TotalContainer>
       <TotalContainer>
         <Content>Discount:</Content>
-        <Price>-${(+orderDetails.discount)}</Price>
+        <Price>-${(+orderDetails.discount).toFixed(2)}</Price>
       </TotalContainer>
       <TotalContainer>
         <Content>Shipping fee:</Content>
-        <Price>${(+orderDetails.shippingFee)}</Price>
+        <Price>${(+orderDetails.shippingFee).toFixed(2)}</Price>
       </TotalContainer>
       <TotalContainer>
         <Content>Taxes:</Content>
-        <Price>${(+orderDetails.taxTotal)}</Price>
+        <Price>${(+orderDetails.taxTotal).toFixed(2)}</Price>
       </TotalContainer>
       <TotalContainer>
         <Content>Tip:</Content>
@@ -28,7 +28,7 @@ const TotalAmountList = ({ orderDetails }) => {
           <span style={{ color: 'black' }}>Total:</span>
         </Content>
         <Price>
-          <span style={{ color: 'black' }}>${(+orderDetails.total)}</span>
+          <span style={{ color: 'black' }}>${(+orderDetails.total).toFixed(2)}</span>
         </Price>
       </TotalContainer>
     </>

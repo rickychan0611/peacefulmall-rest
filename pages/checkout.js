@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import {
   orderDetails as orderDetailsAtom,
+  orderItems,
   shippingMethod as shippingMethodAtom
 } from '../data/orderAtoms.js';
 import {
@@ -14,7 +15,8 @@ import {
   selections as selectionsAtom,
   currentPosition as currentPositionAtom,
   defaultAddress as defaultAddressAtom,
-  addresses as addressAtom
+  addresses as addressAtom,
+  currentShop as currentShopAtom
 } from '../data/atoms';
 import { HOST_URL } from '../env';
 import { useCookies } from 'react-cookie';
@@ -44,6 +46,8 @@ const checkout = () => {
   const [cookies] = useCookies(null);
   const [err, setErr] = useState();
   const [loading, setLoading] = useState(false);
+  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
+  const [reload, setReload] = useState(0);
 
   const EditButton = ({ add }) => (
     <Edit
@@ -68,11 +72,6 @@ const checkout = () => {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    console.log('orderDetails!!!!!!!!!!!!!!!!!', orderDetails);
-    // appReady && orderDetails && !orderDetails.orderItems[0] && router.push('/');
-  }, [orderDetails]);
 
   const handleChange = (value, name, id) => {
     console.log(value);
@@ -109,11 +108,10 @@ const checkout = () => {
           headers: { Authorization: cookies.userToken }
         });
         console.log(result.data);
-        if (result.data === "order create success"){
-          router.push('/consumer/order-success')
-        }
-        else {
-          throw new Error("Order failed. Please try again")
+        if (result.data === 'order create success') {
+          router.push('/consumer/order-success');
+        } else {
+          throw new Error('Order failed. Please try again');
         }
         setLoading(false);
       }
@@ -123,6 +121,19 @@ const checkout = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    console.log('orderDetails!!!!!!!!!!!!!!!!!', orderDetails);
+    setCurrentShop(orderDetails.shop);
+    console.log('currentShop!!!!!!!!!!!!!!!!!', currentShop);
+    console.log('!orderDetails[0]', orderDetails.length);
+    if (orderDetails.orderItems.length === 0 && currentShop) {
+      router.push('/shop/' + currentShop.name + '/' + currentShop.id);
+    } else if (reload === 2 && orderDetails.orderItems.length === 0 && !currentShop) {
+      router.push('/');
+    }
+    setReload(reload + 1)
+  }, [orderDetails]);
 
   return (
     <>
@@ -190,7 +201,15 @@ const checkout = () => {
 
             {orderDetails.shippingMethod === 'Delivery' && (
               <>
-                <H4 >Your Address: {err && <span style={{color: err && "red"}}><Icon name="warning circle" />You must add an address</span>}</H4>
+                <H4>
+                  Your Address:{' '}
+                  {err && (
+                    <span style={{ color: err && 'red' }}>
+                      <Icon name="warning circle" />
+                      You must add an address
+                    </span>
+                  )}
+                </H4>
                 <H4>
                   {defaultAddress ? (
                     <>
@@ -254,6 +273,7 @@ const checkout = () => {
               </>
             )}
             <Header>Order Summary</Header>
+            <p>You can click item to edit</p>
             {orderDetails.orderItems &&
               orderDetails.orderItems[0] &&
               orderDetails.orderItems.map((item, i) => {
@@ -261,8 +281,12 @@ const checkout = () => {
               })}
             <Divider />
             <a
-            style={{cursor: "pointer"}} 
-            onClick={() => router.push('/shop/' +  orderDetails.shop.name + "/" + orderDetails.shop.id + "#fullMenu")}>
+              style={{ cursor: 'pointer' }}
+              onClick={() =>
+                router.push(
+                  '/shop/' + orderDetails.shop.name + '/' + orderDetails.shop.id + '#fullMenu'
+                )
+              }>
               + Add more items
             </a>
             <Divider />
@@ -283,7 +307,9 @@ const checkout = () => {
                   <div>${orderDetails.total}</div>
                 </>
               ) : (
-                <div style={{ textAlign: 'center', width: "100%" }}><Icon name="spinner" loading /></div>
+                <div style={{ textAlign: 'center', width: '100%' }}>
+                  <Icon name="spinner" loading />
+                </div>
               )}
             </CheckoutButton>
             <div style={{ color: 'red', textAlign: 'center' }}>{err}</div>

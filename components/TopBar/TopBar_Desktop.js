@@ -12,7 +12,7 @@ import { user as userAtom } from '../../data/userAtom';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 import useTranslation from 'next-translate/useTranslation';
 import Dimmer from '../Dimmer';
-import {  useCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 const TopBar_Desktop = ({ locales, changeLocale }) => {
   const router = useRouter();
@@ -73,7 +73,7 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
 
             <Item
               onClick={() => {
-                setOpenSideMenu(!openSideMenu);
+                router.push('/consumer/orders');
               }}>
               <Icon name="file alternate outline" size="large" />
               <H4>{t('myOrder')}</H4>
@@ -105,12 +105,12 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
                       last
                       className="last"
                       onClick={() => {
-                        removeCookie('userToken')
-                        localStorage.removeItem('user')
-                        setUser(null)
-                        setOpenSideMenu(false)
+                        removeCookie('userToken');
+                        localStorage.removeItem('user');
+                        setUser(null);
+                        setOpenSideMenu(false);
                         setOpenDropdownMenu(false);
-                        router.push('/')
+                        router.push('/');
                       }}>
                       Logout
                     </MenuItem>
@@ -144,21 +144,23 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
           />
         </Item>
 
-        <Transition animation="jiggle" duration={600} visible={jiggle}>
-          {showCheckoutButton && (
-            <Button
-              style={{
-                backgroundColor: '#ff614d',
-                marginRight: 10,
-                color: 'white',
-                width: 80,
-                borderRadius: 30
-              }}
-              onClick={() => setOpenCheckOutList(!openCheckOutList)}>
-              <Icon name="shop" /> {orderItems && orderItems.length}
-            </Button>
-          )}
-        </Transition>
+        {router.route !== '/checkout' && (
+          <Transition animation="jiggle" duration={600} visible={jiggle}>
+            {showCheckoutButton && (
+              <Button
+                style={{
+                  backgroundColor: '#ff614d',
+                  marginRight: 10,
+                  color: 'white',
+                  width: 80,
+                  borderRadius: 30
+                }}
+                onClick={() => setOpenCheckOutList(!openCheckOutList)}>
+                <Icon name="shop" /> {orderItems && orderItems.length}
+              </Button>
+            )}
+          </Transition>
+        )}
       </Row>
     </>
   );

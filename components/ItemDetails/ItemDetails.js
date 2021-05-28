@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import  { useIsMobile } from '../../util/useScreenSize';
+import { useIsMobile } from '../../util/useScreenSize';
 import styled from 'styled-components';
 import { HOST_URL } from '../../env';
 import toSlug from '../../util/toSlug';
@@ -10,14 +10,13 @@ import Loader from '../Loader';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentItem as currentItemAtom,
-  currentShop as currentShopAtom,
-  currentCat as currentCatAtom,
-  selections as selectionsAtom
+  currentShop as currentShopAtom
 } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 
 import { Form, Grid, Icon, Radio, Image } from 'semantic-ui-react';
-import BottomAddBar from '../../components/BottomAddBar';
+import BottomAddBar from '../BottomAddBar';
+import ItemDetailsContext from '../ItemDetailsContext';
 import _ from 'lodash';
 import { useEffect } from 'react';
 
@@ -96,62 +95,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
             }}>
             <Icon name="arrow left" /> Back
           </BackButton>
-          <Wrapper>
-            <Container>
-              <StoreHeader
-                onClick={() => {
-                  // router.push('/store/' + toSlug(selectedStore.name) + '/' + selectedStore.id + '#top');
-                  // handleClose();
-                }}>
-                <Image
-                  src={currentShop.logo ? HOST_URL + '/storage/' + currentShop.logo : '/avatar-placeholder.png'}
-                  avatar
-                  size="mini"
-                />
-                &nbsp;&nbsp;
-                {currentShop.name}
-              </StoreHeader>
-              <h2>{item.name}</h2>
-
-              {item.images && item.images[0] ? (
-                <Img src={HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
-              ) : (
-                <Img src="/no-image.png" />
-              )}
-
-              <Description>{item.description}</Description>
-              <h4>Choose your options</h4>
-              <Form>
-                <Form.Field>
-                  Selected option:{' '}
-                  <b>
-                    {value.option} : +${value.value}
-                  </b>
-                </Form.Field>
-                {_.times(6, (i) => (
-                  <Form.Field key={i}>
-                    <Grid>
-                      <Grid.Column width={8}>
-                        <Radio
-                          label={'option' + i}
-                          name="radioGroup"
-                          value={'option' + i}
-                          checked={value.option === 'option' + i}
-                          onChange={(e, { value }) => {
-                            console.log(e);
-                            setValue({ option: value, value: i });
-                          }}
-                        />
-                      </Grid.Column>
-                      <Grid.Column width={8} style={{ textAlign: 'right' }}>
-                        + ${i}
-                      </Grid.Column>
-                    </Grid>
-                  </Form.Field>
-                ))}
-              </Form>
-            </Container>
-          </Wrapper>
+          <ItemDetailsContext />
           <BottomAddBar quantity={quantity} setQty={setQty} option={value} price={item.promotion_price === null ? item.price : item.promotion_price} addItem={addItem} />
         </>
       )}

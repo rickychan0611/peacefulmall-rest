@@ -63,15 +63,18 @@ const orders = () => {
                   return (
                     <div key={i}>
                       <Divider />
-                      <Row>
-                        <div key={order.id} 
-                        // style={{ maxWidth: 480 }}
+                      <Row onClick={() => {
+                        setOpen(true);
+                        setSelectedOrder(order);
+                      }}>
+                        <div key={order.id}
+                          style={{ width: "100%" }}
                           onClick={() => {
                             setOpen(true);
                             setSelectedOrder(order);
                           }}>
                           <P>
-                            {moment(order.created_at).format('MMM DD - hh:mm a')} <br/>
+                            {moment(order.created_at).format('MMM DD - hh:mm a')} <br />
                             {t(statusDecoder(order.status))} • Total: $
                             {parseInt(order.pay_amount).toFixed(2)}
                           </P>
@@ -80,7 +83,7 @@ const orders = () => {
                             {order.order_items.length} items:{' '}
                             {order.order_items.map((item, i) => {
                               return (
-                                <span key={i} style={{fontSize: 12}}>{(i === 0 ? '' : ', ') + item.product_name}</span>
+                                <span key={i} style={{ fontSize: 12 }}>{(i === 0 ? '' : ', ') + item.product_name}</span>
                               );
                             })}
                           </P>

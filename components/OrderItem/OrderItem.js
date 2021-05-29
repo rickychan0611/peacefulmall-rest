@@ -89,10 +89,8 @@ const OrderItem = ({ item, index }) => {
 
       <Divider />
       <Row
-        onClick={() => {
-          setOpen(true);
-          console.log(item);
-        }}>
+        onClick={() => { setOpen(true) }}
+        style={{ cursor: "pointer" }}>
         <Qty>
           <ItemText style={{ minWidth: '30px', marginRight: 5 }}>
             {item.quantity}
@@ -113,7 +111,7 @@ const OrderItem = ({ item, index }) => {
           <QtyContainer>
             <div>
               <Icon
-                style={{ cursor: 'pointer', marginRight: 15 }}
+                style={{ cursor: 'pointer', marginRight: 20 }}
                 name="minus circle"
                 onClick={() => {
                   updateItem(1, 'minus');
@@ -127,9 +125,9 @@ const OrderItem = ({ item, index }) => {
                 }}
               />
             </div>
-            <Remove onClick={() => remove(index)}>
-              <Icon name="close" />
-              Remove
+            <Remove >
+              <span onClick={() => { setOpen(true) }} ><Icon name="pen circle" /> <span style={{ marginRight: 15 }}>Edit </span></span>
+              <span onClick={() => { remove(index) }} ><Icon name="times circle" />Remove</span>
             </Remove>
           </QtyContainer>
         </Row>
@@ -143,7 +141,6 @@ const Row = styled.div`
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
-  cursor: pointer;
   /* padding: 5px 0; */
 `;
 const Qty = styled.div`

@@ -32,8 +32,8 @@ const BottomAddBar = ({ index, remove, setOpen, quantity, setQty, option, price,
                 setOpen(false);
               } else addItem(total());
             }}>
-            {quantity > 0 && !updateItem && `ADD - $${total()}`}
-            {quantity > 0 && updateItem && `UPDATE - $${total()}`}
+            {quantity > 0 && !updateItem && `ADD $${total()}`}
+            {quantity > 0 && updateItem && `UPDATE $${total()}`}
           </AddButton>
         </QtyContainer>
         {updateItem && <Remove onClick={() =>{
@@ -46,11 +46,13 @@ const BottomAddBar = ({ index, remove, setOpen, quantity, setQty, option, price,
 };
 
 const Remove = styled.p`
-  margin: 0 0 0 20px;
+  /* margin: 0 0 0 20px; */
   font-size: 12px;
   font-weight: bold;
   color: red;
   cursor: pointer;
+  text-align: center;
+  padding-right: 10px;
 `;
 const BottomBar = styled.div`
   position: fixed;
@@ -76,6 +78,7 @@ const AddButton = styled.div`
   padding: 10px 25px 10px 25px;
   border-radius: 25px;
   cursor: pointer;
+  text-align: center;
 `;
 const QtyContainer = styled.div`
   margin: 0 10px 0 10px;

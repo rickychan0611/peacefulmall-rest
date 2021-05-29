@@ -50,7 +50,7 @@ const orders = () => {
               onClose={() => setOpen(false)}
               onOpen={() => setOpen(true)}
               open={open}
-              >
+            >
               <Modal.Content>
                 <OrderReceipt order={selectedOrder} />
               </Modal.Content>
@@ -64,30 +64,35 @@ const orders = () => {
                     <div key={i}>
                       <Divider />
                       <Row>
-                        <div key={order.id}>
+                        <div key={order.id} 
+                        // style={{ maxWidth: 480 }}
+                          onClick={() => {
+                            setOpen(true);
+                            setSelectedOrder(order);
+                          }}>
                           <P>
-                            {moment(order.created_at).format('MMM DD - hh:mm a')} •{' '}
+                            {moment(order.created_at).format('MMM DD - hh:mm a')} <br/>
                             {t(statusDecoder(order.status))} • Total: $
                             {parseInt(order.pay_amount).toFixed(2)}
                           </P>
-                          <Name>Peaceful Restaurant</Name>
+                          <Name>{order.shop.name}</Name>
                           <P>
                             {order.order_items.length} items:{' '}
                             {order.order_items.map((item, i) => {
                               return (
-                                <span key={i}>{(i === 0 ? '' : ', ') + item.product_name}</span>
+                                <span key={i} style={{fontSize: 12}}>{(i === 0 ? '' : ', ') + item.product_name}</span>
                               );
                             })}
                           </P>
                         </div>
-                        <div style={{minWidth: 130, marginLeft: 10 }}>
+                        {/* <div style={{ marginLeft: 10 }}>
                           <Button
                             size="small"
                             onClick={() => {
                               setOpen(true);
                               setSelectedOrder(order);
                             }}>{t`ViewReceipt`}</Button>
-                        </div>
+                        </div> */}
                       </Row>
                     </div>
                   );

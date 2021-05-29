@@ -71,18 +71,20 @@ const OrderItem = ({ item, index }) => {
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}>
-        <ItemDetailsContext checkOutListItem={item} />
-        <BottomAddBar
-          index={index}
-          remove={remove}
-          quantity={item.quantity}
-          setQty={setQty}
-          option={value}
-          price={item.promotion_price === null ? item.price : item.promotion_price}
-          updateItem={updateItem}
-          setOpen={setOpen}
-          setOpenCheckOutList={setOpenCheckOutList}
-        />
+        <div style={{ height: '90vh', overflowY: 'auto', position: 'relative' }}>
+          <ItemDetailsContext checkOutListItem={item} />
+          <BottomAddBar
+            index={index}
+            remove={remove}
+            quantity={item.quantity}
+            setQty={setQty}
+            option={value}
+            price={item.promotion_price === null ? item.price : item.promotion_price}
+            updateItem={updateItem}
+            setOpen={setOpen}
+            setOpenCheckOutList={setOpenCheckOutList}
+          />
+        </div>
       </Modal>
 
       <Divider />
@@ -103,7 +105,7 @@ const OrderItem = ({ item, index }) => {
             )}
           </div>
         </Qty>
-        <ItemText>${+(Math.round(item.total + "e+2")  + "e-2")}</ItemText>
+        <ItemText>${+(Math.round(item.total + 'e+2') + 'e-2')}</ItemText>
       </Row>
 
       {router.route !== '/checkout' && (
@@ -141,6 +143,7 @@ const Row = styled.div`
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: space-between;
+  cursor: pointer;
   /* padding: 5px 0; */
 `;
 const Qty = styled.div`

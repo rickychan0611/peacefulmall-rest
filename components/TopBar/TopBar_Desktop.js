@@ -144,7 +144,7 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
           />
         </Item>
 
-        {router.route !== '/checkout' && (
+        
           <Transition animation="jiggle" duration={600} visible={jiggle}>
             {showCheckoutButton && (
               <Button
@@ -160,7 +160,6 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
               </Button>
             )}
           </Transition>
-        )}
       </Row>
     </>
   );

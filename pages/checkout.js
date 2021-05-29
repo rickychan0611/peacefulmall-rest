@@ -273,7 +273,7 @@ const checkout = () => {
               </>
             )}
             <Header>Order Summary</Header>
-            <p>You can click item to edit</p>
+            <p stype={{margin: 0}}>You can click item to edit</p>
             {orderDetails.orderItems &&
               orderDetails.orderItems[0] &&
               orderDetails.orderItems.map((item, i) => {

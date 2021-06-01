@@ -126,7 +126,7 @@ const OrderItem = ({ item, index }) => {
               />
             </div>
             <Remove >
-              <span onClick={() => { setOpen(true) }} ><Icon name="pen circle" /> <span style={{ marginRight: 15 }}>Edit </span></span>
+              <span onClick={() => { setOpen(true) }} ><Icon name="pen" /> <span style={{ marginRight: 15 }}>Edit </span></span>
               <span onClick={() => { remove(index) }} ><Icon name="times circle" />Remove</span>
             </Remove>
           </QtyContainer>

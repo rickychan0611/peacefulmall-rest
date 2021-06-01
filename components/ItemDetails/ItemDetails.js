@@ -27,6 +27,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   const [item, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [loading, setLoading] = useState(true);
+  const [attributes, setAttributes] = useState([]);
 
   const [value, setValue] = useState({ option: 'option0', value: 0 });
   const [quantity, setQty] = useState(1);
@@ -95,8 +96,8 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
             }}>
             <Icon name="arrow left" /> Back
           </BackButton>
-          <ItemDetailsContext />
-          <BottomAddBar quantity={quantity} setQty={setQty} option={value} price={item.promotion_price === null ? item.price : item.promotion_price} addItem={addItem} />
+          <ItemDetailsContext attributes={attributes} setAttributes={setAttributes}/>
+          <BottomAddBar attributes={attributes} quantity={quantity} setQty={setQty} option={value} price={item.promotion_price === null ? item.price : item.promotion_price} addItem={addItem} />
         </>
       )}
     </>

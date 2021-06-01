@@ -10,22 +10,21 @@ import {
 
 import { Form, Grid, Icon, Radio, Image, Checkbox, Divider } from 'semantic-ui-react';
 
-const ItemDetailsContext = ({ checkOutListItem }) => {
+const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => {
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [item, setItem] = useState();
   const [quantity, setQty] = useState(1);
-  const [attributes, setAttributes] = useState([]);
+  // const [attributes, setAttributes] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState({});
 
   useEffect(() => {
     console.log(checkOutListItem);
     checkOutListItem ? setItem(checkOutListItem) : setItem(currentItem);
   }, [checkOutListItem, currentItem]);
 
-  const handleChange = (e, option) => {
-    console.log('e', e);
+  const handleCheckBoxChange = (option) => {
     let attTemp = [...attributes];
 
     //find attribute index
@@ -55,33 +54,27 @@ const ItemDetailsContext = ({ checkOutListItem }) => {
     setAttributes(attTemp);
   };
 
+
   const handleRadioChange = (option) => {
+    setChecked(prev => ({ ...prev, [option.attribute_id]: option.id }))
     let temp = [...attributes];
     let attIndex = temp.findIndex(item => item.id === option.attribute_id)
     if (!temp[0]) {
-      setAttributes([{id: option.attribute_id, options: [option]}])
-    } 
+      setAttributes([{ id: option.attribute_id, options: [option] }])
+    }
     else if (attIndex !== -1) {
-        temp[attIndex].options = option;
-        setAttributes(temp);
+      temp[attIndex].options = option;
+      setAttributes(temp);
     }
     else {
-      temp.push({id: option.attribute_id, options: [option]})
+      temp.push({ id: option.attribute_id, options: [option] })
       setAttributes(temp);
     }
   };
 
-  const checks = (option) => {
-    if (attributes.length > 0) {
-      console.log("$$$$$$$$$$" , attributes[attributes.findIndex(item =>item.id === option.attribute_id)].options.includes(item => item.id === option.id )
-      )
-      setChecked(attributes[attributes.findIndex(item =>item.id === option.attribute_id)].options.includes(item => item.id === option.id ))
-    }
-  }
 
   useEffect(() => {
     console.log('attributes', attributes);
-    checks()
   }, [attributes]);
 
   return (
@@ -122,16 +115,21 @@ const ItemDetailsContext = ({ checkOutListItem }) => {
                 item.attributes[0] &&
                 item.attributes.map((attribute, i) => {
                   return (
-                    <>
+                    <div key={i}>
                       <Divider />
 
-                      <Form.Field key={i}>
+                      <Form.Field>
                         <h4 style={{ fontWeight: 'bold' }}>
                           {attribute.name}
                           <span style={{ color: 'grey' }}>
                             {attribute.type === 1
                               ? ' (choose one only)'
                               : ' (you can choose more than one)'}
+                          </span>
+                          <span style={{ color: 'red' }}>
+                            {attribute.require_status === 1
+                              ? ' *required'
+                              : ''}
                           </span>
                         </h4>
 
@@ -147,9 +145,10 @@ const ItemDetailsContext = ({ checkOutListItem }) => {
                                       label={option.option_name}
                                       name="radioGroup"
                                       // value={option.option_price}
-                                      checked={checked}
-                                      onChange={(e, { value }) => {
-                                        // Uncheck if optionId is checked, remove option from attritubes array and selctedOptions
+                                      // checked={checked[option_attribite.id]}
+                                      onChange={() => {
+
+                                        // Handle UNCHECK! Uncheck if optionId is checked, remove option from attritubes array and selctedOptions
                                         // selectedOptions is used to control checkboxes
                                         if (selectedOptions.includes(option.id)) {
                                           // remove option in attributes
@@ -157,17 +156,11 @@ const ItemDetailsContext = ({ checkOutListItem }) => {
                                           let attIndex = temp.findIndex(
                                             (item) => item.id === option.attribute_id
                                           );
-                                          console.log('temp[attIndex].options', temp[attIndex]);
                                           let optIndex = temp[attIndex].options.findIndex(
                                             (item) => item.id === option.id
                                           );
 
-                                          console.log(
-                                            'remove excludedOptions!!!!!!!!!!!!!!!!!',
-                                            optIndex
-                                          );
                                           temp[attIndex].options.splice(optIndex, 1);
-                                          console.log('remove tempOpt!!!!!!!!!!!!!!!!!', temp);
 
                                           if (temp[attIndex].options.length === 0) {
                                             temp.splice(attIndex, 1);
@@ -180,7 +173,7 @@ const ItemDetailsContext = ({ checkOutListItem }) => {
                                           );
                                         } else {
                                           setSelectedOptions([...selectedOptions, option.id]);
-                                          handleChange(value, option);
+                                          handleCheckBoxChange(option);
                                         }
                                       }}
                                     />
@@ -189,11 +182,9 @@ const ItemDetailsContext = ({ checkOutListItem }) => {
                                       type="radio"
                                       label={option.option_name}
                                       name={option.attribute_id}
-                                      checked={checks(option)}
-                                      onChange={(e, { value }) => {
-                                  
+                                      checked={checked[option.attribute_id] === option.id}
+                                      onChange={() => {
                                         handleRadioChange(option);
-                                        // setSelectedOptions([...selectedOptions, option.id]);
                                       }}
                                     />
                                   )}
@@ -205,7 +196,7 @@ const ItemDetailsContext = ({ checkOutListItem }) => {
                             );
                           })}
                       </Form.Field>
-                    </>
+                    </div>
                   );
                 })}
             </Form>

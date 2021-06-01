@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
 
-const BottomAddBar = ({ index, remove, setOpen, quantity, setQty, option, price, addItem, updateItem }) => {
-  const total = () => +(Math.round(((price + option.value) * quantity) + "e+2")  + "e-2") 
+const BottomAddBar = ({ index, remove, setOpen, quantity, setQty, price, addItem, updateItem, attributes, attributeTotal }) => {
+  
+  const total = () => {
+    return +(Math.round(((+price + +attributeTotal) * +quantity) + "e+2")  + "e-2") }
 
   return (
     <>

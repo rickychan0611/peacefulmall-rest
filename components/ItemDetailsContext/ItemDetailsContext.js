@@ -63,7 +63,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
       setAttributes([{ id: option.attribute_id, options: [option] }])
     }
     else if (attIndex !== -1) {
-      temp[attIndex].options = option;
+      temp[attIndex].options = [option];
       setAttributes(temp);
     }
     else {
@@ -71,11 +71,6 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
       setAttributes(temp);
     }
   };
-
-
-  useEffect(() => {
-    console.log('attributes', attributes);
-  }, [attributes]);
 
   return (
     <>
@@ -181,7 +176,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
                                     <Radio
                                       type="radio"
                                       label={option.option_name}
-                                      name={option.attribute_id}
+                                      name={option.attribute_id.toString()}
                                       checked={checked[option.attribute_id] === option.id}
                                       onChange={() => {
                                         handleRadioChange(option);

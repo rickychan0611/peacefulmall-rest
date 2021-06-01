@@ -28,6 +28,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [loading, setLoading] = useState(true);
   const [attributes, setAttributes] = useState([]);
+  const [attributeTotal, setAttributeTotal] = useState(0);
 
   const [value, setValue] = useState({ option: 'option0', value: 0 });
   const [quantity, setQty] = useState(1);
@@ -38,16 +39,22 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   //update orderItems and localstorage, and then redirect to store's page
   const addItem = (total) => {
     let updatedItems;
-    console.log("currentShop", currentShop)
-    console.log("orderItems", orderItems)
+    console.log('currentShop', currentShop);
+    console.log('orderItems', orderItems);
+    console.log('attributes!!!', attributes);
     setOrderItems((prev) => {
       //if a prev store's name is equal to the current store, update the object
       if (prev[0] && prev[0].shop.id === currentShop.id) {
-        updatedItems = [{ ...item, option: value, quantity, total, shop: currentShop }, ...prev];
+        updatedItems = [
+          { ...item, attributes, attributeTotal, quantity, total, shop: currentShop },
+          ...prev
+        ];
       }
       //if not, replace the whole orderItem object. Add store to currentShop
       else {
-        updatedItems = [{ ...item, option: value, quantity, total, shop: currentShop }];
+        updatedItems = [
+          { ...item, attributes, attributeTotal, quantity, total, shop: currentShop }
+        ];
       }
       localStorage.setItem('orderItems', JSON.stringify(updatedItems));
       return updatedItems;
@@ -84,6 +91,21 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
     }
   }, [router.query.item_id]);
 
+  useEffect( () => {
+    console.log('attributes', attributes);
+    let total = 0;
+    attributes &&
+      attributes[0] &&
+      attributes.forEach((att) => {
+        console.log("ATTTT", att)
+        att.options.forEach((opt) => {
+          total = total + opt.option_price * (opt.quantity ? opt.quantity : 1);
+        });
+      });
+    console.log('total', total);
+    setAttributeTotal(total);
+  }, [attributes]);
+
   return (
     <>
       {!item ? (
@@ -96,8 +118,16 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
             }}>
             <Icon name="arrow left" /> Back
           </BackButton>
-          <ItemDetailsContext attributes={attributes} setAttributes={setAttributes}/>
-          <BottomAddBar attributes={attributes} quantity={quantity} setQty={setQty} option={value} price={item.promotion_price === null ? item.price : item.promotion_price} addItem={addItem} />
+          <ItemDetailsContext attributes={attributes} setAttributes={setAttributes} />
+          <BottomAddBar
+            attributeTotal={attributeTotal}
+            attributes={attributes}
+            quantity={quantity}
+            setQty={setQty}
+            option={value}
+            price={item.promotion_price === null ? item.price : item.promotion_price}
+            addItem={addItem}
+          />
         </>
       )}
     </>

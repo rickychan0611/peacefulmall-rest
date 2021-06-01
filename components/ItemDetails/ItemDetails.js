@@ -33,8 +33,6 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   const [value, setValue] = useState({ option: 'option0', value: 0 });
   const [quantity, setQty] = useState(1);
 
-  const price = 10;
-
   //function: addItem is called in <BottomAddBar>,
   //update orderItems and localstorage, and then redirect to store's page
   const addItem = (total) => {
@@ -92,17 +90,16 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   }, [router.query.item_id]);
 
   useEffect( () => {
-    console.log('attributes', attributes);
     let total = 0;
     attributes &&
       attributes[0] &&
       attributes.forEach((att) => {
-        console.log("ATTTT", att)
+        console.log('attributes', att);
         att.options.forEach((opt) => {
-          total = total + opt.option_price * (opt.quantity ? opt.quantity : 1);
+          total = total + opt.option_price * opt.quantity;
         });
       });
-    console.log('total', total);
+    console.log('setAttributeTotal', total);
     setAttributeTotal(total);
   }, [attributes]);
 

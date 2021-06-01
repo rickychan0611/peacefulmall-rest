@@ -14,23 +14,36 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [item, setItem] = useState();
-  const [quantity, setQty] = useState(1);
-  // const [attributes, setAttributes] = useState([]);
-  const [selectedOptions, setSelectedOptions] = useState([]);
   const [checked, setChecked] = useState({});
-
+  const [qty, setQty] = useState({});
+  const [selectedOpt, setSelectedOpt] = useState();
+  
   useEffect(() => {
     console.log(checkOutListItem);
     checkOutListItem ? setItem(checkOutListItem) : setItem(currentItem);
   }, [checkOutListItem, currentItem]);
 
-  const handleCheckBoxChange = (option) => {
-    let attTemp = [...attributes];
+  const onChangeQty = (task, option) => {
+    setSelectedOpt(option)
+    let temp = { ...qty };
+    if (!temp[option.id] && task == 'plus') {
+      setQty((prev) => ({ ...prev, [option.id]: 1 }));
+    } else if (temp[option.id]) {
+      setQty((prev) => ({ ...prev, [option.id]: +prev[option.id] + (task === 'plus' ? 1 : -1) }));
+    }
+  };
 
+  useEffect(() => {
+    selectedOpt && updateAttribute(selectedOpt);
+  }, [qty]);
+
+  const updateAttribute = (optObj) => {
+    let attTemp = [...attributes];
+    let option = { ...optObj, quantity: qty[optObj.id] ? qty[optObj.id] : 0 };
+    console.log('quantity', option.quantity);
     //find attribute index
     let attIndex = attributes.findIndex((attr) => attr.id === option.attribute_id);
 
-    console.log('attIndex', attIndex);
     // new attribute
     if (attIndex === -1) {
       attTemp.push({ id: option.attribute_id, options: [option] });
@@ -38,7 +51,6 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
 
     // existing attribute
     else {
-      console.log('existing attribute');
       // find option index
       let optIndex = attTemp[attIndex].options.findIndex((opt) => opt.id === option.id);
 
@@ -54,20 +66,18 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
     setAttributes(attTemp);
   };
 
-
-  const handleRadioChange = (option) => {
-    setChecked(prev => ({ ...prev, [option.attribute_id]: option.id }))
+  const handleRadioChange = (opt) => {
+    const option = {...opt, quantity : 1}
+    setChecked((prev) => ({ ...prev, [option.attribute_id]: option.id }));
     let temp = [...attributes];
-    let attIndex = temp.findIndex(item => item.id === option.attribute_id)
+    let attIndex = temp.findIndex((item) => item.id === option.attribute_id);
     if (!temp[0]) {
-      setAttributes([{ id: option.attribute_id, options: [option] }])
-    }
-    else if (attIndex !== -1) {
+      setAttributes([{ id: option.attribute_id, options: [option] }]);
+    } else if (attIndex !== -1) {
       temp[attIndex].options = [option];
       setAttributes(temp);
-    }
-    else {
-      temp.push({ id: option.attribute_id, options: [option] })
+    } else {
+      temp.push({ id: option.attribute_id, options: [option] });
       setAttributes(temp);
     }
   };
@@ -122,9 +132,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
                               : ' (you can choose more than one)'}
                           </span>
                           <span style={{ color: 'red' }}>
-                            {attribute.require_status === 1
-                              ? ' *required'
-                              : ''}
+                            {attribute.require_status === 1 ? ' *required' : ''}
                           </span>
                         </h4>
 
@@ -135,44 +143,66 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
                               <Grid key={j}>
                                 <Grid.Column width={8}>
                                   {attribute.type === 2 ? (
-                                    <Checkbox
-                                      type={attribute.type === 2 ? 'checkbox' : 'radio'}
-                                      label={option.option_name}
-                                      name="radioGroup"
-                                      // value={option.option_price}
-                                      // checked={checked[option_attribite.id]}
-                                      onChange={() => {
-
-                                        // Handle UNCHECK! Uncheck if optionId is checked, remove option from attritubes array and selctedOptions
-                                        // selectedOptions is used to control checkboxes
-                                        if (selectedOptions.includes(option.id)) {
-                                          // remove option in attributes
-                                          let temp = [...attributes];
-                                          let attIndex = temp.findIndex(
-                                            (item) => item.id === option.attribute_id
-                                          );
-                                          let optIndex = temp[attIndex].options.findIndex(
-                                            (item) => item.id === option.id
-                                          );
-
-                                          temp[attIndex].options.splice(optIndex, 1);
-
-                                          if (temp[attIndex].options.length === 0) {
-                                            temp.splice(attIndex, 1);
-                                          }
-
-                                          setAttributes(temp);
-
-                                          setSelectedOptions(
-                                            selectedOptions.filter((id) => id !== option.id)
-                                          );
-                                        } else {
-                                          setSelectedOptions([...selectedOptions, option.id]);
-                                          handleCheckBoxChange(option);
-                                        }
-                                      }}
-                                    />
+                                    <QtyContainer>
+                                      <div>
+                                        <Icon
+                                          style={{ cursor: 'pointer' }}
+                                          name="minus circle"
+                                          onClick={() => {
+                                            onChangeQty('minus', option);
+                                          }}
+                                        />
+                                        <span style={{ margin: '0 8px 0 5px' }}>
+                                          {qty[option.id] ? qty[option.id] : 0}
+                                        </span>
+                                        <Icon
+                                          style={{ cursor: 'pointer', marginRight: 10 }}
+                                          name="plus circle"
+                                          onClick={() => {
+                                            onChangeQty('plus', option);
+                                          }}
+                                        />
+                                      </div>
+                                      {option.option_name}
+                                    </QtyContainer>
                                   ) : (
+                                    // <Checkbox
+                                    //   type={attribute.type === 2 ? 'checkbox' : 'radio'}
+                                    //   label={option.option_name}
+                                    //   name="radioGroup"
+                                    //   // value={option.option_price}
+                                    //   // checked={checked[option_attribite.id]}
+                                    //   onChange={() => {
+
+                                    //     // Handle UNCHECK! Uncheck if optionId is checked, remove option from attritubes array and selctedOptions
+                                    //     // selectedOptions is used to control checkboxes
+                                    //     if (selectedOptions.includes(option.id)) {
+                                    //       // remove option in attributes
+                                    //       let temp = [...attributes];
+                                    //       let attIndex = temp.findIndex(
+                                    //         (item) => item.id === option.attribute_id
+                                    //       );
+                                    //       let optIndex = temp[attIndex].options.findIndex(
+                                    //         (item) => item.id === option.id
+                                    //       );
+
+                                    //       temp[attIndex].options.splice(optIndex, 1);
+
+                                    //       if (temp[attIndex].options.length === 0) {
+                                    //         temp.splice(attIndex, 1);
+                                    //       }
+
+                                    //       setAttributes(temp);
+
+                                    //       setSelectedOptions(
+                                    //         selectedOptions.filter((id) => id !== option.id)
+                                    //       );
+                                    //     } else {
+                                    //       setSelectedOptions([...selectedOptions, option.id]);
+                                    //       handleCheckBoxChange(option);
+                                    //     }
+                                    //   }}
+                                    // />
                                     <Radio
                                       type="radio"
                                       label={option.option_name}
@@ -185,7 +215,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
                                   )}
                                 </Grid.Column>
                                 <Grid.Column width={8} style={{ textAlign: 'right' }}>
-                                  + ${option.option_price}
+                                  + ${option.option_price} / ea.
                                 </Grid.Column>
                               </Grid>
                             );
@@ -201,6 +231,15 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
     </>
   );
 };
+
+const QtyContainer = styled.div`
+  margin: 10px 10px 0 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+`;
 
 const Wrapper = styled.div`
   display: flex;

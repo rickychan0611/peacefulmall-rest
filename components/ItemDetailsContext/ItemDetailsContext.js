@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { HOST_URL } from '../../env';
-import nestedProperty from 'nested-property';
 import { useRecoilState } from 'recoil';
 import {
   currentItem as currentItemAtom,
@@ -14,78 +13,65 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [item, setItem] = useState();
-  const [checked, setChecked] = useState({});
+  // const [checked, setChecked] = useState({});
   // const [qty, setQty] = useState({});
-  const [selectedOpt, setSelectedOpt] = useState();
+  // const [selectedOpt, setSelectedOpt] = useState();
 
   useEffect(() => {
-    // console.log("Load currentItem");
-    console.log( 'Load currentItem', currentItem);
-    console.log('Load checkOutListItem' , checkOutListItem);
+    console.log('Load currentItem', currentItem);
+    console.log('Load checkOutListItem', checkOutListItem);
     checkOutListItem ? setItem(checkOutListItem) : setItem(currentItem);
   }, [checkOutListItem, currentItem]);
 
-  const onChangeQty = (task, option) => {
+  const onChange = (task, option) => {
     let tempItem = JSON.parse(JSON.stringify(currentItem));
     const attIndex = tempItem.attributes.findIndex((item) => item.id === option.attribute_id);
     const optIndex = tempItem.attributes[attIndex].options.findIndex(
       (item) => item.id === option.id
     );
-    let tempObj = tempItem.attributes[attIndex].options[optIndex]
-    if (!tempObj.quantity && (task == 'plus')) {
-      tempObj.quantity = tempObj.quantity + 1
-    } else if (tempObj.quantity) {
-      tempObj.quantity = tempObj.quantity + (task === 'plus' ? 1 : -1);
+    let tempOpts = tempItem.attributes[attIndex].options[optIndex]
+
+    if (task === "radio") {
+      tempItem.attributes[attIndex].options = tempItem.attributes[attIndex].options.map((item) => ({...item, quantity: 0}))
+      tempItem.attributes[attIndex].options[optIndex].quantity = 1
+    }
+    else if (!tempOpts.quantity && (task == 'plus')) {
+      tempOpts.quantity = 1
+    } else if (tempOpts.quantity) {
+      tempOpts.quantity = tempOpts.quantity + (task === 'plus' ? 1 : -1);
     }
     setCurrentItem(tempItem);
   };
 
-  const updateAttribute = (optObj) => {
-    let attTemp = [...attributes];
-    let option = { ...optObj, quantity: qty[optObj.id] ? qty[optObj.id] : 0 };
-    console.log('quantity', option.quantity);
-    //find attribute index
-    let attIndex = attributes.findIndex((attr) => attr.id === option.attribute_id);
+  // const updateAttribute = (optObj) => {
+  //   let attTemp = [...attributes];
+  //   let option = { ...optObj, quantity: qty[optObj.id] ? qty[optObj.id] : 0 };
+  //   console.log('quantity', option.quantity);
+  //   //find attribute index
+  //   let attIndex = attributes.findIndex((attr) => attr.id === option.attribute_id);
 
-    // new attribute
-    if (attIndex === -1) {
-      attTemp.push({ id: option.attribute_id, options: [option] });
-    }
+  //   // new attribute
+  //   if (attIndex === -1) {
+  //     attTemp.push({ id: option.attribute_id, options: [option] });
+  //   }
 
-    // existing attribute
-    else {
-      // find option index
-      let optIndex = attTemp[attIndex].options.findIndex((opt) => opt.id === option.id);
+  //   // existing attribute
+  //   else {
+  //     // find option index
+  //     let optIndex = attTemp[attIndex].options.findIndex((opt) => opt.id === option.id);
 
-      // new option
-      if (optIndex === -1) {
-        attTemp[attIndex].options.push(option);
-      }
-      // existing otpion
-      else {
-        attTemp[attIndex].options[optIndex] = option;
-      }
-    }
+  //     // new option
+  //     if (optIndex === -1) {
+  //       attTemp[attIndex].options.push(option);
+  //     }
+  //     // existing otpion
+  //     else {
+  //       attTemp[attIndex].options[optIndex] = option;
+  //     }
+  //   }
 
-    setAttributes(attTemp);
-  };
-
-  const handleRadioChange = (opt) => {
-    onChangeQty("radio", option)
-    const option = { ...opt, quantity: 1 };
-    setChecked((prev) => ({ ...prev, [option.attribute_id]: option.id }));
-    let temp = [...attributes];
-    let attIndex = temp.findIndex((item) => item.id === option.attribute_id);
-    if (!temp[0]) {
-      setAttributes([{ id: option.attribute_id, options: [option] }]);
-    } else if (attIndex !== -1) {
-      temp[attIndex].options = [option];
-      setAttributes(temp);
-    } else {
-      temp.push({ id: option.attribute_id, options: [option] });
-      setAttributes(temp);
-    }
-  };
+  //   setAttributes(attTemp);
+  // };
 
   return (
     <>
@@ -154,7 +140,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
                                           style={{ cursor: 'pointer' }}
                                           name="minus circle"
                                           onClick={() => {
-                                            onChangeQty('minus', option);
+                                            onChange('minus', option);
                                           }}
                                         />
                                         <span style={{ margin: '0 8px 0 5px' }}>
@@ -164,7 +150,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
                                           style={{ cursor: 'pointer', marginRight: 10 }}
                                           name="plus circle"
                                           onClick={() => {
-                                            onChangeQty('plus', option);
+                                            onChange('plus', option);
                                           }}
                                         />
                                       </div>
@@ -212,9 +198,9 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
                                       type="radio"
                                       label={option.option_name}
                                       name={option.attribute_id.toString()}
-                                      checked={checked[option.attribute_id] === option.id}
+                                      checked={option.quantity === 1}
                                       onChange={() => {
-                                        handleRadioChange(option);
+                                        onChange("radio", option);
                                       }}
                                     />
                                   )}

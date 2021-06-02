@@ -6,7 +6,6 @@ import { HOST_URL } from '../../env';
 import toSlug from '../../util/toSlug';
 import axios from 'axios';
 import Loader from '../Loader';
-import nestedProperty  from "nested-property";
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {

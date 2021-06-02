@@ -30,16 +30,17 @@ const OrderReceipt = ({ order }) => {
                   <ItemText style={{ minWidth: '30px' }}>{item.product_quantity} x</ItemText>
                   <div>
                     <ItemName>{item.product_name}</ItemName>
-                    {/* {item.option && item.option.value !== 0 && (
-                      <p>• {item.option.option + ' ' + '+$' + item.option.value}</p>
-                    )} */}
+                    {JSON.parse(item.product_attr).map(att => {
+                      console.log(att)
+                      return att.options[0] && att.options.map(opt => <p>{att.name} : {opt.name}</p>)
+                    })}
                   </div>
                 </Qty>
                 <ItemText>${item.sub_total_amount}</ItemText>
               </ItemContainer>
             );
           })}
-          <Divider />
+          {/* <Divider /> */}
           <TotalContainer>
             <Content>Subtotal:</Content>
             <Price>${order.sub_total_amount}</Price>

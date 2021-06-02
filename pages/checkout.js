@@ -6,14 +6,10 @@ import styled from 'styled-components';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import {
   orderDetails as orderDetailsAtom,
-  orderItems,
+  orderItems as orderItemsAtom,
   shippingMethod as shippingMethodAtom
 } from '../data/orderAtoms.js';
 import {
-  appReady as appReadyAtom,
-  showCheckoutButton as showCheckoutButtonAtom,
-  selections as selectionsAtom,
-  currentPosition as currentPositionAtom,
   defaultAddress as defaultAddressAtom,
   addresses as addressAtom,
   currentShop as currentShopAtom
@@ -23,7 +19,6 @@ import { useCookies } from 'react-cookie';
 
 import OrderItem from '../components/OrderItem/';
 import TotalAmountList from '../components/TotalAmountList/';
-import AddressChange from '../components/AddressChange/AddressChange.js';
 import AddressBook from '../components/AddressBook';
 import { useIsDesktop } from '../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
@@ -31,13 +26,10 @@ import useTranslation from 'next-translate/useTranslation';
 const checkout = () => {
   const router = useRouter();
   const orderDetails = useRecoilValue(orderDetailsAtom);
-  const selections = useRecoilValue(selectionsAtom);
   const defaultAddress = useRecoilValue(defaultAddressAtom);
   const [deliveryTime, setDeliveryTime] = useState('ASAP');
-  const appReady = useRecoilValue(appReadyAtom);
-  const [, setShowCheckoutButton] = useRecoilState(showCheckoutButtonAtom);
   const [, setShippingMethod] = useRecoilState(shippingMethodAtom);
-  const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
+  const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
   const [open, setOpen] = useState(false);
   const isDesktop = useIsDesktop();
   const { t } = useTranslation('profile');
@@ -48,6 +40,13 @@ const checkout = () => {
   const [loading, setLoading] = useState(false);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [reload, setReload] = useState(0);
+  const [tips_amount, setTips_amount] = useState({tips: 0});
+
+  const setTips = (value, name) => {
+    console.log('tips', value);
+    if (name !== '$') setTips_amount({ tips: orderDetails.subtotal * value, name });
+    else setTips_amount({ tips: value, name });
+  };
 
   const EditButton = ({ add }) => (
     <Edit
@@ -101,7 +100,8 @@ const checkout = () => {
           receiver_city: defaultAddress.city,
           receiver_detail_address: defaultAddress.detail_address,
           receiver_unit_number: defaultAddress.unit_number,
-          receiver_note: defaultAddress.note
+          receiver_note: defaultAddress.note,
+          tips_amount : tips_amount.tips
         };
         console.log('body', body);
         const result = await axios.post(HOST_URL + '/api/user/order/create', body, {
@@ -132,7 +132,7 @@ const checkout = () => {
     } else if (reload === 2 && orderDetails.orderItems.length === 0 && !currentShop) {
       router.push('/');
     }
-    setReload(reload + 1)
+    setReload(reload + 1);
   }, [orderDetails]);
 
   return (
@@ -273,7 +273,7 @@ const checkout = () => {
               </>
             )}
             <Header>Order Summary</Header>
-            <p stype={{margin: 0}}>You can click item to edit</p>
+            <p stype={{ margin: 0 }}>You can click item to edit</p>
             {orderDetails.orderItems &&
               orderDetails.orderItems[0] &&
               orderDetails.orderItems.map((item, i) => {
@@ -291,7 +291,11 @@ const checkout = () => {
             </a>
             <Divider />
 
-            <TotalAmountList orderDetails={orderDetails} />
+            <TotalAmountList
+              orderDetails={orderDetails}
+              setTips={setTips}
+              tips_amount={tips_amount}
+            />
 
             <Divider />
             <Header>Payment method</Header>
@@ -304,7 +308,7 @@ const checkout = () => {
               {!loading ? (
                 <>
                   <div>Place Order</div>
-                  <div>${orderDetails.total}</div>
+                  <div>${(orderDetails.total + tips_amount.tips).toFixed(2)}</div>
                 </>
               ) : (
                 <div style={{ textAlign: 'center', width: '100%' }}>

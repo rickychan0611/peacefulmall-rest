@@ -51,15 +51,15 @@ const OrderReceipt = ({ order }) => {
           </TotalContainer>
           <TotalContainer>
             <Content>Shipping fee:</Content>
-            <Price>${+order.shipping_amount}</Price>
+            <Price>${order.shipping_amount}</Price>
           </TotalContainer>
           <TotalContainer>
             <Content>Taxes:</Content>
-            <Price>${+order.tax_amount}</Price>
+            <Price>${order.tax_amount}</Price>
           </TotalContainer>
           <TotalContainer>
             <Content>Tip:</Content>
-            <Price>${0}</Price>
+            <Price>${order.tips_amount}</Price>
           </TotalContainer>
           <Divider />
           <TotalContainer>
@@ -67,7 +67,7 @@ const OrderReceipt = ({ order }) => {
               <span style={{ color: 'black' }}>Total:</span>
             </Content>
             <Price>
-              <span style={{ color: 'black' }}>${+order.pay_amount}</span>
+              <span style={{ color: 'black' }}>${+order.pay_amount + +order.tips_amount}</span>
             </Price>
           </TotalContainer>
         </OrdersContainer>
@@ -94,7 +94,7 @@ const OrdersContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  /* padding: 25px; */
+  padding: 10px;
 `;
 const H4 = styled.h4`
   margin: 0 0 10px 0;

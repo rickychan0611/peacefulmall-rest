@@ -15,7 +15,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [item, setItem] = useState();
   const [checked, setChecked] = useState({});
-  const [qty, setQty] = useState({});
+  // const [qty, setQty] = useState({});
   const [selectedOpt, setSelectedOpt] = useState();
 
   useEffect(() => {
@@ -26,19 +26,19 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
   }, [checkOutListItem, currentItem]);
 
   const onChangeQty = (task, option) => {
-    setSelectedOpt(option);
-    let temp = { ...qty };
-    if (!temp[option.id] && task == 'plus') {
-      setQty((prev) => ({ ...prev, [option.id]: 1 }));
-    } else if (temp[option.id]) {
-      setQty((prev) => ({ ...prev, [option.id]: +prev[option.id] + (task === 'plus' ? 1 : -1) }));
+    let tempItem = JSON.parse(JSON.stringify(currentItem));
+    const attIndex = tempItem.attributes.findIndex((item) => item.id === option.attribute_id);
+    const optIndex = tempItem.attributes[attIndex].options.findIndex(
+      (item) => item.id === option.id
+    );
+    let tempObj = tempItem.attributes[attIndex].options[optIndex]
+    if (!tempObj.quantity && (task == 'plus')) {
+      tempObj.quantity = tempObj.quantity + 1
+    } else if (tempObj.quantity) {
+      tempObj.quantity = tempObj.quantity + (task === 'plus' ? 1 : -1);
     }
+    setCurrentItem(tempItem);
   };
-
-  // tigger when qty changes, otherwise one step behind
-  useEffect(() => {
-    selectedOpt && updateAttribute(selectedOpt);
-  }, [qty]);
 
   const updateAttribute = (optObj) => {
     let attTemp = [...attributes];
@@ -68,18 +68,10 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
     }
 
     setAttributes(attTemp);
-    let tempItem = JSON.stringify(currentItem);
-    tempItem = JSON.parse(tempItem);
-    const tempAttIndex = tempItem.attributes.findIndex((item) => item.id === option.attribute_id);
-    const tempOptIndex = tempItem.attributes[tempAttIndex].options.findIndex(
-      (item) => item.id === option.id
-    );
-    tempItem.attributes[tempAttIndex].options[tempOptIndex].quantity = option.quantity
-    console.log("tempItem@@@@@@@@@@@@", tempItem)
-    setCurrentItem(tempItem);
   };
 
   const handleRadioChange = (opt) => {
+    onChangeQty("radio", option)
     const option = { ...opt, quantity: 1 };
     setChecked((prev) => ({ ...prev, [option.attribute_id]: option.id }));
     let temp = [...attributes];

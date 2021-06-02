@@ -32,7 +32,7 @@ const BottomAddBar = ({ index, remove, setOpen, quantity, setQty, price, addItem
             onClick={() => {
               if (updateItem) {
                 setOpen(false);
-              } else addItem(total());
+              } else addItem();
             }}>
             {quantity > 0 && !updateItem && `ADD $${total()}`}
             {quantity > 0 && updateItem && `UPDATE $${total()}`}

@@ -10,7 +10,13 @@ import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 
 import { Form, Grid, Icon, Radio, Image, Checkbox, Divider } from 'semantic-ui-react';
 
-const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes, updateItem, attributeTotal }) => {
+const ItemDetailsContext = ({
+  checkOutListItem,
+  attributes,
+  setAttributes,
+  updateItem,
+  attributeTotal
+}) => {
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [item, setItem] = useState();
@@ -29,20 +35,24 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes, updat
     const optIndex = tempItem.attributes[attIndex].options.findIndex(
       (item) => item.id === option.id
     );
-    let tempOpts = tempItem.attributes[attIndex].options[optIndex]
+    let tempOpts = tempItem.attributes[attIndex].options[optIndex];
 
-    if (task === "radio") {
-      tempItem.attributes[attIndex].options = tempItem.attributes[attIndex].options.map((item) => ({ ...item, quantity: 0 }))
-      tempItem.attributes[attIndex].options[optIndex].quantity = 1
-    }
-    else if (!tempOpts.quantity && (task == 'plus')) {
-      tempOpts.quantity = 1
+    if (task === 'radio') {
+      tempItem.attributes[attIndex].options = tempItem.attributes[attIndex].options.map((item) => ({
+        ...item,
+        quantity: 0
+      }));
+      tempItem.attributes[attIndex].options[optIndex].quantity = 1;
+    } else if (!tempOpts.quantity && task == 'plus') {
+      tempOpts.quantity = 1;
     } else if (tempOpts.quantity) {
       tempOpts.quantity = tempOpts.quantity + (task === 'plus' ? 1 : -1);
     }
 
-    console.log("orderItems", orderItems)
-    updateItem ? setOrderItems(prev => prev.map(item => item.id === tempItem.id ? tempItem : item)) : setCurrentItem(tempItem);
+    console.log('orderItems', orderItems);
+    updateItem
+      ? setOrderItems((prev) => prev.map((item) => (item.uid === tempItem.uid ? tempItem : item)))
+      : setCurrentItem(tempItem);
   };
 
   return (
@@ -84,20 +94,20 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes, updat
                 item.attributes.map((attribute, i) => {
                   return (
                     <div key={i}>
-                      <Divider />
-
                       <Form.Field>
-                        <h4 style={{ fontWeight: 'bold' }}>
-                          {attribute.name}
-                          {/* <span style={{ color: 'grey' }}>
+                        <OptionTitle>
+                          <h4 style={{ fontWeight: 'bold' }}>
+                            {attribute.name}
+                            {/* <span style={{ color: 'grey' }}>
                             {attribute.type === 1
                               ? ' (choose one only)'
                               : ' (you can choose more than one)'}
                           </span> */}
-                          <span style={{ color: 'red' }}>
-                            {attribute.require_status === 1 ? ' *required' : ''}
-                          </span>
-                        </h4>
+                            <span style={{ color: 'red' }}>
+                              {attribute.require_status === 1 ? ' *required' : ''}
+                            </span>
+                          </h4>
+                        </OptionTitle>
 
                         {attribute.options &&
                           attribute.options[0] &&
@@ -172,7 +182,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes, updat
                                       name={option.attribute_id.toString()}
                                       checked={option.quantity === 1}
                                       onChange={() => {
-                                        onChange("radio", option);
+                                        onChange('radio', option);
                                       }}
                                     />
                                   )}
@@ -195,6 +205,11 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes, updat
   );
 };
 
+const OptionTitle = styled.div`
+  padding: 5px;
+  background-color: #ded9d9;
+  margin: 15px 0 15px 0;
+`;
 const QtyContainer = styled.div`
   margin: 10px 10px 0 10px;
   display: flex;

@@ -19,6 +19,7 @@ import BottomAddBar from '../BottomAddBar';
 import ItemDetailsContext from '../ItemDetailsContext';
 import _ from 'lodash';
 import { useEffect } from 'react';
+import {uid} from 'react-uid';
 
 const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   const router = useRouter();
@@ -34,7 +35,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
 
   //function: addItem is called in <BottomAddBar>,
   //update orderItems and localstorage, and then redirect to store's page
-  const addItem = (total) => {
+  const addItem = () => {
     let updatedItems;
     console.log('currentShop', currentShop);
     console.log('orderItems', orderItems);
@@ -48,14 +49,14 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
 
       if (prev[0] && prev[0].shop.id === currentShop.id) {
         updatedItems = [
-          { ...item, attributeTotal, quantity, total, shop: currentShop },
+          { ...item, attributeTotal, quantity, shop: currentShop, uid: uid(item) },
           ...prev
         ];
       }
       //if not, replace the whole orderItem object. Add store to currentShop
       else {
         updatedItems = [
-          { ...item, attributeTotal, quantity, total, shop: currentShop }
+          { ...item, attributeTotal, quantity, shop: currentShop, uid: uid(item) }
         ];
       }
       localStorage.setItem('orderItems', JSON.stringify(updatedItems));

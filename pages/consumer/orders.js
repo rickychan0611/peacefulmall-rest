@@ -37,74 +37,74 @@ const orders = () => {
     }
   }, []);
 
-  return (
-    <>
-      <Container>
-        {loading ? (
-          <Loader loading={loading} />
-        ) : (
-          <>
-            <Modal
-              closeIcon
-              size={'tiny'}
-              onClose={() => setOpen(false)}
-              onOpen={() => setOpen(true)}
-              open={open}
-            >
-              <Modal.Content>
-                <OrderReceipt order={selectedOrder} />
-              </Modal.Content>
-            </Modal>
-            <Wrapper>
-              <h2>{t`YourOrders`}</h2>
-              <h4>{t`PastOrders`}</h4>
-              {orders &&
-                orders.map((order, i) => {
-                  return (
-                    <div key={i}>
-                      <Divider />
-                      <Row onClick={() => {
-                        setOpen(true);
-                        setSelectedOrder(order);
-                      }}>
-                        <div key={order.id}
-                          style={{ width: "100%" }}
-                          onClick={() => {
-                            setOpen(true);
-                            setSelectedOrder(order);
-                          }}>
-                          <P>
-                            {moment(order.created_at).format('MMM DD - hh:mm a')} <br />
-                            {t(statusDecoder(order.status))} • Total: $
-                            {parseInt(order.pay_amount).toFixed(2)}
-                          </P>
-                          <Name>{order.shop.name}</Name>
-                          <P>
-                            {order.order_items.length} items:{' '}
-                            {order.order_items.map((item, i) => {
-                              return (
-                                <span key={i} style={{ fontSize: 12 }}>{(i === 0 ? '' : ', ') + item.product_name}</span>
-                              );
-                            })}
-                          </P>
-                        </div>
-                        {/* <div style={{ marginLeft: 10 }}>
-                          <Button
-                            size="small"
-                            onClick={() => {
-                              setOpen(true);
-                              setSelectedOrder(order);
-                            }}>{t`ViewReceipt`}</Button>
-                        </div> */}
-                      </Row>
-                    </div>
-                  );
-                })}
-            </Wrapper>
-          </>
-        )}
-      </Container>
-    </>
+  return ( <></>
+    // <>
+    //   <Container>
+    //     {loading ? (
+    //       <Loader loading={loading} />
+    //     ) : (
+    //       <>
+    //         <Modal
+    //           closeIcon
+    //           size={'tiny'}
+    //           onClose={() => setOpen(false)}
+    //           onOpen={() => setOpen(true)}
+    //           open={open}
+    //         >
+    //           <Modal.Content>
+    //             <OrderReceipt order={selectedOrder} />
+    //           </Modal.Content>
+    //         </Modal>
+    //         <Wrapper>
+    //           <h2>{t`YourOrders`}</h2>
+    //           <h4>{t`PastOrders`}</h4>
+    //           {orders &&
+    //             orders.map((order, i) => {
+    //               return (
+    //                 <div key={i}>
+    //                   <Divider />
+    //                   <Row onClick={() => {
+    //                     setOpen(true);
+    //                     setSelectedOrder(order);
+    //                   }}>
+    //                     <div key={order.id}
+    //                       style={{ width: "100%" }}
+    //                       onClick={() => {
+    //                         setOpen(true);
+    //                         setSelectedOrder(order);
+    //                       }}>
+    //                       <P>
+    //                         {moment(order.created_at).format('MMM DD - hh:mm a')} <br />
+    //                         {t(statusDecoder(order.status))} • Total: $
+    //                         {parseInt(order.pay_amount).toFixed(2)}
+    //                       </P>
+    //                       <Name>{order.shop.name}</Name>
+    //                       <P>
+    //                         {order.order_items.length} items:{' '}
+    //                         {order.order_items.map((item, i) => {
+    //                           return (
+    //                             <span key={i} style={{ fontSize: 12 }}>{(i === 0 ? '' : ', ') + item.product_name}</span>
+    //                           );
+    //                         })}
+    //                       </P>
+    //                     </div>
+    //                     {/* <div style={{ marginLeft: 10 }}>
+    //                       <Button
+    //                         size="small"
+    //                         onClick={() => {
+    //                           setOpen(true);
+    //                           setSelectedOrder(order);
+    //                         }}>{t`ViewReceipt`}</Button>
+    //                     </div> */}
+    //                   </Row>
+    //                 </div>
+    //               );
+    //             })}
+    //         </Wrapper>
+    //       </>
+    //     )}
+    //   </Container>
+    // </>
   );
 };
 

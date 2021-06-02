@@ -27,9 +27,10 @@ export const orderDetails = selector({
       });
     let taxTotal = 0;
     items &&
-      items[0] &&
-      items.forEach((item, index) => {
-        taxTotal = taxTotal + ((item.attributeTotal + item.total) * ((item.tax ? +item.tax.tax_rate : 12) / 100))
+    items[0] &&
+    items.forEach((item, index) => {
+        let itemTotal = (((item.promotion_price ?  +item.promotion_price : +item.price ) + item.attributeTotal) * +item.quantity)
+        taxTotal = taxTotal + ((itemTotal) * ((item.tax ? +item.tax.tax_rate : 12) / 100))
       });
 
     return {

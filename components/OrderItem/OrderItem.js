@@ -39,12 +39,13 @@ const OrderItem = ({ item, index }) => {
     console.log('quantity', quantity);
     console.log('item.price', item.price);
 
+    //item.total doesn't contain attributeTotal, attributeTotal is set in Atom
     key === 'minus' &&
       item.quantity > 1 &&
       setOrderItems((prev) => {
         let newQty = item.quantity - value;
         return prev.map((item, i) =>
-          i === index ? { ...item, quantity: newQty, total: item.price * newQty } : item
+          i === index ? { ...item, quantity: newQty} : item
         );
       });
 
@@ -52,7 +53,7 @@ const OrderItem = ({ item, index }) => {
       setOrderItems((prev) => {
         let newQty = item.quantity + value;
         return prev.map((item, i) =>
-          i === index ? { ...item, quantity: newQty, total: item.price * newQty } : item
+          i === index ? { ...item, quantity: newQty } : item
         );
       });
     
@@ -63,6 +64,10 @@ const OrderItem = ({ item, index }) => {
   useEffect(() => {
     localStorage.setItem('orderItems', JSON.stringify(orderItems));
   }, [orderItems]);
+
+  const getTotal = () => {
+    return (((item.promotion_price ?  +item.promotion_price : +item.price ) + item.attributeTotal) * +item.quantity)
+  }
 
   useEffect(() => {
     let total = 0;
@@ -78,9 +83,13 @@ const OrderItem = ({ item, index }) => {
   }, [item]);
 
   useEffect(() => {
-    setOrderItems(prev => prev.map(order => order.id === item.id ? {...order, attributeTotal} : order));
+    setOrderItems(prev => prev.map(order => order.uid === item.uid ? {
+      ...order, 
+      attributeTotal,
+    } : order));
   }, [attributeTotal])
   
+    
   return (
     <>
       <Modal
@@ -123,7 +132,8 @@ const OrderItem = ({ item, index }) => {
             )}
           </div>
         </Qty>
-        <ItemText>${+(Math.round(item.total + (item.attributeTotal * item.quantity) + 'e+2') + 'e-2')}</ItemText>
+        <ItemText>${getTotal()}</ItemText>
+        {/* <ItemText>${item.attributeTotal + +item.price}</ItemText> */}
       </Row>
 
       {router.route !== '/checkout' && (

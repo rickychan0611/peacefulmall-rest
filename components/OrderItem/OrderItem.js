@@ -76,6 +76,10 @@ const OrderItem = ({ item, index }) => {
 
     setAttributeTotal(total)
   }, [item]);
+
+  useEffect(() => {
+    setOrderItems(prev => prev.map(order => order.id === item.id ? {...order, attributeTotal} : order));
+  }, [attributeTotal])
   
   return (
     <>
@@ -87,7 +91,7 @@ const OrderItem = ({ item, index }) => {
         onOpen={() => setOpen(true)}
         open={open}>
         <div style={{ height: '90vh', overflowY: 'auto', position: 'relative' }}>
-          <ItemDetailsContext checkOutListItem={item} updateItem/>
+          <ItemDetailsContext checkOutListItem={item} updateItem attributeTotal={attributeTotal}/>
           <BottomAddBar
             index={index}
             remove={remove}
@@ -119,7 +123,7 @@ const OrderItem = ({ item, index }) => {
             )}
           </div>
         </Qty>
-        <ItemText>${+(Math.round(item.total + 'e+2') + 'e-2')}</ItemText>
+        <ItemText>${+(Math.round(item.total + (item.attributeTotal * item.quantity) + 'e+2') + 'e-2')}</ItemText>
       </Row>
 
       {router.route !== '/checkout' && (

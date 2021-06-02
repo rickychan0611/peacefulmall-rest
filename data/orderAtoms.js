@@ -23,13 +23,13 @@ export const orderDetails = selector({
     items &&
       items[0] &&
       items.forEach((item, index) => {
-        subtotal = subtotal + ((item.promotion_price ? +item.promotion_price : +item.price) * item.quantity);
+        subtotal = subtotal + ((+item.attributeTotal + (item.promotion_price ? +item.promotion_price : +item.price)) * item.quantity);
       });
     let taxTotal = 0;
     items &&
       items[0] &&
       items.forEach((item, index) => {
-        taxTotal = taxTotal + (item.total * ((item.tax ? +item.tax.tax_rate : 12) / 100))
+        taxTotal = taxTotal + ((item.attributeTotal + item.total) * ((item.tax ? +item.tax.tax_rate : 12) / 100))
       });
 
     return {

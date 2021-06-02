@@ -10,7 +10,7 @@ import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 
 import { Form, Grid, Icon, Radio, Image, Checkbox, Divider } from 'semantic-ui-react';
 
-const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes, updateItem }) => {
+const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes, updateItem, attributeTotal }) => {
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [item, setItem] = useState();
@@ -57,7 +57,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes, updat
               }}>
               <Image
                 src={
-                  currentShop.logo
+                  currentShop && currentShop.logo
                     ? HOST_URL + '/storage/' + currentShop.logo
                     : '/avatar-placeholder.png'
                 }
@@ -65,7 +65,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes, updat
                 size="mini"
               />
               &nbsp;&nbsp;
-              {currentShop.name}
+              {currentShop && currentShop.name}
             </StoreHeader>
             <h2>{item.name}</h2>
 

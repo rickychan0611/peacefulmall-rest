@@ -75,14 +75,7 @@ const orders = () => {
                             setOpen(true);
                             setSelectedOrder(order);
                           }}>
-                          <Row>
-                            <P>
-                              {moment(order.created_at).format('MMM DD - hh:mm a')}
-                              {' • '}
-                              {t(statusDecoder(order.status))} <br />
-                            </P>
-                            <P>Total: $ {parseInt(order.pay_amount).toFixed(2)}</P>
-                          </Row>
+                            <StoreName>{order.shop.name}</StoreName>
                           <Name>
                             {/* {order.order_items.length} items:{' '} */}
                             {order.order_items.map((item, i) => {
@@ -91,7 +84,14 @@ const orders = () => {
                               );
                             })}
                           </Name>
-                          <P>From: {order.shop.name}</P>
+                          <Row>
+                            <P>
+                              {moment(order.created_at).format('MMM DD - hh:mm a')}
+                              {' • '}
+                              {t(statusDecoder(order.status))} <br />
+                            </P>
+                            <P>Total: ${parseInt(order.pay_amount).toFixed(2)}</P>
+                          </Row>
                         </div>
                         {/* <div style={{ marginLeft: 10 }}>
                           <Button
@@ -113,20 +113,25 @@ const orders = () => {
   );
 };
 
+const StoreName = styled.div`
+  background-color: #e7e3e3;
+  border-radius: 5px 5px 0px 0px;
+  padding: 3px 10px 3px 10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+`;
 const Card = styled.div`
   background-color: #ffffff;
   border-radius: 5px;
-  padding: 15px;
-  box-shadow: 0 2px 10px #acaaaa;
-  border: 1px solid #cccaca;
-  margin-bottom: 10px;
+  box-shadow: 2px 2px 20px #c2c0c0;
+  border: 1px solid #d6d4d8;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
 `;
 const Container = styled.div`
   display: flex;
   justify-content: center;
-  /* margin-top: 40px; */
   width: 100%;
-  /* height: calc(100vh - 60px); */
   padding: 15px;
 `;
 const Row = styled.div`
@@ -141,13 +146,15 @@ const Wrapper = styled.div`
 `;
 const Name = styled.div`
   margin: 5px 0 5px 0;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   font-family: "'Noto Serif SC', serif";
+  padding : 0 10px 0px 10px;
 `;
 const P = styled.p`
   font-size: 12px;
   margin: 0;
+  padding : 0 10px 0px 10px;
 `;
 
 export default orders;

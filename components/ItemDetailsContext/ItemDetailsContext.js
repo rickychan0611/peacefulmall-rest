@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { HOST_URL } from '../../env';
-
+import nestedProperty from 'nested-property';
 import { useRecoilState } from 'recoil';
 import {
   currentItem as currentItemAtom,
@@ -17,14 +17,16 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
   const [checked, setChecked] = useState({});
   const [qty, setQty] = useState({});
   const [selectedOpt, setSelectedOpt] = useState();
-  
+
   useEffect(() => {
-    console.log(checkOutListItem);
+    // console.log("Load currentItem");
+    console.log( 'Load currentItem', currentItem);
+    console.log('Load checkOutListItem' , checkOutListItem);
     checkOutListItem ? setItem(checkOutListItem) : setItem(currentItem);
   }, [checkOutListItem, currentItem]);
 
   const onChangeQty = (task, option) => {
-    setSelectedOpt(option)
+    setSelectedOpt(option);
     let temp = { ...qty };
     if (!temp[option.id] && task == 'plus') {
       setQty((prev) => ({ ...prev, [option.id]: 1 }));
@@ -33,6 +35,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
     }
   };
 
+  // tigger when qty changes, otherwise one step behind
   useEffect(() => {
     selectedOpt && updateAttribute(selectedOpt);
   }, [qty]);
@@ -63,11 +66,21 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
         attTemp[attIndex].options[optIndex] = option;
       }
     }
+
     setAttributes(attTemp);
+    let tempItem = JSON.stringify(currentItem);
+    tempItem = JSON.parse(tempItem);
+    const tempAttIndex = tempItem.attributes.findIndex((item) => item.id === option.attribute_id);
+    const tempOptIndex = tempItem.attributes[tempAttIndex].options.findIndex(
+      (item) => item.id === option.id
+    );
+    tempItem.attributes[tempAttIndex].options[tempOptIndex].quantity = option.quantity
+    console.log("tempItem@@@@@@@@@@@@", tempItem)
+    setCurrentItem(tempItem);
   };
 
   const handleRadioChange = (opt) => {
-    const option = {...opt, quantity : 1}
+    const option = { ...opt, quantity: 1 };
     setChecked((prev) => ({ ...prev, [option.attribute_id]: option.id }));
     let temp = [...attributes];
     let attIndex = temp.findIndex((item) => item.id === option.attribute_id);
@@ -153,7 +166,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
                                           }}
                                         />
                                         <span style={{ margin: '0 8px 0 5px' }}>
-                                          {qty[option.id] ? qty[option.id] : 0}
+                                          {option.quantity ? option.quantity : 0}
                                         </span>
                                         <Icon
                                           style={{ cursor: 'pointer', marginRight: 10 }}
@@ -199,7 +212,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
                                     //       );
                                     //     } else {
                                     //       setSelectedOptions([...selectedOptions, option.id]);
-                                    //       handleCheckBoxChange(option);
+                                    //       updateAttribute(option);
                                     //     }
                                     //   }}
                                     // />

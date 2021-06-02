@@ -6,6 +6,7 @@ import { HOST_URL } from '../../env';
 import toSlug from '../../util/toSlug';
 import axios from 'axios';
 import Loader from '../Loader';
+import nestedProperty  from "nested-property";
 
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -39,19 +40,24 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
     let updatedItems;
     console.log('currentShop', currentShop);
     console.log('orderItems', orderItems);
+    console.log('item.attributes!!!', item.attributes);
     console.log('attributes!!!', attributes);
     setOrderItems((prev) => {
       //if a prev store's name is equal to the current store, update the object
+      let att = [];
+      // nestedProperty.set(item.attributes, "0.options.0")
+      console.log(item.attributes)
+
       if (prev[0] && prev[0].shop.id === currentShop.id) {
         updatedItems = [
-          { ...item, attributes, attributeTotal, quantity, total, shop: currentShop },
+          { ...item, attributes: att, attributeTotal, quantity, total, shop: currentShop },
           ...prev
         ];
       }
       //if not, replace the whole orderItem object. Add store to currentShop
       else {
         updatedItems = [
-          { ...item, attributes, attributeTotal, quantity, total, shop: currentShop }
+          { ...item, attributes: att, attributeTotal, quantity, total, shop: currentShop }
         ];
       }
       localStorage.setItem('orderItems', JSON.stringify(updatedItems));
@@ -89,7 +95,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
     }
   }, [router.query.item_id]);
 
-  useEffect( () => {
+  useEffect(() => {
     let total = 0;
     attributes &&
       attributes[0] &&

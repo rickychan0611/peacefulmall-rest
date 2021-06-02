@@ -6,25 +6,25 @@ import {
   currentItem as currentItemAtom,
   currentShop as currentShopAtom
 } from '../../data/atoms.js';
+import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 
 import { Form, Grid, Icon, Radio, Image, Checkbox, Divider } from 'semantic-ui-react';
 
-const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => {
+const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes, updateItem }) => {
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [item, setItem] = useState();
-  // const [checked, setChecked] = useState({});
-  // const [qty, setQty] = useState({});
-  // const [selectedOpt, setSelectedOpt] = useState();
+  const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
 
   useEffect(() => {
     console.log('Load currentItem', currentItem);
     console.log('Load checkOutListItem', checkOutListItem);
     checkOutListItem ? setItem(checkOutListItem) : setItem(currentItem);
+    // setItem(currentItem);
   }, [checkOutListItem, currentItem]);
 
   const onChange = (task, option) => {
-    let tempItem = JSON.parse(JSON.stringify(currentItem));
+    let tempItem = JSON.parse(JSON.stringify(updateItem ? checkOutListItem : currentItem));
     const attIndex = tempItem.attributes.findIndex((item) => item.id === option.attribute_id);
     const optIndex = tempItem.attributes[attIndex].options.findIndex(
       (item) => item.id === option.id
@@ -32,7 +32,7 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
     let tempOpts = tempItem.attributes[attIndex].options[optIndex]
 
     if (task === "radio") {
-      tempItem.attributes[attIndex].options = tempItem.attributes[attIndex].options.map((item) => ({...item, quantity: 0}))
+      tempItem.attributes[attIndex].options = tempItem.attributes[attIndex].options.map((item) => ({ ...item, quantity: 0 }))
       tempItem.attributes[attIndex].options[optIndex].quantity = 1
     }
     else if (!tempOpts.quantity && (task == 'plus')) {
@@ -40,38 +40,10 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
     } else if (tempOpts.quantity) {
       tempOpts.quantity = tempOpts.quantity + (task === 'plus' ? 1 : -1);
     }
-    setCurrentItem(tempItem);
+
+    console.log("orderItems", orderItems)
+    updateItem ? setOrderItems(prev => prev.map(item => item.id === tempItem.id ? tempItem : item)) : setCurrentItem(tempItem);
   };
-
-  // const updateAttribute = (optObj) => {
-  //   let attTemp = [...attributes];
-  //   let option = { ...optObj, quantity: qty[optObj.id] ? qty[optObj.id] : 0 };
-  //   console.log('quantity', option.quantity);
-  //   //find attribute index
-  //   let attIndex = attributes.findIndex((attr) => attr.id === option.attribute_id);
-
-  //   // new attribute
-  //   if (attIndex === -1) {
-  //     attTemp.push({ id: option.attribute_id, options: [option] });
-  //   }
-
-  //   // existing attribute
-  //   else {
-  //     // find option index
-  //     let optIndex = attTemp[attIndex].options.findIndex((opt) => opt.id === option.id);
-
-  //     // new option
-  //     if (optIndex === -1) {
-  //       attTemp[attIndex].options.push(option);
-  //     }
-  //     // existing otpion
-  //     else {
-  //       attTemp[attIndex].options[optIndex] = option;
-  //     }
-  //   }
-
-  //   setAttributes(attTemp);
-  // };
 
   return (
     <>
@@ -117,11 +89,11 @@ const ItemDetailsContext = ({ checkOutListItem, attributes, setAttributes }) => 
                       <Form.Field>
                         <h4 style={{ fontWeight: 'bold' }}>
                           {attribute.name}
-                          <span style={{ color: 'grey' }}>
+                          {/* <span style={{ color: 'grey' }}>
                             {attribute.type === 1
                               ? ' (choose one only)'
                               : ' (you can choose more than one)'}
-                          </span>
+                          </span> */}
                           <span style={{ color: 'red' }}>
                             {attribute.require_status === 1 ? ' *required' : ''}
                           </span>

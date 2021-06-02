@@ -7,7 +7,7 @@ import toSlug from '../../util/toSlug';
 import axios from 'axios';
 import Loader from '../Loader';
 
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import {
   currentItem as currentItemAtom,
   currentShop as currentShopAtom
@@ -30,7 +30,6 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   const [attributes, setAttributes] = useState([]);
   const [attributeTotal, setAttributeTotal] = useState(0);
 
-  const [value, setValue] = useState({ option: 'option0', value: 0 });
   const [quantity, setQty] = useState(1);
 
   //function: addItem is called in <BottomAddBar>,
@@ -49,14 +48,14 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
 
       if (prev[0] && prev[0].shop.id === currentShop.id) {
         updatedItems = [
-          { ...item, attributes: att, attributeTotal, quantity, total, shop: currentShop },
+          { ...item, attributeTotal, quantity, total, shop: currentShop },
           ...prev
         ];
       }
       //if not, replace the whole orderItem object. Add store to currentShop
       else {
         updatedItems = [
-          { ...item, attributes: att, attributeTotal, quantity, total, shop: currentShop }
+          { ...item, attributeTotal, quantity, total, shop: currentShop }
         ];
       }
       localStorage.setItem('orderItems', JSON.stringify(updatedItems));
@@ -96,17 +95,16 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
 
   useEffect(() => {
     let total = 0;
-    attributes &&
-      attributes[0] &&
-      attributes.forEach((att) => {
-        console.log('attributes', att);
-        att.options.forEach((opt) => {
-          total = total + opt.option_price * opt.quantity;
-        });
-      });
-    console.log('setAttributeTotal', total);
-    setAttributeTotal(total);
-  }, [attributes]);
+    item && item.attributes && item.attributes.forEach(att => {
+      att.options[0] && att.options.forEach(opt => {
+        console.log(opt.option_price)
+        total = total + (opt.option_price * (opt.quantity ? opt.quantity : 0))
+      })
+    })
+    console.log("setAttributeTotal", total)
+
+    setAttributeTotal(total)
+  }, [item]);
 
   return (
     <>
@@ -126,7 +124,6 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
             attributes={attributes}
             quantity={quantity}
             setQty={setQty}
-            option={value}
             price={item.promotion_price === null ? item.price : item.promotion_price}
             addItem={addItem}
           />

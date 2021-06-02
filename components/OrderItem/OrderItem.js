@@ -25,6 +25,7 @@ const OrderItem = ({ item, index }) => {
   const [total, setTotal] = useState();
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   const router = useRouter();
+  const [attributeTotal, setAttributeTotal] = useState(0);
 
   const remove = (index) => {
     setOrderItems((prev) => {
@@ -54,6 +55,7 @@ const OrderItem = ({ item, index }) => {
           i === index ? { ...item, quantity: newQty, total: item.price * newQty } : item
         );
       });
+    
 
     return true;
   };
@@ -62,6 +64,19 @@ const OrderItem = ({ item, index }) => {
     localStorage.setItem('orderItems', JSON.stringify(orderItems));
   }, [orderItems]);
 
+  useEffect(() => {
+    let total = 0;
+    item && item.attributes && item.attributes.forEach(att => {
+      att.options[0] && att.options.forEach(opt => {
+        console.log(opt.option_price)
+        total = total + (opt.option_price * (opt.quantity ? opt.quantity : 0))
+      })
+    })
+    console.log("setAttributeTotal", total)
+
+    setAttributeTotal(total)
+  }, [item]);
+  
   return (
     <>
       <Modal
@@ -72,7 +87,7 @@ const OrderItem = ({ item, index }) => {
         onOpen={() => setOpen(true)}
         open={open}>
         <div style={{ height: '90vh', overflowY: 'auto', position: 'relative' }}>
-          <ItemDetailsContext checkOutListItem={item} />
+          <ItemDetailsContext checkOutListItem={item} updateItem/>
           <BottomAddBar
             index={index}
             remove={remove}
@@ -83,6 +98,7 @@ const OrderItem = ({ item, index }) => {
             updateItem={updateItem}
             setOpen={setOpen}
             setOpenCheckOutList={setOpenCheckOutList}
+            attributeTotal={attributeTotal}
           />
         </div>
       </Modal>

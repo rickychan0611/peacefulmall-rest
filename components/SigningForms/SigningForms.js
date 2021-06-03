@@ -109,12 +109,12 @@ const SigningForms = ({ signUp }) => {
 
   return (
     <Grid textAlign="center" style={{ height: '90vh' }} verticalAlign="middle">
-      <Grid.Column style={{ maxWidth: 450 }}>
+      <Grid.Column style={{ maxWidth: 450, margin: 10 }}>
         <Header as="h2" textAlign="center" style={{ color: '#292929' }}>
           {signUp ? t('signUPAccount') : t('LogInAccount')}
         </Header>
         <Form size="large" onSubmit={handleSubmit}>
-          <Segment stacked>
+          <Segment>
             {signUp && (
               <>
                 <Form.Input

@@ -77,9 +77,9 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
           addresses.map((address, i) => {
             return (
               <AddressCard default={address.default_status} key={i} isMobile={isMobile}>
-                <h4>
+                <h4 style={{margin: 0}}>
                   {address.name} <br />
-                  {address.detail_address ? address.detail_address : "N/A"}
+                  {address.detail_address ? address.detail_address : <span style={{color: "red"}}>*No address entered. Please edit</span>}
                 </h4>
                 <p>
                   <Row><div>City: </div><div style={{textAlign: "right"}}>{address.city ? address.city : "N/A"} </div></Row>

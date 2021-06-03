@@ -12,16 +12,18 @@ import {
 import {
   defaultAddress as defaultAddressAtom,
   addresses as addressAtom,
-  currentShop as currentShopAtom
+  currentShop as currentShopAtom,
+  currentPosition as currentPositionAtom
 } from '../data/atoms';
 import { HOST_URL } from '../env';
 import { useCookies } from 'react-cookie';
-
+import Map from '../components/Map';
 import OrderItem from '../components/OrderItem/';
 import TotalAmountList from '../components/TotalAmountList/';
 import AddressBook from '../components/AddressBook';
 import { useIsDesktop } from '../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
+import { geocodeByAddress } from 'react-google-places-autocomplete';
 
 const checkout = () => {
   const router = useRouter();
@@ -29,7 +31,7 @@ const checkout = () => {
   const defaultAddress = useRecoilValue(defaultAddressAtom);
   const [deliveryTime, setDeliveryTime] = useState('ASAP');
   const [, setShippingMethod] = useRecoilState(shippingMethodAtom);
-  const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
+  const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
   const [open, setOpen] = useState(false);
   const isDesktop = useIsDesktop();
   const { t } = useTranslation('profile');
@@ -137,6 +139,21 @@ const checkout = () => {
     setReload(reload + 1);
   }, [orderDetails]);
 
+  const [mapResponse, setMapResponse] = useState();
+  const [destination, setDestination] = useState();
+
+  useEffect(() => {
+    console.log('currentPosition', currentPosition);
+  }, []);
+
+  const getLatLng = (address) => {
+    return geocodeByAddress(address)
+      .then((results) => {
+        console.log('getLatLng', results);
+      })
+      .catch((error) => console.error(error));
+  };
+
   return (
     <>
       <Modal closeIcon open={open} onClose={() => setOpen(false)}>
@@ -165,7 +182,19 @@ const checkout = () => {
             <h4 style={{ margin: 0 }}>Order from</h4>
             <h2 style={{ margin: 0 }}>{orderDetails.shop && orderDetails.shop.name}</h2>
             <Divider />
-            <iframe
+
+            <Map
+              origin={getLatLng(`${orderDetails.shop.name},
+                ${orderDetails.shop.address_line},
+                ${orderDetails.shop.address_city},
+                ${orderDetails.shop.address_province},
+                ${orderDetails.shop.address_post_code}`)}
+              mapResponse={mapResponse}
+              setMapResponse={setMapResponse}
+              destination={destination}
+            />
+
+            {/* <iframe
               width="100%"
               height="250"
               style={{ border: 10 }}
@@ -176,31 +205,29 @@ const checkout = () => {
               ${orderDetails.shop.address_line},
               ${orderDetails.shop.address_city},
               ${orderDetails.shop.address_province},
-              ${orderDetails.shop.address_post_code}`}></iframe>
+              ${orderDetails.shop.address_post_code}`}></iframe> */}
             <Divider />
 
             <Header>Delivery or Pick-up?</Header>
             <PickupContainer>
-              {currentShop &&
-                currentShop.shipping_methods.map((item, i) => {
-                  return (
-                    <Row key={i}
-                      onClick={() => setShippingMethod(item)}
-                      style={{ marginRight: 10, marginBottom: 10}}>
-                      <RadioButton
-                        readOnly
-                        type="radio"
-                        value={item.name}
-                        checked={
-                          orderDetails.shippingMethod.id === item.id
-                        }
-                      />
-                      <Column>
-                        <H4>{item.name + " - $" + item.fee}</H4>
-                      </Column>
-                    </Row>
-                  );
-                })}
+              {orderDetails.shop.shipping_methods.map((item, i) => {
+                return (
+                  <Row
+                    key={i}
+                    onClick={() => setShippingMethod(item)}
+                    style={{ marginRight: 10, marginBottom: 10 }}>
+                    <RadioButton
+                      readOnly
+                      type="radio"
+                      value={item.name}
+                      checked={orderDetails.shippingMethod.id === item.id}
+                    />
+                    <Column>
+                      <H4>{item.name + ' - $' + item.fee}</H4>
+                    </Column>
+                  </Row>
+                );
+              })}
             </PickupContainer>
             {orderDetails.shippingMethod.shipping_type === 1 && (
               <>

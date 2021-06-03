@@ -37,48 +37,60 @@ const SigningForms = ({ signUp }) => {
     // confirmPassword: 'Ricric61',
     email: 'ric0611@gmail.com',
     // name: 'Rickychan1',
-    password: '123456',
+    password: '123456'
     // phone: '1234567890'
   });
 
   const handleSignUp = async () => {
+    setErr({});
     setLoading(true);
     try {
       /*** Sign UP Query***/
       const response = await axios.post(HOST_URL + '/api/user/register', inputs);
       console.log(response);
-      setCookie('userToken', response.data.data, {  path: "/", maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
-      const getUser = await axios.get(HOST_URL + '/api/user/info', {
-        headers: { Authorization: response.data.data }
-      });
-      console.log(getUser.data.data);
-      localStorage.setItem('user', JSON.stringify(getUser.data.data));
-      setUser(getUser.data.data);
-      setAddresses(getUser.data.data.addresses);
-      router.push('/')
-      setLoading(false);
+      if (response.data.code === 200) {
+        setCookie('userToken', response.data.data, { path: '/', maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
+        const getUser = await axios.get(HOST_URL + '/api/user/info', {
+          headers: { Authorization: response.data.data }
+        });
+        console.log(getUser.data);
+
+        localStorage.setItem('user', JSON.stringify(getUser.data));
+        setUser(getUser.data);
+        setAddresses(getUser.data.addresses);
+        router.push('/');
+        setLoading(false);
+      } else throw response.data;
     } catch (err) {
       console.log(err);
+      setErr(err);
       setLoading(false);
     }
   };
 
   const handleSignIn = async () => {
+    setErr({});
     setLoading(true);
     try {
       /*** Sign UP Query***/
-      const response = await axios.post(HOST_URL + '/api/user/login', {email: inputs.email, password: inputs.password});
-      console.log(response);
-      setCookie('userToken', response.data.data, { path: "/",  maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
-      const getUser = await axios.get(HOST_URL + '/api/user/info', {
-        headers: { Authorization: response.data.data }
+      const response = await axios.post(HOST_URL + '/api/user/login', {
+        email: inputs.email,
+        password: inputs.password
       });
-      localStorage.setItem('user', JSON.stringify(getUser.data.data));
-      setUser(getUser.data.data);
-      console.log(getUser.data.data);
-      setAddresses(getUser.data.data.addresses);
-      router.push('/')
-      setLoading(false);
+      console.log(response);
+      console.log(response.data.code);
+      if (response.data.code === 200) {
+        setCookie('userToken', response.data.data, { path: '/', maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
+        const getUser = await axios.get(HOST_URL + '/api/user/info', {
+          headers: { Authorization: response.data.data }
+        });
+        localStorage.setItem('user', JSON.stringify(getUser.data));
+        setUser(getUser.data);
+        console.log(getUser.data);
+        setAddresses(getUser.data.addresses);
+        router.push('/');
+        setLoading(false);
+      } else throw (response.data);
     } catch (err) {
       console.log(err);
       setLoading(false);
@@ -90,7 +102,7 @@ const SigningForms = ({ signUp }) => {
 
     validation(inputs)
       .then(() => {
-        signUp ? handleSignUp() : handleSignIn()
+        signUp ? handleSignUp() : handleSignIn();
       })
       .catch((err) => {
         console.log(err);
@@ -225,9 +237,9 @@ const SigningForms = ({ signUp }) => {
                   <Icon name="spinner" loading />
                 )
               }></Button>
-            <Message negative size="mini" hidden={!err.submit}>
-              {err.submit}
-            </Message>
+            {err.message && <Message negative size="mini" hidden={!err}>
+              {err.message}
+            </Message>}
           </Segment>
         </Form>
         {signUp ? (

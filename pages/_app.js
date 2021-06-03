@@ -42,7 +42,7 @@ const InitApp = ({ children }) => {
       const getUser = await axios.get(HOST_URL + '/api/user/info', {
         headers: { Authorization: cookies.userToken }
       });
-      console.log('USER DATA', getUser.data.data);
+      console.log('USER DATA', getUser);
 
       // if (getUser.data.data === 'token invalid') {
       // removeCookie('userToken');
@@ -55,7 +55,7 @@ const InitApp = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(getUser.data.data));
       setUser(getUser.data.data);
       setAddresses(getUser.data.data.addresses);
-      setAppReady(true);
+      // setAppReady(true);
       return;
       // }
     }

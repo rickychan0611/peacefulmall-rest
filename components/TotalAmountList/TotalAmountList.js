@@ -27,17 +27,14 @@ const TotalAmountList = ({ orderDetails, setTips, tips_amount }) => {
         <Modal.Header>Enter tips amount</Modal.Header>
         <Modal.Content>
           <Row style={{justifyContent: "center"}}>
-          <Input labelPosition="right" type="text" placeholder="Amount">
-            <Label basic>$</Label>
-            <input type='number' value={amount} onChange={(e) => handleChange(e.target.value)} />
-          </Input>
+          <Input label="$" type="text" placeholder="Amount" type='number' value={amount} onChange={(e) => handleChange(e.target.value)} />
           </Row>
         </Modal.Content>
         <Modal.Actions>
           <Button onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button positive onClick={() => handleSubmit(false)}>
+          <Button style={{color: "white", backgroundColor: "#ff614d"}} onClick={() => handleSubmit(false)}>
             OK
           </Button>
         </Modal.Actions>

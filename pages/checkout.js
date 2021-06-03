@@ -40,7 +40,7 @@ const checkout = () => {
   const [loading, setLoading] = useState(false);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [reload, setReload] = useState(0);
-  const [tips_amount, setTips_amount] = useState({tips: 0});
+  const [tips_amount, setTips_amount] = useState({ tips: 0 });
 
   const setTips = (value, name) => {
     console.log('tips', value);
@@ -101,7 +101,7 @@ const checkout = () => {
           receiver_detail_address: defaultAddress.detail_address,
           receiver_unit_number: defaultAddress.unit_number,
           receiver_note: defaultAddress.note,
-          tips_amount : tips_amount.tips
+          tips_amount: tips_amount.tips
         };
         console.log('body', body);
         const result = await axios.post(HOST_URL + '/api/user/order/create', body, {
@@ -170,36 +170,50 @@ const checkout = () => {
               loading="lazy"
               allowFullScreen
               src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBugBL6F0x-jyq_4l-6OS1i8Du6yv9bH-s&q=
-              ${orderDetails.shop.address}`}></iframe>
+              ${orderDetails.shop.namw},
+              ${orderDetails.shop.address_line},
+              ${orderDetails.shop.address_city},
+              ${orderDetails.shop.address_province},
+              ${orderDetails.shop.address_post_code}`}></iframe>
             <Divider />
 
             <Header>Delivery or Pick-up?</Header>
             <PickupContainer style={{ justifyContent: 'flex-start' }}>
-              <Row onClick={() => setShippingMethod('Delivery')}>
-                <RadioButton
-                  readOnly
-                  type="radio"
-                  value={'Delivery'}
-                  checked={orderDetails.shippingMethod === 'Delivery'}
-                />
-                <Column>
-                  <H4>Delivery</H4>
-                </Column>
-              </Row>
-              <Row style={{ marginLeft: 40 }} onClick={() => setShippingMethod('Pick-up')}>
-                <RadioButton
-                  readOnly
-                  type="radio"
-                  value={'Pick-up'}
-                  checked={orderDetails.shippingMethod === 'Pick-up'}
-                />
-                <Column>
-                  <H4>Pick-up</H4>
-                </Column>
-              </Row>
+              {currentShop &&
+                currentShop.shipping_methods.map((item, i) => {
+                  return (
+                    <Row key={i}
+                      onClick={() => setShippingMethod(item.shipping_type)}
+                      style={{ marginRight: 10 }}>
+                      <RadioButton
+                        readOnly
+                        type="radio"
+                        value={item.name}
+                        checked={orderDetails.shippingMethod === item.shipping_type}
+                      />
+                      <Column>
+                        <H4>{item.name}</H4>
+                      </Column>
+                    </Row>
+                  );
+                })}
             </PickupContainer>
-
-            {orderDetails.shippingMethod === 'Delivery' && (
+            {orderDetails.shippingMethod === 1 && (
+              <>
+                <H4>Pick Up Address:</H4>
+                <H4>
+                  <>
+                    {orderDetails.shop.name}
+                    <br />
+                    {orderDetails.shop.address_line},&nbsp;
+                    {orderDetails.shop.address_city},&nbsp;
+                    {orderDetails.shop.address_province},&nbsp;
+                    {orderDetails.shop.address_post_code}
+                  </>
+                </H4>
+              </>
+            )}
+            {orderDetails.shippingMethod === 2 && (
               <>
                 <H4>
                   Your Address:{' '}
@@ -373,7 +387,7 @@ const Row = styled.div`
   }
 `;
 const RadioButton = styled.input`
-  margin-right: 15px;
+  margin-right: 5px;
 `;
 const Column = styled.div`
   display: flex;

@@ -10,7 +10,7 @@ export const orderItems = atom({
 
 export const shippingMethod = atom({
   key: 'shippingMethod',
-  default: 'Delivery'
+  default: 1
 });
 
 export const orderDetails = selector({

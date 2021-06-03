@@ -123,7 +123,7 @@ const StoreName = styled.div`
 const Card = styled.div`
   background-color: #ffffff;
   border-radius: 5px;
-  box-shadow: 2px 2px 20px #c2c0c0;
+  box-shadow: 0px 0px 10px #ece9e9;
   border: 1px solid #d6d4d8;
   margin-bottom: 20px;
   padding-bottom: 10px;

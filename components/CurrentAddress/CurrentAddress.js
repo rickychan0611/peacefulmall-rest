@@ -26,7 +26,7 @@ export const validateAddress = (address, user, initial) => {
   return new Promise((resolve, reject) => {
     let obj = !initial ? { 
       type: 'create', 
-      default_status: 1,
+      default_status: 0,
       name: user.first_name + ' ' + user.last_name 
     } : 
     {name: ""};

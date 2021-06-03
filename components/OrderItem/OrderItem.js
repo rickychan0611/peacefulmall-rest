@@ -66,7 +66,7 @@ const OrderItem = ({ item, index }) => {
   }, [orderItems]);
 
   const getTotal = () => {
-    return (((item.promotion_price ?  +item.promotion_price : +item.price ) + item.attributeTotal) * +item.quantity)
+    return (((item.promotion_price ?  +item.promotion_price : +item.price ) + item.attributeTotal) * +item.quantity).toFixed(2)
   }
 
   useEffect(() => {

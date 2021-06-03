@@ -10,7 +10,7 @@ export const orderItems = atom({
 
 export const shippingMethod = atom({
   key: 'shippingMethod',
-  default: 1
+  default: {id: 1, fee: 0}
 });
 
 export const orderDetails = selector({
@@ -18,6 +18,8 @@ export const orderDetails = selector({
   get: ({ get }) => {
     const items = get(orderItems);
     const user = get(userAtom);
+    const shippingFee = get(shippingMethod).fee
+
     console.log("Atom OrderItems", items)
     let subtotal = 0;
     items &&
@@ -36,13 +38,13 @@ export const orderDetails = selector({
     return {
       orderItems: items,
       subtotal,
+      shippingFee,
       taxTotal : +(Math.round(taxTotal + "e+2")  + "e-2"),
-      shippingFee: 0,
       discount: 0,
       shop: items[0] && items[0].shop,
       deliveryAddress: user ? user.deliveryAddress : '',
       shippingMethod: get(shippingMethod),
-      total:  +(Math.round((+subtotal + +taxTotal) + "e+2")  + "e-2")
+      total:  +(Math.round((+subtotal + +taxTotal + +shippingFee) + "e+2")  + "e-2")
     };
   }
 });

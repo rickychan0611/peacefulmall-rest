@@ -101,7 +101,9 @@ const checkout = () => {
           receiver_detail_address: defaultAddress.detail_address,
           receiver_unit_number: defaultAddress.unit_number,
           receiver_note: defaultAddress.note,
-          tips_amount: tips_amount.tips
+          tips_amount: tips_amount.tips,
+          shipping_amount: orderDetails.shippingMethod.fee,
+          shipping_method_id: orderDetails.shippingMethod.id
         };
         console.log('body', body);
         const result = await axios.post(HOST_URL + '/api/user/order/create', body, {
@@ -178,27 +180,29 @@ const checkout = () => {
             <Divider />
 
             <Header>Delivery or Pick-up?</Header>
-            <PickupContainer style={{ justifyContent: 'flex-start' }}>
+            <PickupContainer>
               {currentShop &&
                 currentShop.shipping_methods.map((item, i) => {
                   return (
                     <Row key={i}
-                      onClick={() => setShippingMethod(item.shipping_type)}
-                      style={{ marginRight: 10 }}>
+                      onClick={() => setShippingMethod(item)}
+                      style={{ marginRight: 10, marginBottom: 10}}>
                       <RadioButton
                         readOnly
                         type="radio"
                         value={item.name}
-                        checked={orderDetails.shippingMethod === item.shipping_type}
+                        checked={
+                          orderDetails.shippingMethod.id === item.id
+                        }
                       />
                       <Column>
-                        <H4>{item.name}</H4>
+                        <H4>{item.name + " - $" + item.fee}</H4>
                       </Column>
                     </Row>
                   );
                 })}
             </PickupContainer>
-            {orderDetails.shippingMethod === 1 && (
+            {orderDetails.shippingMethod.shipping_type === 1 && (
               <>
                 <H4>Pick Up Address:</H4>
                 <H4>
@@ -213,7 +217,7 @@ const checkout = () => {
                 </H4>
               </>
             )}
-            {orderDetails.shippingMethod === 2 && (
+            {orderDetails.shippingMethod.shipping_type === 2 && (
               <>
                 <H4>
                   Your Address:{' '}
@@ -367,10 +371,10 @@ const CheckoutButton = styled.div`
 `;
 const PickupContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
-  align-items: center;
-  justify-content: space-between;
+  /* align-items: center;
+  justify-content: space-between; */
   margin-bottom: 20px;
 `;
 const Row = styled.div`

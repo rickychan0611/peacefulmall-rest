@@ -143,6 +143,7 @@ const Wrapper = styled.div`
   margin: 0 auto;
   width: 100%;
   max-width: 600px;
+  height: 100vh;
 `;
 const Name = styled.div`
   margin: 5px 0 5px 0;

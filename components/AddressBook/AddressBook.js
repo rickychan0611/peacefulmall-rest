@@ -36,6 +36,7 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
   };
 
   const saveAddressQuery = async () => {
+    console.log("about to save address: " , selectedAddress)
     query(selectedAddress);
   };
 

@@ -17,8 +17,9 @@ const OrderReceipt = ({ order }) => {
               {order.receiver_detail_address},&nbsp;
               {order.receiver_city},&nbsp;
               {order.receiver_province},&nbsp;
+              {order.receiver_post_code},&nbsp;
               {order.receiver_country} <br />
-              {order.receiver_phone}
+              Tel: {order.receiver_phone}
               <br />
             </H4>
           </>

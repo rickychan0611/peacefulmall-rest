@@ -39,8 +39,8 @@ const DishCards = ({ type }) => {
         count: '100'
       }
     });
-    // console.log('getProducts.data', getProducts.data);
-    setProducts(getProducts.data);
+    // console.log('getProducts.data.data', getProducts.data.data);
+    setProducts(getProducts.data.data);
     setLoading(false);
   }, [currentCat]);
 

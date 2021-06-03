@@ -24,8 +24,8 @@ const orderSuccess = () => {
       const getOrders = await axios.get(HOST_URL + '/api/user/orders', {
         headers: { Authorization: cookies.userToken }
       });
-      console.log(getOrders.data);
-      setOrders(getOrders.data);
+      console.log(getOrders.data.data);
+      setOrders(getOrders.data.data);
       setLoading(false);
     } catch (err) {
       console.log(err);

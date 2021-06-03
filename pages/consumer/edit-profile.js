@@ -27,9 +27,9 @@ const Profile = () => {
       const result = await axios.get(HOST_URL + '/api/user/address', {
         headers: { Authorization: cookies.userToken }
       });
-      // const sorted = result.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      console.log(result.data);
-      setAddresses(result.data);
+      // const sorted = result.data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      console.log(result.data.data);
+      setAddresses(result.data.data);
       return;
     } catch (err) {
       console.log(err);

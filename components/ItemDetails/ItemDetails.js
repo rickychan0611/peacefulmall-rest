@@ -79,11 +79,11 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
             product_id
           }
         });
-        setCurrentItem(getProduct.data);
-        setCurrentShop(getProduct.data.shop);
+        setCurrentItem(getProduct.data.data);
+        setCurrentShop(getProduct.data.data.shop);
         setLoading(false);
-        console.log('NO product', getProduct.data);
-        console.log('NO currentShop', getProduct.data.shop);
+        console.log('NO product', getProduct.data.data);
+        console.log('NO currentShop', getProduct.data.data.shop);
       } catch (err) {
         console.log(err);
         setLoading(false);

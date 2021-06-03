@@ -43,8 +43,8 @@ const CuisineSlider = ({ contextRef  }) => {
     if (!sliderCats) {
       try {
         const query = await axios.get(HOST_URL + '/api/getplatcat');
-        console.log(query.data);
-        setSliderCats(query.data);
+        console.log(query.data.data);
+        setSliderCats(query.data.data);
       } catch (err) {
         console.log(err);
       }

@@ -42,9 +42,9 @@ const InitApp = ({ children }) => {
       const getUser = await axios.get(HOST_URL + '/api/user/info', {
         headers: { Authorization: cookies.userToken }
       });
-      console.log('USER DATA', getUser.data);
+      console.log('USER DATA', getUser.data.data);
 
-      // if (getUser.data === 'token invalid') {
+      // if (getUser.data.data === 'token invalid') {
       // removeCookie('userToken');
       // localStorage.removeItem('user');
       // setUser(null);
@@ -52,9 +52,9 @@ const InitApp = ({ children }) => {
       // router.push('/sign-in');
       // setAppReady(true);
       // } else {
-      localStorage.setItem('user', JSON.stringify(getUser.data));
-      setUser(getUser.data);
-      setAddresses(getUser.data.addresses);
+      localStorage.setItem('user', JSON.stringify(getUser.data.data));
+      setUser(getUser.data.data);
+      setAddresses(getUser.data.data.addresses);
       setAppReady(true);
       return;
       // }

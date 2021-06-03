@@ -40,7 +40,7 @@ const ShopCards = ({ type }) => {
         count: '20'
       }
     });
-    setShops(getShops.data);
+    setShops(getShops.data.data);
     setLoading(false);
   }, [currentCat]);
 

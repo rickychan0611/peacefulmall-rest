@@ -108,7 +108,7 @@ const CurrentAddress = () => {
       const newAddresses = await axios.get(HOST_URL + '/api/user/address', {
         headers: { Authorization: cookies.userToken }
       });
-      setAddresses(newAddresses.data);
+      setAddresses(newAddresses.data.data);
       setLoading(false);
       setOpenNew(false);
       colorChange();

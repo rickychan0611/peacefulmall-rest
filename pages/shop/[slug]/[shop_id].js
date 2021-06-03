@@ -38,8 +38,8 @@ const shop = () => {
         const getSingleShop = await axios.get(HOST_URL + '/api/singleshop', {
           params: { shop_id: router.query.shop_id }
         });
-        console.log('getSingleShop.data', getSingleShop.data);
-        setCurrentShop(getSingleShop.data);
+        console.log('getSingleShop.data.data', getSingleShop.data.data);
+        setCurrentShop(getSingleShop.data.data);
       } catch (err) {
         console.log(err);
         // router.push('/404');
@@ -59,8 +59,8 @@ const shop = () => {
             category_id: 'all'
           }
         });
-        console.log('getShopProducts.data', getShopProducts.data);
-        setCurrentShopProducts(getShopProducts.data);
+        console.log('getShopProducts.data.data', getShopProducts.data.data);
+        setCurrentShopProducts(getShopProducts.data.data);
       } catch (err) {
         console.log('err' + err);
       }

@@ -47,14 +47,14 @@ const SigningForms = ({ signUp }) => {
       /*** Sign UP Query***/
       const response = await axios.post(HOST_URL + '/api/user/register', inputs);
       console.log(response);
-      setCookie('userToken', response.data, {  path: "/", maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
+      setCookie('userToken', response.data.data, {  path: "/", maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
       const getUser = await axios.get(HOST_URL + '/api/user/info', {
-        headers: { Authorization: response.data }
+        headers: { Authorization: response.data.data }
       });
-      console.log(getUser.data);
-      localStorage.setItem('user', JSON.stringify(getUser.data));
-      setUser(getUser.data);
-      setAddresses(getUser.data.addresses);
+      console.log(getUser.data.data);
+      localStorage.setItem('user', JSON.stringify(getUser.data.data));
+      setUser(getUser.data.data);
+      setAddresses(getUser.data.data.addresses);
       router.push('/')
       setLoading(false);
     } catch (err) {
@@ -69,14 +69,14 @@ const SigningForms = ({ signUp }) => {
       /*** Sign UP Query***/
       const response = await axios.post(HOST_URL + '/api/user/login', {email: inputs.email, password: inputs.password});
       console.log(response);
-      setCookie('userToken', response.data, { path: "/",  maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
+      setCookie('userToken', response.data.data, { path: "/",  maxAge: 1000 * 60 * 24 * 3 }); //expires in 3 days
       const getUser = await axios.get(HOST_URL + '/api/user/info', {
-        headers: { Authorization: response.data }
+        headers: { Authorization: response.data.data }
       });
-      localStorage.setItem('user', JSON.stringify(getUser.data));
-      setUser(getUser.data);
-      console.log(getUser.data);
-      setAddresses(getUser.data.addresses);
+      localStorage.setItem('user', JSON.stringify(getUser.data.data));
+      setUser(getUser.data.data);
+      console.log(getUser.data.data);
+      setAddresses(getUser.data.data.addresses);
       router.push('/')
       setLoading(false);
     } catch (err) {

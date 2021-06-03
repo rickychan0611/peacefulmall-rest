@@ -28,9 +28,9 @@ const orders = () => {
       const getOrders = await axios.get(HOST_URL + '/api/user/orders', {
         headers: { Authorization: cookies.userToken }
       });
-      getOrders.data !== 'no order found' && setOrders(getOrders.data);
+      getOrders.data.data !== 'no order found' && setOrders(getOrders.data.data);
       setLoading(false);
-      console.log('getOrders.data', getOrders.data);
+      console.log('getOrders.data.data', getOrders.data.data);
     } catch (err) {
       setOrders();
       console.log('error: ', err);

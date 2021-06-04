@@ -64,7 +64,7 @@ const SidebarMenu = () => {
         <Menu.Item onClick={() => handleClick('/consumer/edit-profile')}>
           <Icon name="user circle" size="large" />
           <H4>{t('account')}</H4>
-          <p style={{ margin: 0, color: "grey" }}>{user.name}</p>
+          <p style={{ margin: 0, color: "grey" }}>{user.first_name}</p>
         </Menu.Item>
 
         <Menu.Item onClick={() => {

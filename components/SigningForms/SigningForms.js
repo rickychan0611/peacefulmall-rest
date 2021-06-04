@@ -17,6 +17,7 @@ import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
 import { HOST_URL } from '../../env';
+import InputMask from 'react-input-mask';
 
 import { useRecoilState } from 'recoil';
 import { user as userAtom, userdata } from '../../data/userAtom';
@@ -53,11 +54,10 @@ const SigningForms = ({ signUp }) => {
         const getUser = await axios.get(HOST_URL + '/api/user/info', {
           headers: { Authorization: response.data.data }
         });
-        console.log(getUser.data);
-
-        localStorage.setItem('user', JSON.stringify(getUser.data));
-        setUser(getUser.data);
-        setAddresses(getUser.data.addresses);
+        console.log("getUser.data.data", getUser.data.data);
+        localStorage.setItem('user', JSON.stringify(getUser.data.data));
+        setUser(getUser.data.data);
+        setAddresses(getUser.data.data.addresses);
         router.push('/');
         setLoading(false);
       } else throw response.data;
@@ -84,13 +84,13 @@ const SigningForms = ({ signUp }) => {
         const getUser = await axios.get(HOST_URL + '/api/user/info', {
           headers: { Authorization: response.data.data }
         });
-        localStorage.setItem('user', JSON.stringify(getUser.data));
-        setUser(getUser.data);
-        console.log(getUser.data);
-        setAddresses(getUser.data.addresses);
+        localStorage.setItem('user', JSON.stringify(getUser.data.data));
+        setUser(getUser.data.data);
+        console.log("getUser.data.data", getUser.data.data);
+        setAddresses(getUser.data.data.addresses);
         router.push('/');
         setLoading(false);
-      } else throw (response.data);
+      } else throw response.data;
     } catch (err) {
       console.log(err);
       setLoading(false);
@@ -133,10 +133,19 @@ const SigningForms = ({ signUp }) => {
                   fluid
                   icon="user"
                   iconPosition="left"
-                  placeholder={t('userName')}
+                  placeholder={t('FirstName')}
                   required
-                  value={inputs.name}
-                  onChange={(e) => handleChange(e, 'name')}
+                  value={inputs.first_name}
+                  onChange={(e) => handleChange(e, 'first_name')}
+                />
+                <Form.Input
+                  fluid
+                  icon="user"
+                  iconPosition="left"
+                  placeholder={t('LastName')}
+                  required
+                  value={inputs.last_name}
+                  onChange={(e) => handleChange(e, 'last_name')}
                 />
               </>
             )}
@@ -153,14 +162,22 @@ const SigningForms = ({ signUp }) => {
             {signUp && (
               <Form.Input
                 fluid
-                icon="phone"
-                iconPosition="left"
-                placeholder={t('Phone')}
+                iconPosition='left'
                 required
-                value={inputs.phone}
-                onChange={(e) => handleChange(e, 'phone')}
                 error={err.phone}
-                // maxLength="10"
+                children={
+                  <>
+                    <Icon name="phone" />
+                    <InputMask
+                      mask="999-999-9999"
+                      maskChar="_"
+                      alwaysShowMask
+                      placeholder={t('Phone')}
+                      value={inputs.phone}
+                      onChange={(e) => handleChange(e, 'phone')}
+                    />
+                  </>
+                }
               />
             )}
             <PasswordWrapper>
@@ -237,9 +254,11 @@ const SigningForms = ({ signUp }) => {
                   <Icon name="spinner" loading />
                 )
               }></Button>
-            {err.message && <Message negative size="mini" hidden={!err}>
-              {err.message}
-            </Message>}
+            {err.message && (
+              <Message negative size="mini" hidden={!err}>
+                {err.message}
+              </Message>
+            )}
           </Segment>
         </Form>
         {signUp ? (

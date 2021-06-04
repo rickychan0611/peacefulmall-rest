@@ -10,6 +10,7 @@ import useTranslation from 'next-translate/useTranslation';
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { addresses as addressAtom, appReady as appReadyAtom } from '../../data/atoms';
 // import { updateMapDestination } from '../../pages/checkout';
+import validation from '../../util/validation';
 
 const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery }) => {
   const [loading, setLoading] = useState(false);
@@ -39,7 +40,15 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
 
   const saveAddressQuery = async () => {
     console.log("about to save address: " , selectedAddress)
-    query(selectedAddress);
+    setErr(null)
+    validation(selectedAddress)
+    .then(() => {
+      query(selectedAddress);
+    })
+    .catch((err) => {
+      console.log(err);
+      setErr((prev) => ({ ...prev, ...err }));
+    });
   };
 
   const deleteAddressQuery = async (id) => {
@@ -78,20 +87,22 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
         {appReady && addresses &&
           addresses[0] &&
           addresses.map((address, i) => {
+            console.log("address" , address)
             return (
               <AddressCard default={address.default_status} key={i} isMobile={isMobile}>
                 <h4 style={{margin: 0}}>
-                  {address.name} <br />
+                  {address.name ? address.name : <span style={{color: "red"}}>No Name entered. Please edit</span>}
+                  <br />
                   {address.detail_address ? address.detail_address : <span style={{color: "red"}}>*No address entered. Please edit</span>}
                 </h4>
-                <p>
-                  <Row><div>City: </div><div style={{textAlign: "right"}}>{address.city ? address.city : "N/A"} </div></Row>
-                  <Row><div>Province: </div><div style={{textAlign: "right"}}>{address.province ? address.province : "N/A"} </div></Row>
-                  <Row><div>Postal Code: </div><div style={{textAlign: "right"}}>{address.post_code ? address.post_code : "N/A"} </div></Row>
-                  <Row><div>Coutry: </div><div style={{textAlign: "right"}}>{address.country ? address.country : "N/A"} </div></Row>
+                <div style={{margin: "5px 0 15px 0", fontSize: 14}}>
+                  <Row style={{ marginBottom: 3}}><div>City: </div><div style={{textAlign: "right"}}>{address.city ? address.city : "N/A"} </div></Row>
+                  <Row style={{ marginBottom: 3}}><div>Province: </div><div style={{textAlign: "right"}}>{address.province ? address.province : "N/A"} </div></Row>
+                  <Row style={{ marginBottom: 3}}><div>Postal Code: </div><div style={{textAlign: "right"}}>{address.post_code ? address.post_code : "N/A"} </div></Row>
+                  <Row style={{ marginBottom: 3}}><div>Coutry: </div><div style={{textAlign: "right"}}>{address.country ? address.country : "N/A"} </div></Row>
                   <Row style={{fontWeight: "bold"}}><div>Tel: </div><div style={{textAlign: "right"}}>{address.phone ? address.phone : "N/A"} </div></Row>
-                </p>
-                <Row>
+                  </div>
+                  <Row>
                   <AddressButton
                     default={address.default_status}
                     onClick={() => {

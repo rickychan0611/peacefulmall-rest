@@ -47,6 +47,7 @@ const Profile = () => {
         <Container isDesktop={isDesktop}>
           <h1>{t`Profile`}</h1>
           <Divider />
+          
           <ProfileForm t={t} />
 
           <h3>{t`Address Books`}</h3>

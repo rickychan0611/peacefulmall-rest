@@ -21,7 +21,6 @@ const ProfileForm = () => {
   const [cookies] = useCookies(null);
   const [user, setUser] = useRecoilState(userAtom);
   const [visible, setVisible] = useState(false);
-  const [saving, setSaving] = useState(false);
   const { t } = useTranslation('profile');
 
   const formItems = [
@@ -38,11 +37,6 @@ const ProfileForm = () => {
     {
       label: t`PhoneNumber`,
       key: 'phone',
-      required: true
-    },
-    {
-      label: t`Email`,
-      key: 'email',
       required: true
     }
   ];
@@ -102,6 +96,13 @@ const ProfileForm = () => {
       {editedUser && (
         <Form onSubmit={saveUserQuery}>
           <Form.Group widths="equal">
+            <Form.Input
+              fluid
+              label={'Email'}
+              placeholder={editedUser.email}
+              value={editedUser.email}
+              style={{pointerEvents:"none"}}
+            />
             {formItems.map((item, i) => {
               return item.key !== 'phone' ? (
                 <Form.Input
@@ -154,7 +155,7 @@ const ProfileForm = () => {
               type="submit"
               content={
                 loading ? (
-                  <Icon name="spinner" loading style={{ margin: 0, width: 30 }} />
+                  <Icon name="spinner" loading style={{ margin: "0 0 10px 0", width: 30 }} />
                 ) : (
                   t`Save Changes`
                 )
@@ -192,6 +193,7 @@ const ButtonWrapper = styled.div`
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
+  margin-top: 10px;
 `;
 
 const SubmitButton = styled(Button)`

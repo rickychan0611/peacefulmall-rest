@@ -24,12 +24,13 @@ import { user as userAtom } from '../../data/userAtom';
 
 export const validateAddress = (address, user, initial) => {
   return new Promise((resolve, reject) => {
-    let obj = !initial ? { 
-      type: 'create', 
-      default_status: 0,
-      name: user.first_name + ' ' + user.last_name 
-    } : 
-    {name: ""};
+    let obj = !initial
+      ? {
+          type: 'create',
+          default_status: 0,
+          name: user.first_name + ' ' + user.last_name
+        }
+      : { name: '' };
 
     console.log('address', address);
     const street_number = address.findIndex((item) => item.types[0] === 'street_number');
@@ -47,7 +48,7 @@ export const validateAddress = (address, user, initial) => {
         obj.detail_address = name;
       }
       if (item.types[0] === 'route') {
-        obj.detail_address = obj.detail_address ? (obj.detail_address + ' ' + name) : name;
+        obj.detail_address = obj.detail_address ? obj.detail_address + ' ' + name : name;
       }
       if (item.types[0] === 'locality') {
         obj.city = name;
@@ -90,16 +91,9 @@ const CurrentAddress = () => {
     try {
       const results = await geocodeByAddress(value.label);
       console.log('restult:', results[0]);
-
-      //?????get lag lng don't know how to use now
-      // const latLng = await getLatLng(results[0]).then(({ lat, lng }) => {
-      //   setCurrentPosition({ lat, lng, address: value.label });
-      //   // router.push('/home')
-      //   console.log('Successfully got latitude and longitude', { lat, lng });
-      //   return { lat, lng }
-      // });
-
+      
       const body = await validateAddress(results[0].address_components, user);
+      console.log('current address body:', body);
 
       await axios.post(HOST_URL + '/api/user/address/set', body, {
         headers: { Authorization: cookies.userToken }
@@ -146,11 +140,12 @@ const CurrentAddress = () => {
             <Address isMobile={isMobile}>
               <span style={{ fontSize: 12 }}>
                 {currentPosition ? t('currentAddress') : t('chooseAddress')}
-                </span>
+              </span>
               {isMobile && <br />}
               <span>
                 {' '}
-                {currentPosition && currentPosition.detail_address + ', ' + currentPosition.city}{' '}
+                {currentPosition &&
+                  currentPosition.detail_address + ', ' + currentPosition.city}{' '}
                 {/* {useDefaultAddress
                     ? useDefaultAddress.detail_address + ', ' + useDefaultAddress.city
                     : currentPosition.address}{' '} */}

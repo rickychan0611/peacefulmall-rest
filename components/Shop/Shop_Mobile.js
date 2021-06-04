@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { HOST_URL } from '../../env';
+import { useRef } from 'react';
 
 import { useRecoilState } from 'recoil';
 import {
   currentShop as currentShopAtom,
-  currentShopProducts as currentShopProductsAtom,
+  currentShopProducts as currentShopProductsAtom
 } from '../../data/atoms';
 
 import Slider from '../Slider';
@@ -13,17 +14,21 @@ import PopularDishes from '../PopularDishes';
 import RestaurantMenu from '../RestaurantMenu';
 import ReviewFeed from '../ReviewFeed';
 import BottomNavBar from '../BottomNavBar';
-import ShopInfo from '../ShopSideBar/ShopInfo'
-import ShopArticleList from '../ShopSideBar/ShopArticleList'
+import ShopInfo from '../ShopSideBar/ShopInfo';
+import ShopArticleList from '../ShopSideBar/ShopArticleList';
+import { Ref } from 'semantic-ui-react';
+import useTranslation from 'next-translate/useTranslation';
 
 const Shop_Mobile = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
+  const contextRef = useRef();
+  const { t } = useTranslation('shop');
 
   return (
-    <div style={{marginTop: -100}}>
-      <Section id="shopTop" style={{height: 100}} ></Section>
-      
+    <div style={{ marginTop: -100 }}>
+      <Section id="shopTop" style={{ height: 100 }}></Section>
+
       {currentShop.images && currentShop.images[0] ? (
         <Img src={HOST_URL + '/storage/' + JSON.parse(currentShop.images)[0]} />
       ) : (
@@ -42,7 +47,7 @@ const Shop_Mobile = () => {
       </Wrapper>
       <Description style={{ marginBottom: 20 }}>{currentShop.description}</Description>
 
-      <Section id="shopInfo" >
+      <Section id="shopInfo">
         <ShopInfo shop={currentShop} />
       </Section>
       <br />
@@ -52,14 +57,17 @@ const Shop_Mobile = () => {
         {currentShopProducts ? (
           <PopularDishes products={currentShopProducts} />
         ) : (
-          <div style={{marginBottom: 30}}>No item found.</div>
+          <div style={{ marginBottom: 30 }}>No item found.</div>
         )}
       </Slider>
       <hr />
       <br />
-      <Section id="fullMenu" >
-        <RestaurantMenu />
-      </Section>
+      <Ref innerRef={contextRef}>
+        <RestaurantMenu
+          t={t}
+          contextRef={contextRef}
+        />
+      </Ref>
       <br />
       <hr />
       <br />
@@ -82,7 +90,6 @@ const Shop_Mobile = () => {
       <hr />
       <br />
       <BottomNavBar />
-
     </div>
   );
 };

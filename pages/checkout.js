@@ -24,7 +24,6 @@ import AddressBook from '../components/AddressBook';
 import { useIsDesktop } from '../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
-import { Marker } from '@react-google-maps/api';
 
 const checkout = () => {
   const router = useRouter();
@@ -106,14 +105,14 @@ const checkout = () => {
           receiver_note: defaultAddress.note,
           tips_amount: tips_amount.tips,
           shipping_amount: orderDetails.shippingMethod.fee,
-          shipping_method_id: orderDetails.shippingMethod.id
+          shipping_method_id: orderDetails.shippingMethod.id,
         };
         console.log('body', body);
         const result = await axios.post(HOST_URL + '/api/user/order/create', body, {
           headers: { Authorization: cookies.userToken }
         });
-        console.log(result.data.data);
-        if (result.data.data === 'order create success') {
+        console.log("create order respond", result.data);
+        if (result.data.message === 'Order create success') {
           router.push('/consumer/order-success');
         } else {
           throw new Error('Order failed. Please try again');
@@ -226,18 +225,6 @@ const checkout = () => {
               runDirectionsService={runDirectionsService}
               setRunDirectionsService={setRunDirectionsService}
               />
-            {/* <iframe
-              width="100%"
-              height="250"
-              style={{ border: 10 }}
-              loading="lazy"
-              allowFullScreen
-              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBugBL6F0x-jyq_4l-6OS1i8Du6yv9bH-s&q=
-              ${orderDetails.shop.namw},
-              ${orderDetails.shop.address_line},
-              ${orderDetails.shop.address_city},
-              ${orderDetails.shop.address_province},
-              ${orderDetails.shop.address_post_code}`}></iframe> */}
             <Divider />
             <Header>Delivery or Pick-up?</Header>
             <PickupContainer>
@@ -260,17 +247,18 @@ const checkout = () => {
                 );
               })}
             </PickupContainer>
-            {orderDetails.shippingMethod.shipping_type === 1 && (
+            {orderDetails.shippingMethod.shipping_type !== 2 && (
               <>
                 <H4>Pick Up Address:</H4>
                 <H4>
                   <>
                     {orderDetails.shop.name}
                     <br />
-                    {orderDetails.shop.address_line},&nbsp;
-                    {orderDetails.shop.address_city},&nbsp;
-                    {orderDetails.shop.address_province},&nbsp;
-                    {orderDetails.shop.address_post_code}
+                    {orderDetails.shop.address_line ? (orderDetails.shop.address_line + 
+                    orderDetails.shop.address_city && ", " + orderDetails.shop.address_city + 
+                    orderDetails.shop.address_province && ", " + orderDetails.shop.address_province + 
+                    orderDetails.shop.address_post_code && ", " + orderDetails.shop.address_post_code)
+                  : (<><Icon name="info circle" /> For address, please call {orderDetails.shop.phone}</>)}
                   </>
                 </H4>
               </>
@@ -278,7 +266,7 @@ const checkout = () => {
             {orderDetails.shippingMethod.shipping_type === 2 && (
               <>
                 <H4>
-                  Your Address:{' '}
+                  Delivery Address:{' '}
                   {err && (
                     <span style={{ color: err && 'red' }}>
                       <Icon name="warning circle" />

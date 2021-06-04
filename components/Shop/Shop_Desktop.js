@@ -55,7 +55,7 @@ const Shop_Desktop = () => {
             </Slider>
 
             <Ref innerRef={contextRef}>
-              <RestaurantMenu t={t} contextRef={contextRef} currentShop={currentShop} currentShopProducts={currentShopProducts} />
+              <RestaurantMenu t={t} contextRef={contextRef}/>
             </Ref>
             <br />
             <hr />

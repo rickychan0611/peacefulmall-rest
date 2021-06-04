@@ -30,7 +30,7 @@ const orders = () => {
       });
       getOrders.data.data !== 'no order found' && setOrders(getOrders.data.data);
       setLoading(false);
-      console.log('getOrders.data.data', getOrders.data.data);
+      console.log('getOrders.data', getOrders.data);
     } catch (err) {
       setOrders();
       console.log('error: ', err);

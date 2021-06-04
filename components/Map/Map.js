@@ -42,17 +42,16 @@ export default function Map({
 
   const RenderMap = () => {
 
-    useEffect(() => {
-      console.log("!!!!!!1", destination)
-      if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          // setOrigin({ lat: position.coords.latitude, lng: position.coords.longitude });
-        });
-      } else {
-        console.log('Not Available');
-      }
-
-    }, []);
+    // useEffect(() => {
+    //   console.log("!!!!!!1", destination)
+    //   if ('geolocation' in navigator) {
+    //     navigator.geolocation.getCurrentPosition(function (position) {
+    //       // setOrigin({ lat: position.coords.latitude, lng: position.coords.longitude });
+    //     });
+    //   } else {
+    //     console.log('Not Available');
+    //   }
+    // }, []);
 
     return (
       <>
@@ -62,20 +61,13 @@ export default function Map({
             width: '100%',
             height: '300px'
           }}
-          center={
-            shipping && origin && destination
-              ? {
-                  lat: (origin.lat + destination.lat) / 2,
-                  lng: (origin.lng + destination.lng) / 2
-                }
-              : origin
-          }
+          center={origin}
           zoom={11}
           // onLoad={onLoad}
         >
           {/* Child components, such as markers, info windows, etc. */}
           <>
-            {runDirectionsService && destination && origin && (
+            {runDirectionsService && destination && origin && shipping && (
               <DirectionsService
                 // required
                 options={{
@@ -101,7 +93,7 @@ export default function Map({
               />
             )}
 
-            {!runDirectionsService && mapResponse && mapResponse.routes[0] && (
+            {!runDirectionsService && mapResponse && mapResponse.routes[0] && shipping && (
               <DirectionsRenderer
                 // required
                 options={{
@@ -119,8 +111,8 @@ export default function Map({
               />
             )}
 
-            {shipping && <Marker position={destination} title="Your position" />}
-            <Marker position={origin} title="Shop" />
+            {/* {shipping && <Marker position={destination} title="Your position" />} */}
+            {!shipping && <Marker position={origin} title="Shop" />}
             {children}
           </>
         </GoogleMap>

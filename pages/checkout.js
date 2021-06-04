@@ -153,6 +153,7 @@ const checkout = () => {
       .then(({ lat, lng }) => {
         name === 'origin' && setOrigin({ lat, lng });
         name === 'defaultAddress' && setDestination({ lat, lng });
+        setRunDirectionsService(true)
       })
       .catch((error) => console.error(error));
   };
@@ -171,8 +172,8 @@ const checkout = () => {
   }, [orderDetails]);
 
   useEffect(() => {
-    setRunDirectionsService(true)
-    setMapResponse()
+    // setRunDirectionsService(true)
+    // setMapResponse()
     console.log('defaultAddress', defaultAddress);
     console.log('destination', destination);
     if (!orderDetails.shippingMethod.shipping_type === 2) {
@@ -181,13 +182,32 @@ const checkout = () => {
       defaultAddress &&
         LntLng(
           `${defaultAddress.detail_address}, 
-      ${defaultAddress.city},
-      ${defaultAddress.province},
-      ${defaultAddress.country}`,
+            ${defaultAddress.city},
+            ${defaultAddress.province},
+            ${defaultAddress.country}`,
           'defaultAddress'
         );
     }
-  }, [defaultAddress, orderDetails]);
+  }, [addresses]);
+
+  // exportconst updateMapDestination = () => {
+  //   setRunDirectionsService(true)
+  //   setMapResponse()
+  //   console.log('defaultAddress', defaultAddress);
+  //   console.log('destination', destination);
+  //   if (!orderDetails.shippingMethod.shipping_type === 2) {
+  //     setDestination();
+  //   } else {
+  //     defaultAddress &&
+  //       LntLng(
+  //         `${defaultAddress.detail_address}, 
+  //           ${defaultAddress.city},
+  //           ${defaultAddress.province},
+  //           ${defaultAddress.country}`,
+  //         'defaultAddress'
+  //       );
+  //   }
+  // }, [addresses]);
 
   return (
     <>

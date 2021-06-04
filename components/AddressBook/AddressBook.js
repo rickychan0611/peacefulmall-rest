@@ -9,6 +9,7 @@ import { useIsMobile } from '../../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { addresses as addressAtom, appReady as appReadyAtom } from '../../data/atoms';
+// import { updateMapDestination } from '../../pages/checkout';
 
 const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery }) => {
   const [loading, setLoading] = useState(false);
@@ -29,6 +30,7 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
       await getAddressesQuery();
       setLoading(false);
       setOpen(false);
+      return;
     } catch (err) {
       console.log(err);
       setLoading(false);
@@ -42,10 +44,11 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
 
   const deleteAddressQuery = async (id) => {
     query({ type: 'delete', address_id: id });
+    
   };
 
   const setDefaultQuery = async (id) => {
-    query({ type: 'edit', address_id: id, default_status: 1 });
+    await query({ type: 'edit', address_id: id, default_status: 1 });
   };
 
   return (

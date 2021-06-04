@@ -28,7 +28,7 @@ const Profile = () => {
         headers: { Authorization: cookies.userToken }
       });
       // const sorted = result.data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      console.log(result.data.data);
+      console.log("address", result.data.data);
       setAddresses(result.data.data);
       return;
     } catch (err) {

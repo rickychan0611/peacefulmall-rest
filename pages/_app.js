@@ -55,7 +55,7 @@ const InitApp = ({ children }) => {
       localStorage.setItem('user', JSON.stringify(getUser.data.data));
       setUser(getUser.data.data);
       setAddresses(getUser.data.data.addresses);
-      // setAppReady(true);
+      setAppReady(true);
       return;
       // }
     }

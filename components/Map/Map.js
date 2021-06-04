@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   GoogleMap,
   LoadScript,
@@ -14,13 +14,14 @@ export default function Map({
   mapResponse,
   setMapResponse,
   children,
-  runDirectionsService,
-  setRunDirectionsService,
   waypoints,
   destination,
   origin,
   setShowList,
-  setLoading
+  setLoading,
+  shipping,
+  runDirectionsService,
+  setRunDirectionsService
 }) {
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: MAP_API // ,
@@ -30,8 +31,8 @@ export default function Map({
   function directionsCallback(response) {
     if (response !== null) {
       if (response.status === 'OK') {
+        console.log("directionsCallback", response)
         setMapResponse(response);
-        setShowList(true);
         setLoading(false);
       } else {
         setLoading(false);
@@ -39,47 +40,42 @@ export default function Map({
     }
   }
 
-  const renderMap = () => {
-    // wrapping to a function is useful in case you want to access `window.google`
-    // to eg. setup options or create latLng object, it won't be available otherwise
-    // feel free to render directly if you don't need that
-    // const onLoad = React.useCallback(
-    //   function onLoad(mapInstance) {
-    //     // do something with map Instance
-    //   }
-    // )
+  const RenderMap = () => {
 
-    // useEffect(() => {
-    //   if ('geolocation' in navigator) {
-    //     navigator.geolocation.getCurrentPosition(function (position) {
-    //       setOrigin({ lat: position.coords.latitude, lng: position.coords.longitude });
-    //     });
-    //   } else {
-    //     console.log('Not Available');
-    //   }
+    useEffect(() => {
+      console.log("!!!!!!1", destination)
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          // setOrigin({ lat: position.coords.latitude, lng: position.coords.longitude });
+        });
+      } else {
+        console.log('Not Available');
+      }
 
-      
-    // }, []);
+    }, []);
 
     return (
       <>
         <GoogleMap
           mapContainerStyle={{
             id: 'direction',
-            // position: 'absolute',
             width: '100%',
             height: '300px'
           }}
-          center={{
-            lat: 0,
-            lng: -180
-          }}
-          zoom={12}
+          center={
+            shipping && origin && destination
+              ? {
+                  lat: (origin.lat + destination.lat) / 2,
+                  lng: (origin.lng + destination.lng) / 2
+                }
+              : origin
+          }
+          zoom={11}
           // onLoad={onLoad}
         >
           {/* Child components, such as markers, info windows, etc. */}
           <>
-            {runDirectionsService && waypoints && waypoints[0] && (
+            {runDirectionsService && destination && origin && (
               <DirectionsService
                 // required
                 options={{
@@ -122,6 +118,9 @@ export default function Map({
                 // }}
               />
             )}
+
+            {shipping && <Marker position={destination} title="Your position" />}
+            <Marker position={origin} title="Shop" />
             {children}
           </>
         </GoogleMap>
@@ -133,5 +132,5 @@ export default function Map({
     return <div>Map cannot be loaded right now, sorry.</div>;
   }
 
-  return isLoaded ? renderMap() : <Loader />;
+  return isLoaded ? <RenderMap /> : <Loader />;
 }

@@ -23,7 +23,8 @@ import TotalAmountList from '../components/TotalAmountList/';
 import AddressBook from '../components/AddressBook';
 import { useIsDesktop } from '../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
-import { geocodeByAddress } from 'react-google-places-autocomplete';
+import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import { Marker } from '@react-google-maps/api';
 
 const checkout = () => {
   const router = useRouter();
@@ -130,7 +131,6 @@ const checkout = () => {
     console.log('orderDetails!!!!!!!!!!!!!!!!!', orderDetails);
     setCurrentShop(orderDetails.shop);
     console.log('currentShop!!!!!!!!!!!!!!!!!', currentShop);
-    console.log('!orderDetails[0]', orderDetails.length);
     if (orderDetails.orderItems.length === 0 && currentShop) {
       router.push('/shop/' + currentShop.name + '/' + currentShop.id);
     } else if (reload === 2 && orderDetails.orderItems.length === 0 && !currentShop) {
@@ -141,18 +141,53 @@ const checkout = () => {
 
   const [mapResponse, setMapResponse] = useState();
   const [destination, setDestination] = useState();
+  const [orgin, setOrigin] = useState();
+  const [runDirectionsService, setRunDirectionsService] = useState(false);
 
-  useEffect(() => {
-    console.log('currentPosition', currentPosition);
-  }, []);
-
-  const getLatLng = (address) => {
+  const LntLng = (address, name) => {
+    console.log('addressaddressaddress', address);
     return geocodeByAddress(address)
       .then((results) => {
-        console.log('getLatLng', results);
+        return getLatLng(results[0]);
+      })
+      .then(({ lat, lng }) => {
+        name === 'origin' && setOrigin({ lat, lng });
+        name === 'defaultAddress' && setDestination({ lat, lng });
       })
       .catch((error) => console.error(error));
   };
+
+  useEffect(() => {
+    orderDetails &&
+      orderDetails.shop &&
+      LntLng(
+        `${orderDetails.shop.name},
+      ${orderDetails.shop.address_line},
+      ${orderDetails.shop.address_city},
+      ${orderDetails.shop.address_province},
+      ${orderDetails.shop.address_post_code}`,
+        'origin'
+      );
+  }, [orderDetails]);
+
+  useEffect(() => {
+    setRunDirectionsService(true)
+    setMapResponse()
+    console.log('defaultAddress', defaultAddress);
+    console.log('destination', destination);
+    if (!orderDetails.shippingMethod.shipping_type === 2) {
+      setDestination();
+    } else {
+      defaultAddress &&
+        LntLng(
+          `${defaultAddress.detail_address}, 
+      ${defaultAddress.city},
+      ${defaultAddress.province},
+      ${defaultAddress.country}`,
+          'defaultAddress'
+        );
+    }
+  }, [defaultAddress, orderDetails]);
 
   return (
     <>
@@ -182,18 +217,16 @@ const checkout = () => {
             <h4 style={{ margin: 0 }}>Order from</h4>
             <h2 style={{ margin: 0 }}>{orderDetails.shop && orderDetails.shop.name}</h2>
             <Divider />
-
             <Map
-              origin={getLatLng(`${orderDetails.shop.name},
-                ${orderDetails.shop.address_line},
-                ${orderDetails.shop.address_city},
-                ${orderDetails.shop.address_province},
-                ${orderDetails.shop.address_post_code}`)}
+              setLoading={setLoading}
+              origin={orgin}
               mapResponse={mapResponse}
               setMapResponse={setMapResponse}
               destination={destination}
-            />
-
+              shipping={orderDetails.shippingMethod.shipping_type === 2}
+              runDirectionsService={runDirectionsService}
+              setRunDirectionsService={setRunDirectionsService}
+              />
             {/* <iframe
               width="100%"
               height="250"
@@ -207,7 +240,6 @@ const checkout = () => {
               ${orderDetails.shop.address_province},
               ${orderDetails.shop.address_post_code}`}></iframe> */}
             <Divider />
-
             <Header>Delivery or Pick-up?</Header>
             <PickupContainer>
               {orderDetails.shop.shipping_methods.map((item, i) => {
@@ -335,17 +367,14 @@ const checkout = () => {
               + Add more items
             </a>
             <Divider />
-
             <TotalAmountList
               orderDetails={orderDetails}
               setTips={setTips}
               tips_amount={tips_amount}
             />
-
             <Divider />
             <Header>Payment method</Header>
             <Divider />
-
             <CheckoutButton
               onClick={() => {
                 !loading && createOrderQuery();

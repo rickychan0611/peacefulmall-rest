@@ -387,11 +387,11 @@ const checkout = () => {
 
 const OrdersContainer = styled.div`
   max-width: 600px;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  padding: 80px 0px;
+  padding: 20px 0px;
 `;
 const H4 = styled.h4`
   margin: 0 0 10px 0;

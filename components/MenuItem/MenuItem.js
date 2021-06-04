@@ -62,21 +62,27 @@ const MenuItem = ({ item, smallCard }) => {
       <>
         <VCardContainer onClick={() => route(item)}>
           <div>
-            <Img src={IMG_URL} />
+            {item.images && item.images[0] ? (
+              <Img src={HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
+            ) : (
+              <Img src="/no-image.png" />
+            )}
             <Name style={{ padding: '0 5px' }}>{item.name}</Name>
           </div>
           <div style={{ padding: '0 5px' }}>
             <Wrapper>
-            {item.promotion_price ? (
-                  <>
-                    <Price>
-                      <span style={{ textDecoration: 'line-through', fontSize: 12 }}>${item.price}</span>
-                      <span style={{ color: 'red', marginLeft: 5 }}>${item.promotion_price}</span>
-                    </Price>
-                  </>
-                ) : (
-                  <Price>${item.price}</Price>
-                )}
+              {item.promotion_price ? (
+                <>
+                  <Price>
+                    <span style={{ textDecoration: 'line-through', fontSize: 12 }}>
+                      ${item.price}
+                    </span>
+                    <span style={{ color: 'red', marginLeft: 5 }}>${item.promotion_price}</span>
+                  </Price>
+                </>
+              ) : (
+                <Price>${item.price}</Price>
+              )}
               <PlusSign>
                 <Icon name="plus circle" color="red" />
               </PlusSign>

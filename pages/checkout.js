@@ -172,8 +172,6 @@ const checkout = () => {
   }, [orderDetails]);
 
   useEffect(() => {
-    // setRunDirectionsService(true)
-    // setMapResponse()
     console.log('defaultAddress', defaultAddress);
     console.log('destination', destination);
     if (!orderDetails.shippingMethod.shipping_type === 2) {
@@ -189,25 +187,6 @@ const checkout = () => {
         );
     }
   }, [addresses]);
-
-  // exportconst updateMapDestination = () => {
-  //   setRunDirectionsService(true)
-  //   setMapResponse()
-  //   console.log('defaultAddress', defaultAddress);
-  //   console.log('destination', destination);
-  //   if (!orderDetails.shippingMethod.shipping_type === 2) {
-  //     setDestination();
-  //   } else {
-  //     defaultAddress &&
-  //       LntLng(
-  //         `${defaultAddress.detail_address}, 
-  //           ${defaultAddress.city},
-  //           ${defaultAddress.province},
-  //           ${defaultAddress.country}`,
-  //         'defaultAddress'
-  //       );
-  //   }
-  // }, [addresses]);
 
   return (
     <>

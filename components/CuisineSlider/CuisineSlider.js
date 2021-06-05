@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useIsMobile } from '../../util/useScreenSize';
 import _ from 'lodash';
 import styled from 'styled-components';
-import { Sticky } from 'semantic-ui-react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import SliderTitle from '../SliderTitle';
 import axios from 'axios';
@@ -64,7 +63,6 @@ const CuisineSlider = ({ contextRef  }) => {
         <>
           <div style={{ cursor: 'grab' }}>
             <SliderTitle title={t("chooseAStyle")} icon="leaf" hideViewAll />
-            <Sticky offset={60} context={contextRef}>
               <Container
                 isMobile={isMobile}
                 horizontal
@@ -94,7 +92,6 @@ const CuisineSlider = ({ contextRef  }) => {
                   })}
                 </ItemWrapper>
               </Container>
-            </Sticky>
           </div>
         </>
       )}

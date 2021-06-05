@@ -6,7 +6,7 @@ import { useRecoilState } from 'recoil';
 import { currentPosition as currentPositionAtom } from '../../data/atoms';
 import useTranslation from 'next-translate/useTranslation';
 
-const SearchBanner_Mobile = ({ hide }) => {
+const SearchBanner_Mobile = ({ setOpenModal }) => {
   const isMobile = useIsMobile();
   const { t } = useTranslation('home');
   const [openLocationSearch, setOpenLocationSearch] = useState(false);
@@ -14,13 +14,13 @@ const SearchBanner_Mobile = ({ hide }) => {
   const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
   return (
     <>
-      <BannerContainer className={hide}>
+      <BannerContainer>
         <InputContainer style={{ display: 'flex' }}>
-          <InputWrapper style={{}}>
+          <InputWrapper>
             <StyledInput
               placeholder={t("enterAddress")}
-              onClick={() => setOpenLocationSearch(true)}
-              onBlur={() => setOpenMyLocation(false)}
+              onClick={() =>setOpenModal(true)}
+              // onBlur={() => setOpenMyLocation(false)}
             />
             <Label style={{ borderRadius: ' 0 5px 5px 0' }}>
               <Icon name="search" />
@@ -29,7 +29,7 @@ const SearchBanner_Mobile = ({ hide }) => {
         </InputContainer>
       </BannerContainer>
 
-      {openLocationSearch && <BannerContainer className={hide}>
+      {/* {openLocationSearch && <BannerContainer className={hide}>
 
         <InputContainer style={{ display: 'flex' }}>
           <Icon name="close" style={{marginRight: 10, color: "white"}}
@@ -58,7 +58,7 @@ const SearchBanner_Mobile = ({ hide }) => {
             </Label>
           </InputWrapper>
         </InputContainer>
-      </BannerContainer>}
+      </BannerContainer>} */}
     </>
   );
 };

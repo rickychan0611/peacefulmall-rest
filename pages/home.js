@@ -22,39 +22,43 @@ const Home = () => {
     <>
       <CheckOutListPusher>
         <Image src="/banner.jpg" />
-        <SearchBanner />
-
-        <CurrentAddress />
-
         <Ref innerRef={contextRef}>
-          <Container style={{ marginTop: '2em' }}>
-            <CuisineSlider contextRef={contextRef} />
-            <Slider topic={t("discountedDishes")} icon="food">
-              <DishCards type="discount" />
-            </Slider>
-            <Slider topic={t("mostPopular")} icon="food">
-              <DishCards type="popular" />
-            </Slider>
-            <Slider topic={t("mostLoved")} icon="star">
-              <ShopCards />
-            </Slider>
-            <Slider topic={t("fastest")} icon="store">
-              <ShopCards />
-            </Slider>
-            <Slider topic={t("Weekly")} icon="store">
-              <ShopCards />
-            </Slider>
-            <Slider topic={t("Featured")} icon="store">
-              <ShopCards />
-            </Slider>
-            <Slider topic={t("UserReviews")} icon="star">
-              <ReviewCards />
-            </Slider>
-            <Slider topic={t("EditorPicks")} icon="star">
-              <ReviewCards />
-            </Slider>
-          </Container>
+          <div>
+            <Sticky offset={62} context={contextRef}>
+              <SearchBanner />
+            </Sticky>
+
+            <CurrentAddress />
+            <Container style={{ marginTop: '2em' }}>
+              <CuisineSlider />
+              <Slider topic={t('discountedDishes')} icon="food">
+                <DishCards type="discount" />
+              </Slider>
+              <Slider topic={t('mostPopular')} icon="food">
+                <DishCards type="popular" />
+              </Slider>
+              <Slider topic={t('mostLoved')} icon="star">
+                <ShopCards />
+              </Slider>
+              <Slider topic={t('fastest')} icon="store">
+                <ShopCards />
+              </Slider>
+              <Slider topic={t('Weekly')} icon="store">
+                <ShopCards />
+              </Slider>
+              <Slider topic={t('Featured')} icon="store">
+                <ShopCards />
+              </Slider>
+              <Slider topic={t('UserReviews')} icon="star">
+                <ReviewCards />
+              </Slider>
+              <Slider topic={t('EditorPicks')} icon="star">
+                <ReviewCards />
+              </Slider>
+            </Container>
+          </div>
         </Ref>
+
         <Footer />
       </CheckOutListPusher>
     </>

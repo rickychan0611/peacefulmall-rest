@@ -91,7 +91,7 @@ const CurrentAddress = () => {
     try {
       const results = await geocodeByAddress(value.label);
       console.log('restult:', results[0]);
-      
+
       const body = await validateAddress(results[0].address_components, user);
       console.log('current address body:', body);
 
@@ -168,32 +168,34 @@ const CurrentAddress = () => {
               {addresses &&
                 addresses[0] &&
                 addresses.map((address, i) => {
-                  return (
-                    <div
-                      key={i}
-                      onClick={() => {
-                        // setUseDefaultAddress(address);
-                        setCurrentPosition(address);
-                        localStorage.setItem('currentPosition', JSON.stringify(address));
-                        setOpenAddressMenu(false);
-                        console.log(
-                          'address',
-                          address.detail_address + ', ' + address.city + ', ' + address.province
-                        );
-                      }}
-                      style={{ backgroundColor: i === 0 && 'rgba(255, 241, 82,' + color + ')' }}>
-                      <H4
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          padding: 10,
-                          borderBottom: '1px solid #dbdbd7'
-                        }}>
-                        <Radio checked={address === currentPosition} style={{ marginRight: 7 }} />
-                        {address.detail_address}, {address.city}
-                      </H4>
-                    </div>
-                  );
+                  if (address.detail_address) {
+                    return (
+                      <div
+                        key={i}
+                        onClick={() => {
+                          // setUseDefaultAddress(address);
+                          setCurrentPosition(address);
+                          localStorage.setItem('currentPosition', JSON.stringify(address));
+                          setOpenAddressMenu(false);
+                          console.log(
+                            'address',
+                            address.detail_address + ', ' + address.city + ', ' + address.province
+                          );
+                        }}
+                        style={{ backgroundColor: i === 0 && 'rgba(255, 241, 82,' + color + ')' }}>
+                        <H4
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: 10,
+                            borderBottom: '1px solid #dbdbd7'
+                          }}>
+                          <Radio checked={address === currentPosition} style={{ marginRight: 7 }} />
+                          {address.detail_address}, {address.city}
+                        </H4>
+                      </div>
+                    );
+                  }
                 })}
             </ChooseAddressContainer>
             <LocationInputContainer>
@@ -270,7 +272,7 @@ const CurrentAddressContainer = styled.div`
   text-overflow: ellipsis;
   height: 48px;
   padding: 0 10px 0 10px;
-  border-bottom: 1px solid #b9b8b8;
+  /* border-bottom: 1px solid #b9b8b8; */
   padding-bottom: 5px;
   padding-top: 3px;
   background-color: white;

@@ -17,31 +17,31 @@ import { Button, Label } from 'semantic-ui-react';
 import { HOST_URL } from '../../env';
 import PlaceHolder_Card from '../PlaceHolder_Card/';
 
-const DishCards = ({ type }) => {
+const DishCards = ({ type, products }) => {
   const router = useRouter();
   const [dishes, setDishes] = useState([]);
   const isMobile = useIsMobile();
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [currentCat, setCurrentcat] = useRecoilState(currentCatAtom);
-  const [products, setProducts] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // const [products, setProducts] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation('home');
 
   //get products from server when component is loaded
   useEffect(async () => {
-    setLoading(true);
-    // console.log('plat_category reload', currentCat ? currentCat.id : 'all');
-    const getProducts = await axios.get(HOST_URL + '/api/products', {
-      params: {
-        plat_category: currentCat ? currentCat.id : 'all',
-        type,
-        count: '100'
-      }
-    });
-    // console.log('getProducts.data.data', getProducts.data.data);
-    setProducts(getProducts.data.data);
-    setLoading(false);
+    // setLoading(true);
+    // // console.log('plat_category reload', currentCat ? currentCat.id : 'all');
+    // const getProducts = await axios.get(HOST_URL + '/api/products', {
+    //   params: {
+    //     plat_category: currentCat ? currentCat.id : 'all',
+    //     type,
+    //     count: '100'
+    //   }
+    // });
+    console.log(products);
+    // setProducts(products);
+    // setLoading(false);
   }, [currentCat]);
 
   return (

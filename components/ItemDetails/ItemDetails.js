@@ -87,7 +87,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
       } catch (err) {
         console.log(err);
         setLoading(false);
-        router.push('/404');
+        // router.push('/404');
       }
     } else if (item && item.id !== +product_id) {
       setLoading(false);

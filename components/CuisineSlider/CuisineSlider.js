@@ -31,27 +31,18 @@ import {
 //   { name: 'Mexcian', img: 'mexcian-thumb.jpg' }
 // ];
 
-const CuisineSlider = ({ contextRef  }) => {
+const CuisineSlider = ( {sliderCats, cacheDate} ) => {
   const isMobile = useIsMobile();
   const [currentCat, setCurrentCat] = useRecoilState(currentCatAtom);
-  const [sliderCats, setSliderCats] = useRecoilState(sliderCatsAtom);
+  // const [sliderCats, setSliderCats] = useRecoilState(sliderCatsAtom);
   const [catChange, setCatChange] = useRecoilState(scatChangeAtom);
   const { t } = useTranslation('home');
 
-  useEffect(async () => {
-    if (!sliderCats) {
-      try {
-        const query = await axios.get(HOST_URL + '/api/getplatcat');
-        console.log(query.data.data);
-        setSliderCats(query.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }, []);
+  console.log("@@@@@sliderCats cacheDate", sliderCats);
 
   return (
     <>
+    {console.log(sliderCats)}
       {!sliderCats ? (
         <div style={{ marginBottom: 20 }}>
           <SliderTitle title={t("chooseAStyle")} icon="leaf" />
@@ -69,7 +60,7 @@ const CuisineSlider = ({ contextRef  }) => {
                 nativeMobileScroll
                 hideScrollbars={isMobile}>
                 <ItemWrapper isMobile={isMobile}>
-                  {sliderCats.map((item, i) => {
+                  {sliderCats && sliderCats[0] && sliderCats.map((item, i) => {
                     return (
                       <CatCard
                         selected={item.id === (currentCat ? currentCat.id : 'all')}

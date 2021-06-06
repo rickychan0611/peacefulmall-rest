@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import { Container, Dimmer, Loader } from 'semantic-ui-react';
 import Head from 'next/head';
 import axios from 'axios';
@@ -21,51 +20,18 @@ import CurrentAddress from '../../../components/CurrentAddress';
 
 // import { restaurants } from '../../../data/restaurants';
 
-const shop = () => {
-  const router = useRouter();
+const shop = ({ getSingleShop, getShopProducts }) => {
   const hide = useState(false);
   const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
   const isTablet = useIsTablet();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
-  const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
+  const [, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
 
   useEffect(async () => {
-    console.log('currentShop!!!', currentShop)
-    if (router.query.shop_id) {
-      try {
-        console.log('qetting shop from server...');
-        const getSingleShop = await axios.get(HOST_URL + '/api/singleshop', {
-          params: { shop_id: router.query.shop_id }
-        });
-        console.log('getSingleShop.data.data', getSingleShop.data.data);
-        setCurrentShop(getSingleShop.data.data);
-      } catch (err) {
-        console.log(err);
-        // router.push('/404');
-      }
-    }
-  }, [router, router.query.shop_id]);
-
-  useEffect(async () => {
-    console.log('currentShopProducts!!!', currentShopProducts);
-
-    if (router.query.shop_id) {
-      try {
-        console.log('getShopProducts from server...');
-        const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {
-          params: {
-            shop_id: router.query.shop_id,
-            category_id: 'all'
-          }
-        });
-        console.log('getShopProducts.data.data', getShopProducts.data.data);
-        setCurrentShopProducts(getShopProducts.data.data);
-      } catch (err) {
-        console.log('err' + err);
-      }
-    }
-  }, [router, router.query]);
+    setCurrentShop(getSingleShop);
+    setCurrentShopProducts(getShopProducts);
+  }, []);
 
   return (
     <div>
@@ -101,6 +67,28 @@ const shop = () => {
     </div>
   );
 };
+
+export const getServerSideProps = async (context) => {
+  context.res.setHeader('Cache-Control', 's-maxage=120, stale-while-revalidate=60');
+
+  const getSingleShop = await axios.get(HOST_URL + '/api/singleshop', {
+    params: { shop_id: context.params.shop_id }
+  });
+
+  const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {
+    params: {
+      shop_id: context.params.shop_id,
+      category_id: 'all'
+    }
+  });
+
+  return {
+    props: { 
+      getSingleShop: getSingleShop.data.data,
+      getShopProducts: getShopProducts.data.data,
+     }
+  }
+}
 
 const SearchBannerWrapper = styled.div`
   z-index: 1000;

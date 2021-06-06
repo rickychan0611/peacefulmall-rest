@@ -17,6 +17,7 @@ import Shop_Desktop from '../../../components/Shop/Shop_Desktop';
 import Shop_Mobile from '../../../components/Shop/Shop_Mobile';
 import Footer from '../../../components/Footer';
 import CurrentAddress from '../../../components/CurrentAddress';
+import BackButton from '../../../components/BackButton';
 
 // import { restaurants } from '../../../data/restaurants';
 
@@ -40,16 +41,19 @@ const shop = ({ getSingleShop, getShopProducts }) => {
       </Head>
       {currentShop && !isMobile ? (
         <SearchBannerWrapper>
-          <SearchBanner hide={hide} />
-          <CurrentAddress />
+          <SearchBanner />
+          {/* <CurrentAddress /> */}
         </SearchBannerWrapper>
       ) : (
-        <CurrentAddress />
+        <SearchBannerWrapper>
+          <SearchBanner />
+          <BackButton />
+          {/* <CurrentAddress /> */}
+        </SearchBannerWrapper>
       )}
-
       <Container
         style={{
-          marginTop: isMobile ? '0px' : isTablet ? '80px' : '140px'
+          marginTop: isMobile ? '85px' : isTablet ? '85px' : '140px'
         }}>
         {!currentShop || currentShop === 'not found' ? (
           <div style={{ height: '80vh' }}>
@@ -60,7 +64,9 @@ const shop = ({ getSingleShop, getShopProducts }) => {
         ) : isDesktop ? (
           <Shop_Desktop />
         ) : (
-          <Shop_Mobile />
+          <>
+            <Shop_Mobile />
+          </>
         )}
       </Container>
       {currentShop && <Footer />}
@@ -83,10 +89,10 @@ export const getServerSideProps = async (context) => {
   });
 
   return {
-    props: { 
+    props: {
       getSingleShop: getSingleShop.data.data,
       getShopProducts: getShopProducts.data.data,
-     }
+    }
   }
 }
 

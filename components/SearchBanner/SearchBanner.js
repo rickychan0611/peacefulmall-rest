@@ -27,7 +27,7 @@ const SearchBanner = () => {
                 icon="search"
                 iconPosition="left"
                 value={value}
-                onChange={handleChange} />
+                onChange={handleChange}/>
               <Icon
                 name="times"
                 style={{ margin: '0 10px' }}

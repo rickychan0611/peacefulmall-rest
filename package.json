@@ -25,6 +25,7 @@
     "next-compose-plugins": "^2.2.1",
     "next-translate": "^1.0.6",
     "npm": "^7.15.1",
+    "nprogress": "^0.2.0",
     "password-validator": "^5.1.1",
     "react": "^17.0.1",
     "react-cookie": "^4.0.3",

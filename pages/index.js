@@ -19,7 +19,7 @@ import CurrentAddress from '../components/CurrentAddress';
 const Home = ({ sliderCats, products, shops, cacheDate }) => {
   let contextRef = createRef();
   const { t } = useTranslation('home');
-
+  console.log("home cacheDate: ",  cacheDate)
   return (
     <>
       <CheckOutListPusher>

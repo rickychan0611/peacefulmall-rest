@@ -1,17 +1,9 @@
-import { useState } from 'react';
-import { Button, Container, Icon, Image, Divider, Dropdown } from 'semantic-ui-react';
+import { Container, Icon  } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { useIsMobile } from '../../util/useScreenSize';
-import { useRecoilState } from 'recoil';
-import { currentPosition as currentPositionAtom } from '../../data/atoms';
 import useTranslation from 'next-translate/useTranslation';
 
 const SearchBanner_Mobile = ({ setOpenModal }) => {
-  const isMobile = useIsMobile();
   const { t } = useTranslation('home');
-  const [openLocationSearch, setOpenLocationSearch] = useState(false);
-  const [openMyLocation, setOpenMyLocation] = useState(false);
-  const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
   return (
     <>
       <BannerContainer>
@@ -19,8 +11,10 @@ const SearchBanner_Mobile = ({ setOpenModal }) => {
           <InputWrapper>
             <StyledInput
               placeholder={t("enterAddress")}
-              onClick={() =>setOpenModal(true)}
-              // onBlur={() => setOpenMyLocation(false)}
+              onClick={() => setOpenModal(true)}
+              onKeyDown={(event) => {
+                event.preventDefault();
+              }}
             />
             <Label style={{ borderRadius: ' 0 5px 5px 0' }}>
               <Icon name="search" />

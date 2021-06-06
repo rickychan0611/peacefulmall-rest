@@ -38,8 +38,6 @@ const CuisineSlider = ( {sliderCats, cacheDate} ) => {
   const [catChange, setCatChange] = useRecoilState(scatChangeAtom);
   const { t } = useTranslation('home');
 
-  console.log("@@@@@sliderCats cacheDate", sliderCats);
-
   return (
     <>
     {console.log(sliderCats)}

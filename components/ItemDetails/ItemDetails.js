@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useIsMobile } from '../../util/useScreenSize';
-import styled from 'styled-components';
 import { HOST_URL } from '../../env';
 import toSlug from '../../util/toSlug';
 import axios from 'axios';
@@ -14,8 +13,8 @@ import {
 } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 
-import { Form, Grid, Icon, Radio, Image } from 'semantic-ui-react';
 import BottomAddBar from '../BottomAddBar';
+import BackButton from '../BackButton';
 import ItemDetailsContext from '../ItemDetailsContext';
 import _ from 'lodash';
 import { useEffect } from 'react';
@@ -113,12 +112,7 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
         <Loader loading={loading} />
       ) : (
         <>
-          <BackButton
-            onClick={() => {
-              router.back();
-            }}>
-            <Icon name="arrow left" /> Back
-          </BackButton>
+          <BackButton />
           <ItemDetailsContext attributes={attributes} setAttributes={setAttributes} />
           <BottomAddBar
             attributeTotal={attributeTotal}
@@ -133,49 +127,5 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
     </>
   );
 };
-
-const BackButton = styled.div`
-  position: fixed;
-  cursor: 'pointer';
-  font-size: 18px;
-  background-color: white;
-  width: 100%;
-  z-index: 10;
-  padding: 10px;
-  margin: 0 0 0 0;
-  cursor: pointer;
-`;
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-`;
-const Container = styled.div`
-  padding: 20px;
-  padding-top: 60px;
-  padding-bottom: 150px;
-  min-height: calc(100vh - 60px);
-  width: 100%;
-  max-width: 500px;
-`;
-const StoreHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-`;
-const Description = styled.h4`
-  color: grey;
-`;
-const Img = styled.img`
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-`;
 
 export default ItemDetails;

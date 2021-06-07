@@ -228,7 +228,8 @@ const checkout = () => {
             <Divider />
             <Header>Delivery or Pick-up?</Header>
             <PickupContainer>
-              {orderDetails.shop.shipping_methods.map((item, i) => {
+              {orderDetails && orderDetails.shop && orderDetails.shop.shipping_methods && 
+              orderDetails.shop.shipping_methods.map((item, i) => {
                 return (
                   <Row
                     key={i}

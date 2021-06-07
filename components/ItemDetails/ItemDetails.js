@@ -20,7 +20,7 @@ import _ from 'lodash';
 import { useEffect } from 'react';
 import {uid} from 'react-uid';
 
-const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
+const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
   const router = useRouter();
   const isMobile = useIsMobile();
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
@@ -61,8 +61,8 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
       localStorage.setItem('orderItems', JSON.stringify(updatedItems));
       return updatedItems;
     });
-
-    router.push('/shop/' + toSlug(currentShop.name) + '/' + currentShop.id + '#fullMenu');
+    router.back();
+    // router.push('/shop/' + toSlug(currentShop.name) + '/' + currentShop.id + '#fullMenu');
   };
 
   //If currentItem is empty, get the product by url id from server
@@ -70,27 +70,32 @@ const ItemDetails = ({ setOpen, fromRestaurantPage }) => {
   useEffect(async () => {
     const product_id = router.query.item_id;
     setLoading(true);
+    console.log("getProduct: ", getProduct)
+    setCurrentItem(getProduct);
+    setCurrentShop(getProduct.shop);
+    setLoading(false);
 
-    if (!item && product_id) {
-      try {
-        const getProduct = await axios.get(HOST_URL + '/api/singleproduct', {
-          params: {
-            product_id
-          }
-        });
-        setCurrentItem(getProduct.data.data);
-        setCurrentShop(getProduct.data.data.shop);
-        setLoading(false);
-        console.log('NO product', getProduct.data.data);
-        console.log('NO currentShop', getProduct.data.data.shop);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
-        // router.push('/404');
-      }
-    } else if (item && item.id !== +product_id) {
-      setLoading(false);
-    }
+    // if (!item && product_id) {
+    //   try {
+    //     const getProduct = await axios.get(HOST_URL + '/api/singleproduct', {
+    //       params: {
+    //         product_id
+    //       }
+    //     });
+    //     setCurrentItem(getProduct);
+    //     setCurrentShop(getProduct.shop);
+    //     setLoading(false);
+    //     console.log('NO product', getProduct.data.data);
+    //     console.log('NO currentShop', getProduct.data.data.shop);
+    //   } catch (err) {
+    //     console.log(err);
+    //     setLoading(false);
+    //     // router.push('/404');
+    //   }
+    // } else if (item && item.id !== +product_id) {
+    //   setLoading(false);
+    // }
+
   }, [router.query.item_id]);
 
   useEffect(() => {

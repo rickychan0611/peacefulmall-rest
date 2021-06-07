@@ -387,7 +387,7 @@ const checkout = () => {
 
 const OrdersContainer = styled.div`
   max-width: 600px;
-  /* margin: 0 auto; */
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;

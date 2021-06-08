@@ -59,8 +59,7 @@ const SearchBanner = () => {
                 name="search"
                 style={{ margin: '0 10px' }}
                 onClick={() => {
-                  setValue('');
-                  onSubmit = { handleSubmit };
+                  handleSubmit() 
                 }}
               />
             </InputWrapper>

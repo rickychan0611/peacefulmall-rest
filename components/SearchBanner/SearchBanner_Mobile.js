@@ -2,7 +2,7 @@ import { Container, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import useTranslation from 'next-translate/useTranslation';
 
-const SearchBanner_Mobile = ({ setOpenModal }) => {
+const SearchBanner_Mobile = ({ setOpenModal, value }) => {
   const { t } = useTranslation('home');
   return (
     <>
@@ -10,7 +10,7 @@ const SearchBanner_Mobile = ({ setOpenModal }) => {
         <InputContainer style={{ display: 'flex' }}>
           <InputWrapper>
             <InputBox placeholder={t('enterAddress')} onClick={() => setOpenModal(true)}>
-              Search restaurants or food
+              {value ? value : "Search restaurants or food"}
             </InputBox>
             <Label style={{ borderRadius: ' 0 5px 5px 0' }}>
               <Icon name="search" />
@@ -18,51 +18,10 @@ const SearchBanner_Mobile = ({ setOpenModal }) => {
           </InputWrapper>
         </InputContainer>
       </BannerContainer>
-
-      {/* {openLocationSearch && <BannerContainer className={hide}>
-
-        <InputContainer style={{ display: 'flex' }}>
-          <Icon name="close" style={{marginRight: 10, color: "white"}}
-          onClick={()=>setOpenLocationSearch(false)}/>
-          <InputWrapper >
-
-            <div style={{ position: 'relative' }}>
-              <StyledInput
-              style={{width: "calc(80vw - 28px"}}
-                placeholder={t("inputEg")}
-                onClick={() => setOpenMyLocation(true)}
-              />
-              {openMyLocation && (
-                <LocationDropDown>
-                  <div style={{ color: '#5959df' }} 
-                  onClick={() => {position()}}>
-                    <Icon name="location arrow" />
-                    My current Location
-                  </div>
-                  {JSON.stringify(currentPosition)}
-                </LocationDropDown>
-              )}
-            </div>
-            <Label style={{ borderRadius: ' 0 5px 5px 0' }}>
-              <Icon name="map marker alternate" />
-            </Label>
-          </InputWrapper>
-        </InputContainer>
-      </BannerContainer>} */}
     </>
   );
 };
 
-const LocationDropDown = styled.div`
-  position: absolute;
-  z-index: 100000;
-  background-color: white;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  color: grey;
-  box-shadow: 0 0 10px grey;
-`;
 const BannerContainer = styled.div`
   width: 100vw;
   height: 44px;
@@ -86,7 +45,6 @@ const Label = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin: 0 5px 0 0; */
   color: grey;
   padding: 0 0 0 6px;
   height: 32px;
@@ -104,7 +62,8 @@ const InputWrapper = styled.div`
   /* padding: 10px; */
 `;
 
-const InputBox = styled.div`
+const InputBox = styled.div`  
+max-width: 800px;
   outline: none;
   border-radius: 5px;
   border: 0;
@@ -116,6 +75,7 @@ const InputBox = styled.div`
   height: 32px;
   padding: 0 0 0 6px;
   margin-left: 5px;
+  cursor: text;
 `;
 
 export default SearchBanner_Mobile;

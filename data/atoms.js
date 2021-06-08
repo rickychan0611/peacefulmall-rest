@@ -50,6 +50,11 @@ export const sliderCats = atom({
   default: null
 });
 
+export const searchValue = atom({
+  key: 'searchValue',
+  default: null
+});
+
 
 export const scrolling = atom({
   key: 'scrolling',

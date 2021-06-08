@@ -1,54 +1,71 @@
-import { useState } from 'react';
 import { Container, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
-import { useIsMobile } from '../../util/useScreenSize';
-import GooglePlacesAutocomplete, {
-  geocodeByAddress,
-  getLatLng
-} from 'react-google-places-autocomplete';
 import useTranslation from 'next-translate/useTranslation';
-import LocationInput from '../LocationInput';
 
-const SearchBanner_Desktop = ({ hide }) => {
-  const isMobile = useIsMobile();
-  const [ openMyLocation, setOpenMyLocation ] = useState(false)
-  const [value, setValue] = useState();
+const SearchBanner_Mobile = ({ setOpenModal }) => {
   const { t } = useTranslation('home');
-
   return (
-    <BannerContainer className={hide}>
-      {/* <BannerImage src="/rest-banner.jpg" /> */}
-      <InputContainer style={{ display: 'flex' }}>
+    <>
+      <BannerContainer>
+        <InputContainer style={{ display: 'flex' }}>
+          <InputWrapper>
+            <InputBox placeholder={t('enterAddress')} onClick={() => setOpenModal(true)}>
+              Search restaurants or food
+            </InputBox>
+            <Label style={{ borderRadius: ' 0 5px 5px 0' }}>
+              <Icon name="search" />
+            </Label>
+          </InputWrapper>
+        </InputContainer>
+      </BannerContainer>
 
-        <InputWrapper style={{ 
-          borderRadius: '5px 0 0 5px', 
-          borderRight: '1px solid #999696',
-         }}>
-          <Label style={{ borderRadius: '5px 0 0 5px' }}>
-            <Icon name="map marker alternate" />
-          </Label>
-          
-          <LocationInput />
+      {/* {openLocationSearch && <BannerContainer className={hide}>
 
-        </InputWrapper>
+        <InputContainer style={{ display: 'flex' }}>
+          <Icon name="close" style={{marginRight: 10, color: "white"}}
+          onClick={()=>setOpenLocationSearch(false)}/>
+          <InputWrapper >
 
-        <InputWrapper style={{ borderRadius: ' 0 5px 5px 0' }}>
-          <StyledInput
-            style={{ borderRadius: ' 0 5px 5px 0', marginRight: 5 }}
-            placeholder={t("inputEg")}
-            />
-          <Label style={{ borderRadius: ' 0 5px 5px 0' }}>
-            <Icon name="search" />
-          </Label>
-        </InputWrapper>
-      </InputContainer>
-    </BannerContainer>
+            <div style={{ position: 'relative' }}>
+              <StyledInput
+              style={{width: "calc(80vw - 28px"}}
+                placeholder={t("inputEg")}
+                onClick={() => setOpenMyLocation(true)}
+              />
+              {openMyLocation && (
+                <LocationDropDown>
+                  <div style={{ color: '#5959df' }} 
+                  onClick={() => {position()}}>
+                    <Icon name="location arrow" />
+                    My current Location
+                  </div>
+                  {JSON.stringify(currentPosition)}
+                </LocationDropDown>
+              )}
+            </div>
+            <Label style={{ borderRadius: ' 0 5px 5px 0' }}>
+              <Icon name="map marker alternate" />
+            </Label>
+          </InputWrapper>
+        </InputContainer>
+      </BannerContainer>} */}
+    </>
   );
 };
 
+const LocationDropDown = styled.div`
+  position: absolute;
+  z-index: 100000;
+  background-color: white;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  color: grey;
+  box-shadow: 0 0 10px grey;
+`;
 const BannerContainer = styled.div`
   width: 100vw;
-  height: 50px;
+  height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,7 +89,7 @@ const Label = styled.div`
   /* margin: 0 5px 0 0; */
   color: grey;
   padding: 0 0 0 6px;
-  height: 38px;
+  height: 32px;
   font-size: 18px;
   background-color: #ebdbdb;
 `;
@@ -82,23 +99,23 @@ const InputWrapper = styled.div`
   align-items: center;
   justify-content: center;
   background-color: white;
-  height: 38px;
-  /* max-width: 450px; */
+  height: 32px;
+  border-radius: 5px;
   /* padding: 10px; */
 `;
 
-const StyledInput = styled.input`
+const InputBox = styled.div`
   outline: none;
-  border-radius: 0;
+  border-radius: 5px;
   border: 0;
-  display: inline-block;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
   font-size: 16px;
-  width: 33vw;
-  height: 38px;
+  width: 80vw;
+  height: 32px;
   padding: 0 0 0 6px;
-  ::placeholder {
-  font-size: 13px;
-}
+  margin-left: 5px;
 `;
 
-export default SearchBanner_Desktop;
+export default SearchBanner_Mobile;

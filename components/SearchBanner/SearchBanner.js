@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Form, Modal, Header, Icon, Input } from 'semantic-ui-react';
 import { useIsMobile } from '../../util/useScreenSize';
@@ -6,26 +6,43 @@ import SearchBanner_Desktop from './SearchBanner_Desktop';
 import SearchBanner_Mobile from './SearchBanner_Mobile';
 import CurrentAddress from '../CurrentAddress';
 import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { 
+  sliderCats as sliderCatsAtom,
+  searchValue as searchValueAtom,
+} from '../../data/atoms.js';
+import axios from 'axios';
+import { HOST_URL } from '../../env';
 
-const SearchBanner = () => {
+const topSearch = [
+  "和平", "中西结合", "Dim Sum", "和平饭店", "Richmond", "Kitsilano"
+]
+
+const SearchBanner = ({cats}) => {
+  const router = useRouter();
   const isMobile = useIsMobile();
   const [openModal, setOpenModal] = useState(false);
-  const [value, setValue] = useState();
-  const router = useRouter();
+  const [sliderCats, setSliderCats] = useRecoilState(sliderCatsAtom);
+  const [searchValue, setSearchValue] = useRecoilState(searchValueAtom);
 
   const handleChange = (e) => {
-    setValue(e.target.value);
+    setSearchValue(e.target.value);
   };
 
   const search = (keyword) => {
-    setValue(keyword);
+    setSearchValue(keyword);
     router.push('/search/shop/' + keyword)
     setOpenModal(false)
   }
 
   const handleSubmit = () => {
-    search(value)
+    search(searchValue)
   }
+
+  useEffect( async ()=>{
+    const getplatcat = await axios.get(HOST_URL + '/api/getplatcat');
+    setSliderCats(getplatcat.data.data);
+  },[] )
 
   return (
     <>
@@ -42,15 +59,15 @@ const SearchBanner = () => {
                   placeholder="Search restaurants or food"
                   icon="search"
                   iconPosition="left"
-                  value={value}
+                  value={searchValue}
                   onChange={handleChange}
                 />
-                {value && (
+                {searchValue && (
                   <Icon
                     name="times"
                     style={{ margin: '0 10px', color: '#c4c3c3' }}
                     onClick={() => {
-                      setValue('');
+                      setSearchValue('');
                     }}
                   />
                 )}
@@ -65,156 +82,52 @@ const SearchBanner = () => {
             </InputWrapper>
           </Form>
           <h4>Top Searches</h4>
-
-          <Item
-            onClick={() => {
-              search('和平')
-            }}>
-            <NameIcon>
-              <Icon name="search" />
-              <Name>和平</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
           
-          <Item
-            onClick={() => {
-              search('Pizza')
-            }}>
-            <NameIcon>
-              <Icon name="search" />
-              <Name>Pizza</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-
-          <Item
-            onClick={() => {
-              search('Dim Sum');
-            }}>
-            <NameIcon>
-              <Icon name="search" />
-              <Name>Dim Sum</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-
-          <Item>
-            <NameIcon>
-              <Icon name="search" />
-              <Name>Peaceful Restaurant</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
+          {topSearch.map((item, i) => {
+            return (
+              <Item
+              key={i}
+              onClick={() => {
+                search(item)
+              }}>
+              <NameIcon>
+                <Icon name="search" />
+                <Name>{item}</Name>
+              </NameIcon>
+              <div>
+                <Icon name="chevron right" />
+              </div>
+            </Item>
+            )
+          })}
 
           <h4>Cuisines</h4>
-
-          <Item>
-            <NameIcon>
-              <Icon name="food" />
-              <Name>Chinese</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-          <Item>
-            <NameIcon>
-              <Icon name="food" />
-              <Name>Japanese</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-          <Item>
-            <NameIcon>
-              <Icon name="food" />
-              <Name>Fast Food</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-          <Item>
-            <NameIcon>
-              <Icon name="food" />
-              <Name>Chicken</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-          <Item>
-            <NameIcon>
-              <Icon name="food" />
-              <Name>Burgers</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-          <Item>
-            <NameIcon>
-              <Icon name="food" />
-              <Name>Chinese</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-          <Item>
-            <NameIcon>
-              <Icon name="food" />
-              <Name>Japanese</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-          <Item>
-            <NameIcon>
-              <Icon name="food" />
-              <Name>Fast Food</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-          <Item>
-            <NameIcon>
-              <Icon name="food" />
-              <Name>Chicken</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
-          <Item>
-            <NameIcon>
-              <Icon name="food" />
-              <Name>Burgers</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
+          {sliderCats && sliderCats[0] && sliderCats.map((item, i) => {
+            return (
+              <Item
+              key={i}
+              onClick={() => {
+                search(item.category_name)
+              }}>
+              <NameIcon>
+                <Icon name="food" />
+                <Name>{item.category_name}</Name>
+              </NameIcon>
+              <div>
+                <Icon name="chevron right" />
+              </div>
+            </Item>
+            )
+          })}
         </Modal.Content>
       </Modal>
 
-      {isMobile ? (
+      <SearchBanner_Mobile setOpenModal={setOpenModal} value={searchValue}/>
+      {/* {isMobile ? (
         <SearchBanner_Mobile setOpenModal={setOpenModal} />
       ) : (
         <SearchBanner_Desktop setOpenModal={setOpenModal} />
-      )}
+      )} */}
     </>
   );
 };
@@ -245,5 +158,18 @@ const Name = styled.div`
   font-size: 14;
   font-weight: 600;
 `;
+
+
+export const getServerSideProps = async (context) => {
+  context.res.setHeader('Cache-Control', 's-maxage=120, stale-while-revalidate=60');
+
+  const getplatcat = await axios.get(HOST_URL + '/api/getplatcat');
+
+  return {
+    props: {
+      cats: getplatcat.data.data
+    }
+  }
+}
 
 export default SearchBanner;

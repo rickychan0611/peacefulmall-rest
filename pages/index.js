@@ -1,4 +1,4 @@
-import { createRef } from 'react';
+import { createRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useIsMobile } from '../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
@@ -15,11 +15,20 @@ import Slider from '../components/Slider';
 import ReviewCards from '../components/ReviewCards';
 import CheckOutListPusher from '../components/CheckOutListPusher';
 import CurrentAddress from '../components/CurrentAddress';
+import { useRecoilState } from 'recoil';
+import { sliderCats as sliderCatsAtom } from '../data/atoms.js';
+
 
 const Home = ({ sliderCats, products, shops, cacheDate }) => {
   let contextRef = createRef();
   const { t } = useTranslation('home');
   console.log("home cacheDate: ",  cacheDate)
+  const [, setSliderCats] = useRecoilState(sliderCatsAtom);
+
+  useEffect(()=>{
+    setSliderCats(sliderCats);
+  },[sliderCats] )
+  
   return (
     <>
       <CheckOutListPusher>
@@ -68,6 +77,7 @@ const Home = ({ sliderCats, products, shops, cacheDate }) => {
 };
 
 export const getServerSideProps = async (context) => {
+
   context.res.setHeader('Cache-Control', 's-maxage=120, stale-while-revalidate=60');
 
   const getplatcat = await axios.get(HOST_URL + '/api/getplatcat');

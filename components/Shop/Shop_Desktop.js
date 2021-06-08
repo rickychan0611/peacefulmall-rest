@@ -45,17 +45,18 @@ const Shop_Desktop = () => {
                 <Description style={{ marginBottom: 60 }}>{currentShop.description}</Description>
               </div>
             </Wrapper>
-
-            <Slider topic={t('PopularItems')} hideViewAll>
-              {currentShopProducts ? (
-                <PopularDishes products={currentShopProducts} />
-              ) : (
-                'No item found.'
-              )}
-            </Slider>
+            <Section id="popular">
+              <Slider topic={t('PopularItems')} hideViewAll>
+                {currentShopProducts ? (
+                  <PopularDishes products={currentShopProducts} />
+                ) : (
+                  'No item found.'
+                )}
+              </Slider>
+            </Section>
 
             <Ref innerRef={contextRef}>
-              <RestaurantMenu t={t} contextRef={contextRef}/>
+              <RestaurantMenu t={t} contextRef={contextRef} />
             </Ref>
             <br />
             <hr />

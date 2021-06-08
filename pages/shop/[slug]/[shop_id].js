@@ -42,18 +42,16 @@ const shop = ({ getSingleShop, getShopProducts }) => {
       {currentShop && !isMobile ? (
         <SearchBannerWrapper>
           <SearchBanner />
-          {/* <CurrentAddress /> */}
         </SearchBannerWrapper>
       ) : (
         <SearchBannerWrapper>
           <SearchBanner />
           <BackButton />
-          {/* <CurrentAddress /> */}
         </SearchBannerWrapper>
       )}
       <Container
         style={{
-          marginTop: isMobile ? '85px' : isTablet ? '85px' : '140px'
+          marginTop: isMobile ? '85px' : isTablet ? '85px' : '85px'
         }}>
         {!currentShop || currentShop === 'not found' ? (
           <div style={{ height: '80vh' }}>

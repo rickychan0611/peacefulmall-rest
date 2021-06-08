@@ -1,4 +1,4 @@
-import { Container, Icon  } from 'semantic-ui-react';
+import { Container, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -9,13 +9,9 @@ const SearchBanner_Mobile = ({ setOpenModal }) => {
       <BannerContainer>
         <InputContainer style={{ display: 'flex' }}>
           <InputWrapper>
-            <StyledInput
-              placeholder={t("enterAddress")}
-              onClick={() => setOpenModal(true)}
-              onKeyDown={(event) => {
-                event.preventDefault();
-              }}
-            />
+            <InputBox placeholder={t('enterAddress')} onClick={() => setOpenModal(true)}>
+              Search restaurants or food
+            </InputBox>
             <Label style={{ borderRadius: ' 0 5px 5px 0' }}>
               <Icon name="search" />
             </Label>
@@ -108,11 +104,13 @@ const InputWrapper = styled.div`
   /* padding: 10px; */
 `;
 
-const StyledInput = styled.input`
+const InputBox = styled.div`
   outline: none;
   border-radius: 5px;
   border: 0;
-  display: inline-block;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
   font-size: 16px;
   width: 80vw;
   height: 32px;

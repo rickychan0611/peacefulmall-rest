@@ -32,7 +32,7 @@ const RestaurantMenu = ( {contextRef, t} ) => {
   return (
       <div style={{position: "relative"}}>
         {/* Menu cat slider*/}
-        <Sticky offset={isMobile ? 20 : 120} context={contextRef}>
+        <Sticky offset={isMobile ? 20 : 70} context={contextRef}>
           <Slider topic={t && t`FullMenu`} hideViewAll>
             <CatWrapper>
               {currentShop && currentShop.shop_categories && currentShop.shop_categories[0] && 
@@ -130,9 +130,9 @@ const CatTitle = styled.div`
   .jumptarget::before {
     content: '';
     display: block;
-    height: ${(p) => (p.isMobile ? '190px' : '250px')}; /* anchor fixed header height*/
+    height: ${(p) => (p.isMobile ? '190px' : '220px')}; /* anchor fixed header height*/
     margin: ${(p) =>
-      p.isMobile ? '-190px 0 0' : '-250px 0 0'}; /* anchor negative fixed header height */
+      p.isMobile ? '-190px 0 0' : '-220px 0 0'}; /* anchor negative fixed header height */
   }
 `;
 export default RestaurantMenu;

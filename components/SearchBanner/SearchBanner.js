@@ -5,34 +5,62 @@ import { useIsMobile } from '../../util/useScreenSize';
 import SearchBanner_Desktop from './SearchBanner_Desktop';
 import SearchBanner_Mobile from './SearchBanner_Mobile';
 import CurrentAddress from '../CurrentAddress';
+import { useRouter } from 'next/router';
 
 const SearchBanner = () => {
   const isMobile = useIsMobile();
   const [openModal, setOpenModal] = useState(false);
   const [value, setValue] = useState();
+  const router = useRouter();
+
   const handleChange = (e) => {
     setValue(e.target.value);
   };
+
+  const search = (keyword) => {
+    setValue(keyword);
+    router.push('/search/shop/' + keyword)
+    setOpenModal(false)
+  }
+
+  const handleSubmit = () => {
+    search(value)
+  }
+
   return (
     <>
       <Modal open={openModal} onClose={() => setOpenModal(false)} closeIcon>
         <Header>Search</Header>
         <CurrentAddress />
         <Modal.Content>
+          
           <Form>
-            <InputWrapper>
-              <Input
-                style={{ margin: 0, width: '100%' }}
-                placeholder="Search restaurants or food"
-                icon="search"
-                iconPosition="left"
-                value={value}
-                onChange={handleChange}/>
+            <InputWrapper style={{ backgroundColor: '#c4c3c3', border: '1px solid #c4c3c3' }}>
+              <InputWrapper style={{ backgroundColor: 'white', borderRadius: '5px 0px 0px 5px' }}>
+                <input
+                  style={{ margin: 0, width: '100%', border: 0 }}
+                  placeholder="Search restaurants or food"
+                  icon="search"
+                  iconPosition="left"
+                  value={value}
+                  onChange={handleChange}
+                />
+                {value && (
+                  <Icon
+                    name="times"
+                    style={{ margin: '0 10px', color: '#c4c3c3' }}
+                    onClick={() => {
+                      setValue('');
+                    }}
+                  />
+                )}
+              </InputWrapper>
               <Icon
-                name="times"
+                name="search"
                 style={{ margin: '0 10px' }}
                 onClick={() => {
                   setValue('');
+                  onSubmit = { handleSubmit };
                 }}
               />
             </InputWrapper>
@@ -41,43 +69,43 @@ const SearchBanner = () => {
 
           <Item
             onClick={() => {
-              setValue('Peaceful Restaurant');
+              search('和平')
             }}>
             <NameIcon>
               <Icon name="search" />
-              <Name>Peaceful Restaurant</Name>
+              <Name>和平</Name>
             </NameIcon>
             <div>
               <Icon name="chevron right" />
             </div>
           </Item>
-          <Item>
+          
+          <Item
+            onClick={() => {
+              search('Pizza')
+            }}>
             <NameIcon>
               <Icon name="search" />
-              <Name>Peaceful Restaurant</Name>
+              <Name>Pizza</Name>
             </NameIcon>
             <div>
               <Icon name="chevron right" />
             </div>
           </Item>
-          <Item>
+
+          <Item
+            onClick={() => {
+              search('Dim Sum');
+            }}>
             <NameIcon>
               <Icon name="search" />
-              <Name>Peaceful Restaurant</Name>
+              <Name>Dim Sum</Name>
             </NameIcon>
             <div>
               <Icon name="chevron right" />
             </div>
           </Item>
-          <Item>
-            <NameIcon>
-              <Icon name="search" />
-              <Name>Peaceful Restaurant</Name>
-            </NameIcon>
-            <div>
-              <Icon name="chevron right" />
-            </div>
-          </Item>
+
           <Item>
             <NameIcon>
               <Icon name="search" />
@@ -198,6 +226,7 @@ const InputWrapper = styled.div`
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
+  border-radius: 5px;
 `;
 const Item = styled.div`
   width: 100%;

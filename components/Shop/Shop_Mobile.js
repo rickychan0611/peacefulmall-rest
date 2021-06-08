@@ -63,10 +63,9 @@ const Shop_Mobile = () => {
       <hr />
       <br />
       <Ref innerRef={contextRef}>
-        <RestaurantMenu
-          t={t}
-          contextRef={contextRef}
-        />
+        <Section id="fullMenu">
+          <RestaurantMenu t={t} contextRef={contextRef} />
+        </Section>
       </Ref>
       <br />
       <hr />

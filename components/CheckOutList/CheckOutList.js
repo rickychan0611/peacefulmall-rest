@@ -1,15 +1,13 @@
-import {useRouter} from 'next/router';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Sidebar, Icon } from 'semantic-ui-react';
 
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { 
-  openCheckOutList as openCheckOutListAtom,
- } from '../../data/atoms.js';
-import { 
+import { openCheckOutList as openCheckOutListAtom } from '../../data/atoms.js';
+import {
   orderItems as orderItemsAtom,
   orderDetails as orderDetailsAtom
- } from '../../data/orderAtoms.js';
+} from '../../data/orderAtoms.js';
 
 import OrderItem from '../OrderItem';
 
@@ -17,7 +15,7 @@ const CheckOutList = () => {
   const router = useRouter();
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   const orderDetails = useRecoilValue(orderDetailsAtom);
-  const [orderItems, ] = useRecoilState(orderItemsAtom);
+  const [orderItems] = useRecoilState(orderItemsAtom);
 
   return (
     <SidebarContainer
@@ -25,41 +23,49 @@ const CheckOutList = () => {
       direction="right"
       // onHide={() => setOpenCheckOutList(false)}
       width="wide"
-      visible={openCheckOutList}
-    >
-      <Icon name="close" size="large"
-          style={{ marginTop: 80, marginLeft: 10, marginBottom: 20, cursor: "pointer" }}
-          onClick={()=>setOpenCheckOutList(false)}/>
-      {orderItems && orderItems[0] ?
+      visible={openCheckOutList}>
+      <Icon
+        name="close"
+        size="large"
+        style={{ marginTop: 80, marginLeft: 10, marginBottom: 20, cursor: 'pointer' }}
+        onClick={() => setOpenCheckOutList(false)}
+      />
+      {orderItems && orderItems[0] ? (
         <OrdersContainer>
-          <H4>Your Order</H4>
-          <H4 style={{ color: 'red' }}>{orderDetails.store && orderDetails.store.name}</H4>
+          <H4>You are ordering from: </H4>
+          <H4
+            style={{ marginTop: 10, cursor: 'pointer', color: '#4183c4' }}
+            onClick={() =>
+              router.push('/shop/' + orderDetails.shop.name + '/' + orderDetails.shop.id)
+            }>
+            {orderDetails.shop && orderDetails.shop.name}
+            <Icon name="linkify" />
+          </H4>
           <CheckoutButton
             onClick={() => {
-              router.push('/checkout')
-              setOpenCheckOutList(!openCheckOutList)}}>
+              router.push('/checkout');
+              setOpenCheckOutList(!openCheckOutList);
+            }}>
             <H4>Checkout</H4>
             <H4>${orderDetails.subtotal.toFixed(2)}</H4>
           </CheckoutButton>
 
-          {orderItems[0] && orderItems.map((item, i) => {
-            return (
-              <OrderItem item={item} index={i} key={i} />
-            )
-          })}
-
+          {orderItems[0] &&
+            orderItems.map((item, i) => {
+              return <OrderItem item={item} index={i} key={i} />;
+            })}
         </OrdersContainer>
-        :
+      ) : (
         <>
           <EmptyMsg>
             <Img src="/cook-girl.jpg" />
             <h4 style={{ color: 'gray' }}>
               Your cart is empty <br />
-          Add items to get started!
-        </h4>
+              Add items to get started!
+            </h4>
           </EmptyMsg>
         </>
-      }
+      )}
     </SidebarContainer>
   );
 };
@@ -67,7 +73,7 @@ const CheckOutList = () => {
 const SidebarContainer = styled(Sidebar)`
   background-color: white;
   position: fixed !important;
-  box-shadow: 10px 0px 25px rgba(0, 0, 0, .3);
+  box-shadow: 10px 0px 25px rgba(0, 0, 0, 0.3);
   max-width: 320px;
 `;
 const EmptyMsg = styled.div`

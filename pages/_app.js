@@ -26,8 +26,8 @@ import 'nprogress/nprogress.css'; //styles of nprogress
 
 //Binding events for NProgress bar
 NProgress.configure({ showSpinner: false });
-Router.events.on('routeChangeStart', () => NProgress.start()); 
-Router.events.on('routeChangeComplete', () => NProgress.done()); 
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
 const InitApp = ({ children }) => {
@@ -53,20 +53,21 @@ const InitApp = ({ children }) => {
         headers: { Authorization: cookies.userToken }
       });
       console.log('USER DATA', getUser);
-
-      // if (getUser.data.data === 'token invalid') {
-      // removeCookie('userToken');
-      // localStorage.removeItem('user');
-      // setUser(null);
-      // setAddresses(null);
-      // router.push('/sign-in');
-      // setAppReady(true);
-      // } else {
-      localStorage.setItem('user', JSON.stringify(getUser.data.data));
-      setUser(getUser.data.data);
-      setAddresses(getUser.data.data.addresses);
-      setAppReady(true);
-      return;
+      if (getUser.data.code === 200) {
+        localStorage.setItem('user', JSON.stringify(getUser.data.data));
+        setUser(getUser.data.data);
+        setAddresses(getUser.data.data.addresses);
+        setAppReady(true);
+        return;
+      }
+      else {
+        console.log("User Error: " + getUser.data.message);
+        removeCookie('userToken');
+        setUser();
+        localStorage.removeItem('user');
+        setAppReady(true);
+        return;
+      }
       // }
     }
   };

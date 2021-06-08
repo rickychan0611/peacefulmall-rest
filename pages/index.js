@@ -28,7 +28,7 @@ const Home = ({ sliderCats, products, shops, cacheDate }) => {
   useEffect(()=>{
     setSliderCats(sliderCats);
   },[sliderCats] )
-  
+
   return (
     <>
       <CheckOutListPusher>
@@ -82,28 +82,28 @@ export const getServerSideProps = async (context) => {
 
   const getplatcat = await axios.get(HOST_URL + '/api/getplatcat');
 
-  const products = await axios.get(HOST_URL + '/api/products', {
-    params: {
-      plat_category: 'all',
-      type: "all",
-      count: '100'
-    }
-  });
+  // const products = await axios.get(HOST_URL + '/api/products', {
+  //   params: {
+  //     plat_category: 'all',
+  //     type: "all",
+  //     count: '20'
+  //   }
+  // });
 
-  const shops = await axios.get(HOST_URL + '/api/shops', {
-    params: {
-      type: 'all',
-      shop_type: 'all',
-      count: '100'
-    }
-  });
+  // const shops = await axios.get(HOST_URL + '/api/shops', {
+  //   params: {
+  //     type: 'all',
+  //     shop_type: 'all',
+  //     count: '20'
+  //   }
+  // });
 
   const cacheDate = moment(new Date()).format("MMM DD hh:mma")
   return {
     props: {
       sliderCats: getplatcat.data.data,
-      products: products.data.data,
-      shops: shops.data.data,
+      // products: products.data.data,
+      // shops: shops.data.data,
       cacheDate
     }
   }

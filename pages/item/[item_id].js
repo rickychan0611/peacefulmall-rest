@@ -15,7 +15,7 @@ const item = ({ getProduct }) => {
 };
 
 export const getServerSideProps = async (context) => {
-  context.res.setHeader('Cache-Control', 's-maxage=900, stale-while-revalidate=60'); // last 15mins
+  context.res.setHeader('Cache-Control', 's-maxage=3600'); // last 1 hr
   const product_id = context.params.item_id;
 
   const getProduct = await axios.get(HOST_URL + '/api/singleproduct?product_id=' + product_id);

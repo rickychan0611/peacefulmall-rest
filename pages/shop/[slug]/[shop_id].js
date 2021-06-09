@@ -32,6 +32,7 @@ const shop = ({ getSingleShop, getShopProducts }) => {
   useEffect(async () => {
     setCurrentShop(getSingleShop);
     setCurrentShopProducts(getShopProducts);
+    console.log("Single shop" , getSingleShop)
   }, []);
 
   return (

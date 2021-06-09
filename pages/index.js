@@ -51,10 +51,7 @@ const Home = ({ sliderCats, products, shops, cacheDate }) => {
               <Slider topic={t('mostLoved')} icon="star">
                 <ShopCards shops={shops}/>
               </Slider>
-              <Slider topic={t('fastest')} icon="store">
-                <ShopCards shops={shops}/>
-              </Slider>
-              <Slider topic={t('Weekly')} icon="store">
+              <Slider topic={"Restaurants near you"} icon="store">
                 <ShopCards shops={shops}/>
               </Slider>
               <Slider topic={t('Featured')} icon="store">

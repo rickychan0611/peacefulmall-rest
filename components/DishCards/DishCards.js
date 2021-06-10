@@ -59,7 +59,7 @@ const DishCards = ({type}) => {
                   onClick={() => {
                     // when click, save item in selectedItem Atom and selectedStore Atom.
                     // then open item's page by using item's id
-                    setCurrentItem(item);
+                    setCurrentItem({...item, fromHomePage: true});
                     setCurrentShop(item.shop);
                     router.push('/item/' + item.id);
                   }}>

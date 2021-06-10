@@ -44,6 +44,8 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
       return updatedItems;
     });
     setOpenWarning(false);
+    console.log("item.fromHomePage", item.fromHomePage)
+    item.fromHomePage ? router.push("/shop/" + item.shop.name + "/" + item.shop.id) : router.back();
   };
 
   //function: addItem is called in <BottomAddBar>,
@@ -54,13 +56,14 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
     console.log('orderItems', orderItems);
     console.log('item.attributes!!!', item.attributes);
     console.log('attributes!!!', attributes);
+    console.log("item.fromHomePage", item)
 
     //if a prev store's name is equal to the current store, update the object
     if (orderItems.length === 0 || (orderItems[0] && orderItems[0].shop.id) === currentShop.id) {
       setOrderItems((prev) => {
         return [{ ...item, attributeTotal, quantity, shop: currentShop, uid: uid(item) }, ...prev];
       });
-      router.back();
+      item.fromHomePage ? router.push("/shop/" + item.shop.name + "/" + item.shop.id) : router.back();
     } else {
       setOpenWarning(true);
     }
@@ -72,7 +75,8 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
     const product_id = router.query.item_id;
     setLoading(true);
     console.log('getProduct: ', getProduct);
-    setCurrentItem(getProduct);
+    console.log('currentItem ', item);
+    !item && setCurrentItem(getProduct);
     setCurrentShop(getProduct.shop);
     setLoading(false);
 

@@ -15,6 +15,14 @@ const ReviewForm = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [openImage, setOpenImage] = useState();
+  const [index, setIndex] = useState(0);
+
+  //refresh index when reviews update
+  useEffect(() => {
+    console.log("reviewIndex", reviews.findIndex(review => review.product_id === item.product_id))
+    setIndex(reviews.findIndex(review => review.product_id === item.product_id))
+  },[reviews])
+
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: 'image/*',
@@ -25,9 +33,17 @@ const ReviewForm = ({
         })
       );
       console.log('newfiles', newfiles);
-      setFiles([...files, ...newfiles]);
+      // setFiles([...files, ...newfiles]);
+      let files = reviews[index] ? reviews[index].files : null;
+
+      if (files) {
+      handleChange([...files, ...newfiles], "files")
+      }
+      else {handleChange([...newfiles], "files")}
+
     }
   });
+
 
   const handleChange = (value, name) => {
     let Obj = {
@@ -38,7 +54,6 @@ const ReviewForm = ({
     let prev = [...reviews]
     console.log("Obj", Obj)
 
-    let index = reviews.findIndex(review => review.product_id === item.product_id)
     if (index !== -1) {
       prev[index] = { ...prev[index], ...Obj }
     }
@@ -47,6 +62,7 @@ const ReviewForm = ({
     }
     setReviews(prev)
   };
+
 
   return (
     <>
@@ -78,16 +94,22 @@ const ReviewForm = ({
         </StarWrapper>
         <Title>Add a photo</Title>
         <Row>
-          {files[0] &&
-            files.map((file, i) => {
+          {reviews && reviews[index] && reviews[index].files && reviews[index].files[0] &&
+            reviews[index].files.map((file, i) => {
               return (
                 <div style={{ position: 'relative' }}>
+
                   <CloseIcon
                     onClick={() => {
-                      setFiles((prev) => prev.filter((item) => item !== prev[i]));
+                      let reviewClone = [...reviews]
+                      let files = [...reviews[index].files]
+                      files.splice(i, 1)
+                      reviewClone[index].files = files
+                      setReviews(reviewClone)
                     }}>
                     <Icon name="times" />
                   </CloseIcon>
+
                   <ReviewImage
                     src={file.preview}
                     key={i}

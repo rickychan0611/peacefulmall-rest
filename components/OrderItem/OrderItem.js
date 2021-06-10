@@ -29,9 +29,6 @@ const OrderItem = ({ item, index }) => {
 
   const remove = (index) => {
     setOrderItems((prev) => {
-      if (prev.length === 1) {
-        setCurrentShop()
-      }
       let removeItems = prev.filter((_, i) => i !== index);
       localStorage.setItem('orderItems', JSON.stringify(removeItems));
       return removeItems;

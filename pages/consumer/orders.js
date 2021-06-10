@@ -71,7 +71,7 @@ const orders = () => {
                         <div key={order.id} style={{ width: '100%' }}>
                           <Row style={{ backgroundColor: '#eeeaea', padding: 5 }}>
                             <StoreName>{order.shop.name}</StoreName>
-                            <StoreName
+                            {order.reviews.length === 0 ? <StoreName
                               onClick={() => {
                                 router.push('/consumer/review');
                                 setCurrentOrder(order);
@@ -80,7 +80,7 @@ const orders = () => {
                                 <Icon name="edit" />
                                 Write a review
                               </a>
-                            </StoreName>
+                            </StoreName> : <StoreName>Review submitted</StoreName>}
                           </Row>
                           <div
                             style={{ padding: 5 }}
@@ -106,14 +106,6 @@ const orders = () => {
                             </Row>
                           </div>
                         </div>
-                        {/* <div style={{ marginLeft: 10 }}>
-                          <Button
-                            size="small"
-                            onClick={() => {
-                              setOpen(true);
-                              setSelectedOrder(order);
-                            }}>{t`ViewReceipt`}</Button>
-                        </div> */}
                       </Row>
                     </Card>
                   );

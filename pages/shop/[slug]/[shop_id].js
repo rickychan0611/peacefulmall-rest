@@ -47,7 +47,7 @@ const shop = ({ getSingleShop, getShopProducts }) => {
       ) : (
         <SearchBannerWrapper>
           <SearchBanner />
-          <BackButton />
+          {/* <BackButton /> */}
         </SearchBannerWrapper>
       )}
       <Container

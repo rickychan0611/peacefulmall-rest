@@ -29,6 +29,9 @@ const Review = () => {
     if (!currentOrder) {
       router.push('/consumer/orders');
     }
+    else {
+      setReviews(currentOrder.reviews)
+    }
   }, []);
 
   const handleSubmit = async () => {

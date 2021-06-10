@@ -6,7 +6,7 @@ import moment from 'moment';
 import useTranslation from 'next-translate/useTranslation';
 import _ from 'lodash';
 import ReactStars from 'react-rating-stars-component';
-
+import Link from 'next/link'
 
 const ReviewFeed = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
@@ -14,7 +14,6 @@ const ReviewFeed = () => {
 
   return (
     <>
-      <Title>{t`Reviews`}</Title>
       <Rating icon="heart" defaultRating={3} maxRating={4} />
       {currentShop && currentShop.reviews && currentShop.reviews[0] &&
         currentShop.reviews.map((item, i) => {
@@ -35,7 +34,7 @@ const ReviewFeed = () => {
                       {moment(item.updated_at).format('MMM DD, YYYY | h : mma')}
                     </Feed.Date>
                   </Feed.Summary>
-
+                  <Link href={"/item/" + item.product_id}>{item.product_name}</Link>
                   <Row>
                     <ReactStars
                       count={5}
@@ -45,9 +44,9 @@ const ReviewFeed = () => {
                       isHalf={true}
                       value={item.rating}
                     />
-
                     <span style={{ paddingTop: 5 }}>{" " + item.rating}</span>
                   </Row>
+
                   <Feed.Extra text>{item.content}</Feed.Extra>
                 </Feed.Content>
               </Feed.Event>

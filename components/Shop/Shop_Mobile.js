@@ -77,6 +77,7 @@ const Shop_Mobile = () => {
       <hr />
       <br /> */}
       <Section id="reviews">
+      <Title style={{fontSize: 28}}>{t`Reviews`}</Title>
         <ReviewFeed />
       </Section>
       <br />

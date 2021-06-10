@@ -32,7 +32,7 @@ const RestaurantMenu = ( {contextRef, t} ) => {
   return (
       <div style={{position: "relative"}}>
         {/* Menu cat slider*/}
-        <Sticky offset={isMobile ? 100 : 70} context={contextRef}>
+        <Sticky offset={isMobile ? 70 : 70} context={contextRef}>
           <Slider topic={t && t`FullMenu`} hideViewAll>
             <CatWrapper>
               {currentShop && currentShop.shop_categories && currentShop.shop_categories[0] && 

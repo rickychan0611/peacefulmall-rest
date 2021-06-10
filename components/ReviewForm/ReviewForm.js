@@ -30,20 +30,22 @@ const ReviewForm = ({
   });
 
   const handleChange = (value, name) => {
-    let tempObj = {
+    let Obj = {
       product_id: item.product_id,
       product_name: item.product_name,
       [name]: value
     }
-    let reviewTemp = [...reviews]
-    if (reviewTemp.length > 0) {
-      reviewTemp = reviewTemp.map((review) => {
-      review.product_id === item.product_id ? tempObj : review
-    })}
-    else {
-      reviewTemp.push(tempObj)
+    let prev = [...reviews]
+    console.log("Obj", Obj)
+
+    let index = reviews.findIndex(review => review.product_id === item.product_id)
+    if (index !== -1) {
+      prev[index] = { ...prev[index], ...Obj }
     }
-    setReviews(reviewTemp)
+    else {
+      prev.push(Obj)
+    }
+    setReviews(prev)
   };
 
   return (
@@ -60,7 +62,7 @@ const ReviewForm = ({
           style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
         />
       </Modal>
-
+      {JSON.stringify(reviews)}
       <h2>{item.product_name}</h2>
       <Form onSubmit={handleSubmit}>
         <StarWrapper>
@@ -70,7 +72,7 @@ const ReviewForm = ({
             size={32}
             activeColor="#ffd700"
             color="#d3d3d3"
-            value={reviews.rating}
+            // value={reviews.rating}
             onChange={(e) => handleChange(e, 'rating')}
           />
         </StarWrapper>
@@ -111,7 +113,7 @@ const ReviewForm = ({
           label="Add a written review"
           placeholder="What did you like or dislike?"
           rows={3}
-          value={reviews.content}
+          // value=""
           onChange={(e) => handleChange(e.target.value, 'content')}
         />
         <Row style={{ marginTop: 30 }}>

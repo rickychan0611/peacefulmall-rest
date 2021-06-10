@@ -75,7 +75,7 @@ const Home = ({ sliderCats, products, shops, cacheDate }) => {
 
 export const getServerSideProps = async (context) => {
 
-  context.res.setHeader('Cache-Control', 's-maxage=120, stale-while-revalidate=60');
+  context.res.setHeader('Cache-Control', 's-maxage=3600');
 
   const getplatcat = await axios.get(HOST_URL + '/api/getplatcat');
 

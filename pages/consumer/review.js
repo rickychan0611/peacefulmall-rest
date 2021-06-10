@@ -63,6 +63,7 @@ const Review = () => {
 
             {currentOrder && currentOrder.order_items && currentOrder.order_items[0] && 
             currentOrder.order_items.map((item, i) => {
+              // console.log("item", item)
               return (
                 <ReviewForm
                   key={i}

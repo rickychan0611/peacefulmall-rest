@@ -226,7 +226,8 @@ const checkout = () => {
               setRunDirectionsService={setRunDirectionsService}
               />
             <Divider />
-            <Header>Delivery or Pick-up?</Header>
+            <Header>{orderDetails && orderDetails.shop && orderDetails.shop.shipping_methods ? 
+            "Delivery or Pick-up?" : "Shipping method is not provided"} </Header>
             <PickupContainer>
               {orderDetails && orderDetails.shop && orderDetails.shop.shipping_methods && 
               orderDetails.shop.shipping_methods.map((item, i) => {
@@ -259,7 +260,7 @@ const checkout = () => {
                     orderDetails.shop.address_city && ", " + orderDetails.shop.address_city + 
                     orderDetails.shop.address_province && ", " + orderDetails.shop.address_province + 
                     orderDetails.shop.address_post_code && ", " + orderDetails.shop.address_post_code)
-                  : (<><Icon name="info circle" /> For address, please call {orderDetails.shop.phone}</>)}
+                  : (<><Icon name="info circle" /> For more information, please call {orderDetails.shop.phone}</>)}
                   </>
                 </H4>
               </>

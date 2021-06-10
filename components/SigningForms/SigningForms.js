@@ -158,6 +158,7 @@ const SigningForms = ({ signUp }) => {
               value={inputs.email}
               onChange={(e) => handleChange(e, 'email')}
               error={err.email}
+              type="email"
             />
             {signUp && (
               <Form.Input

@@ -56,7 +56,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
     console.log('attributes!!!', attributes);
 
     //if a prev store's name is equal to the current store, update the object
-    if (orderItems[0] && orderItems[0].shop.id === currentShop.id) {
+    if (orderItems.length === 0 || (orderItems[0] && orderItems[0].shop.id) === currentShop.id) {
       setOrderItems((prev) => {
         return [{ ...item, attributeTotal, quantity, shop: currentShop, uid: uid(item) }, ...prev];
       });

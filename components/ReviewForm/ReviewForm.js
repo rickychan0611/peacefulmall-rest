@@ -6,10 +6,7 @@ import { useDropzone } from 'react-dropzone';
 
 const ReviewForm = ({
   item,
-  files,
-  setFiles,
   reviews,
-  currentOrder,
   handleSubmit,
   setReviews
 }) => {
@@ -139,7 +136,7 @@ const ReviewForm = ({
           onChange={(e) => handleChange(e.target.value, 'content')}
         />
         <Row style={{ marginTop: 30 }}>
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button type="submit">Submit</Button>
         </Row>
       </Form>
       <Divider />

@@ -11,21 +11,21 @@ import Loader from '../../components/Loader';
 import ReviewForm from '../../components/ReviewForm';
 import { HOST_URL } from '../../env';
 import axios from 'axios';
+import { CookiesProvider, useCookies } from 'react-cookie';
 
 const Review = () => {
   const router = useRouter();
   const [currentOrder, setCurrentOrder] = useRecoilState(currentOrderAtom);
   const [reviews, setReviews] = useState([]);
   const [files, setFiles] = useState([]);
-
-
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   useEffect(() => {
     console.log("reviews" , reviews);
   }, [reviews]);
 
   useEffect(() => {
-    console.log(currentOrder);
+    console.log("currentOrder", currentOrder);
     if (!currentOrder) {
       router.push('/consumer/orders');
     }
@@ -34,19 +34,23 @@ const Review = () => {
   const handleSubmit = async () => {
     try {
       const response = await axios.post(HOST_URL + '/api/user/review/create', 
-      // {
-      //   order_id: currentOrder,
-      //   shop_id: 
-      //   reviews: [
-
-      //   ]
-      // }
+      {
+        order_id: currentOrder.id,
+        shop_id: currentOrder.shop_id,
+        reviews
+      },
        {
         headers: { Authorization: cookies.userToken }
       })
+      console.log("review response", response)
+      if (response.data.code === 200) {
+        router.push('/consumer/orders');
+      }
+      else {throw ("Error: " + response.data.message)}
     }
     catch (err) {
       console.log(err)
+      alert(err)
     }
   };
 

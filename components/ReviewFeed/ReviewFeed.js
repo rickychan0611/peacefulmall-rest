@@ -7,6 +7,7 @@ import useTranslation from 'next-translate/useTranslation';
 import _ from 'lodash';
 import ReactStars from 'react-rating-stars-component';
 
+
 const ReviewFeed = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const { t } = useTranslation('home');

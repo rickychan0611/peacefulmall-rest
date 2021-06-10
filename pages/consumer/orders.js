@@ -5,13 +5,17 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Divider, Button, Modal } from 'semantic-ui-react';
 import { useRecoilState } from 'recoil';
-import { openSideMenu as openSideMenuAtom } from '../../data/atoms.js';
+import {
+  openSideMenu as openSideMenuAtom,
+  currentOrder as currentOrderAtom
+} from '../../data/atoms.js';
 import { CookiesProvider, useCookies } from 'react-cookie';
 import Loader from '../../components/Loader';
 import moment from 'moment';
 import useTranslation from 'next-translate/useTranslation';
 import statusDecoder from '../../util/statusDecoder';
 import OrderReceipt from '../../components/OrderReceipt';
+import { Icon } from 'semantic-ui-react';
 
 const orders = () => {
   const { t } = useTranslation('orders');
@@ -22,6 +26,7 @@ const orders = () => {
   const [orders, setOrders] = useState();
   const [open, setOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState();
+  const [currentOrder, setCurrentOrder] = useRecoilState(currentOrderAtom);
 
   useEffect(async () => {
     try {
@@ -51,10 +56,9 @@ const orders = () => {
               onClose={() => setOpen(false)}
               onOpen={() => setOpen(true)}
               open={open}>
-              <Modal.Content>
-                <OrderReceipt order={selectedOrder} />
-              </Modal.Content>
+              <Modal.Content>{currentOrder && <OrderReceipt order={currentOrder} />}</Modal.Content>
             </Modal>
+
             <Wrapper>
               <h2>{t`YourOrders`}</h2>
               <h4>{orders ? t`PastOrders` : `No order found 😓`}</h4>
@@ -63,35 +67,44 @@ const orders = () => {
                 orders.map((order, i) => {
                   return (
                     <Card key={i}>
-                      <Row
-                        onClick={() => {
-                          setOpen(true);
-                          setSelectedOrder(order);
-                        }}>
-                        <div
-                          key={order.id}
-                          style={{ width: '100%' }}
-                          onClick={() => {
-                            setOpen(true);
-                            setSelectedOrder(order);
-                          }}>
+                      <Row>
+                        <div key={order.id} style={{ width: '100%' }}>
+                          <Row style={{ backgroundColor: '#eeeaea', padding: 5 }}>
                             <StoreName>{order.shop.name}</StoreName>
-                          <Name>
-                            {/* {order.order_items.length} items:{' '} */}
-                            {order.order_items.map((item, i) => {
-                              return (
-                                <span key={i}>{(i === 0 ? '' : ', ') + item.product_name}</span>
-                              );
-                            })}
-                          </Name>
-                          <Row>
-                            <P>
-                              {moment(order.created_at).format('MMM DD - hh:mm a')}
-                              {' • '}
-                              {t(statusDecoder(order.status))} <br />
-                            </P>
-                            <P>Total: ${parseInt(order.pay_amount).toFixed(2)}</P>
+                            <StoreName
+                              onClick={() => {
+                                router.push('/consumer/review');
+                                setCurrentOrder(order);
+                              }}>
+                              <a>
+                                <Icon name="edit" />
+                                Write a review
+                              </a>
+                            </StoreName>
                           </Row>
+                          <div
+                            style={{ padding: 5 }}
+                            onClick={() => {
+                              setOpen(true);
+                              // setSelectedOrder(order);
+                              setCurrentOrder(order);
+                            }}>
+                            <Name>
+                              {order.order_items.map((item, i) => {
+                                return (
+                                  <span key={i}>{(i === 0 ? '' : ', ') + item.product_name}</span>
+                                );
+                              })}
+                            </Name>
+                            <Row>
+                              <P>
+                                {moment(order.created_at).format('MMM DD - hh:mm a')}
+                                {' • '}
+                                {t(statusDecoder(order.status))} <br />
+                              </P>
+                              <P>Total: ${parseInt(order.pay_amount).toFixed(2)}</P>
+                            </Row>
+                          </div>
                         </div>
                         {/* <div style={{ marginLeft: 10 }}>
                           <Button
@@ -114,19 +127,19 @@ const orders = () => {
 };
 
 const StoreName = styled.div`
-  background-color: #e7e3e3;
   border-radius: 5px 5px 0px 0px;
   padding: 3px 10px 3px 10px;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   font-size: 12px;
 `;
 const Card = styled.div`
   background-color: #ffffff;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: 0px 0px 10px #ece9e9;
   border: 1px solid #d6d4d8;
   margin-bottom: 20px;
   padding-bottom: 10px;
+  cursor: pointer;
 `;
 const Container = styled.div`
   display: flex;
@@ -143,19 +156,19 @@ const Wrapper = styled.div`
   margin: 0 auto;
   width: 100%;
   max-width: 600px;
-  height: 100vh;
+  /* height: 100vh; */
 `;
 const Name = styled.div`
-  margin: 5px 0 5px 0;
+  margin: 10px 0 10px 0;
   font-size: 14px;
   font-weight: 600;
-  font-family: "'Noto Serif SC', serif";
-  padding : 0 10px 0px 10px;
+  /* font-family: "'Noto Serif SC', serif"; */
+  padding: 0 10px 0px 10px;
 `;
 const P = styled.p`
   font-size: 12px;
   margin: 0;
-  padding : 0 10px 0px 10px;
+  padding: 0 10px 0px 10px;
 `;
 
 export default orders;

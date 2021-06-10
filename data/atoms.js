@@ -30,6 +30,11 @@ export const currentItem = atom({
   default: null
 });
 
+export const currentOrder = atom({
+  key: 'currentOrder',
+  default: null
+});
+
 export const currentShop = atom({
   key: 'currentShop',
   default: null
@@ -55,7 +60,6 @@ export const searchValue = atom({
   default: null
 });
 
-
 export const scrolling = atom({
   key: 'scrolling',
   default: 1
@@ -75,14 +79,17 @@ export const sliderPosition = atom({
   key: 'sliderPosition',
   default: {}
 });
+
 export const catChange = atom({
   key: 'catChange',
   default: false
 });
+
 export const currentPosition = atom({
   key: 'currentPosition',
   default: null
 });
+
 export const addresses = atom({
   key: 'addresses',
   default: null

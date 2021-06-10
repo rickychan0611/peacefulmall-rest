@@ -1,4 +1,3 @@
-import React from 'react';
 import { Feed, Rating, Image, Icon } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
@@ -6,41 +5,7 @@ import { currentShop as currentShopAtom } from '../../data/atoms';
 import moment from 'moment';
 import useTranslation from 'next-translate/useTranslation';
 import _ from 'lodash';
-
-const percent = (i, rating) => {
-  if (rating - i >= 1) {
-    return 1;
-  } else if (rating - i < 1 && rating - i > 0) {
-    console.log('rating', rating - i);
-    return rating - i;
-  } else {
-    return 0;
-  }
-};
-
-const Star = ({i, rating }) => {
-  return (
-    <>
-      {percent(i, rating)}
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" height="17" viewBox="0 -1 40 30">
-        <defs>
-          <linearGradient id="half_grad">
-           {percent(i, rating) !== 0 &&  <stop offset={percent(i, rating)} stop-color="#f0d22a" />}
-            <stop offset={1} stop-color="#ebdbdb" stop-opacity="1" />
-          </linearGradient>
-        </defs>
-        <path
-          d="M20.388,10.918L32,12.118l-8.735,7.749L25.914,
-                 31.4l-9.893-6.088L6.127,31.4l2.695-11.533L0,
-                  12.118l11.547-1.2L16.026,0.6L20.388,10.918z"
-          fill="url(#half_grad)"
-          stroke-width="1"
-          // stroke="red"
-        />
-      </svg>
-    </>
-  );
-};
+import ReactStars from 'react-rating-stars-component';
 
 const ReviewFeed = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
@@ -50,7 +15,7 @@ const ReviewFeed = () => {
     <>
       <Title>{t`Reviews`}</Title>
       <Rating icon="heart" defaultRating={3} maxRating={4} />
-      {currentShop.reviews[0] &&
+      {currentShop && currentShop.reviews && currentShop.reviews[0] &&
         currentShop.reviews.map((item, i) => {
           return (
             <Feed key={i}>
@@ -71,11 +36,16 @@ const ReviewFeed = () => {
                   </Feed.Summary>
 
                   <Row>
-                    {_.times(5, (i) => {
-                      return <Star rating={item.rating} i={i}/>
-                    })}
+                    <ReactStars
+                      count={5}
+                      // onChange={ratingChanged}
+                      size={22}
+                      activeColor="#ffd700"
+                      isHalf={true}
+                      value={item.rating}
+                    />
 
-                    <span style={{ paddingTop: 5 }}>{item.rating}</span>
+                    <span style={{ paddingTop: 5 }}>{" " + item.rating}</span>
                   </Row>
                   <Feed.Extra text>{item.content}</Feed.Extra>
                 </Feed.Content>

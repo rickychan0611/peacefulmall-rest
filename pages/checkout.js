@@ -6,15 +6,14 @@ import styled from 'styled-components';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import {
   orderDetails as orderDetailsAtom,
-  orderItems as orderItemsAtom,
   shippingMethod as shippingMethodAtom
 } from '../data/orderAtoms.js';
 import {
   defaultAddress as defaultAddressAtom,
   addresses as addressAtom,
   currentShop as currentShopAtom,
-  currentPosition as currentPositionAtom
 } from '../data/atoms';
+import { user as userAtom } from '../data/userAtom';
 import { HOST_URL } from '../env';
 import { useCookies } from 'react-cookie';
 import Map from '../components/Map';
@@ -24,14 +23,14 @@ import AddressBook from '../components/AddressBook';
 import { useIsDesktop } from '../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import InputMask from 'react-input-mask';
 
 const checkout = () => {
   const router = useRouter();
   const orderDetails = useRecoilValue(orderDetailsAtom);
   const defaultAddress = useRecoilValue(defaultAddressAtom);
-  const [deliveryTime, setDeliveryTime] = useState('ASAP');
-  const [, setShippingMethod] = useRecoilState(shippingMethodAtom);
-  const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
+  const [shippingMethod, setShippingMethod] = useRecoilState(shippingMethodAtom);
+  const user = useRecoilValue(userAtom);
   const [open, setOpen] = useState(false);
   const isDesktop = useIsDesktop();
   const { t } = useTranslation('profile');
@@ -43,6 +42,15 @@ const checkout = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [reload, setReload] = useState(0);
   const [tips_amount, setTips_amount] = useState({ tips: 0 });
+  const [pickUpInfo, setPickupInfo] = useState({ name: '', phone: '' });
+
+  useEffect(() => {
+    user &&
+      setPickupInfo({
+        name: user.first_name + ' ' + user.last_name,
+        phone: user.phone
+      });
+  }, [user]);
 
   const setTips = (value, name) => {
     console.log('tips', value);
@@ -75,11 +83,19 @@ const checkout = () => {
   };
 
   const handleChange = (value, name, id) => {
-    console.log(value);
-    let temp = [...addresses];
-    temp = temp.map((item) => (item.id === id ? { ...item, [name]: value } : item));
-    console.log('temp', temp);
-    setAddresses(temp);
+    if (id === 'pickup') {
+      setAddresses;
+    } else {
+      console.log(value);
+      let temp = [...addresses];
+      temp = temp.map((item) => (item.id === id ? { ...item, [name]: value } : item));
+      console.log('temp', temp);
+      setAddresses(temp);
+    }
+  };
+
+  const handlePickupChange = (value, name) => {
+    setPickupInfo((prev) => ({ ...prev, [name]: value }));
   };
 
   const createOrderQuery = async () => {
@@ -88,30 +104,44 @@ const checkout = () => {
     console.log('placeOrderQuery', orderDetails);
     console.log('defaultAddress', defaultAddress);
     try {
-      if (!defaultAddress) {
+      if (orderDetails.shippingMethod.id !== 1 && !defaultAddress) {
         throw new Error('Missing address. Please add an address');
+      }
+      if (orderDetails.shippingMethod.id == 1 && (!pickUpInfo.name || !pickUpInfo.phone)) {
+        throw new Error('Name and phone number are required');
       } else {
-        const body = {
-          shop_id: orderDetails.shop.id,
-          items: orderDetails.orderItems,
-          receiver_name: defaultAddress.name,
-          receiver_phone: defaultAddress.phone,
-          receiver_post_code: defaultAddress.post_code,
-          receiver_country: defaultAddress.country,
-          receiver_province: defaultAddress.province,
-          receiver_city: defaultAddress.city,
-          receiver_detail_address: defaultAddress.detail_address,
-          receiver_unit_number: defaultAddress.unit_number,
-          receiver_note: defaultAddress.note,
-          tips_amount: tips_amount.tips,
-          shipping_amount: orderDetails.shippingMethod.fee,
-          shipping_method_id: orderDetails.shippingMethod.id,
-        };
+        const body =
+          orderDetails.shippingMethod.id === 1
+            ? {
+                shop_id: orderDetails.shop.id,
+                items: orderDetails.orderItems,
+                receiver_name: pickUpInfo.name,
+                receiver_phone: pickUpInfo.phone,
+                tips_amount: tips_amount.tips,
+                shipping_amount: orderDetails.shippingMethod.fee,
+                shipping_method_id: orderDetails.shippingMethod.id
+              }
+            : {
+                shop_id: orderDetails.shop.id,
+                items: orderDetails.orderItems,
+                receiver_name: defaultAddress.name,
+                receiver_phone: defaultAddress.phone,
+                receiver_post_code: defaultAddress.post_code,
+                receiver_country: defaultAddress.country,
+                receiver_province: defaultAddress.province,
+                receiver_city: defaultAddress.city,
+                receiver_detail_address: defaultAddress.detail_address,
+                receiver_unit_number: defaultAddress.unit_number,
+                receiver_note: defaultAddress.note,
+                tips_amount: tips_amount.tips,
+                shipping_amount: orderDetails.shippingMethod.fee,
+                shipping_method_id: orderDetails.shippingMethod.id
+              };
         console.log('body', body);
         const result = await axios.post(HOST_URL + '/api/user/order/create', body, {
           headers: { Authorization: cookies.userToken }
         });
-        console.log("create order respond", result.data);
+        console.log('create order respond', result.data);
         if (result.data.message === 'Order create success') {
           router.push('/consumer/order-success');
         } else {
@@ -152,7 +182,7 @@ const checkout = () => {
       .then(({ lat, lng }) => {
         name === 'origin' && setOrigin({ lat, lng });
         name === 'defaultAddress' && setDestination({ lat, lng });
-        setRunDirectionsService(true)
+        setRunDirectionsService(true);
       })
       .catch((error) => console.error(error));
   };
@@ -209,7 +239,7 @@ const checkout = () => {
         {/* <AddressChange setOpen={setOpen} /> */}
       </Modal>
 
-      {orderDetails.shop && (
+      {orderDetails.shop && orderDetails.shippingMethod && (
         <Container>
           <OrdersContainer>
             <h4 style={{ margin: 0 }}>Order from</h4>
@@ -224,30 +254,35 @@ const checkout = () => {
               shipping={orderDetails.shippingMethod.shipping_type === 2}
               runDirectionsService={runDirectionsService}
               setRunDirectionsService={setRunDirectionsService}
-              />
+            />
             <Divider />
-            <Header>{orderDetails && orderDetails.shop && orderDetails.shop.shipping_methods ? 
-            "Delivery or Pick-up?" : "Shipping method is not provided"} </Header>
+            <Header>
+              {orderDetails && orderDetails.shop && orderDetails.shop.shipping_methods
+                ? 'Delivery or Pick-up?'
+                : 'Shipping method is not provided'}{' '}
+            </Header>
             <PickupContainer>
-              {orderDetails && orderDetails.shop && orderDetails.shop.shipping_methods && 
-              orderDetails.shop.shipping_methods.map((item, i) => {
-                return (
-                  <Row
-                    key={i}
-                    onClick={() => setShippingMethod(item)}
-                    style={{ marginRight: 10, marginBottom: 10 }}>
-                    <RadioButton
-                      readOnly
-                      type="radio"
-                      value={item.name}
-                      checked={orderDetails.shippingMethod.id === item.id}
-                    />
-                    <Column>
-                      <H4>{item.name + ' - $' + item.fee}</H4>
-                    </Column>
-                  </Row>
-                );
-              })}
+              {orderDetails &&
+                orderDetails.shop &&
+                orderDetails.shop.shipping_methods &&
+                orderDetails.shop.shipping_methods.map((item, i) => {
+                  return (
+                    <Row
+                      key={i}
+                      onClick={() => setShippingMethod(item)}
+                      style={{ marginRight: 10, marginBottom: 10 }}>
+                      <RadioButton
+                        readOnly
+                        type="radio"
+                        value={item.name}
+                        checked={orderDetails.shippingMethod.id === item.id}
+                      />
+                      <Column>
+                        <H4>{item.name + ' - $' + item.fee}</H4>
+                      </Column>
+                    </Row>
+                  );
+                })}
             </PickupContainer>
             {orderDetails.shippingMethod.shipping_type !== 2 && (
               <>
@@ -256,13 +291,44 @@ const checkout = () => {
                   <>
                     {orderDetails.shop.name}
                     <br />
-                    {orderDetails.shop.address_line ? (orderDetails.shop.address_line + 
-                    orderDetails.shop.address_city && ", " + orderDetails.shop.address_city + 
-                    orderDetails.shop.address_province && ", " + orderDetails.shop.address_province + 
-                    orderDetails.shop.address_post_code && ", " + orderDetails.shop.address_post_code)
-                  : (<><Icon name="info circle" /> For more information, please call {orderDetails.shop.phone}</>)}
+                    {orderDetails.shop.address_line ? (
+                      orderDetails.shop.address_line + orderDetails.shop.address_city &&
+                      ', ' + orderDetails.shop.address_city + orderDetails.shop.address_province &&
+                      ', ' +
+                        orderDetails.shop.address_province +
+                        orderDetails.shop.address_post_code &&
+                      ', ' + orderDetails.shop.address_post_code
+                    ) : (
+                      <>
+                        <Icon name="info circle" /> For more information, please call{' '}
+                        {orderDetails.shop.phone}
+                      </>
+                    )}
                   </>
                 </H4>
+                <Form>
+                  <Form.Group widths="equal">
+                    <InputMask
+                      mask="999-999-9999"
+                      maskChar="_"
+                      alwaysShowMask
+                      placeholder="Phone Number"
+                      value={pickUpInfo.phone}
+                      onChange={(e) => {
+                        handlePickupChange(e.target.value, 'phone');
+                      }}
+                    />
+                    <Form.Input
+                      required
+                      label="Your Name"
+                      placeholder="Your Name"
+                      value={pickUpInfo.name}
+                      onChange={(e) => {
+                        handlePickupChange(e.target.value, 'name');
+                      }}
+                    />
+                  </Form.Group>
+                </Form>
               </>
             )}
             {orderDetails.shippingMethod.shipping_type === 2 && (
@@ -320,24 +386,9 @@ const checkout = () => {
                     />
                   </Form.Group>
                 </Form>
-
-                {/* <H4 style={{ marginLeft: 20 }}>{orderDetails.deliveryAddress.instructions}</H4> */}
-
-                {/* <Header>Delivery Time</Header>
-                <div>
-                  <Button
-                    color={deliveryTime === 'ASAP' ? 'green' : 'white'}
-                    onClick={() => setDeliveryTime('ASAP')}>
-                    ASAP: 20 - 30min
-                  </Button>
-                  <Button
-                    color={deliveryTime === 'Schedule' ? 'green' : 'white'}
-                    onClick={() => setDeliveryTime('Schedule')}>
-                    Schedule
-                  </Button>
-                </div> */}
               </>
             )}
+
             <Header>Order Summary</Header>
             <p stype={{ margin: 0 }}>You can click item to edit</p>
             {orderDetails.orderItems &&

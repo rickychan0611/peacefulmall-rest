@@ -18,7 +18,7 @@ export const orderDetails = selector({
   get: ({ get }) => {
     const items = get(orderItems);
     const user = get(userAtom);
-    const shippingFee = get(shippingMethod).fee
+    const shippingFee = get(shippingMethod) ? get(shippingMethod).fee : 0
 
     console.log("Atom OrderItems", items)
     let subtotal = 0;

@@ -1,45 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
-import { HOST_URL } from '../../env';
 import styled from 'styled-components';
-import { Divider, Button } from 'semantic-ui-react';
 import { useRecoilState } from 'recoil';
-import { openSideMenu as openSideMenuAtom } from '../../data/atoms.js';
-import { CookiesProvider, useCookies } from 'react-cookie';
-import Loader from '../../components/Loader';
-import moment from 'moment';
+import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 import useTranslation from 'next-translate/useTranslation';
 
 const orderSuccess = () => {
   const { t } = useTranslation('orders');
   const router = useRouter();
-  const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
-  const [loading, setLoading] = useState(true);
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const [orders, setOrders] = useState();
-  
+  const [, setOrderItems] = useRecoilState(orderItemsAtom);
+
   useEffect(async () => {
-    try {
-      const getOrders = await axios.get(HOST_URL + '/api/user/orders', {
-        headers: { Authorization: cookies.userToken }
-      });
-      console.log(getOrders.data.data);
-      setOrders(getOrders.data.data);
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-      setLoading(false);
-    }
+    localStorage.removeItem('orderItems');
+    setOrderItems([]);
   }, []);
 
   return (
     <Container>
       <Img src="/cook-girl.jpg" />
-      <h1 style={{ color: '#4ab976', textAlign: "center" }}>
+      <h1 style={{ color: '#4ab976', textAlign: 'center' }}>
         Order Successful <br />
       </h1>
-      <CheckButton onClick={()=>{router.push('/consumer/orders')}}><a>Check your order</a></CheckButton>
+      <CheckButton
+        onClick={() => {
+          router.push('/consumer/orders');
+        }}>
+        <a>Check your order</a>
+      </CheckButton>
     </Container>
   );
 };

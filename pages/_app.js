@@ -105,7 +105,7 @@ const InitApp = ({ children }) => {
             // };
 
             console.log('GPS location body: ', body);
-            setCurrentPosition(body);
+            setCurrentPosition({...body, lat: position.coords.latitude, lng: position.coords.longitude});
           })
           .catch((error) => console.error(error));
       }

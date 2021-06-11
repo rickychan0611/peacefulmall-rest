@@ -9,6 +9,7 @@ import { Container, Image, Ref, Icon, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
 import DishCards from '../components/DishCards';
 import ShopCards from '../components/ShopCards';
+import NearShopsCards from '../components/NearShopsCards';
 import SearchBanner from '../components/SearchBanner';
 import Footer from '../components/Footer';
 import Slider from '../components/Slider';
@@ -52,7 +53,7 @@ const Home = ({ sliderCats, products, shops, cacheDate }) => {
                 <ShopCards shops={shops}/>
               </Slider>
               <Slider topic={"Restaurants near you"} icon="store">
-                <ShopCards shops={shops}/>
+                <NearShopsCards type="near" shops={shops}/>
               </Slider>
               <Slider topic={t('Featured')} icon="store">
                 <ShopCards shops={shops}/>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import  { useIsMobile } from '../../util/useScreenSize';
+import { useIsMobile } from '../../util/useScreenSize';
 import _ from 'lodash';
 import styled from 'styled-components';
 import toSlug from '../../util/toSlug';
@@ -33,20 +33,21 @@ const NearShopsCards = () => {
 
   //get products from server when component is loaded
   useEffect(async () => {
-    setLoading(true);
-
-    const getShops = await axios.get(HOST_URL + '/api/shops/nearby', {
-      params: {
-        latitude: currentPosition.lat,
-        longitude: currentPosition.lng,
-        radius: 10000
-      }
-    });
-    console.log("getShops.data.data", getShops)
-    console.log("latitude", currentPosition.lat)
-    console.log("longitude", currentPosition.lng)
-    setShops(getShops.data.data);
-    setLoading(false);
+    if (currentPosition && currentPosition.lat && currentPosition.lng) {
+      setLoading(true);
+      const getShops = await axios.get(HOST_URL + '/api/shops/nearby', {
+        params: {
+          latitude: currentPosition.lat,
+          longitude: currentPosition.lng,
+          radius: 10000
+        }
+      });
+      console.log("getShops.data.data", getShops)
+      console.log("latitude", currentPosition.lat)
+      console.log("longitude", currentPosition.lng)
+      setShops(getShops.data.data);
+      setLoading(false);
+    }
   }, [currentPosition]);
 
   return (
@@ -67,7 +68,7 @@ const NearShopsCards = () => {
                     router.push('/shop/' + toSlug(shop.name) + '/' + shop.id);
                   }}>
                   {/* <Img src={`/img/food (${Math.floor( Math.random() * (86 - 1) + 1 )}).jpg`} /> */}
-                  
+
                   {shop.images && shop.images[0] ? (
                     <Img src={HOST_URL + '/storage/' + JSON.parse(shop.images)[0]} />
                   ) : (

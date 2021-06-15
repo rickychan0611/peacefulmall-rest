@@ -94,11 +94,16 @@ export const addresses = atom({
   key: 'addresses',
   default: null
 });
+
 export const useDefaultAddress = atom({
   key: 'useDefaultAddress',
   default: false
 });
 
+export const loginPending = atom({
+  key: 'loginPending',
+  default: false
+});
 
 export const defaultAddress = selector({
   key: 'defaultAddress',

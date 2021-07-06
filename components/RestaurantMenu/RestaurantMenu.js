@@ -40,15 +40,9 @@ const RestaurantMenu = ( {contextRef, t} ) => {
 
                   if (item.category_name !== 'Popular Items') {
                     return (
-                      <Label
+                      <LabelContainer
                         color="black"
                         key={item.id}
-                        style={{
-                          margin: 5,
-                          padding: '10px 15px 10px 15px',
-                          cursor: 'pointer',
-                          textAlign: 'left'
-                        }}
                         onClick={() => {
                           router.push(
                             '/shop/' +
@@ -60,7 +54,7 @@ const RestaurantMenu = ( {contextRef, t} ) => {
                           );
                         }}>
                         {item.category_name}
-                      </Label>
+                      </LabelContainer>
                     );
                   }
                 })}
@@ -100,6 +94,18 @@ const RestaurantMenu = ( {contextRef, t} ) => {
       </div>
   );
 };
+
+const LabelContainer = styled.div({
+  margin: 5,
+  padding: "6px 15px",
+  cursor: "pointer",
+  textAlign: "left",
+  borderRadius: 25,
+  fontSize: 12,
+  fontWeight: "bold",
+  backgroundColor: "#e8ebe9",
+  color: "black"
+});
 
 const MenuContainer = styled.div`
   margin-bottom: 30px;

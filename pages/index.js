@@ -27,6 +27,7 @@ const Home = ({ sliderCats, products, shops, cacheDate }) => {
   const [, setSliderCats] = useRecoilState(sliderCatsAtom);
 
   useEffect(()=>{
+    console.log("sliderCats", sliderCats)
     setSliderCats(sliderCats);
   },[sliderCats] )
 
@@ -42,7 +43,7 @@ const Home = ({ sliderCats, products, shops, cacheDate }) => {
 
             <CurrentAddress />
             <Container style={{ marginTop: '2em' }}>
-              <CuisineSlider sliderCats={sliderCats} cacheDate={cacheDate} />
+              {sliderCats.length > 0 && <CuisineSlider sliderCats={sliderCats} cacheDate={cacheDate} />}
               <Slider topic={t('discountedDishes')} icon="food">
                 <DishCards type="discount" products={products} />
               </Slider>
@@ -76,11 +77,9 @@ const Home = ({ sliderCats, products, shops, cacheDate }) => {
 
 export const getServerSideProps = async (context) => {
 
-  context.res.setHeader('Cache-Control', 's-maxage=3600');
+  const getplatcat = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/getplatcat');
 
-  const getplatcat = await axios.get(HOST_URL + '/api/getplatcat');
-
-  // const products = await axios.get(HOST_URL + '/api/products', {
+  // const products = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/products', {
   //   params: {
   //     plat_category: 'all',
   //     type: "all",
@@ -88,7 +87,7 @@ export const getServerSideProps = async (context) => {
   //   }
   // });
 
-  // const shops = await axios.get(HOST_URL + '/api/shops', {
+  // const shops = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shops', {
   //   params: {
   //     type: 'all',
   //     shop_type: 'all',

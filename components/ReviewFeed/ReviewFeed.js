@@ -22,7 +22,7 @@ const ReviewFeed = () => {
               <Feed.Event>
                 <Feed.Label>
                   <Image
-                    src={item.images ? HOST_URL + '/storage/' + item.images : '/avatar.jpg'}
+                    src={item.images ? process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + item.images : '/avatar.jpg'}
                     avatar
                     size="mini"
                   />
@@ -64,7 +64,7 @@ const ReviewFeed = () => {
     //         <Image
     //           src={
     //             currentShop && currentShop.logo
-    //               ? HOST_URL + '/storage/' + currentShop.logo
+    //               ? process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + currentShop.logo
     //               : '/avatar-placeholder.png'
     //           }
     //           avatar

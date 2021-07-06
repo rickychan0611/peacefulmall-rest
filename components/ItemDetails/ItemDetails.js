@@ -82,7 +82,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
 
     // if (!item && product_id) {
     //   try {
-    //     const getProduct = await axios.get(HOST_URL + '/api/singleproduct', {
+    //     const getProduct = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleproduct', {
     //       params: {
     //         product_id
     //       }

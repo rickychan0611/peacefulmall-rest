@@ -68,7 +68,7 @@ const ItemDetailsContext = ({
               <Image
                 src={
                   currentShop && currentShop.logo
-                    ? HOST_URL + '/storage/' + currentShop.logo
+                    ? process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + currentShop.logo
                     : '/avatar-placeholder.png'
                 }
                 avatar
@@ -80,7 +80,7 @@ const ItemDetailsContext = ({
             <h2>{item.name}</h2>
 
             {item.images && item.images[0] ? (
-              <Img src={HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
+              <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
             ) : (
               <Img src="/no-image.png" />
             )}

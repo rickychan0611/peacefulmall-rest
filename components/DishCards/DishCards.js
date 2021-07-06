@@ -32,7 +32,7 @@ const DishCards = ({type}) => {
   useEffect(async () => {
     setLoading(true);
     // console.log('plat_category reload', currentCat ? currentCat.id : 'all');
-    const getProducts = await axios.get(HOST_URL + '/api/products', {
+    const getProducts = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/products', {
       params: {
         plat_category: currentCat ? currentCat.id : 'all',
         type,
@@ -73,7 +73,7 @@ const DishCards = ({type}) => {
                   </Label>
 
                   {item.images && item.images[0] ? (
-                    <Img src={HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
+                    <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
                   ) : (
                     <Img src="/no-image.png" />
                   )}

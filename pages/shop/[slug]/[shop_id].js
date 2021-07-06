@@ -76,11 +76,11 @@ const shop = ({ getSingleShop, getShopProducts }) => {
 export const getServerSideProps = async (context) => {
   context.res.setHeader('Cache-Control', 's-maxage=3600');
 
-  const getSingleShop = await axios.get(HOST_URL + '/api/singleshop', {
+  const getSingleShop = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleshop', {
     params: { shop_id: context.params.shop_id }
   });
 
-  const getShopProducts = await axios.get(HOST_URL + '/api/shopproducts', {
+  const getShopProducts = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shopproducts', {
     params: {
       shop_id: context.params.shop_id,
       category_id: 'all'

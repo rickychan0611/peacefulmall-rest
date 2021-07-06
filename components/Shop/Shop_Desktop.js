@@ -36,7 +36,7 @@ const Shop_Desktop = () => {
           <div>
             <Wrapper>
               {currentShop.logo ? (
-                <Avatar src={HOST_URL + '/storage/' + currentShop.logo} />
+                <Avatar src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + currentShop.logo} />
               ) : (
                 <Avatar src="/avatar-placeholder.png" />
               )}

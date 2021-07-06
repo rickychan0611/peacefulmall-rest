@@ -49,7 +49,7 @@ const InitApp = ({ children }) => {
       return;
     } else if (cookies.userToken) {
       //login user and store user in localstorage
-      const getUser = await axios.get(HOST_URL + '/api/user/info', {
+      const getUser = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/info', {
         headers: { Authorization: cookies.userToken }
       });
       console.log('USER DATA', getUser);
@@ -145,7 +145,7 @@ function MyApp({ Component, pageProps }) {
             <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
             <script
               type="text/javascript"
-              src={'https://maps.googleapis.com/maps/api/js?key=' + MAP_API + '&libraries=places'}
+              src={'https://maps.googleapis.com/maps/api/js?key=' + process.env.NEXT_PUBLIC_MAP_API + '&libraries=places'}
             />
           </Head>
           <TopBar />

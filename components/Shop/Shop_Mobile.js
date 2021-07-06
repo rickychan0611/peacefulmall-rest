@@ -30,14 +30,14 @@ const Shop_Mobile = () => {
       <Section id="shopTop" style={{ height: 100 }}></Section>
 
       {currentShop.images && currentShop.images[0] ? (
-        <Img src={HOST_URL + '/storage/' + JSON.parse(currentShop.images)[0]} />
+        <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(currentShop.images)[0]} />
       ) : (
         <Img src="/no-image.png" />
       )}
 
       <Wrapper>
         {currentShop.logo ? (
-          <Avatar src={HOST_URL + '/storage/' + currentShop.logo} />
+          <Avatar src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + currentShop.logo} />
         ) : (
           <Avatar src="/avatar-placeholder.png" />
         )}

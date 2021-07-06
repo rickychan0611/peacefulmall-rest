@@ -41,7 +41,7 @@ const SearchShopCards = ({ shops }) => {
                   {shop.images && shop.images[0] ? (
                     <Img
                       isMobile={isMobile}
-                      src={HOST_URL + '/storage/' + JSON.parse(shop.images)[0]}
+                      src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(shop.images)[0]}
                     />
                   ) : (
                     <Img isMobile={isMobile} src="/no-image.png" />

@@ -55,7 +55,7 @@ const ProfileForm = () => {
     setErr(null);
     validation(editedUser)
       .then(async (res) => {
-        await axios.post(HOST_URL + '/api/user/edit', editedUser, {
+        await axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/edit', editedUser, {
           headers: { Authorization: cookies.userToken }
         });
         // if successful

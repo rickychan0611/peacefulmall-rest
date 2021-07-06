@@ -40,7 +40,7 @@ const SearchBanner = ({cats}) => {
   }
 
   useEffect( async ()=>{
-    const getplatcat = await axios.get(HOST_URL + '/api/getplatcat');
+    const getplatcat = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/getplatcat');
     setSliderCats(getplatcat.data.data);
   },[] )
 
@@ -163,7 +163,7 @@ const Name = styled.div`
 export const getServerSideProps = async (context) => {
   context.res.setHeader('Cache-Control', 's-maxage=3600');
 
-  const getplatcat = await axios.get(HOST_URL + '/api/getplatcat');
+  const getplatcat = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/getplatcat');
 
   return {
     props: {

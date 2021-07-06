@@ -25,7 +25,7 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
   const query = async (body) => {
     setLoading(true);
     try {
-      await axios.post(HOST_URL + '/api/user/address/set', body, {
+      await axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/address/set', body, {
         headers: { Authorization: cookies.userToken }
       });
       await getAddressesQuery();

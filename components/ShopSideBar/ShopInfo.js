@@ -10,7 +10,7 @@ const ShopInfo = ({ shop }) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('shop')
   const isDesktop = useIsDesktop();
-  const profilePic = shop.images && HOST_URL + '/storage/' + JSON.parse(shop.images)[0]
+  const profilePic = shop.images && process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(shop.images)[0]
 
   return (
     <>

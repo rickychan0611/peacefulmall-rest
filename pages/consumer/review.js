@@ -36,7 +36,7 @@ const Review = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post(HOST_URL + '/api/user/review/create', 
+      const response = await axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/review/create', 
       {
         order_id: currentOrder.id,
         shop_id: currentOrder.shop_id,

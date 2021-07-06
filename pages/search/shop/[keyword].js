@@ -57,7 +57,7 @@ const search = ({ shops, products, keyword }) => {
 
 export const getServerSideProps = async (context) => {
   console.log(context.params.keyword);
-  const getShops = await axios.get(HOST_URL + '/api/search', {
+  const getShops = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/search', {
     params: {
       keyword: context.params.keyword
     }

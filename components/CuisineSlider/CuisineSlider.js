@@ -73,7 +73,7 @@ const CuisineSlider = ( {sliderCats, cacheDate} ) => {
                         key={i}>
                         <Image
                           isMobile={isMobile}
-                          src={item.image ? `${HOST_URL}/storage/${item.image}` : `/no-image.png`}
+                          src={item.image ? `${process.env.NEXT_PUBLIC_HOST_URL}/storage/${item.image}` : `/no-image.png`}
                         />
                         <Text isMobile={isMobile}>{item.category_name.toUpperCase()}</Text>
                       </CatCard>

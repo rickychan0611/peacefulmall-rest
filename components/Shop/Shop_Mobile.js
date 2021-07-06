@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { HOST_URL } from '../../env';
 import { useRef } from 'react';
 
 import { useRecoilState } from 'recoil';

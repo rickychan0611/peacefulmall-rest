@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { HOST_URL } from '../../env';
 import { useRecoilState } from 'recoil';
 import {
   currentItem as currentItemAtom,

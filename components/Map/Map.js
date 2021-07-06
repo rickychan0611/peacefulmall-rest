@@ -8,7 +8,6 @@ import {
   Marker
 } from '@react-google-maps/api';
 import Loader from '../../components/Loader';
-import { MAP_API } from '../../env';
 
 export default function Map({
   mapResponse,

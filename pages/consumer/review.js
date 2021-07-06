@@ -9,7 +9,6 @@ import { user as userAtom } from '../../data/userAtom.js';
 import { useRouter } from 'next/router';
 import Loader from '../../components/Loader';
 import ReviewForm from '../../components/ReviewForm';
-import { HOST_URL } from '../../env';
 import axios from 'axios';
 import { CookiesProvider, useCookies } from 'react-cookie';
 

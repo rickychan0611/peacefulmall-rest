@@ -18,7 +18,6 @@ import GooglePlacesAutocomplete, {
   getLatLng,
   geocodeByLatLng
 } from 'react-google-places-autocomplete';
-import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { user as userAtom } from '../../data/userAtom';
 

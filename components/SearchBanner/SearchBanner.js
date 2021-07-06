@@ -12,7 +12,6 @@ import {
   searchValue as searchValueAtom,
 } from '../../data/atoms.js';
 import axios from 'axios';
-import { HOST_URL } from '../../env';
 
 const topSearch = [
   "和平", "中西结合", "Dim Sum", "和平饭店", "Richmond", "Kitsilano"

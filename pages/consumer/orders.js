@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { HOST_URL } from '../../env';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Divider, Button, Modal } from 'semantic-ui-react';

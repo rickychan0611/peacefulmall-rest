@@ -15,7 +15,6 @@ import {
 import { Button, Label } from 'semantic-ui-react';
 import useTranslation from 'next-translate/useTranslation';
 
-import { HOST_URL } from '../../env';
 import PlaceHolder_Card from '../PlaceHolder_Card';
 
 const ShopCards = () => {

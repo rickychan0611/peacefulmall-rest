@@ -4,7 +4,6 @@ import { Grid, List, Header, Modal } from 'semantic-ui-react';
 import useTranslation from 'next-translate/useTranslation';
 import {useIsDesktop} from '../../util/useScreenSize';
 
-import { HOST_URL } from '../../env';
 
 const ShopInfo = ({ shop }) => {
   const [open, setOpen] = useState(false);

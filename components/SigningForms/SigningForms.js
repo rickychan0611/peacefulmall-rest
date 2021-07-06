@@ -16,7 +16,6 @@ import validation from '../../util/validation';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
-import { HOST_URL } from '../../env';
 import InputMask from 'react-input-mask';
 
 import { useRecoilState } from 'recoil';

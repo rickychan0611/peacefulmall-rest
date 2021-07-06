@@ -3,7 +3,7 @@ import { Container, Dimmer, Loader } from 'semantic-ui-react';
 import Head from 'next/head';
 import axios from 'axios';
 import styled from 'styled-components';
-import { HOST_URL } from '../../../env';
+
 import { useIsMobile, useIsTablet, useIsDesktop } from '../../../util/useScreenSize';
 
 import { useRecoilState } from 'recoil';

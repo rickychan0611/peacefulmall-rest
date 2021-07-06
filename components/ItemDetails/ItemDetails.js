@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useIsMobile } from '../../util/useScreenSize';
-import { HOST_URL } from '../../env';
 import toSlug from '../../util/toSlug';
 import axios from 'axios';
 import Loader from '../Loader';

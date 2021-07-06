@@ -14,7 +14,6 @@ import {
 } from '../../data/atoms.js';
 import { Button, Label } from 'semantic-ui-react';
 
-import { HOST_URL } from '../../env';
 import PlaceHolder_Card from '../PlaceHolder_Card/';
 
 const DishCards = ({type}) => {

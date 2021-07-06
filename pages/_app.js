@@ -5,7 +5,7 @@ import '../.semantic/dist/semantic.min.css';
 import './styles.css';
 import { CookiesProvider, useCookies } from 'react-cookie';
 import axios from 'axios';
-import { HOST_URL } from '../env';
+
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { appReady as appReadyAtom } from '../data/atoms';
 import { user as userAtom, userdata } from '../data/userAtom';
@@ -16,7 +16,6 @@ import SideMenu from '../components/SideMenu';
 import CheckOutListPusher from '../components/CheckOutListPusher';
 import TopBar from '../components/TopBar';
 import GooglePlacesAutocomplete, { geocodeByLatLng } from 'react-google-places-autocomplete';
-import { MAP_API } from '../env';
 
 import { validateAddress } from '../components/CurrentAddress/CurrentAddress';
 

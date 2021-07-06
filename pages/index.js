@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useIsMobile } from '../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
 import axios from 'axios';
-import { HOST_URL } from '../env';
+
 import moment from 'moment';
 import { Container, Image, Ref, Icon, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';

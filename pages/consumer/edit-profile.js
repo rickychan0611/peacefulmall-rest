@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { Divider, Icon } from 'semantic-ui-react';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom';
-import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { useIsDesktop } from '../../util/useScreenSize';
 import ProfileForm from '../../components/ProfileForm';

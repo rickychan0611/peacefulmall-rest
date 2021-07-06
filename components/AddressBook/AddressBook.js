@@ -3,7 +3,6 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
 import AddressEditModal from '../AddressEditModal';
-import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { useIsMobile } from '../../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';

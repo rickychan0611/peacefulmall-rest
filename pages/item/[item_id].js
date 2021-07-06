@@ -1,5 +1,4 @@
 import ItemDetails from '../../components/ItemDetails';
-import { HOST_URL } from '../../env';
 import axios from 'axios';
 import Head from 'next/head';
 

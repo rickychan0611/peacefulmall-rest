@@ -15,7 +15,7 @@ import {
   loginPending as loginPendingAtom
 } from '../data/atoms';
 import { user as userAtom } from '../data/userAtom';
-import { HOST_URL } from '../env';
+
 import { useCookies } from 'react-cookie';
 import Map from '../components/Map';
 import OrderItem from '../components/OrderItem/';

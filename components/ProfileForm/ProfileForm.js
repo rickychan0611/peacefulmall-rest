@@ -7,7 +7,6 @@ import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
 import moment from 'moment';
 import validation from '../../util/validation';
 import InputMask from 'react-input-mask';
-import { HOST_URL } from '../../env';
 import { useCookies } from 'react-cookie';
 import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom';

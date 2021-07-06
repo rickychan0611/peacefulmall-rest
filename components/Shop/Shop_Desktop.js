@@ -15,7 +15,6 @@ import ShopSideBar from '../ShopSideBar';
 import RestaurantMenu from '../RestaurantMenu';
 import ReviewFeed from '../ReviewFeed/index.js';
 import axios from 'axios';
-import { HOST_URL } from '../../env';
 import useTranslation from 'next-translate/useTranslation';
 
 const Shop_Desktop = () => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { HOST_URL } from '../../../env';
+
 import styled from 'styled-components';
 import { Container } from 'semantic-ui-react';
 import SearchShopCards from '../../../components/SearchShopCards';

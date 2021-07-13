@@ -16,6 +16,7 @@ import validation from '../../util/validation';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
+
 import InputMask from 'react-input-mask';
 
 import { useRecoilState } from 'recoil';
@@ -35,11 +36,8 @@ const SigningForms = ({ signUp }) => {
   const [loginPending, setLoginPending] = useRecoilState(loginPendingAtom);
 
   const [inputs, setInputs] = useState({
-    // confirmPassword: 'Ricric61',
-    email: 'ric0611@gmail.com',
-    // name: 'Rickychan1',
-    password: '123456'
-    // phone: '1234567890'
+    email: '',
+    password: ''
   });
 
   const handleSignUp = async () => {
@@ -104,6 +102,7 @@ const SigningForms = ({ signUp }) => {
     } catch (err) {
       console.log(err);
       setLoading(false);
+      setErr({message: err.message})
     }
   };
 
@@ -278,10 +277,13 @@ const SigningForms = ({ signUp }) => {
             <Link href="/sign-in">{t('LogInAccount')}</Link>{' '}
           </Message>
         ) : (
+          <>
           <Message>
             {t('NewtoPeacefulMall')}
-            <Link href="/sign-up">{t('signUPAccount')}</Link>{' '}
+            <Link href="/sign-up">{t('signUPAccount')}</Link><br />
+            <a target="_blank" href={process.env.NEXT_PUBLIC_HOST_URL + "/password/reset"}>{t('Forgot Password?')}</a>{' '}
           </Message>
+        </>
         )}
       </Grid.Column>
     </Grid>

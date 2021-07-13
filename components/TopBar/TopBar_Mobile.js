@@ -17,6 +17,18 @@ const TopBar = () => {
   const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
   const [jiggle, setJiggle] = useState(false);
+  const [qty, setQty] = useState(0);
+
+  useEffect(() => {
+    if (orderItems && orderItems.length !== 0) {
+      let q = 0;
+      orderItems.forEach((item) => {
+        q = q + item.quantity;
+      });
+      setQty(q);
+    }
+    else setQty(0)
+  }, [orderItems]);
 
   useEffect(() => {
     setJiggle(!jiggle);
@@ -41,20 +53,22 @@ const TopBar = () => {
         <Transition animation="jiggle" duration={600} visible={jiggle}>
           {/* <div style={{ marginTop: 5 }}> */}
           {showCheckoutButton && (
-            <div>
-              <Button
-                style={{
-                  backgroundColor: '#ff614d',
-                  color: 'white',
-                  width: 80,
-                  borderRadius: 30,
-                  marginLeft: 10
-                }}
-                onClick={() => setOpenCheckOutList(!openCheckOutList)}>
-                <Icon name="shop" /> {orderItems && orderItems.length}
-              </Button>
-            </div>
-          )}
+              <div>
+                <Button
+                  style={{
+                    backgroundColor: "#ff614d",
+                    color: "white",
+                    width: 60,
+                    borderRadius: 30,
+                    marginLeft: 10,
+                    padding: "10px 0 10px 0",
+                  }}
+                  onClick={() => setOpenCheckOutList(!openCheckOutList)}
+                >
+                  <Icon name="shop" />{" "} {qty}
+                </Button>
+              </div>
+            )}
           {/* </div> */}
         </Transition>
       </div>

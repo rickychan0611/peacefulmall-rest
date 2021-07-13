@@ -84,7 +84,7 @@ const SidebarContainer = styled(Sidebar)`
   background-color: white;
   position: fixed !important;
   box-shadow: 10px 0px 25px rgba(0, 0, 0, 0.3);
-  max-width: 320px;
+  max-width: 90vw;
 `;
 const EmptyMsg = styled.div`
   display: flex;

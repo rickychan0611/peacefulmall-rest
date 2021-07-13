@@ -25,11 +25,21 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
   const { t } = useTranslation('home');
   const [openDropdownMenu, setOpenDropdownMenu] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies();
+  const [qty, setQty] = useState(0);
 
+  useEffect(() => {
+    if (orderItems && orderItems.length !== 0) {
+      let q = 0;
+      orderItems.forEach((item) => {
+        q = q + item.quantity;
+      });
+      setQty(q);
+    }
+    else setQty(0)
+  }, [orderItems]);
   useEffect(() => {
     setJiggle(!jiggle);
   }, [orderItems]);
-
   useEffect(() => {
     console.log('showCheckoutButton', showCheckoutButton);
   }, [showCheckoutButton]);
@@ -144,22 +154,21 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
           />
         </Item>
 
-        
-          <Transition animation="jiggle" duration={600} visible={jiggle}>
-            {showCheckoutButton && (
-              <Button
-                style={{
-                  backgroundColor: '#ff614d',
-                  marginRight: 10,
-                  color: 'white',
-                  width: 80,
-                  borderRadius: 30
-                }}
-                onClick={() => setOpenCheckOutList(!openCheckOutList)}>
-                <Icon name="shop" /> {orderItems && orderItems.length}
-              </Button>
-            )}
-          </Transition>
+        <Transition animation="jiggle" duration={600} visible={jiggle}>
+          {showCheckoutButton && (
+            <Button
+              style={{
+                backgroundColor: '#ff614d',
+                marginRight: 10,
+                color: 'white',
+                width: 80,
+                borderRadius: 30
+              }}
+              onClick={() => setOpenCheckOutList(!openCheckOutList)}>
+              <Icon name="shop" /> {" "} {qty}
+            </Button>
+          )}
+        </Transition>
       </Row>
     </>
   );

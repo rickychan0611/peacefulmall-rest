@@ -31,7 +31,7 @@ const Shop_Desktop = () => {
           <ShopSideBar shop={currentShop} />
         </Grid.Column>
 
-        <Grid.Column width={12} style={{ padding: '0 20px' }}>
+        <Grid.Column width={12} style={{ padding: '80px 20px' }}>
           <div>
             <Wrapper>
               {currentShop.logo ? (
@@ -44,6 +44,10 @@ const Shop_Desktop = () => {
                 <Description style={{ marginBottom: 60 }}>{currentShop.description}</Description>
               </div>
             </Wrapper>
+            <Ref innerRef={contextRef}>
+              <RestaurantMenu t={t} contextRef={contextRef} />
+            </Ref>
+            
             <Section id="popular">
               <Slider topic={t('PopularItems')} hideViewAll>
                 {currentShopProducts ? (
@@ -54,9 +58,6 @@ const Shop_Desktop = () => {
               </Slider>
             </Section>
 
-            <Ref innerRef={contextRef}>
-              <RestaurantMenu t={t} contextRef={contextRef} />
-            </Ref>
             <br />
             <hr />
             <br />

@@ -85,11 +85,6 @@ const ProfileForm = () => {
     setEditedUser(user);
   }, [user]);
 
-  // useEffect(() => {
-  //   setEditedUser((prev) => prev);
-  //   editedUser.log('edituser', editedUser);
-  // }, [user]);
-
   return (
     <>
       {editedUser && (

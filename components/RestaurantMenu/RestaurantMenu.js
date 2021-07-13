@@ -1,25 +1,37 @@
-import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/router';
-import styled from 'styled-components';
-import { Label, Sticky } from 'semantic-ui-react';
-
-import { useRecoilState } from 'recoil';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import styled from "styled-components";
+import { Label, Sticky } from "semantic-ui-react";
+import { Divider } from "semantic-ui-react";
+import { useRecoilState } from "recoil";
 import {
   currentShop as currentShopAtom,
-  currentShopProducts as currentShopProductsAtom
-} from '../../data/atoms';
+  currentShopProducts as currentShopProductsAtom,
+  currentShopPoplularProducts as currentShopPoplularProductsAtom,
+  searchResults as searchResultsAtom,
+  searchValue as searchValueAtom,
+} from "../../data/atoms";
 
-import MenuItem from '../../components/MenuItem/MenuItem.js';
-import Slider from '../Slider/Slider.js';
-import { useIsMobile } from '../../util/useScreenSize.js';
+import ShopDishCards from "../../components/ShopDishCards";
+import Slider from "../Slider/Slider.js";
+import { useIsMobile } from "../../util/useScreenSize.js";
+import { useIsDesktop } from "../../util/useScreenSize.js";
 
-const RestaurantMenu = ( {contextRef, t} ) => {
+import { trackWindowScroll } from "react-lazy-load-image-component";
+
+const RestaurantMenu = ({ contextRef, t }) => {
   const router = useRouter();
+  const isDesktop = useIsDesktop();
   const isMobile = useIsMobile();
-  const [loading, setLoading] = useState(true);
-  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
-  const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
-
+  const [, setLoading] = useState(true);
+  const [currentShop] = useRecoilState(currentShopAtom);
+  const [currentShopProducts] = useRecoilState(currentShopProductsAtom);
+  const [currentShopPoplularProducts] = useRecoilState(
+    currentShopPoplularProductsAtom
+  );
+  const [searchResults, setSearchResults] = useRecoilState(searchResultsAtom);
+  const [searchValue] = useRecoilState(searchValueAtom);
+  
   useEffect(() => {
     // console.log(currentShop && currentShop.shop_categories);
     try {
@@ -62,36 +74,105 @@ const RestaurantMenu = ( {contextRef, t} ) => {
           </Slider>
         </Sticky>
 
-        {/* Menu cards*/}
-        {currentShop && currentShop.shop_categories && currentShop.shop_categories[0] &&
-          currentShop.shop_categories.map((cat, i) => {
-            let isEmpty = true;
-            if (cat.category_name !== 'Popular Items') {
-              return (
-                <MenuContainer key={i}>
-                  <CatTitle id={cat.id} isMobile={isMobile}>
-                    <div className="jumptarget">{cat.category_name}</div>
-                  </CatTitle>
-                  {/* <hr/> */}
-                  <MenuItemsWrapper isMobile={isMobile}>
-                    {currentShopProducts &&
-                      currentShopProducts.map((product) => {
-                        if (
-                          product.shop_categories.findIndex((item) => item.id === cat.id) !== -1
-                        ) {
-                          isEmpty = false;
-                          return <MenuItem item={product} key={product.id} />;
-                        }
-                      })}
-                  </MenuItemsWrapper>
+       {/* Menu cards*/}
+      {/******** Search Results| 搜索结果 ********/}
+      {isDesktop ? (
+        <div id="result" style={{ paddingTop: 1 }} />
+      ) : (
+        <div id="result" style={{ paddingTop: 190, marginTop: -190 }} />
+      )}
 
-                  {isEmpty && <div style={{ borderTop: '1px solid #dadada' }}>No item found.</div>}
-                </MenuContainer>
-              );
-            }
-          })}
-        <br />
-      </div>
+      {searchResults && searchResults[0] &&
+        <MenuContainer>
+          <>
+            <CatTitle isMobile={isMobile}>
+              <div className="jumptarget">{searchResults.length} results found for "{searchValue}" | 搜索结果</div>
+            </CatTitle>
+            <Divider />
+            <CardContainer isMobile={isMobile}>
+              {searchResults ?
+                searchResults.map((product) => {
+                  return <ShopDishCards item={product} key={product.id} />;
+                }) :
+                <div>No result found.</div>
+              }
+            </CardContainer>
+          </>
+        </MenuContainer>
+      }
+
+      {/******** Most Popular | 本店最热 ********/}
+      {/* <MenuContainer>
+        {isDesktop ? (
+          <div id="popular" style={{ paddingTop: 1 }} />
+        ) : (
+          <div id="popular" style={{ paddingTop: 190, marginTop: -190 }} />
+        )}
+        <CatTitle isMobile={isMobile}>
+          <div className="jumptarget">Most Popular | 本店最热</div>
+        </CatTitle>
+        <Divider />
+        <CardContainer isMobile={isMobile}>
+          {currentShopPoplularProducts &&
+            currentShopPoplularProducts.map((product) => {
+              return <ShopDishCards item={product} key={product.id} />;
+            })}
+          {!currentShopPoplularProducts[0] && <div>No item found.</div>}
+        </CardContainer>
+      </MenuContainer> */}
+
+      {
+        currentShop &&
+        currentShop.shop_categories &&
+        currentShop.shop_categories[0] &&
+        currentShop.shop_categories.map((cat, i) => {
+          let isEmpty = true;
+          if (cat.category_name !== "Popular Items") {
+            return (
+              <MenuContainer key={i}>
+                {/* Anchor point for desktop and non desktop */}
+                {/* {isDesktop && <Anchor id={cat.id} isDesktop={isDesktop}></Anchor>} */}
+                {isDesktop ? (
+                  <div id={cat.id} style={{ paddingTop: 1 }} />
+                ) : (
+                  <div
+                    id={cat.id}
+                    style={{ paddingTop: 190, marginTop: -190 }}
+                  />
+                )}
+
+                <CatTitle isMobile={isMobile}>
+                  <div className="jumptarget">{cat.category_name}</div>
+                </CatTitle>
+                <Divider />
+                {/* <hr/> */}
+                <CardContainer isMobile={isMobile}>
+                  {currentShopProducts &&
+                    currentShopProducts.map((product) => {
+                      if (
+                        product.shop_categories.findIndex(
+                          (item) => item.id === cat.id
+                        ) !== -1
+                      ) {
+                        isEmpty = false;
+                        return (
+                          <ShopDishCards item={product} key={product.id} />
+                        );
+                      }
+                    })}
+                </CardContainer>
+                {isEmpty && (
+                  <div style={{ borderTop: "1px solid #dadada" }}>
+                    No item found.
+                  </div>
+                )}
+              </MenuContainer>
+            );
+          }
+        })
+      }
+      <br />
+    </div >
   );
 };
 
@@ -106,39 +187,43 @@ const LabelContainer = styled.div({
   backgroundColor: "#e8ebe9",
   color: "black"
 });
-
-const MenuContainer = styled.div`
-  margin-bottom: 30px;
-`;
-
 const CatWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  width: 100%;
-  background-color: white;
-  padding: 10px 0;
-  max-height: 104px;
-`;
-const MenuItemsWrapper = styled.div`
-  display: flex;
-  flex-direction: ${(p) => (p.isMobile ? 'column' : 'row')};
-  flex-wrap: ${(p) => (p.isMobile ? 'nowrap' : 'wrap')};
-  justify-content: space-between;
-`;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      width: 100%;
+      min-width: 100px;
+      background-color: white;
+      padding: 15px 0 8px 0;
+      max-height: 140px;
+      `;
+const CardContainer = styled.div`
+      padding-bottom: 30px;
+      display: grid;
+      grid-gap: ${(p) => (p.isMobile && !p.toggle ? "10px" : "15px")};
+      grid-template-columns: ${(p) =>
+    p.isMobile
+      ? "repeat(auto-fill, minmax(150px, 1fr))"
+      : "repeat(auto-fill, minmax(200px, 1fr))"};
+      `;
+const Anchor = styled.div`
+      display: block;
+      position: relative;
+      top: 500;
+      visibility: hidden;
+      margin-top: -500;
+      padding: 500;
+      `;
+const MenuContainer = styled.div`
+      margin-bottom: 30px;
+      `;
 const CatTitle = styled.div`
-  font-size: 24px;
-  font-weight: bold;
-  /* scroll-margin-top: 160px;
-  scroll-snap-margin-top: 160px; */
-  padding-bottom: 10px;
-
-  .jumptarget::before {
-    content: '';
-    display: block;
-    height: ${(p) => (p.isMobile ? '190px' : '220px')}; /* anchor fixed header height*/
-    margin: ${(p) =>
-      p.isMobile ? '-190px 0 0' : '-220px 0 0'}; /* anchor negative fixed header height */
-  }
-`;
-export default RestaurantMenu;
+      font-size: 24px;
+      font-weight: bold;
+      line-height: normal;
+      /* scroll-margin-top: 160px;
+      scroll-snap-margin-top: 160px; */
+      padding-bottom: 10px;
+      /* margin-top: 30px; */
+      `;
+export default trackWindowScroll(RestaurantMenu);

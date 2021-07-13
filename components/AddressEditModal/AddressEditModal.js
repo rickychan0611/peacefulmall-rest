@@ -19,8 +19,13 @@ const AddressEditModal = ({
 
   const formItems = [
     {
-      label: t`Receiver's name`,
-      key: 'name',
+      label: t`FirstName`,
+      key: 'first_name',
+      required: true
+    },
+    {
+      label: t`LastName`,
+      key: 'last_name',
       required: true
     },
     {
@@ -56,9 +61,10 @@ const AddressEditModal = ({
   ];
 
   return (
-    <Modal open={open} style={{maxWidth: 400}}>
+    <Modal open={open} style={{ maxWidth: 400 }}>
+      <Form onSubmit={() => { saveAddressQuery() }}
+        style={{ padding: 20 }}>
       <Header content={selectedAddress && t(selectedAddress.type).toUpperCase()} />
-      <Form onSubmit={saveAddressQuery} style={{ padding: 20 }}>
         {formItems.map((item, i) => {
           return item.key === 'phone' ? (
             <Form.Input
@@ -109,7 +115,7 @@ const AddressEditModal = ({
           <Icon name="remove" /> {t`Cancel`}
         </Button>
         <Button
-          type="submit"
+          content='Submit'
           style={{ backgroundColor: '#ff614d', color: 'white', marginLeft: 10 }}
         >
           {loading ? (

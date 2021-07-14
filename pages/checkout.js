@@ -49,7 +49,8 @@ const checkout = () => {
   useEffect(() => {
     user &&
       setPickupInfo({
-        name: user.first_name + ' ' + user.last_name,
+        first_name: user.first_name,
+        last_name: user.last_name,
         phone: user.phone
       });
   }, [user]);
@@ -114,7 +115,7 @@ const checkout = () => {
       if (orderDetails.shippingMethod.id !== 1 && !defaultAddress) {
         throw new Error('Missing address. Please add an address');
       }
-      if (orderDetails.shippingMethod.id == 1 && (!pickUpInfo.name || !pickUpInfo.phone)) {
+      if (orderDetails.shippingMethod.id == 1 && (!pickUpInfo.first_name || !pickUpInfo.last_name || !pickUpInfo.phone)) {
         throw new Error('Name and phone number are required');
       } else {
         const body =
@@ -299,12 +300,10 @@ const checkout = () => {
                     {orderDetails.shop.name}
                     <br />
                     {orderDetails.shop.address_line ? (
-                      orderDetails.shop.address_line + orderDetails.shop.address_city &&
-                      ', ' + orderDetails.shop.address_city + orderDetails.shop.address_province &&
-                      ', ' +
-                        orderDetails.shop.address_province +
-                        orderDetails.shop.address_post_code &&
-                      ', ' + orderDetails.shop.address_post_code
+                      orderDetails.shop.address_line + 
+                      (orderDetails.shop.address_city && ', ' + orderDetails.shop.address_city) + 
+                      (orderDetails.shop.address_province && ', ' + orderDetails.shop.address_province) 
+                      // (orderDetails.shop.address_post_code &&  ', ' + orderDetails.shop.address_post_code)
                     ) : (
                       <>
                         <Icon name="info circle" /> For more information, please call{' '}
@@ -326,7 +325,7 @@ const checkout = () => {
                           mask="999-999-9999"
                           maskChar="_"
                           alwaysShowMask
-                          placeholder="Your phone number"
+                          placeholder="Your Phone Number"
                           value={pickUpInfo.phone}
                           onChange={(e) => {
                             handlePickupChange(e.target.value, 'phone');
@@ -336,11 +335,20 @@ const checkout = () => {
                     />
                     <Form.Input
                       required
-                      label="Your Name"
-                      placeholder="Your Name"
-                      value={pickUpInfo.name}
+                      label="Your first name"
+                      placeholder="First Name"
+                      value={pickUpInfo.first_name}
                       onChange={(e) => {
-                        handlePickupChange(e.target.value, 'name');
+                        handlePickupChange(e.target.value, 'first_name');
+                      }}
+                    />
+                    <Form.Input
+                      required
+                      label="Your last name"
+                      placeholder="Last Name"
+                      value={pickUpInfo.last_name}
+                      onChange={(e) => {
+                        handlePickupChange(e.target.value, 'last_name');
                       }}
                     />
                   </Form.Group>
@@ -371,7 +379,7 @@ const checkout = () => {
                     <EditButton add />
                   )}
                 </H4>
-                <H4>{defaultAddress && 'Receiver: ' + defaultAddress.name.toUpperCase()} </H4>
+                <H4>{defaultAddress && 'Receiver: ' + defaultAddress.first_name + " " + defaultAddress.last_name} </H4>
                 <Form>
                   <Form.Group widths="equal">
                     <Form.Input
@@ -406,7 +414,7 @@ const checkout = () => {
             )}
 
             <Header>Order Summary</Header>
-            <p stype={{ margin: 0 }}>You can click item to edit</p>
+            <p stype={{ margin: 0 }}>You can click on an item to edit</p>
             {orderDetails.orderItems &&
               orderDetails.orderItems[0] &&
               orderDetails.orderItems.map((item, i) => {

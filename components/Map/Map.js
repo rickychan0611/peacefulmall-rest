@@ -23,7 +23,7 @@ export default function Map({
   setRunDirectionsService
 }) {
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_process.env.NEXT_PUBLIC_MAP_API // ,
+    googleMapsApiKey: process.env.NEXT_PUBLIC_MAP_API // ,
     // ...otherOptions
   });
 

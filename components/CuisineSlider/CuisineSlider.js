@@ -30,7 +30,7 @@ import {
 //   { name: 'Mexcian', img: 'mexcian-thumb.jpg' }
 // ];
 
-const CuisineSlider = ( {sliderCats, cacheDate} ) => {
+const CuisineSlider = ( {sliderCats} ) => {
   const isMobile = useIsMobile();
   const [currentCat, setCurrentCat] = useRecoilState(currentCatAtom);
   // const [sliderCats, setSliderCats] = useRecoilState(sliderCatsAtom);

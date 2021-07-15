@@ -62,7 +62,7 @@ export const currentCat = atom({
 
 export const sliderCats = atom({
   key: 'sliderCats',
-  default: null
+  default: []
 });
 
 export const searchValue = atom({

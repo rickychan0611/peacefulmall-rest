@@ -17,40 +17,24 @@ import useTranslation from 'next-translate/useTranslation';
 
 import PlaceHolder_Card from '../PlaceHolder_Card';
 
-const ShopCards = () => {
+const ShopCards = ({shops}) => {
   const router = useRouter();
   const [dishes, setDishes] = useState([]);
   const isMobile = useIsMobile();
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [currentCat, setCurrentcat] = useRecoilState(currentCatAtom);
-  const [shops, setShops] = useState(null);
   const [loading, setLoading] = useState(false);
   const { t } = useTranslation('home');
 
-  //get products from server when component is loaded
-  useEffect(async () => {
-    setLoading(true);
-    console.log('plat_category reload', currentCat ? currentCat.id : 'all');
-    const getShops = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shops', {
-      params: {
-        type: 'all',
-        shop_type: 'all',
-        count: '20'
-      }
-    });
-    setShops(getShops.data.data);
-    setLoading(false);
-  }, [currentCat]);
-
   return (
     <>
-      {loading ? (
+      {loading || !shops ? (
         <PlaceHolder_Card size={302} />
       ) : (
         <>
           {shops &&
-            shops[0] &&
+            shops[0] ?
             shops.map((shop, i) => {
               return (
                 <Card
@@ -76,7 +60,7 @@ const ShopCards = () => {
                   <Description>{t('Reviews')}: ⭐⭐⭐⭐⭐ (34)</Description>
                 </Card>
               );
-            })}
+            }) : <>No item found</>}
         </>
       )}
     </>

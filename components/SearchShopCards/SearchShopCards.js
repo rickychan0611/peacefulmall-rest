@@ -54,7 +54,7 @@ const SearchShopCards = ({ shops }) => {
                     <Description>
                       {t('style')}: {'shop.cuisine_type'}
                     </Description>
-                    <Description>{t('PriceRange')}: 💲💲💲💲</Description>
+                    {/* <Description>{t('PriceRange')}: 💲💲💲💲</Description> */}
                     <Description>{t('Reviews')}: ⭐⭐⭐⭐⭐ (34)</Description>
                   </div>
                 </Card>

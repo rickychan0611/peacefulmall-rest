@@ -117,6 +117,8 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
                       onClick={() => {
                         removeCookie('userToken');
                         localStorage.removeItem('user');
+                        localStorage.removeItem('currentPosition');
+                        localStorage.removeItem('orderItems');
                         setUser(null);
                         setOpenSideMenu(false);
                         setOpenDropdownMenu(false);

@@ -56,7 +56,7 @@ const ShopCards = ({shops}) => {
                   {/* <Description>{item.description}</Description> */}
                   <Description>{t('location')}: {shop.address_city}</Description>
                   <Description>{t('style')}: {"shop.cuisine_type"}</Description>
-                  <Description>{t('PriceRange')}: 💲💲💲💲</Description>
+                  {/* <Description>{t('PriceRange')}: 💲💲💲💲</Description> */}
                   <Description>{t('Reviews')}: ⭐⭐⭐⭐⭐ (34)</Description>
                 </Card>
               );

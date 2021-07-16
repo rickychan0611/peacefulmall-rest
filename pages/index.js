@@ -1,10 +1,6 @@
 import { createRef, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { useIsMobile } from '../util/useScreenSize';
 import useTranslation from 'next-translate/useTranslation';
 import axios from 'axios';
-
-import moment from 'moment';
 import { Container, Image, Ref, Icon, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
 import DishCards from '../components/DishCards';
@@ -17,16 +13,32 @@ import ReviewCards from '../components/ReviewCards';
 import CheckOutListPusher from '../components/CheckOutListPusher';
 import CurrentAddress from '../components/CurrentAddress';
 import { useRecoilState } from 'recoil';
-import { sliderCats as sliderCatsAtom } from '../data/atoms.js';
+import { currentPosition as currentPositionAtom } from '../data/atoms';
+import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 
 const Home = () => {
   let contextRef = createRef();
   const { t } = useTranslation('home');
   const [result, setResult] = useState({});
+  const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
+
+  const currentLatLng = () => {
+    {
+      currentPosition &&
+      geocodeByAddress(currentPosition.detail_address + " " + currentPosition.city + " " + currentPosition.province + " " + currentPosition.country)
+        .then(results => getLatLng(results[0]))
+        .then(({ lat, lng }) => {
+          console.log('Successfully got latitude and longitude', { lat, lng })
+          if (lat !== currentPosition.lat || lng !== currentPosition.lng) {
+            setCurrentPosition(prev => ({ ...prev, lat, lng }))
+          }
+        }
+        );
+    }
+  }
 
   const query = async (topic, api, params) => {
     const res = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/' + api, { params });
-    console.log("res", res)
     setResult(prev => ({ ...prev, [topic]: res.data.data }))
   }
 
@@ -42,6 +54,23 @@ const Home = () => {
     }
   }, [])
 
+  useEffect(async () => {
+    try {
+      await currentLatLng()
+      console.log("currentPosition", currentPosition)
+      query("nearby", "shops/nearby", {
+        latitude: currentPosition.lat, longitude: currentPosition.lng, radius: 1000
+      });
+    }
+    catch (err) {
+      console.log("query err:", err)
+    }
+  }, [currentPosition])
+
+  // useEffect(async () => {
+  //   console.log("result", result)
+  // }, [result])
+
   return (
     <>
       <CheckOutListPusher>
@@ -50,12 +79,16 @@ const Home = () => {
           <div>
             <Sticky offset={62} context={contextRef}>
               <SearchBanner />
+              <CurrentAddress />
             </Sticky>
 
-            <CurrentAddress />
             <Container style={{ marginTop: '2em' }}>
 
               <CuisineSlider sliderCats={result.platcat} />
+
+              <Slider topic={"Restaurants near you"} icon="store">
+                <ShopCards shops={result.nearby} />
+              </Slider>
 
               <Slider topic={t('discountedDishes')} icon="food">
                 <DishCards products={result.discount} />
@@ -69,12 +102,9 @@ const Home = () => {
                 <ShopCards shops={result.allShops} />
               </Slider>
 
-              <Slider topic={"Restaurants near you"} icon="store">
+              {/* 
+              <Slider topic={t('Featured')} icon="store">
                 <ShopCards shops={result.allShops} />
-              </Slider>
-
-              {/* <Slider topic={t('Featured')} icon="store">
-                <ShopCards shops={shops} />
               </Slider> */}
               {/* <Slider topic={t('UserReviews')} icon="star">
                 <ReviewCards shops={shops}/>

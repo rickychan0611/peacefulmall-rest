@@ -10,7 +10,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentPosition as currentPositionAtom,
   addresses as addressAtom,
-  useDefaultAddress as useDefaultAddressAtom
+  useDefaultAddress as useDefaultAddressAtom,
 } from '../../data/atoms';
 import LocationInput from '../LocationInput';
 import GooglePlacesAutocomplete, {
@@ -27,9 +27,11 @@ export const validateAddress = (address, user, initial) => {
       ? {
           type: 'create',
           default_status: 0,
-          name: user.first_name + ' ' + user.last_name
+          first_name: user.first_name,
+          last_name: user.last_name,
+          phone: user.phone
         }
-      : { name: '' };
+      : { first_name: '', last_name: '' };
 
     console.log('address', address);
     const street_number = address.findIndex((item) => item.types[0] === 'street_number');
@@ -78,7 +80,6 @@ const CurrentAddress = () => {
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies] = useCookies(null);
   const [addresses, setAddresses] = useRecoilState(addressAtom);
-  const [useDefaultAddress, setUseDefaultAddress] = useRecoilState(useDefaultAddressAtom);
   const [openNew, setOpenNew] = useState(false);
   const [color, setColor] = useState(0);
   const [err, setErr] = useState(false);
@@ -90,7 +91,8 @@ const CurrentAddress = () => {
     try {
       const results = await geocodeByAddress(value.label);
       console.log('restult:', results[0]);
-
+      const latlng = await getLatLng(results[0])
+      console.log('latlng:', latlng);
       const body = await validateAddress(results[0].address_components, user);
       console.log('current address body:', body);
 
@@ -102,6 +104,8 @@ const CurrentAddress = () => {
         headers: { Authorization: cookies.userToken }
       });
       setAddresses(newAddresses.data.data);
+      setCurrentPosition(newAddresses.data.data[0]);
+      setOpenAddressMenu(false);
       setLoading(false);
       setOpenNew(false);
       colorChange();
@@ -120,11 +124,6 @@ const CurrentAddress = () => {
       if (i <= 0) clearInterval(countDown);
     }, 10);
   };
-
-  // useEffect(() => {
-  //   console.log(color);
-  //   console.log('currentPosition');
-  // }, [color]);
 
   return (
     <>
@@ -145,9 +144,6 @@ const CurrentAddress = () => {
                 {' '}
                 {currentPosition &&
                   currentPosition.detail_address + ', ' + currentPosition.city}{' '}
-                {/* {useDefaultAddress
-                    ? useDefaultAddress.detail_address + ', ' + useDefaultAddress.city
-                    : currentPosition.address}{' '} */}
               </span>
             </Address>
           </div>
@@ -173,6 +169,7 @@ const CurrentAddress = () => {
                         key={i}
                         onClick={() => {
                           // setUseDefaultAddress(address);
+                          console.log("address" , address)
                           setCurrentPosition(address);
                           localStorage.setItem('currentPosition', JSON.stringify(address));
                           setOpenAddressMenu(false);
@@ -189,7 +186,7 @@ const CurrentAddress = () => {
                             padding: 10,
                             borderBottom: '1px solid #dbdbd7'
                           }}>
-                          <Radio checked={address === currentPosition} style={{ marginRight: 7 }} />
+                          <Radio checked={address.detail_address === currentPosition.detail_address} style={{ marginRight: 7 }} />
                           {address.detail_address}, {address.city}
                         </H4>
                       </div>
@@ -216,9 +213,9 @@ const CurrentAddress = () => {
                   </Button>
                   {err && (
                     <div style={{ color: 'red', marginTop: 5 }}>
-                      Oops! The address you entered is not accurate enough.
+                      Oops! The address you've entered is not accurate enough.
                       <br />
-                      Try adding a place, a street and house number.
+                      Try adding a full address with street name and number.
                     </div>
                   )}
                 </>

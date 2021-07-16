@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 import { openSideMenu as openSideMenuAtom } from '../../data/atoms.js';
 import styled from "styled-components";
 import { user as userAtom } from '../../data/userAtom.js';
-import {  useCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 import { locales, changeLocale } from '../TopBar/TopBar';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -17,7 +17,7 @@ const SidebarMenu = () => {
 
   const handleClick = (name) => {
     router.push(name)
-    setOpenSideMenu(false)  
+    setOpenSideMenu(false)
   }
 
   return (
@@ -36,9 +36,9 @@ const SidebarMenu = () => {
       }}
     >
       <Icon name="close" size="large"
-        style={{ marginLeft: 10, marginBottom: 20, cursor: "pointer" }} 
+        style={{ marginLeft: 10, marginBottom: 20, cursor: "pointer" }}
         onClick={() => setOpenSideMenu(false)}
-        />
+      />
 
       <Menu.Item onClick={() => handleClick('/')}>
         <Icon name="home" size="large" />
@@ -55,7 +55,7 @@ const SidebarMenu = () => {
           <H4>{t('signUp')}</H4>
         </Menu.Item>
       </> : <>
-        
+
         <Menu.Item onClick={() => handleClick('/consumer/orders')}>
           <Icon name="file alternate outline" size="large" />
           <H4>{t('Orders')}</H4>
@@ -69,7 +69,9 @@ const SidebarMenu = () => {
 
         <Menu.Item onClick={() => {
           removeCookie('userToken')
-          localStorage.removeItem('user')
+          localStorage.removeItem('user');
+          localStorage.removeItem('currentPosition');
+          localStorage.removeItem('orderItems');
           setUser(null)
           router.push('/')
           setOpenSideMenu(false)
@@ -86,7 +88,7 @@ const SidebarMenu = () => {
             // console.log("item", activeItem)
             return (
               <LocaleBtn key={item.key} selected={router.locale === item.value}
-              onClick={()=>changeLocale(true,{value : item.value})}>{item.text}</LocaleBtn>
+                onClick={() => changeLocale(true, { value: item.value })}>{item.text}</LocaleBtn>
             )
           })}
         </Row>

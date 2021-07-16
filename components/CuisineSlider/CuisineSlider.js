@@ -39,7 +39,6 @@ const CuisineSlider = ( {sliderCats} ) => {
 
   return (
     <>
-    {console.log(sliderCats)}
       {!sliderCats ? (
         <div style={{ marginBottom: 20 }}>
           <SliderTitle title={t("chooseAStyle")} icon="leaf" />

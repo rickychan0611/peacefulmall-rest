@@ -7,7 +7,7 @@ export const appReady = atom({
 
 export const selections = atom({
   key: 'selections',
-  default: {cuisine: "all", category: "", restaurant: ""}
+  default: { cuisine: "all", category: "", restaurant: "" }
 });
 
 export const selectedLocation = atom({
@@ -130,10 +130,11 @@ export const scrollTop = atom({
   default: 0
 });
 
-
 export const defaultAddress = selector({
   key: 'defaultAddress',
-  get: ({get}) => {
+  get: ({ get }) => {
     return get(addresses) && get(addresses).find(item => item.default_status === 1)
   }
 })
+
+

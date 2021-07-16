@@ -9,6 +9,7 @@ import { useCookies } from 'react-cookie';
 import { useIsDesktop } from '../../util/useScreenSize';
 import ProfileForm from '../../components/ProfileForm';
 import AddressBook from '../../components/AddressBook';
+import InviteCode from '../../components/InviteCode';
 import useTranslation from 'next-translate/useTranslation';
 import { addresses as addressAtom } from '../../data/atoms';
 
@@ -37,33 +38,6 @@ const Profile = () => {
     }
   };
 
-  const getCode = async () => {
-    setLoading(true)
-    setDisableSave(true)
-    try {
-      const getCodeQuery = await axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/dist/generatecode', 
-      {body: ""},
-      {
-        headers: { Authorization: cookies.userToken },
-
-      })
-      console.log("getCodeQuery", getCodeQuery);
-      const getUser = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/info', {
-        headers: { Authorization: cookies.userToken }
-      });
-      console.log('USER DATA', getUser);
-      localStorage.setItem('user', JSON.stringify(getUser.data.data));
-      setUser(getUser.data.data);
-      setLoading(false)
-      setDisableSave(false)
-    }
-    catch (err) {
-      console.log(err)
-      setLoading(false)
-      setDisableSave(false)
-    }
-  }
-
   useEffect(() => {
     if (!localStorage.getItem('user')) router.push('/sign-in');
     else getAddressesQuery();
@@ -85,20 +59,9 @@ const Profile = () => {
             setSelectedAddress={setSelectedAddress}
             getAddressesQuery={getAddressesQuery}
           />
-          <h3>Invite Your Friends and Earn Reward Points!</h3>
-          <Divider />
-          <Button
-            content={
-              loading ? (
-                <Icon name="spinner" loading style={{ margin: "0", width: 30 }} />
-              ) : (
-                <>Generate your invite code</>
-              )
-            }
-            disabled={disableSave}
-            color="green"
-            onClick={()=>getCode()}
-          />
+
+          <InviteCode />
+
         </Container>
       )}
     </div>
@@ -109,7 +72,7 @@ const Container = styled.div`
   margin: 20px auto;
   padding: 20px;
   max-width: 900px;
-  border: ${(p) => p.isDesktop && 'solid 1px #d4d3d3'};
+  /* border: ${(p) => p.isDesktop && 'solid 1px #d4d3d3'}; */
 `;
 const SubmitButton = styled(Button)`
   background-color: #88eb6f;

@@ -12,7 +12,7 @@ import AddressBook from '../../components/AddressBook';
 import useTranslation from 'next-translate/useTranslation';
 import { addresses as addressAtom } from '../../data/atoms';
 
-const Profile = () => {
+const InviteCode = () => {
   const router = useRouter();
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies] = useCookies(null);
@@ -41,11 +41,8 @@ const Profile = () => {
     setLoading(true)
     setDisableSave(true)
     try {
-      const getCodeQuery = await axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/dist/generatecode', 
-      {body: ""},
-      {
-        headers: { Authorization: cookies.userToken },
-
+      const getCodeQuery = await axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/dist/generatecode', {
+        headers: { Authorization: cookies.userToken }
       })
       console.log("getCodeQuery", getCodeQuery);
       const getUser = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/info', {
@@ -70,50 +67,23 @@ const Profile = () => {
   }, []);
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 80px)' }}>
-      {user && (
-        <Container isDesktop={isDesktop}>
-          <h1>{t`Profile`}</h1>
-          <Divider />
-
-          <ProfileForm t={t} />
-
-          <h3>{t`Address Books`}</h3>
-          <Divider />
-          <AddressBook
-            selectedAddress={selectedAddress}
-            setSelectedAddress={setSelectedAddress}
-            getAddressesQuery={getAddressesQuery}
-          />
-          <h3>Invite Your Friends and Earn Reward Points!</h3>
-          <Divider />
-          <Button
-            content={
-              loading ? (
-                <Icon name="spinner" loading style={{ margin: "0", width: 30 }} />
-              ) : (
-                <>Generate your invite code</>
-              )
-            }
-            disabled={disableSave}
-            color="green"
-            onClick={()=>getCode()}
-          />
-        </Container>
-      )}
-    </div>
+    <>
+      <h3>Invite Your Friends and Earn Reward Points!</h3>
+      <Divider />
+      <Button
+        content={
+          loading ? (
+            <Icon name="spinner" loading style={{ margin: "0", width: 30 }} />
+          ) : (
+            <>Generate your invite Code</>
+          )
+        }
+        disabled={disableSave}
+        color="green"
+        onClick={() => getCode()}
+      />
+    </>
   );
 };
 
-const Container = styled.div`
-  margin: 20px auto;
-  padding: 20px;
-  max-width: 900px;
-  border: ${(p) => p.isDesktop && 'solid 1px #d4d3d3'};
-`;
-const SubmitButton = styled(Button)`
-  background-color: #88eb6f;
-  color: white;
-  min-width: 127px;
-`;
-export default Profile;
+export default InviteCode;

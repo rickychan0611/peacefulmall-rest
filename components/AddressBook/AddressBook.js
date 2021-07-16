@@ -87,7 +87,6 @@ const AddressBook = ({ selectedAddress, setSelectedAddress, getAddressesQuery })
         {appReady && addresses &&
           addresses[0] &&
           addresses.map((address, i) => {
-            console.log("address" , address)
             return (
               <AddressCard default={address.default_status} key={i} isMobile={isMobile}>
                 <h4 style={{margin: 0}}>

@@ -31,7 +31,7 @@ const Shop_Desktop = () => {
           <ShopSideBar shop={currentShop} />
         </Grid.Column>
 
-        <Grid.Column width={12} style={{ padding: '80px 20px' }}>
+        <Grid.Column width={12} style={{ padding: '30px 20px 80px 20px' }}>
           <div>
             <Wrapper>
               {currentShop.logo ? (

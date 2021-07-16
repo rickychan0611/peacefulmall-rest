@@ -54,8 +54,8 @@ const DishCards = ({ products }) => {
                         <Img src="/no-image.png" />
                       )}
 
-                      <Name>{item.name}</Name>
-                      <Description>{item.description}</Description>
+                      <Name className="clamp2">{item.name}</Name>
+                      <Description className="clamp2">{item.description}</Description>
                       {!item.promotion_price ? (
                         <Price>
                           <span style={{ marginRigth: 5, color: 'black' }}>${item.price}</span>

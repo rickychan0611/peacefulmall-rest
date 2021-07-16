@@ -37,16 +37,16 @@ const DishCards = ({ products }) => {
                     setCurrentShop(item.shop);
                     router.push('/item/' + item.id);
                   }}>
+                  {item.promotion_price && <Label
+                    as="a"
+                    color="red"
+                    ribbon
+                    style={{ position: 'absolute', left: -13, margin: 0 }}>
+                    {/* {item.promotion_price / item.price * 100}% OFF */}
+                    {(100 - (item.promotion_price / item.price) * 100).toFixed(0)}% OFF
+                  </Label>}
                   <Column>
                     <div>
-                      {item.promotion_price && <Label
-                        as="a"
-                        color="red"
-                        ribbon
-                        style={{ position: 'absolute', left: -13, margin: 0 }}>
-                        {/* {item.promotion_price / item.price * 100}% OFF */}
-                        {(100 - (item.promotion_price / item.price) * 100).toFixed(0)}% OFF
-                      </Label>}
 
                       {item.images && item.images[0] ? (
                         <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
@@ -54,8 +54,8 @@ const DishCards = ({ products }) => {
                         <Img src="/no-image.png" />
                       )}
 
-                      <Name className="clamp2">{item.name}</Name>
-                      <Description className="clamp2">{item.description}</Description>
+                      <Name>{item.name}</Name>
+                      <Description>{item.description}</Description>
                       {!item.promotion_price ? (
                         <Price>
                           <span style={{ marginRigth: 5, color: 'black' }}>${item.price}</span>
@@ -87,11 +87,8 @@ const DishCards = ({ products }) => {
 
 
 const Card = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
+  position: relative;
   margin: 10px;
-  width: 100%;
-  min-width: 200px;
   cursor: pointer;
 `;
 const Column = styled.div`
@@ -99,6 +96,7 @@ const Column = styled.div`
   flex-flow: column nowrap;
   justify-content: space-between;  
   height: 100%;
+  width: 200px;
 `;
 const Img = styled.img`
   width: 100%;
@@ -106,12 +104,15 @@ const Img = styled.img`
   object-fit: cover;
 `;
 const Name = styled.div`
-  padding: 7px 0px;
   font-size: 1.2rem;
   font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 const Description = styled.div`
   font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 const Price = styled.div`
   font-size: 1rem;

@@ -61,7 +61,7 @@ const Slider = ({ topic, children, icon, hideViewAll, marginBottom, hideScrollba
         innerRef={sliderRef}
         style={{
           overflow: 'auto',
-          whiteSpace: 'nowrap',
+          // whiteSpace: 'nowrap',
           display: 'flex',
           flexDiection: 'row',
           flexWrap: 'nowrap',

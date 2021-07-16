@@ -54,8 +54,8 @@ const DishCards = ({ products }) => {
                         <Img src="/no-image.png" />
                       )}
 
-                      <Name>{item.name}</Name>
-                      <Description>{item.description}</Description>
+                      <Name className="clamp2">{item.name}</Name>
+                      <Description className="clamp2">{item.description}</Description>
                       {!item.promotion_price ? (
                         <Price>
                           <span style={{ marginRigth: 5, color: 'black' }}>${item.price}</span>
@@ -87,11 +87,11 @@ const DishCards = ({ products }) => {
 
 
 const Card = styled.div`
-  display: display;
-  position: relative;
+  display: flex;
+  flex-flow: column nowrap;
   margin: 10px;
-  width: 200px;
-  
+  width: 100%;
+  min-width: 200px;
   cursor: pointer;
 `;
 const Column = styled.div`
@@ -106,15 +106,12 @@ const Img = styled.img`
   object-fit: cover;
 `;
 const Name = styled.div`
+  padding: 7px 0px;
   font-size: 1.2rem;
   font-weight: bold;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 const Description = styled.div`
   font-size: 1rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 const Price = styled.div`
   font-size: 1rem;

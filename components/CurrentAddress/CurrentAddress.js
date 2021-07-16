@@ -25,12 +25,12 @@ export const validateAddress = (address, user, initial) => {
   return new Promise((resolve, reject) => {
     let obj = !initial
       ? {
-          type: 'create',
-          default_status: 0,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          phone: user.phone
-        }
+        type: 'create',
+        default_status: 0,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        phone: user.phone
+      }
       : { first_name: '', last_name: '' };
 
     console.log('address', address);
@@ -93,18 +93,24 @@ const CurrentAddress = () => {
       console.log('restult:', results[0]);
       const latlng = await getLatLng(results[0])
       console.log('latlng:', latlng);
-      const body = await validateAddress(results[0].address_components, user);
-      console.log('current address body:', body);
 
-      await axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/address/set', body, {
-        headers: { Authorization: cookies.userToken }
-      });
+      if (user) {
+        const body = await validateAddress(results[0].address_components, user);
+        console.log('current address body:', body);
 
-      const newAddresses = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/address', {
-        headers: { Authorization: cookies.userToken }
-      });
-      setAddresses(newAddresses.data.data);
-      setCurrentPosition(newAddresses.data.data[0]);
+        await axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/address/set', body, {
+          headers: { Authorization: cookies.userToken }
+        });
+
+        const newAddresses = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/user/address', {
+          headers: { Authorization: cookies.userToken }
+        });
+        setAddresses(newAddresses.data.data);
+        setCurrentPosition(newAddresses.data.data[0]);
+      }
+      else {
+        setCurrentPosition({ detail_address: value.label, lat: latlng.lat, lng: latlng.lng });
+      }
       setOpenAddressMenu(false);
       setLoading(false);
       setOpenNew(false);
@@ -142,8 +148,7 @@ const CurrentAddress = () => {
               {isMobile && <br />}
               <span>
                 {' '}
-                {currentPosition &&
-                  currentPosition.detail_address + ', ' + currentPosition.city}{' '}
+                {currentPosition && currentPosition.detail_address}
               </span>
             </Address>
           </div>
@@ -169,7 +174,7 @@ const CurrentAddress = () => {
                         key={i}
                         onClick={() => {
                           // setUseDefaultAddress(address);
-                          console.log("address" , address)
+                          console.log("address", address)
                           setCurrentPosition(address);
                           localStorage.setItem('currentPosition', JSON.stringify(address));
                           setOpenAddressMenu(false);

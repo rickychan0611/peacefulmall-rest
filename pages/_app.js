@@ -112,7 +112,7 @@ const InitApp = ({ children }) => {
       function error(err) {
         console.log(err);
         alert(
-          'Please enable geolocation of your browser, so that we can find restaurants close to you :)'
+          'Please enable geolocation of your browser, so that we can bring the best experience to you :)'
         );
       }
 

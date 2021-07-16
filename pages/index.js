@@ -25,15 +25,15 @@ const Home = () => {
   const currentLatLng = () => {
     {
       currentPosition &&
-      geocodeByAddress(currentPosition.detail_address + " " + currentPosition.city + " " + currentPosition.province + " " + currentPosition.country)
-        .then(results => getLatLng(results[0]))
-        .then(({ lat, lng }) => {
-          console.log('Successfully got latitude and longitude', { lat, lng })
-          if (lat !== currentPosition.lat || lng !== currentPosition.lng) {
-            setCurrentPosition(prev => ({ ...prev, lat, lng }))
+        geocodeByAddress(currentPosition.detail_address + " " + currentPosition.city + " " + currentPosition.province + " " + currentPosition.country)
+          .then(results => getLatLng(results[0]))
+          .then(({ lat, lng }) => {
+            console.log('Successfully got latitude and longitude', { lat, lng })
+            if (lat !== currentPosition.lat || lng !== currentPosition.lng) {
+              setCurrentPosition(prev => ({ ...prev, lat, lng }))
+            }
           }
-        }
-        );
+          );
     }
   }
 
@@ -55,12 +55,18 @@ const Home = () => {
   }, [])
 
   useEffect(async () => {
+    //If there is no current position, get all shops
     try {
-      await currentLatLng()
-      console.log("currentPosition", currentPosition)
-      query("nearby", "shops/nearby", {
-        latitude: currentPosition.lat, longitude: currentPosition.lng, radius: 1000
-      });
+      if (currentPosition) {
+        await currentLatLng()
+        console.log("currentPosition", currentPosition)
+        query("nearby", "shops/nearby", {
+          latitude: currentPosition.lat, longitude: currentPosition.lng, radius: 1000
+        });
+      }
+      else {
+        query("nearby", "shops", { shop_type: 'all', type: 'all', count: '20' });
+      }
     }
     catch (err) {
       console.log("query err:", err)

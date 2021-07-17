@@ -24,7 +24,7 @@ import { user as userAtom, userdata } from '../../data/userAtom';
 import { addresses as addressAtom, loginPending as loginPendingAtom } from '../../data/atoms';
 import useTranslation from 'next-translate/useTranslation';
 
-const SigningForms = ({ signUp }) => {
+const SigningForms = ({ signUp, code }) => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [err, setErr] = useState({});
@@ -37,7 +37,8 @@ const SigningForms = ({ signUp }) => {
 
   const [inputs, setInputs] = useState({
     email: '',
-    password: ''
+    password: '',
+    code
   });
 
   const handleSignUp = async () => {
@@ -102,7 +103,7 @@ const SigningForms = ({ signUp }) => {
     } catch (err) {
       console.log(err);
       setLoading(false);
-      setErr({message: err.message})
+      setErr({ message: err.message })
     }
   };
 
@@ -219,34 +220,48 @@ const SigningForms = ({ signUp }) => {
             </PasswordWrapper>
 
             {signUp && (
-              <PasswordWrapper>
-                <Input
-                  required
-                  fluid
-                  icon="lock"
-                  iconPosition="left"
-                  placeholder={t('ConfirmPassword')}
-                  type={showPassword ? 'text' : 'password'}
-                  label={{
-                    content: <Icon name={showPassword ? 'eye' : 'eye slash'} />,
-                    basic: true,
-                    onClick: () => setShowPassword(!showPassword)
-                  }}
-                  labelPosition="right"
-                  value={inputs.confirmPassword}
-                  onChange={(e) => handleChange(e, 'confirmPassword')}
-                />
-                {err.confirmPassword && (
-                  <Label
-                    basic
-                    color="red"
-                    pointing
-                    style={{ borderRadius: 5 }}
-                    content={err.confirmPassword}
+              <>
+                <PasswordWrapper>
+                  <Input
+                    required
+                    fluid
+                    icon="lock"
+                    iconPosition="left"
+                    placeholder={t('ConfirmPassword')}
+                    type={showPassword ? 'text' : 'password'}
+                    label={{
+                      content: <Icon name={showPassword ? 'eye' : 'eye slash'} />,
+                      basic: true,
+                      onClick: () => setShowPassword(!showPassword)
+                    }}
+                    labelPosition="right"
+                    value={inputs.confirmPassword}
+                    onChange={(e) => handleChange(e, 'confirmPassword')}
                   />
-                )}
-              </PasswordWrapper>
-            )}
+                  {err.confirmPassword && (
+                    <Label
+                      basic
+                      color="red"
+                      pointing
+                      style={{ borderRadius: 5 }}
+                      content={err.confirmPassword}
+                    />
+                  )}
+                </PasswordWrapper>
+                <Form.Input
+                  fluid
+                  icon="heart"
+                  iconPosition="left"
+                  placeholder={"Invite Code"}
+                  value={inputs.code}
+                  onChange={(e) => handleChange(e, 'code')}
+                  error={err.code}
+                  type="text"
+                  disabled={!!code}
+                />
+              </>
+            )
+            }
             <Button
               type="submit"
               // loading={loading}
@@ -278,12 +293,12 @@ const SigningForms = ({ signUp }) => {
           </Message>
         ) : (
           <>
-          <Message>
-            {t('NewtoPeacefulMall')}
-            <Link href="/sign-up">{t('signUPAccount')}</Link><br />
-            <a target="_blank" href={process.env.NEXT_PUBLIC_HOST_URL + "/password/reset"}>{t('Forgot Password?')}</a>{' '}
-          </Message>
-        </>
+            <Message>
+              {t('NewtoPeacefulMall')}
+              <Link href="/sign-up">{t('signUPAccount')}</Link><br />
+              <a target="_blank" href={process.env.NEXT_PUBLIC_HOST_URL + "/password/reset"}>{t('Forgot Password?')}</a>{' '}
+            </Message>
+          </>
         )}
       </Grid.Column>
     </Grid>

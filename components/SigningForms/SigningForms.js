@@ -16,9 +16,7 @@ import validation from '../../util/validation';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import styled from 'styled-components';
-
 import InputMask from 'react-input-mask';
-
 import { useRecoilState } from 'recoil';
 import { user as userAtom, userdata } from '../../data/userAtom';
 import { addresses as addressAtom, loginPending as loginPendingAtom } from '../../data/atoms';
@@ -32,7 +30,7 @@ const SigningForms = ({ signUp, code }) => {
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies, setCookie, removeCookie] = useCookies();
   const { t } = useTranslation('home');
-  const [addresses, setAddresses] = useRecoilState(addressAtom);
+  const [ setAddresses ] = useRecoilState(addressAtom);
   const [loginPending, setLoginPending] = useRecoilState(loginPendingAtom);
 
   const [inputs, setInputs] = useState({
@@ -250,7 +248,7 @@ const SigningForms = ({ signUp, code }) => {
                 </PasswordWrapper>
                 <Form.Input
                   fluid
-                  icon="heart"
+                  icon="users"
                   iconPosition="left"
                   placeholder={"Invite Code"}
                   value={inputs.code}

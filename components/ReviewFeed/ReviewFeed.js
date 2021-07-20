@@ -1,4 +1,4 @@
-import { Feed, Rating, Image, Icon } from 'semantic-ui-react';
+import { Feed, Rating, Image, Divider } from 'semantic-ui-react';
 import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { currentShop as currentShopAtom } from '../../data/atoms';
@@ -18,39 +18,41 @@ const ReviewFeed = () => {
       {currentShop && currentShop.reviews && currentShop.reviews[0] &&
         currentShop.reviews.map((item, i) => {
           return (
-            <Feed key={i}>
-              <Feed.Event>
-                <Feed.Label>
-                  <Image
-                    src={item.images ? process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + item.images : '/avatar.jpg'}
-                    avatar
-                    size="mini"
-                  />
-                </Feed.Label>
-                <Feed.Content>
-                  <Feed.Summary>
-                    <Feed.User>{item.user_nickname}</Feed.User>
-                    <Feed.Date>
-                      {moment(item.updated_at).format('MMM DD, YYYY | h : mma')}
-                    </Feed.Date>
-                  </Feed.Summary>
-                  <Link href={"/item/" + item.product_id}>{item.product_name}</Link>
-                  <Row>
-                    <ReactStars
-                      count={5}
-                      // onChange={ratingChanged}
-                      size={22}
-                      activeColor="#ffd700"
-                      isHalf={true}
-                      value={item.rating}
+            <>
+              <Feed key={i}>
+                <Feed.Event>
+                  <Feed.Label>
+                    <Image
+                      src={item.images ? process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + item.images : '/avatar.jpg'}
+                      avatar
+                      size="mini"
                     />
-                    <span style={{ paddingTop: 5 }}>{" " + item.rating}</span>
-                  </Row>
-
-                  <Feed.Extra text>{item.content}</Feed.Extra>
-                </Feed.Content>
-              </Feed.Event>
-            </Feed>
+                  </Feed.Label>
+                  <Feed.Content>
+                    <Feed.Summary>
+                      <Feed.User>{item.user_nickname}</Feed.User>
+                      <Feed.Date>
+                        {moment(item.updated_at).format('MMM DD, YYYY | h : mma')}
+                      </Feed.Date>
+                    </Feed.Summary>
+                    <Link href={"/item/" + item.product_id}>{item.product_name}</Link>
+                    <Row>
+                      <ReactStars
+                        count={5}
+                        // onChange={ratingChanged}
+                        size={22}
+                        activeColor="#ffd700"
+                        isHalf={true}
+                        value={item.rating}
+                      />
+                      <span style={{ paddingTop: 5 }}>{" " + item.rating}</span>
+                    </Row>
+                    <Feed.Extra text>{item.content}</Feed.Extra>
+                  </Feed.Content>
+                </Feed.Event>
+              </Feed>
+              <Divider />
+            </>
           );
         })}
     </>

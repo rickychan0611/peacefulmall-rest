@@ -3,23 +3,15 @@ import { Container, Dimmer, Loader } from 'semantic-ui-react';
 import Head from 'next/head';
 import axios from 'axios';
 import styled from 'styled-components';
-
-import { useIsMobile, useIsTablet, useIsDesktop } from '../../../util/useScreenSize';
-
+import { useIsMobile, useIsTablet, useIsDesktop } from '../../../../util/useScreenSize';
 import { useRecoilState } from 'recoil';
 import {
   currentShop as currentShopAtom,
   currentShopProducts as currentShopProductsAtom
-} from '../../../data/atoms';
-
-import SearchBanner from '../../../components/SearchBanner';
-import Shop_Desktop from '../../../components/Shop/Shop_Desktop';
-import Shop_Mobile from '../../../components/Shop/Shop_Mobile';
-import Footer from '../../../components/Footer';
-import CurrentAddress from '../../../components/CurrentAddress';
-import BackButton from '../../../components/BackButton';
-
-// import { restaurants } from '../../../data/restaurants';
+} from '../../../../data/atoms';
+import SearchBanner from '../../../../components/SearchBanner';
+import Shop_Desktop_Review from '../../../../components/Shop/Shop_Desktop_Review';
+import Shop_Mobile from '../../../../components/Shop/Shop_Mobile';
 
 const shop = ({ getSingleShop, getShopProducts }) => {
   const hide = useState(false);
@@ -61,14 +53,14 @@ const shop = ({ getSingleShop, getShopProducts }) => {
             </Dimmer>
           </div>
         ) : isDesktop ? (
-          <Shop_Desktop />
+          <Shop_Desktop_Review />
         ) : (
           <>
             <Shop_Mobile />
           </>
         )}
       </Container>
-      {currentShop && <Footer />}
+      {/* {currentShop && <Footer />} */}
     </div>
   );
 };

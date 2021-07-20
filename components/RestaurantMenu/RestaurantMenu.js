@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import { Label, Sticky } from "semantic-ui-react";
-import { Divider } from "semantic-ui-react";
+import { Divider, Sticky } from "semantic-ui-react";
 import { useRecoilState } from "recoil";
 import {
   currentShop as currentShopAtom,

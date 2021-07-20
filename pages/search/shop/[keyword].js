@@ -11,7 +11,6 @@ import SearchToggle from '../../../components/SearchToggle';
 import { useIsMobile } from '../../../util/useScreenSize';
 import { useRecoilState } from 'recoil';
 import { searchValue as searchValueAtom } from '../../../data/atoms';
-import shop from '../../shop/[slug]/[shop_id]';
 
 const search = ({ shops, products, keyword }) => {
   const isMobile = useIsMobile();

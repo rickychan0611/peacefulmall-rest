@@ -5,56 +5,41 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import {
   currentShop as currentShopAtom,
-  currentShopProducts as currentShopProductsAtom
+  articles as articlesAtom,
+  selectedArticle as selectedArticleAtom,
+  selectedPage as selectedPageAtom
 } from '../../data/atoms';
 
 import { Grid, Icon } from 'semantic-ui-react';
-import Slider from '../Slider';
-import PopularDishes from '../PopularDishes';
+import EditorCards from '../EditorCards';
 import ShopSideBar from '../ShopSideBar';
+import Shop_Desktop_Header from './Shop_Desktop_Header';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
-import Gallery from "react-photo-gallery";
-import Shop_Desktop_Header from './Shop_Desktop_Header';
 
-const Shop_Desktop_Photos = () => {
+const Shop_Desktop_Article_Index = () => {
   const router = useRouter();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
+  const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
+  const [articles, setArticles] = useRecoilState(articlesAtom);
   const [result, setResult] = useState();
   const url = '/shop/' + currentShop.name + '/' + currentShop.id
   const [photos, setPhotos] = useState([]);
 
-  const query = async (topic, api, params) => {
-    const res = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/' + api, { params });
-    setResult(prev => ({ ...prev, [topic]: res.data.data }))
-    console.log("PHOTO PAGE", res)
-  }
-
   useEffect(async () => {
+    setSelectedPage("articles")
+
     try {
-      query("products", "shopproducts", { shop_id: router.query.shop_id, category_id: "all" });
+      const getArticles = await axios.get(
+        process.env.NEXT_PUBLIC_STRAPI_URL + '/articles?_where[restaurant_id]=' + currentShop.id + "&_sort=updated_at:DESC")
+      console.log("getArticles", getArticles.data)
+      setArticles(getArticles.data)
     }
     catch (err) {
-      console.log("query err:", err)
+      console.log("err", err)
     }
   }, [])
 
-  useEffect(() => {
-    if (result) {
-      console.log("!!!!!!!!!!!!!", result)
-      let arr = result.products.map(item => {
-        return (
-          {
-            src: process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(item.images)[0],
-            width: 3,
-            height: 2
-          }
-        )
-      })
-      setPhotos(arr)
-      console.log("ARRRRRR", arr)
-    }
-  }, [result])
 
   return (
     <div>
@@ -65,17 +50,16 @@ const Shop_Desktop_Photos = () => {
 
         <Grid.Column width={12} style={{ padding: '30px 20px 80px 20px' }}>
           <div>
-          <Shop_Desktop_Header />
-
+            <Shop_Desktop_Header />
             <Wrapper>
               <Title>
-                <Icon name="photo" size="small" style={{ marginRight: 10 }} />
-                Photo Gallery
+                <Icon name="newspaper" size="small" style={{ marginRight: 10 }} />
+                Featured Articles
               </Title>
             </Wrapper>
-            {photos.length > 0 && 
-            <Gallery photos={photos} direction={"row"} targetRowHeight={130}/>}
-
+            <CardsWrapper>
+              <EditorCards />
+            </CardsWrapper>
           </div>
         </Grid.Column>
       </Grid>
@@ -88,6 +72,12 @@ const Wrapper = styled.div`
   flex-direction: row;
   flex-wrap: nowrap;
   margin-bottom: 30px;
+`;
+const CardsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
 `;
 const Avatar = styled.img`
   display: flex;
@@ -106,12 +96,11 @@ const Title = styled.h2`
   margin: 0 10px 0 0;
   display: flex;
   align-items: center;
-  
+  /* text-align: center; */
 `;
-
 const Description = styled.div`
   font-size: 1rem;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
-export default Shop_Desktop_Photos;
+export default Shop_Desktop_Article_Index;

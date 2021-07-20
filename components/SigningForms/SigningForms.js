@@ -263,7 +263,7 @@ const SigningForms = ({ signUp, code }) => {
             <Button
               type="submit"
               // loading={loading}
-              style={{ backgroundColor: '#ff614d', color: 'white' }}
+              style={{ backgroundColor: '#ee3160', color: 'white' }}
               fluid
               size="large"
               content={

@@ -104,7 +104,7 @@ const H4 = styled.h4`
   margin: 0;
 `;
 const CheckoutButton = styled.div`
-  background-color: #ff614d;
+  background-color: #ee3160;
   margin-top: 20px;
   margin-bottom: 10px;
   color: white;

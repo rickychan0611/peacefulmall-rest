@@ -69,6 +69,9 @@ const Slider = ({ topic, children, icon, hideViewAll, marginBottom, hideScrollba
           zIndex: 100,
           cursor: "grabbing",
           width: "100%",
+          gap: 15,
+          paddingBottom: 10,
+          paddingLeft: 10,
           // marginLeft: -10,
           // marginRight: -10
         }}

@@ -12,7 +12,10 @@ import EditorCards from '../components/EditorCards';
 import CheckOutListPusher from '../components/CheckOutListPusher';
 import CurrentAddress from '../components/CurrentAddress';
 import { useRecoilState } from 'recoil';
-import { currentPosition as currentPositionAtom } from '../data/atoms';
+import {
+  currentPosition as currentPositionAtom,
+  articles as articlesAtom
+} from '../data/atoms';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 import styled from 'styled-components';
 import { useIsMobile } from "../util/useScreenSize.js";
@@ -23,6 +26,7 @@ const Home = () => {
   const { t } = useTranslation('home');
   const [result, setResult] = useState({});
   const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
+  const [articles, setArticles] = useRecoilState(articlesAtom);
   const isDesktop = useIsDesktop();
   const isMobile = useIsMobile();
 
@@ -81,9 +85,23 @@ const Home = () => {
     }
   }, [currentPosition])
 
-  useEffect(()=> {
+
+  // get articles
+  useEffect(async () => {
+    try {
+      const getArticles = await axios.get(
+        process.env.NEXT_PUBLIC_STRAPI_URL + '/articles?_sort=updated_at:DESC')
+      console.log("getArticles", getArticles.data)
+      setArticles(getArticles.data)
+    }
+    catch (err) {
+      console.log("err", err)
+    }
+  }, [])
+
+  useEffect(() => {
     console.log("result", result)
-  },[result])
+  }, [result])
 
   return (
     <>
@@ -126,8 +144,8 @@ const Home = () => {
                 <ReviewCards shop={result.singleshop} />
               </Slider>
 
-              <Slider topic={t('EditorReviews')} icon="star">
-                <EditorCards shops={result.allShops} />
+              <Slider topic={t('FeaturedArticles')} icon="newspaper">
+                <EditorCards />
               </Slider>
 
               <Wrapper>
@@ -172,9 +190,9 @@ const CardContainer = styled.div`
   display: grid;
   grid-gap: ${(p) => (p.isMobile && !p.toggle ? "15px" : "20px")};
   grid-template-columns: ${(p) =>
-p.isMobile
-  ? "repeat(auto-fill, minmax(150px, 1fr))"
-  : "repeat(auto-fill, minmax(200px, 1fr))"};
+    p.isMobile
+      ? "repeat(auto-fill, minmax(150px, 1fr))"
+      : "repeat(auto-fill, minmax(200px, 1fr))"};
 `;
 
 // export const getServerSideProps = async (context) => {

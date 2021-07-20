@@ -116,7 +116,7 @@ const AddressEditModal = ({
         </Button>
         <Button
           content='Submit'
-          style={{ backgroundColor: '#ff614d', color: 'white', marginLeft: 10 }}
+          style={{ backgroundColor: '#ee3160', color: 'white', marginLeft: 10 }}
         >
           {loading ? (
             <>

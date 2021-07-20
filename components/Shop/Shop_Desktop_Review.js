@@ -1,31 +1,28 @@
 import { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-
 import { useRecoilState } from 'recoil';
 import {
   currentShop as currentShopAtom,
-  currentShopProducts as currentShopProductsAtom
+  selectedPage as selectedPageAtom,
+  articles as articlesAtom
 } from '../../data/atoms';
 
 import { Grid, Icon } from 'semantic-ui-react';
-import Slider from '../Slider';
-import PopularDishes from '../PopularDishes';
-import DishCards from '../DishCards';
 import ShopSideBar from '../ShopSideBar';
-import ReviewCards from '../ReviewCards';
 import ReviewFeed from '../ReviewFeed/index.js';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
+import Shop_Desktop_Header from './Shop_Desktop_Header';
 
 const Shop_Desktop_Review = () => {
   const { t } = useTranslation('home');
   const router = useRouter();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
-  const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
-  const contextRef = useRef();
+  const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
   const [result, setResult] = useState({});
   const url = '/shop/' + currentShop.name + '/' + currentShop.id
+  const [articles, setArticles] = useRecoilState(articlesAtom);
 
   const query = async (topic, api, params) => {
     const res = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/' + api, { params });
@@ -43,8 +40,8 @@ const Shop_Desktop_Review = () => {
   }, [])
 
   useEffect(() => {
-    console.log("reviews", result)
-  }, [result])
+    setSelectedPage("reviews")
+  }, [])
 
   return (
     <div>
@@ -52,21 +49,9 @@ const Shop_Desktop_Review = () => {
         <Grid.Column width={4} style={{ paddingBottom: 100 }}>
           <ShopSideBar shop={currentShop} />
         </Grid.Column>
-
         <Grid.Column width={12} style={{ padding: '30px 20px 80px 20px' }}>
           <div>
-            <Wrapper>
-              {currentShop.logo ? (
-                <Avatar src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + currentShop.logo} />
-              ) : (
-                <Avatar src="/avatar-placeholder.png" />
-              )}
-              <div style={{ width: 'calc(100% - 50px)' }}>
-                <Title>{currentShop.name}</Title>
-                <Description style={{ marginBottom: 60 }}>{currentShop.description}</Description>
-              </div>
-            </Wrapper>
-
+            <Shop_Desktop_Header />
             <Wrapper>
               <Title>
                 <Icon name="star" size="small" style={{ marginRight: 10 }} />

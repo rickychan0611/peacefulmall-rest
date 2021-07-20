@@ -239,7 +239,7 @@ const checkout = () => {
           <Modal.Actions>
             <Button
               onClick={() => setOpen(false)}
-              style={{ backgroundColor: '#ff614d', color: 'white' }}>
+              style={{ backgroundColor: '#ee3160', color: 'white' }}>
               <Icon name="check" /> Done
             </Button>
           </Modal.Actions>

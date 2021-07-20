@@ -34,7 +34,7 @@ const TotalAmountList = ({ orderDetails, setTips, tips_amount }) => {
           <Button onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button style={{color: "white", backgroundColor: "#ff614d"}} onClick={() => handleSubmit(false)}>
+          <Button style={{color: "white", backgroundColor: "#ee3160"}} onClick={() => handleSubmit(false)}>
             OK
           </Button>
         </Modal.Actions>

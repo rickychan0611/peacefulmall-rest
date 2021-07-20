@@ -45,9 +45,9 @@ const Option = styled.div`
   justify-content: center;
   align-items: center;
   padding: 10px 15px 10px 15px;
-  border: 1px solid #ff614d;
+  border: 1px solid #ee3160;
   /* border-radius: 10px; */
-  background-color: ${(p) => (p.toggle ? 'white' : '#ff614d')};
+  background-color: ${(p) => (p.toggle ? 'white' : '#ee3160')};
   color: ${(p) => (p.toggle ? 'black' : 'white')};
   width: 50%;
   max-width: 250px;

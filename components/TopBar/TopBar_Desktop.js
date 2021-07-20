@@ -52,7 +52,7 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
         <Image size="mini" src="/logo-p.png" />
         <h4 style={{ color: '#4ab976', margin: 0 }}>
           {t('title')}
-          <span style={{ color: '#ff614d' }}> | {t('subTitle')}</span>
+          <span style={{ color: '#ee3160' }}> | {t('subTitle')}</span>
         </h4>
       </Row>
       <Row>
@@ -60,7 +60,7 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
           <>
             <Button
               inverted
-              style={{ backgroundColor: '#ff614d', marginRight: 10, color: 'white' }}
+              style={{ backgroundColor: '#ee3160', marginRight: 10, color: 'white' }}
               onClick={() => router.push('/sign-up')}>
               {t('signUp')}
             </Button>
@@ -160,7 +160,7 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
           {showCheckoutButton && (
             <Button
               style={{
-                backgroundColor: '#ff614d',
+                backgroundColor: '#ee3160',
                 marginRight: 10,
                 color: 'white',
                 width: 80,

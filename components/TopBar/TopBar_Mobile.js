@@ -56,7 +56,7 @@ const TopBar = () => {
               <div>
                 <Button
                   style={{
-                    backgroundColor: "#ff614d",
+                    backgroundColor: "#ee3160",
                     color: "white",
                     width: 60,
                     borderRadius: 30,

@@ -74,7 +74,7 @@ const AddButton = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
-  background-color: #ff614d;
+  background-color: #ee3160;
   color: white;
   font-weight: bold;
   padding: 10px 25px 10px 25px;

@@ -130,6 +130,21 @@ export const scrollTop = atom({
   default: 0
 });
 
+export const articles = atom({
+  key: 'articles',
+  default: null
+});
+
+export const selectedArticle = atom({
+  key: 'selectedArticle',
+  default: null
+});
+
+export const selectedPage = atom({
+  key: 'selectedPage',
+  default: null
+});
+
 export const defaultAddress = selector({
   key: 'defaultAddress',
   get: ({ get }) => {

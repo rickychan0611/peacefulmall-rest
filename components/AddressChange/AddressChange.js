@@ -186,7 +186,7 @@ const AddressChange = ({ setOpen }) => {
         onChange={(e)=>setInstructions(e.target.value)}
       />
       <Divider />
-      <Button style={{ backgroundColor: '#ff614d', color: 'white' }}
+      <Button style={{ backgroundColor: '#ee3160', color: 'white' }}
       onClick={handleOK}>OK</Button>
     </Segment>
   );

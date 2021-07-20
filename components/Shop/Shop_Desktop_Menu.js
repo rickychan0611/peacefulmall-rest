@@ -1,12 +1,14 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
 import { useRecoilState } from 'recoil';
 import {
   currentShop as currentShopAtom,
-  currentShopProducts as currentShopProductsAtom
+  currentShopProducts as currentShopProductsAtom,
+  selectedPage as selectedPageAtom
 } from '../../data/atoms';
+import Shop_Desktop_Header from './Shop_Desktop_Header';
 
 import { Grid, Ref } from 'semantic-ui-react';
 import Slider from '../Slider';
@@ -18,11 +20,16 @@ import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
 
 const Shop_Desktop = () => {
+  const contextRef = useRef();
   const { t } = useTranslation('shop');
   const router = useRouter();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
-  const contextRef = useRef();
+  const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
+
+  useEffect(() => {
+    setSelectedPage("menu")
+  }, [])
 
   return (
     <div>
@@ -33,17 +40,8 @@ const Shop_Desktop = () => {
 
         <Grid.Column width={12} style={{ padding: '30px 20px 80px 20px' }}>
           <div>
-            <Wrapper>
-              {currentShop.logo ? (
-                <Avatar src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + currentShop.logo} />
-              ) : (
-                <Avatar src="/avatar-placeholder.png" />
-              )}
-              <div style={{ width: 'calc(100% - 50px)' }}>
-                <Title>{currentShop.name}</Title>
-                <Description style={{ marginBottom: 60 }}>{currentShop.description}</Description>
-              </div>
-            </Wrapper>
+          <Shop_Desktop_Header />
+
             <Ref innerRef={contextRef}>
               <RestaurantMenu t={t} contextRef={contextRef} />
             </Ref>

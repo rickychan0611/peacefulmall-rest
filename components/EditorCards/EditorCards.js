@@ -8,79 +8,50 @@ import useTranslation from 'next-translate/useTranslation'
 import { useRecoilState } from 'recoil';
 import {
   selections as selectionsAtom,
+  articles as articlesAtom,
+  selectedArticle as selectedArticleAtom,
+  currentShop as currentShopAtom
 } from '../../data/atoms.js';
+import { useRouter } from 'next/router';
 
 const ReviewCards = () => {
   const [dishes, setDishes] = useState([]);
-  const {t} = useTranslation('home')
-
+  const { t } = useTranslation('home')
+  const router = useRouter();
   const [selections, setSelections] = useRecoilState(selectionsAtom);
-
-  useEffect(() => {
-    let temp = [];
-    let temp2 = [];
-    let temp3 = [];
-    data.categorys.map((item) => {
-      temp.push(item);
-    });
-    temp.map((item) => {
-      temp2.push(item['menu-items']);
-    });
-    temp2.map((item) => {
-      let IMG_URL = `/img/food (${Math.floor(Math.random() * (86 - 1) + 1)}).jpg`;
-
-      // const IMG_URL = `https://source.unsplash.com/featured/?dinning, steak${Math.floor(
-      //   Math.random() * 10000
-      // )}`;
-      temp3.push({
-        ...item,
-        img: IMG_URL,
-        description:
-          'This is description. This is description. This is description. This is description. This is description. This is description. '
-      });
-    });
-    temp3 = [].concat.apply([], temp3);
-
-    let arr = [];
-    for (var i = temp3.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tempArr = temp3[i];
-      temp3[i] = temp3[j];
-      temp3[j] = tempArr;
-      arr.push(tempArr);
-    }
-    setDishes(arr);
-  }, [selections]);
+  const [articles, setArticles] = useRecoilState(articlesAtom);
+  const [selectedArticle, setSelectedArticle] = useRecoilState(selectedArticleAtom);
+  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
 
   return (
     <>
-      {dishes[0] &&
-        dishes.map((item, i) => {
+      {articles && articles[0] &&
+        articles.map((item, i) => {
           return (
-            <Link href={'/restaurant/' + "peaceful-restaurant#reviews"} key={i}>
-              <Card key={i} >
-                <Img
-                  src={item.img}
-                />
-                <Description> ⭐⭐⭐⭐⭐</Description>
-                <Name>
-                  I like it so much. The food is so good. I like it. I like it. I like it. I like
-                  it. I like it.
-                </Name>
-                {/* <Description>{item.description}</Description> */}
-                <Review>
-                  Very first day of soft opening, so their service speed needs a little improvement;
-                  otherwise they made use of this deadspace and turned into something quite
-                  soothing. Great place to hang, and the food is like how it's advertised, clean and
-                  delicate and very healthy.
-                </Review>
-                <Description><a>{t("ReadMore")}</a></Description>
-                <br></br>
-                <Description>{t("Name")}: Restaurant Name</Description>
-                <Description>{t("location")}: Vacnouver</Description>
-                <Description>{t("style")}: Chinese</Description>
-              </Card>
-            </Link>
+            <Card key={i}
+              onClick={() => {
+                setSelectedArticle(item)
+                router.push('/shop/' + currentShop.name + '/' + currentShop.id + '/articles/' + item.id)
+              }}>
+              <Img
+                src={process.env.NEXT_PUBLIC_STRAPI_URL + item.cover_photo.url}
+              />
+              <Name>
+                {item.title}
+              </Name>
+              {/* <Description>{item.description}</Description> */}
+              {/* <Review>
+                {item.content}
+              </Review>
+              <Description><a>{t("ReadMore")}</a></Description> */}
+              <br></br>
+              {router.query.article_id &&
+                <>
+                  <Description>{t("Name")}: Restaurant Name</Description>
+                  <Description>{t("location")}: Vacnouver</Description>
+                  <Description>{t("style")}: Chinese</Description>
+                </>}
+            </Card>
           );
         })}
     </>
@@ -94,13 +65,15 @@ const ReviewCards = () => {
 const Card = styled.div`
   display: inline-block;
   position: relative;
-  margin: 10px;
+  /* margin: 10px; */
   width: 250px;
   cursor: pointer;
+  /* border: 1px solid black; */
+  box-shadow: 0 0 10px rgba(0,0,0,.2)
 `;
 const Img = styled.img`
   width: 250px;
-  height: 150px;
+  height: 200px;
   object-fit: cover;
 `;
 const Name = styled.div`
@@ -112,6 +85,7 @@ const Name = styled.div`
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   margin: 10px 0 10px 0;
+  padding: 10px;
   /* height: 100px; */
 `;
 const Review = styled.div`

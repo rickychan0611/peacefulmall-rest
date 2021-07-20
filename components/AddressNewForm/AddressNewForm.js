@@ -46,7 +46,7 @@ const AddressNewForm = ( {err, setNewAddress, newAddress} ) => {
           error={err.country}
         />
       </Form.Group>
-      <Form.Button style={{ backgroundColor: '#ff614d', color: 'white' }}>Save</Form.Button>
+      <Form.Button style={{ backgroundColor: '#ee3160', color: 'white' }}>Save</Form.Button>
     </>
   );
 };

@@ -109,12 +109,12 @@ const ShopInfo = ({ shop }) => {
           </List.Content>
         </List.Item>
         <br />
-        <List.Item>
+        {/* <List.Item>
           <List.Icon name="checkmark" />
           <List.Content>
             <List.Description>⭐⭐⭐⭐⭐</List.Description>
           </List.Content>
-        </List.Item>
+        </List.Item> */}
       </List>
       </>)}
     </>

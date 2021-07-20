@@ -173,7 +173,7 @@ const AddressCard = styled.div`
   justify-content: space-between;
   padding: ${(p) => (p.default === 1 ? '14px' : '15px')};
   border-radius: 10px;
-  border: ${(p) => (p.default === 1 ? '2px solid #ff614d' : '1px solid #d3d1d1')};
+  border: ${(p) => (p.default === 1 ? '2px solid #ee3160' : '1px solid #d3d1d1')};
   max-width: ${(p) => (p.isMobile ? 'none' : '207px')};
 `;
 const AddressButton = styled.div`
@@ -187,7 +187,7 @@ const AddressButton = styled.div`
   border: 1px solid #d3d1d1;
   cursor: pointer;
   font-size: 12px;
-  background-color: ${(p) => (p.default === 1 ? '#ff614d' : '#e4e3e3')};
+  background-color: ${(p) => (p.default === 1 ? '#ee3160' : '#e4e3e3')};
   color: ${(p) => (p.default === 1 ? 'white' : 'black')};
   font-weight: bold;
   flex: 1;

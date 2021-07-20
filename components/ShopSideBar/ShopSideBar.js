@@ -1,28 +1,51 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
-import { Grid, List, Header } from 'semantic-ui-react';
-import ReviewFeed from '../ReviewFeed/ReviewFeed.js';
+import { Icon } from 'semantic-ui-react';
 import ShopInfo from './ShopInfo';
-import ShopArticleList from './ShopArticleList';
-import useTranslation from 'next-translate/useTranslation';
 import { useIsDesktop } from '../../util/useScreenSize';
-import router from 'next/router';
+import { useRouter } from 'next/router';
+import { useRecoilState } from 'recoil';
+import { selectedPage as selectedPageAtom } from '../../data/atoms.js';
 
 const ShopSideBar = ({ shop }) => {
-  const { t } = useTranslation('shop');
-  const [open, setOpen] = useState(false);
   const isDesktop = useIsDesktop();
   const profilePic = shop.images && process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(shop.images)[0]
   const url = '/shop/' + shop.name + '/' + shop.id
+  const router = useRouter();
+  const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
+
+  useEffect(() => {
+    console.log("router", router.components)
+  }, [])
 
   return (
     <>
       {isDesktop && shop.images && <Img src={profilePic} />}
-      <Button onClick={() => router.push(url + '/')}> Overview </Button>
-      <Button onClick={() => router.push(url + '/menu')}> Menu </Button>
-      <Button onClick={() => router.push(url + '/photos')}> Photos </Button>
-      <Button onClick={() => router.push(url + '/articles')}> Articles </Button>
-      <Button onClick={() => router.push(url + '/reviews')}> Reviews </Button>
+
+      <ButtonsWrapper>
+
+        <Button onClick={() => router.push(url + '/')}
+          selected={selectedPage === "overview"}>
+          Overview<Icon name="check" />
+        </Button>
+
+        <Button onClick={() => router.push(url + '/menu')}
+          selected={selectedPage === "menu"}>
+          Menu <Icon name="bars" /></Button>
+
+        {/* <Button onClick={() => router.push(url + '/photos')}>
+          Photos <Icon name="photo" /></Button> */}
+
+        <Button onClick={() => router.push(url + '/articles')}
+          selected={selectedPage === "articles"}>
+          Articles <Icon name="newspaper" /></Button>
+
+        <Button onClick={() => router.push(url + '/reviews')}
+          selected={selectedPage === "reviews"}>
+          Reviews <Icon name="star" /></Button>
+
+      </ButtonsWrapper>
+
       <ShopInfo shop={shop} />
 
       {/* <Row>
@@ -46,17 +69,23 @@ const ShopSideBar = ({ shop }) => {
   );
 };
 
+const ButtonsWrapper = styled.div`
+  margin-bottom: 30px;
+`;
 const Button = styled.div({
   margin: 5,
-  padding: "6px 15px",
+  padding: "6px 25px",
   cursor: "pointer",
   textAlign: "center",
   borderRadius: 25,
   fontSize: 12,
   fontWeight: "bold",
-  // backgroundColor: "#e8ebe9",
-  color: "black",
-  border: "1px solid grey"
+  backgroundColor: p => p.selected ? "#ee3160" : "#ffffff",
+  color: p => p.selected ? "white" : "black",
+  border: "1px solid grey",
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center'
 });
 
 const Row = styled.div`
@@ -71,6 +100,7 @@ const Img = styled.img`
   width: 100%;
   object-fit: cover;
   height: 20vh;
+  margin-bottom: 20px;
 `;
 
 const ReviewContainer = styled.div`

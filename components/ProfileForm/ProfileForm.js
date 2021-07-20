@@ -191,7 +191,7 @@ const ButtonWrapper = styled.div`
 `;
 
 const SubmitButton = styled(Button)`
-  background-color: #ff614d;
+  background-color: #ee3160;
   color: white;
   min-width: 127px;
 `;

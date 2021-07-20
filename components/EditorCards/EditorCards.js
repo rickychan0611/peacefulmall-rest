@@ -10,7 +10,7 @@ import {
   selections as selectionsAtom,
   articles as articlesAtom,
   selectedArticle as selectedArticleAtom,
-  currentShop as currentShopAtom
+  currentShop as currentShopAtom,
 } from '../../data/atoms.js';
 import { useRouter } from 'next/router';
 

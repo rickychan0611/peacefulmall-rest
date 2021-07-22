@@ -18,8 +18,8 @@ const ReviewFeed = () => {
       {currentShop && currentShop.reviews && currentShop.reviews[0] &&
         currentShop.reviews.map((item, i) => {
           return (
-            <>
-              <Feed key={i}>
+            <div key={i}>
+              <Feed>
                 <Feed.Event>
                   <Feed.Label>
                     <Image
@@ -39,7 +39,7 @@ const ReviewFeed = () => {
                     <Row>
                       <ReactStars
                         count={5}
-                        // onChange={ratingChanged}
+                        edit={false}
                         size={22}
                         activeColor="#ffd700"
                         isHalf={true}
@@ -52,7 +52,7 @@ const ReviewFeed = () => {
                 </Feed.Event>
               </Feed>
               <Divider />
-            </>
+            </div>
           );
         })}
     </>

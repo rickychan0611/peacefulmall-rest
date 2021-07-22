@@ -30,7 +30,7 @@ const SigningForms = ({ signUp, code }) => {
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies, setCookie, removeCookie] = useCookies();
   const { t } = useTranslation('home');
-  const [ setAddresses ] = useRecoilState(addressAtom);
+  const [ , setAddresses ] = useRecoilState(addressAtom);
   const [loginPending, setLoginPending] = useRecoilState(loginPendingAtom);
 
   const [inputs, setInputs] = useState({

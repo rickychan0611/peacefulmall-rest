@@ -44,7 +44,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
     });
     setOpenWarning(false);
     console.log("item.fromHomePage", item.fromHomePage)
-    item.fromHomePage ? router.push("/shop/" + item.shop.name + "/" + item.shop.id) : router.back();
+    item.fromHomePage ? router.push("/shop/" + item.currentShop.name + "/" + item.currentShop.id) : router.back();
   };
 
   //function: addItem is called in <BottomAddBar>,
@@ -62,7 +62,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
       setOrderItems((prev) => {
         return [{ ...item, attributeTotal, quantity, shop: currentShop, uid: uid(item) }, ...prev];
       });
-      item.fromHomePage ? router.push("/shop/" + item.shop.name + "/" + item.shop.id) : router.back();
+      item.fromHomePage ? router.push("/shop/" + item.currentShop.name + "/" + item.currentShop.id) : router.back();
     } else {
       setOpenWarning(true);
     }
@@ -70,36 +70,36 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
 
   //If currentItem is empty, get the product by url id from server
   //then, setCurrentItem and setCurrentShop
-  useEffect(async () => {
-    const product_id = router.query.item_id;
-    setLoading(true);
-    console.log('getProduct: ', getProduct);
-    console.log('currentItem ', item);
-    !item && setCurrentItem(getProduct);
-    setCurrentShop(getProduct.shop);
-    setLoading(false);
+  // useEffect(async () => {
+  //   const product_id = router.query.item_id;
+  //   setLoading(true);
+  //   console.log('getProduct: ', getProduct);
+  //   console.log('currentItem ', item);
+  //   // !item && setCurrentItem(getProduct);
+  //   // setCurrentShop(getProduct && getProduct.shop);
+  //   setLoading(false);
 
-    // if (!item && product_id) {
-    //   try {
-    //     const getProduct = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleproduct', {
-    //       params: {
-    //         product_id
-    //       }
-    //     });
-    //     setCurrentItem(getProduct);
-    //     setCurrentShop(getProduct.shop);
-    //     setLoading(false);
-    //     console.log('NO product', getProduct.data.data);
-    //     console.log('NO currentShop', getProduct.data.data.shop);
-    //   } catch (err) {
-    //     console.log(err);
-    //     setLoading(false);
-    //     // router.push('/404');
-    //   }
-    // } else if (item && item.id !== +product_id) {
-    //   setLoading(false);
-    // }
-  }, [router.query.item_id]);
+  //   // if (!item && product_id) {
+  //   //   try {
+  //   //     const getProduct = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleproduct', {
+  //   //       params: {
+  //   //         product_id
+  //   //       }
+  //   //     });
+  //   //     setCurrentItem(getProduct);
+  //   //     setCurrentShop(getProduct.shop);
+  //   //     setLoading(false);
+  //   //     console.log('NO product', getProduct.data.data);
+  //   //     console.log('NO currentShop', getProduct.data.data.shop);
+  //   //   } catch (err) {
+  //   //     console.log(err);
+  //   //     setLoading(false);
+  //   //     // router.push('/404');
+  //   //   }
+  //   // } else if (item && item.id !== +product_id) {
+  //   //   setLoading(false);
+  //   // }
+  // }, [router.query.item_id]);
 
   useEffect(() => {
     let total = 0;
@@ -137,7 +137,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
         <Loader loading={loading} />
       ) : (
         <>
-          <BackButton />
+          <BackButton /> 
           <ItemDetailsContext attributes={attributes} setAttributes={setAttributes} />
           <BottomAddBar
             attributeTotal={attributeTotal}

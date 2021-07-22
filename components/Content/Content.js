@@ -15,6 +15,7 @@ const Content = () => {
   useEffect(async () => {
     console.log(router.query)
     if (!item) {
+      console.log("Loaded item")
       try {
         let getArticle = await axios.get(
           process.env.NEXT_PUBLIC_STRAPI_URL + '/articles/' +
@@ -29,38 +30,44 @@ const Content = () => {
         console.log("err", err)
       }
     }
+    else {
+      let article = {...item}
+      article.content = article.content.replace(/src="/g, 'src="' + process.env.NEXT_PUBLIC_STRAPI_URL)
+      console.log("getArticleByID", article)
+      setSelectedArticle(article)
+    }
   }, [router]);
 
-  return (
-    <>
-      {item && <Container>
-        <Title>{item.title}</Title>
-        <CoverImg src={process.env.NEXT_PUBLIC_STRAPI_URL + item.cover_photo.url} />
-        <Wrapper>
-          <Row>
-            <Credit>{item.author && "撰文：" + item.author} &nbsp;	&nbsp;	&nbsp;	&nbsp;
-              最後更新日期：{moment(item.updated_at).format("DD MMM YYYY - h:mma")}</Credit>
-          </Row>
-          <TwoCol>
-            <Text>
-              <Markup content={item.content} />
-            </Text>
-            {item.photos[0] &&
-              <Gallery>{item.photos.map((item, i) => {
-                return (
-                  <PhotoWrapper>
-                    <Photo key={i} src={process.env.NEXT_PUBLIC_STRAPI_URL + item.url} />
-                    <Caption>{item.caption}</Caption>
-                  </PhotoWrapper>
-                )
-              })}
-              </Gallery>}
-          </TwoCol>
-        </Wrapper>
-      </Container>
-      }
-    </>
-  );
+return (
+  <>
+    {item && <Container>
+      <Title>{item.title}</Title>
+      <CoverImg src={process.env.NEXT_PUBLIC_STRAPI_URL + item.cover_photo.url} />
+      <Wrapper>
+        <Row>
+          <Credit>{item.author && "撰文：" + item.author} &nbsp;	&nbsp;	&nbsp;	&nbsp;
+            最後更新日期：{moment(item.updated_at).format("DD MMM YYYY - h:mma")}</Credit>
+        </Row>
+        <TwoCol>
+          <Text>
+            <Markup content={item.content} />
+          </Text>
+          {item.photos[0] &&
+            <Gallery>{item.photos.map((item, i) => {
+              return (
+                <PhotoWrapper>
+                  <Photo key={i} src={process.env.NEXT_PUBLIC_STRAPI_URL + item.url} />
+                  <Caption>{item.caption}</Caption>
+                </PhotoWrapper>
+              )
+            })}
+            </Gallery>}
+        </TwoCol>
+      </Wrapper>
+    </Container>
+    }
+  </>
+);
 };
 
 const TwoCol = styled.div`

@@ -59,8 +59,8 @@ const Shop_Desktop_Review = () => {
               </Title>
             </Wrapper>
 
-            <ReviewFeed />
-
+            {result && result.shop && result.shop.reviews && result.shop.reviews.length !== 0 ? 
+              <ReviewFeed /> : <h4>... No review yet 😋 </h4>}
           </div>
         </Grid.Column>
       </Grid>

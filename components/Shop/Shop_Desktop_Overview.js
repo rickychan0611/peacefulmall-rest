@@ -6,7 +6,8 @@ import { useRecoilState } from 'recoil';
 import {
   currentShop as currentShopAtom,
   articles as articlesAtom,
-  selectedPage as selectedPageAtom
+  selectedPage as selectedPageAtom,
+  currentShopProducts as currentShopProductsAtom,
 } from '../../data/atoms';
 import Shop_Desktop_Header from './Shop_Desktop_Header';
 
@@ -24,6 +25,7 @@ const Shop_Desktop = () => {
   const { t } = useTranslation('home');
   const router = useRouter();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
+  const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
   const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
   const [articles, setArticles] = useRecoilState(articlesAtom);
   const contextRef = useRef();
@@ -32,14 +34,32 @@ const Shop_Desktop = () => {
 
   const query = async (topic, api, params) => {
     const res = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/' + api, { params });
-    setResult(prev => ({ ...prev, [topic]: res.data.data }))
-    console.log("popularpopular", result)
+    // setResult(prev => ({ ...prev, [topic]: res.data.data }))
+    setCurrentShop(prev => ({ ...prev, popular : [...currentShopProducts, ...res.data.data] }))
+    //get discounted items
+    // if (topic === "products") {
+    //   let discount = currentShopProducts
+    //   if (discount.length > 0) {
+    //     discount = discount.filter(item => !!item.promotion_price)
+    //   }
+    //   setResult(prev => ({ ...prev, discount: discount }))
+    // }
   }
 
   useEffect(async () => {
     try {
-      query("shop", "singleshop", { shop_id: router.query.shop_id });
-      query("popular", "products", { plat_category: 'all', type: 'popular', count: '20' });
+      // query("shop", "singleshop", { shop_id: router.query.shop_id });
+      query("popular", "shopproducts", { shop_id: router.query.shop_id, category_id: "popular" });
+      // query("products", "shopproducts", { shop_id: router.query.shop_id, category_id: "all" });
+      // setCurrentShop(prev => ({ ...prev, result }))
+
+      //get discounted items
+      // let discount = currentShopProducts
+      // console.log("111111currentShopProducts", discount)
+      // if (!discount.discount && discount.length > 0) {
+      //   discount = discount.filter(item => !!item.promotion_price)
+      //   setCurrentShop(prev => ({ ...prev, discount }))
+      // }
     }
     catch (err) {
       console.log("query err:", err)
@@ -48,10 +68,12 @@ const Shop_Desktop = () => {
 
   // get articles
   useEffect(async () => {
-    try {const getArticles = await axios.get(
-      process.env.NEXT_PUBLIC_STRAPI_URL + '/articles?_where[restaurant_id]=' + currentShop.id + "&_sort=updated_at:ASC")
-    console.log("getArticles", getArticles.data)
-    setArticles(getArticles.data)}
+    try {
+      const getArticles = await axios.get(
+        process.env.NEXT_PUBLIC_STRAPI_URL + '/articles?_where[restaurant_id]=' + currentShop.id + "&_sort=updated_at:ASC")
+      console.log("getArticles", getArticles.data)
+      setArticles(getArticles.data)
+    }
     catch (err) {
       console.log("err", err)
     }
@@ -59,7 +81,8 @@ const Shop_Desktop = () => {
 
   useEffect(() => {
     setSelectedPage("overview")
-  }, [])
+    console.log("currentShopcurrentShop, ", currentShop)
+  }, [currentShop])
 
   return (
     <div>
@@ -70,18 +93,31 @@ const Shop_Desktop = () => {
 
         <Grid.Column width={12} style={{ padding: '30px 20px 80px 20px' }}>
           <div>
-          <Shop_Desktop_Header />
+            <Shop_Desktop_Header />
 
             <Wrapper>
               <Title>
                 <Icon name="food" size="small" style={{ marginRight: 10 }} />
                 Popular Items
               </Title>
-              <Button onClick={() => router.push(url + '/menu')}> View Full Menu </Button>
+              <Button style={{ color: "white", backgroundColor: "#ee3160" }} onClick={() => router.push(url + '/menu')}> View Full Menu </Button>
             </Wrapper>
             <Slider>
-              <DishCards products={result.popular} />
+              <DishCards products={currentShop.popular && currentShop.popular.length > 0 ? currentShop.popular : currentShopProducts} />
             </Slider>
+
+            {currentShop && currentShop.discount && <>
+              <Wrapper>
+                <Title>
+                  <Icon name="food" size="small" style={{ marginRight: 10 }} />
+                  Discounted Items
+                </Title>
+                <Button style={{ color: "white", backgroundColor: "#ee3160" }} onClick={() => router.push(url + '/menu')}> View Full Menu </Button>
+              </Wrapper>
+              <Slider>
+                <DishCards products={currentShop.discount} />
+              </Slider>
+            </>}
 
             {/* <Wrapper>
               <Title>
@@ -90,7 +126,7 @@ const Shop_Desktop = () => {
               </Title>
               <Button onClick={() => router.push(url + '/photos')}> View All Photos </Button>
             </Wrapper> */}
-
+            {/* 
             <ImageRow>
               <ImageWrapper>
                 {result && result.popular && result.popular.map((item, i) => {
@@ -114,18 +150,18 @@ const Shop_Desktop = () => {
                   )
                 })}
               </ImageWrapper>
-            </ImageRow>
+            </ImageRow> */}
 
             <Wrapper>
               <Title>
                 <Icon name="star" size="small" style={{ marginRight: 10 }} />
                 User Reviews
               </Title>
-              <Button onClick={() => router.push(url + '/reviews')}>View All Reviews</Button>
+              {/* <Button onClick={() => router.push(url + '/reviews')}>View All Reviews</Button> */}
             </Wrapper>
             <Slider >
-              {result && result.shop && result.shop.reviews && result.shop.reviews.length !== 0 ? 
-              <ReviewCards shop={result.shop} /> : <>No review yet</>}
+              {currentShop && currentShop.reviews && currentShop.reviews.length !== 0 ?
+                <ReviewCards shop={currentShop} /> : <h4>... No review yet 😋 </h4>}
             </Slider>
 
             <Wrapper>
@@ -133,10 +169,11 @@ const Shop_Desktop = () => {
                 <Icon name="newspaper outline" size="small" style={{ marginRight: 10 }} />
                 Featured Articles
               </Title>
-              <Button onClick={() => router.push(url + '/articles')}>View All Articles</Button>
+              {/* <Button onClick={() => router.push(url + '/articles')}>View All Articles</Button> */}
             </Wrapper>
             <Slider >
-              <EditorCards/>
+              {articles && articles.length !== 0 ?
+                <EditorCards /> : <h4>... No article yet 😋 </h4>}
             </Slider>
 
           </div>

@@ -30,7 +30,7 @@ const RestaurantMenu = ({ contextRef, t }) => {
   );
   const [searchResults, setSearchResults] = useRecoilState(searchResultsAtom);
   const [searchValue] = useRecoilState(searchValueAtom);
-  
+
   useEffect(() => {
     // console.log(currentShop && currentShop.shop_categories);
     try {
@@ -41,39 +41,45 @@ const RestaurantMenu = ({ contextRef, t }) => {
   }, [currentShop]);
 
   return (
-      <div style={{position: "relative"}}>
-        {/* Menu cat slider*/}
-        <Sticky offset={isMobile ? 70 : 70} context={contextRef}>
-          <Slider topic={t && t`FullMenu`} hideViewAll>
-            <CatWrapper>
-              {currentShop && currentShop.shop_categories && currentShop.shop_categories[0] && 
-                currentShop.shop_categories.map((item, i) => {
-
-                  if (item.category_name !== 'Popular Items') {
-                    return (
-                      <LabelContainer
-                        color="black"
-                        key={item.id}
-                        onClick={() => {
-                          router.push(
-                            '/shop/' +
+    <div style={{ position: "relative" }}>
+      {/* Menu cat slider*/}
+      {true && (
+        <Sticky offset={isMobile ? 80 : 70} context={contextRef}>
+          <div>
+            <Slider topic={t && t`FullMenu`} hideViewAll hideScrollbar>
+              <CatWrapper>
+                {currentShop &&
+                  currentShop.shop_categories &&
+                  currentShop.shop_categories[0] &&
+                  currentShop.shop_categories.map((item, i) => {
+                    if (item.category_name !== "Popular Items") {
+                      return (
+                        <LabelContainer
+                          color="black"
+                          key={item.id}
+                          onClick={() => {
+                            router.push(
+                              "/shop/" +
                               router.query.slug +
-                              '/' +
+                              "/" +
                               router.query.shop_id +
-                              '#' +
+                              "/menu#" +
                               item.id
-                          );
-                        }}>
-                        {item.category_name}
-                      </LabelContainer>
-                    );
-                  }
-                })}
-            </CatWrapper>
-          </Slider>
+                            );
+                          }}
+                        >
+                          {item.category_name}
+                        </LabelContainer>
+                      );
+                    }
+                  })}
+              </CatWrapper>
+            </Slider>
+          </div>
         </Sticky>
+      )}
 
-       {/* Menu cards*/}
+      {/* Menu cards*/}
       {/******** Search Results| 搜索结果 ********/}
       {isDesktop ? (
         <div id="result" style={{ paddingTop: 1 }} />
@@ -100,26 +106,7 @@ const RestaurantMenu = ({ contextRef, t }) => {
         </MenuContainer>
       }
 
-      {/******** Most Popular | 本店最热 ********/}
-      {/* <MenuContainer>
-        {isDesktop ? (
-          <div id="popular" style={{ paddingTop: 1 }} />
-        ) : (
-          <div id="popular" style={{ paddingTop: 190, marginTop: -190 }} />
-        )}
-        <CatTitle isMobile={isMobile}>
-          <div className="jumptarget">Most Popular | 本店最热</div>
-        </CatTitle>
-        <Divider />
-        <CardContainer isMobile={isMobile}>
-          {currentShopPoplularProducts &&
-            currentShopPoplularProducts.map((product) => {
-              return <ShopDishCards item={product} key={product.id} />;
-            })}
-          {!currentShopPoplularProducts[0] && <div>No item found.</div>}
-        </CardContainer>
-      </MenuContainer> */}
-
+      {/******** Full Menu ********/}
       {
         currentShop &&
         currentShop.shop_categories &&
@@ -129,10 +116,10 @@ const RestaurantMenu = ({ contextRef, t }) => {
           if (cat.category_name !== "Popular Items") {
             return (
               <MenuContainer key={i}>
-                {/* Anchor point for desktop and non desktop */}
-                {/* {isDesktop && <Anchor id={cat.id} isDesktop={isDesktop}></Anchor>} */}
                 {isDesktop ? (
-                  <div id={cat.id} style={{ paddingTop: 1 }} />
+                  <div id={cat.id} 
+                  style={{ paddingTop: 230, marginTop: -230 }}
+                  />
                 ) : (
                   <div
                     id={cat.id}
@@ -155,7 +142,9 @@ const RestaurantMenu = ({ contextRef, t }) => {
                       ) {
                         isEmpty = false;
                         return (
-                          <ShopDishCards item={product} key={product.id} />
+                          <ShopDishCards item={product} key={product.id} catName={cat.category_name}
+                          // isLunchTime={isLunchTime} 
+                          />
                         );
                       }
                     })}
@@ -188,7 +177,7 @@ const LabelContainer = styled.div({
 });
 const CatWrapper = styled.div`
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       flex-wrap: wrap;
       width: 100%;
       min-width: 100px;

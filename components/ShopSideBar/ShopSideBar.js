@@ -5,14 +5,15 @@ import ShopInfo from './ShopInfo';
 import { useIsDesktop } from '../../util/useScreenSize';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
-import { selectedPage as selectedPageAtom } from '../../data/atoms.js';
+import { selectedPage as selectedPageAtom, currentShop as currentShopAtom } from '../../data/atoms.js';
 
 const ShopSideBar = ({ shop }) => {
   const isDesktop = useIsDesktop();
   const profilePic = shop.images && process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(shop.images)[0]
-  const url = '/shop/' + shop.name + '/' + shop.id
   const router = useRouter();
   const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
+  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
+  const url = '/shop/' + currentShop.name + '/' + currentShop.id
 
   useEffect(() => {
     console.log("router", router.components)
@@ -31,18 +32,18 @@ const ShopSideBar = ({ shop }) => {
 
         <Button onClick={() => router.push(url + '/menu')}
           selected={selectedPage === "menu"}>
-          Menu <Icon name="bars" /></Button>
+          Full Menu <Icon name="bars" /></Button>
 
         {/* <Button onClick={() => router.push(url + '/photos')}>
           Photos <Icon name="photo" /></Button> */}
 
         <Button onClick={() => router.push(url + '/articles')}
           selected={selectedPage === "articles"}>
-          Articles <Icon name="newspaper" /></Button>
+          Featured Articles <Icon name="newspaper" /></Button>
 
         <Button onClick={() => router.push(url + '/reviews')}
           selected={selectedPage === "reviews"}>
-          Reviews <Icon name="star" /></Button>
+          User Reviews <Icon name="star" /></Button>
 
       </ButtonsWrapper>
 

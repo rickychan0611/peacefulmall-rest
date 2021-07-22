@@ -15,9 +15,10 @@ import {
 import SearchBanner from '../../../../components/SearchBanner';
 import Shop_Desktop_Overview from '../../../../components/Shop/Shop_Desktop_Overview';
 import Shop_Mobile from '../../../../components/Shop/Shop_Mobile';
+import { useRouter } from 'next/router';
 
-const shop = ({ getSingleShop, getShopProducts }) => {
-  const hide = useState(false);
+const shop = () => {
+  const router = useRouter();
   const isMobile = useIsMobile();
   const isDesktop = useIsDesktop();
   const isTablet = useIsTablet();
@@ -25,9 +26,26 @@ const shop = ({ getSingleShop, getShopProducts }) => {
   const [, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
 
   useEffect(async () => {
-    setCurrentShop(getSingleShop);
-    setCurrentShopProducts(getShopProducts);
-    console.log("Single shop" , getSingleShop)
+    console.log("Single shop", currentShop)
+    if (!currentShop || currentShop.id !== router.query.shop_id) {
+      const getSingleShop = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleshop', {
+        params: { shop_id: router.query.shop_id }
+      });
+      const getShopProducts = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shopproducts', {
+        params: {
+          shop_id: router.query.shop_id,
+          category_id: 'all'
+        }
+      });
+      setCurrentShop(getSingleShop.data.data);
+      setCurrentShopProducts(getShopProducts.data.data);
+
+      //get discounted items
+        let discount = getShopProducts.data.data
+        discount = discount.filter(item => !!item.promotion_price)
+        console.log("111111currentShopProducts", discount)
+        setCurrentShop({ ...getSingleShop.data.data, discount })
+    }
   }, []);
 
   return (
@@ -68,27 +86,27 @@ const shop = ({ getSingleShop, getShopProducts }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  context.res.setHeader('Cache-Control', 's-maxage=3600');
+// export const getServerSideProps = async (context) => {
+//   // context.res.setHeader('Cache-Control', 's-maxage=3600');
 
-  const getSingleShop = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleshop', {
-    params: { shop_id: context.params.shop_id }
-  });
+//   const getSingleShop = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleshop', {
+//     params: { shop_id: context.params.shop_id }
+//   });
 
-  const getShopProducts = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shopproducts', {
-    params: {
-      shop_id: context.params.shop_id,
-      category_id: 'all'
-    }
-  });
+//   const getShopProducts = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shopproducts', {
+//     params: {
+//       shop_id: context.params.shop_id,
+//       category_id: 'all'
+//     }
+//   });
 
-  return {
-    props: {
-      getSingleShop: getSingleShop.data.data,
-      getShopProducts: getShopProducts.data.data,
-    }
-  }
-}
+// return {
+//   props: {
+//     getSingleShop: getSingleShop.data.data,
+//     getShopProducts: getShopProducts.data.data,
+//   }
+// }
+// }
 
 const SearchBannerWrapper = styled.div`
   z-index: 1000;

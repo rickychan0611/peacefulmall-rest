@@ -28,7 +28,7 @@ const ShopDishCards = ({ item, scrollPosition }) => {
       >
         <SpaceBetween>
           <div style={{position: "relative"}}>
-          <Code>{item.code}</Code>
+          {item.code && <Code>{item.code}</Code>}
             {item.images && item.images[0] ? (
               <Img
                 key={item.name}
@@ -93,7 +93,7 @@ const ShopDishCards = ({ item, scrollPosition }) => {
             style={{
               marginTop: 20,
               padding: 10,
-              backgroundColor: "#9c0404",
+              backgroundColor: "#ee3160",
               color: "white",
               width: "100%",
               borderRadius: 20,

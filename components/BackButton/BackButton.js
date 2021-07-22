@@ -1,16 +1,26 @@
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
+import { useRecoilState } from 'recoil';
+import {
+  currentItem as currentItemAtom,
+  currentShop as currentShopAtom,
+} from '../../data/atoms.js';
 
 const BackButton = () => {
   const router = useRouter();
+  const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
+  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
 
   return (
-    <Container
-      onClick={() => {
+    <Container>
+      <div onClick={() => {
         router.back();
-      }}>
-      <Icon name="arrow left" /> Back
+      }}><Icon name="arrow left" /> Back </div>
+      &nbsp;&nbsp;&nbsp;&nbsp;  | &nbsp;&nbsp;&nbsp;&nbsp; 
+      <div onClick={() => {
+        router.push("/shop/" + currentShop.name + "/" + currentShop.id + "/menu");
+      }}><Icon name="newspaper" /> View Full Menu</div>
     </Container>
   );
 };
@@ -24,6 +34,9 @@ const Container = styled.div`
   padding: 10px;
   margin: 0 0 0 0;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-flow: row nowrap;
 `;
 
 export default BackButton;

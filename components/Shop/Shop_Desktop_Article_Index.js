@@ -58,7 +58,8 @@ const Shop_Desktop_Article_Index = () => {
               </Title>
             </Wrapper>
             <CardsWrapper>
-              <EditorCards />
+            {articles && articles.length !== 0 ? 
+              <EditorCards /> : <>No article yet</>}
             </CardsWrapper>
           </div>
         </Grid.Column>

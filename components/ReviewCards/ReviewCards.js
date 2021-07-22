@@ -32,6 +32,7 @@ const ReviewCards = ({ shop }) => {
                           activeColor="#ffd700"
                           isHalf={true}
                           value={item.rating}
+                          edit={false}
                         />
                         <span style={{ paddingTop: 5 }}>{item.rating}</span>
                       </Row>
@@ -100,6 +101,7 @@ const Description = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
+  width: 200px;
 `;
 const Price = styled.div`
   font-size: 1rem;

@@ -48,7 +48,6 @@ const Home = () => {
   const query = async (topic, api, params) => {
     const res = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/' + api, { params });
     setResult(prev => ({ ...prev, [topic]: res.data.data }))
-    console.log("reviews", res)
   }
 
   useEffect(async () => {
@@ -58,7 +57,7 @@ const Home = () => {
       query("popular", "products", { plat_category: 'all', type: 'popular', count: '20' });
       query("allShops", "shops", { shop_type: 'all', type: 'all', count: '20' });
       query("reviews", "user/reviews");
-      query("singleshop", "singleshop", { shop_id: 2 });
+      // query("singleshop", "singleshop", { shop_id: 2 });
     }
     catch (err) {
       console.log("query err:", err)
@@ -100,7 +99,7 @@ const Home = () => {
   }, [])
 
   useEffect(() => {
-    console.log("result", result)
+    console.log("all queries:", result)
   }, [result])
 
   return (

@@ -33,8 +33,9 @@ const DishCards = ({ products }) => {
                   onClick={() => {
                     // when click, save item in selectedItem Atom and selectedStore Atom.
                     // then open item's page by using item's id
+                    console.log("!!!currentItem", item)
                     setCurrentItem({ ...item, fromHomePage: true });
-                    setCurrentShop(item.shop);
+                    // setCurrentShop(item.shop);
                     router.push('/item/' + item.id);
                   }}>
                   {item.promotion_price && <Label
@@ -69,7 +70,7 @@ const DishCards = ({ products }) => {
                           ${item.promotion_price}
                         </Price>
                       )}
-                      <Description>by: {item.shop.name}</Description>
+                      {item.shop && item.shop.name && <Description>by: {item.shop.name}</Description>}
                     </div>
                     <Button basic size="tiny" style={{ marginTop: 5, padding: 10, color: 'red' }}>
                       {t('OrderNow')}

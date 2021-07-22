@@ -46,29 +46,6 @@ const Shop_Desktop = () => {
               <RestaurantMenu t={t} contextRef={contextRef} />
             </Ref>
             
-            <Section id="popular">
-              <Slider topic={t('PopularItems')} hideViewAll>
-                {currentShopProducts ? (
-                  <PopularDishes products={currentShopProducts} />
-                ) : (
-                  'No item found.'
-                )}
-              </Slider>
-            </Section>
-
-            <br />
-            <hr />
-            <br />
-            <Section id="reviews">
-            <Title style={{fontSize: 28}}>{t`Reviews`}</Title>
-              <ReviewFeed t={t} />
-            </Section>
-            <br />
-            <hr />
-            <br />
-            {/* <Slider topic="Restaurants you may like" hideViewAll> */}
-            {/* <PopularDishes /> */}
-            {/* </Slider> */}
           </div>
         </Grid.Column>
       </Grid>

@@ -12,10 +12,10 @@ const item = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
 
   useEffect(async () => {
-    console.log("!!item_id currentShop", currentShop)
-    if (!currentShop) {
+    console.log("!!!!!item_id currentShop", currentItem)
+    if (!currentShop || !currentItem) {
       const getProduct = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleproduct?product_id=' + router.query.item_id);
-      console.log("currentItemSSSSSSSSSSSSS", getProduct.data.data.shop)
+      console.log("currentItemSSSSSSSSSSSSS", getProduct.data.data)
       setCurrentItem(getProduct.data.data)
       setCurrentShop(getProduct.data.data.shop)
     }

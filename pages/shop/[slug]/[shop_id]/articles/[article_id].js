@@ -11,7 +11,7 @@ import {
 } from '../../../../../data/atoms';
 import SearchBanner from '../../../../../components/SearchBanner';
 import Shop_Desktop_Article from '../../../../../components/Shop/Shop_Desktop_Article';
-import Shop_Mobile from '../../../../../components/Shop/Shop_Mobile';
+import Shop_Mobile_Article from '../../../../../components/Shop/Shop_Mobile_Article';
 
 const shop = ({ getSingleShop, getShopProducts }) => {
   const hide = useState(false);
@@ -24,7 +24,7 @@ const shop = ({ getSingleShop, getShopProducts }) => {
   useEffect(async () => {
     setCurrentShop(getSingleShop);
     setCurrentShopProducts(getShopProducts);
-    console.log("Single shop" , getSingleShop)
+    console.log("Single shop", getSingleShop)
   }, []);
 
   return (
@@ -56,7 +56,7 @@ const shop = ({ getSingleShop, getShopProducts }) => {
           <Shop_Desktop_Article />
         ) : (
           <>
-            <Shop_Mobile />
+            <Shop_Mobile_Article />
           </>
         )}
       </Container>

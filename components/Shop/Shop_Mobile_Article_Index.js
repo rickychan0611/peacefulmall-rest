@@ -12,12 +12,12 @@ import {
 
 import { Grid, Icon } from 'semantic-ui-react';
 import EditorCards from '../EditorCards';
-import ShopSideBar from '../ShopSideBar';
+import BottomNavBar from '../BottomNavBar';
 import Shop_Desktop_Header from './Shop_Desktop_Header';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
 
-const Shop_Desktop_Article_Index = () => {
+const Shop_Mobile_Article_Index = () => {
   const router = useRouter();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
@@ -43,27 +43,21 @@ const Shop_Desktop_Article_Index = () => {
 
   return (
     <div>
-      <Grid>
-        <Grid.Column width={4} style={{ paddingBottom: 100 }}>
-          <ShopSideBar shop={currentShop} />
-        </Grid.Column>
-
-        <Grid.Column width={12} style={{ padding: '30px 20px 80px 20px' }}>
-          <div>
-            <Shop_Desktop_Header />
-            <Wrapper>
-              <Title>
-                <Icon name="newspaper" size="small" style={{ marginRight: 10 }} />
-                Featured Articles
-              </Title>
-            </Wrapper>
-            <CardContainer>
-              {articles && articles.length !== 0 ?
-                <EditorCards /> : <>No article yet</>}
-            </CardContainer>
-          </div>
-        </Grid.Column>
-      </Grid>
+      <Shop_Desktop_Header />
+      <Wrapper>
+        <Title>
+          <Icon name="newspaper" size="small" style={{ marginRight: 10 }} />
+          Featured Articles
+        </Title>
+      </Wrapper>
+      <CardContainer>
+        {articles && articles.length !== 0 ?
+          <EditorCards /> : <>No article yet</>}
+      </CardContainer>
+      <BottomNavBar />
+      <br />
+      <br />
+      <br />
     </div >
   );
 };
@@ -75,14 +69,14 @@ const Wrapper = styled.div`
   margin-bottom: 30px;
 `;
 const CardContainer = styled.div`
-  padding-bottom: 30px;
-  display: grid;
-  grid-gap: ${(p) => (p.isMobile && !p.toggle ? "10px" : "15px")};
-  grid-template-columns: ${(p) =>
-  p.isMobile
-  ? "repeat(auto-fill, minmax(150px, 1fr))"
-  : "repeat(auto-fill, minmax(200px, 1fr))"};
-  `;
+      padding-bottom: 30px;
+      display: grid;
+      grid-gap: ${(p) => (p.isMobile && !p.toggle ? "10px" : "15px")};
+      grid-template-columns: ${(p) =>
+    p.isMobile
+      ? "repeat(auto-fill, minmax(150px, 1fr))"
+      : "repeat(auto-fill, minmax(200px, 1fr))"};
+      `;
 const Avatar = styled.img`
   display: flex;
   justify-content: center;
@@ -107,4 +101,4 @@ const Description = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
-export default Shop_Desktop_Article_Index;
+export default Shop_Mobile_Article_Index;

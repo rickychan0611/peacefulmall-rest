@@ -43,7 +43,7 @@ const ReviewFeed = () => {
                         size={22}
                         activeColor="#ffd700"
                         isHalf={true}
-                        value={item.rating}
+                        value={+item.rating}
                       />
                       <span style={{ paddingTop: 5 }}>{" " + item.rating}</span>
                     </Row>

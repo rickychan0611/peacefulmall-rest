@@ -2,15 +2,13 @@ import { useEffect, useState, useCallback } from 'react';
 import { Header, Input, Image, Icon, Form, Button, Modal } from 'semantic-ui-react';
 import styled from 'styled-components';
 import useTranslation from 'next-translate/useTranslation';
-import ReactStars from 'react-rating-stars-component';
 import { useRecoilState } from 'recoil';
-import { currentShop as currentShopAtom, currentOrder as currentOrderAtom } from '../../data/atoms';
-import { user as userAtom } from '../../data/userAtom.js';
+import { currentOrder as currentOrderAtom } from '../../data/atoms';
 import { useRouter } from 'next/router';
 import Loader from '../../components/Loader';
 import ReviewForm from '../../components/ReviewForm';
 import axios from 'axios';
-import { CookiesProvider, useCookies } from 'react-cookie';
+import { useCookies } from 'react-cookie';
 
 const Review = () => {
   const router = useRouter();
@@ -91,39 +89,6 @@ const Review = () => {
   );
 };
 
-const CloseIcon = styled.div`
-  position: absolute;
-  right: 0;
-  z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.4);
-  padding: 2px 2px 4px 4px;
-`;
-const Title = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-`;
-const Row = styled.div`
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  margin-top: 10px;
-  margin-bottom: 30px;
-`;
-const ReviewImage = styled(Image)`
-  height: 100px;
-  width: 100px;
-  object-fit: cover;
-`;
-const StarWrapper = styled.div`
-  margin: 10px 0 10px 0;
-  height: 100%;
-  span {
-    height: 40px;
-    margin-left: 5px;
-  }
-`;
 const Wrapper = styled.div`
   margin: 0 auto;
   width: 100%;

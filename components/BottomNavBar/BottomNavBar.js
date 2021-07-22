@@ -10,19 +10,19 @@ const BottomNavBar = () => {
 
   return (
     <Container>
-      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "#shopTop")}}>
-        <Icon name="info circle" size="large"/>
-        <Label>About</Label>
+      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id)}}>
+        <Icon name="store" size="large"/>
+        <Label>Overview</Label>
       </IconWrapper>
-      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "#fullMenu")}}>
+      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "/menu")}}>
         <Icon name="bars" size="large"/>
         <Label>Full Menu</Label>
       </IconWrapper>
-      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "#reviews")}}>
+      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "/reviews")}}>
         <Icon name="star" size="large"/>
         <Label>Reviews</Label>
       </IconWrapper>
-      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "#articles")}}>
+      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "/articles")}}>
         <Icon name="newspaper" size="large"/>
         <Label>Articles</Label>
       </IconWrapper>

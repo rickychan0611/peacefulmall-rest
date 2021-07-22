@@ -9,13 +9,16 @@ import { useIsMobile, useIsTablet, useIsDesktop } from '../../../../util/useScre
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentShop as currentShopAtom,
+  articles as articlesAtom,
+  selectedPage as selectedPageAtom,
   currentShopProducts as currentShopProductsAtom,
   currentShopPoplularProducts as currentShopPoplularProductsAtom,
+  popularProducts as popularProductsAtom,
 } from '../../../../data/atoms';
 
 import SearchBanner from '../../../../components/SearchBanner';
 import Shop_Desktop_Overview from '../../../../components/Shop/Shop_Desktop_Overview';
-import Shop_Mobile from '../../../../components/Shop/Shop_Mobile';
+import Shop_Mobile_Overview from '../../../../components/Shop/Shop_Mobile_Overview';
 import { useRouter } from 'next/router';
 
 const shop = () => {
@@ -26,7 +29,9 @@ const shop = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
   const [, setCurrentShopPoplularProducts] = useRecoilState(currentShopPoplularProductsAtom);
-  
+  const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
+  const [articles, setArticles] = useRecoilState(articlesAtom);
+
   useEffect(async () => {
     console.log("Single shop", currentShop)
     if (!currentShop || currentShop.id !== router.query.shop_id) {
@@ -51,6 +56,24 @@ const shop = () => {
       setCurrentShopPoplularProducts(getShopPopularProducts.data.data);
     }
   }, []);
+
+  // get articles
+  useEffect(async () => {
+    try {
+      const getArticles = await axios.get(
+        process.env.NEXT_PUBLIC_STRAPI_URL + '/articles?_where[restaurant_id]=' + currentShop.id + "&_sort=updated_at:ASC")
+      console.log("getArticles", getArticles.data)
+      setArticles(getArticles.data)
+    }
+    catch (err) {
+      console.log("err", err)
+    }
+  }, [])
+
+  useEffect(() => {
+    setSelectedPage("overview")
+    console.log("currentShopcurrentShop, ", currentShop)
+  }, [currentShop])
 
   return (
     <div>
@@ -80,9 +103,7 @@ const shop = () => {
         ) : isDesktop ? (
           <Shop_Desktop_Overview />
         ) : (
-          <>
-            <Shop_Mobile />
-          </>
+            <Shop_Mobile_Overview />
         )}
       </Container>
       {/* {currentShop && <Footer />} */}

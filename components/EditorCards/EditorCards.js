@@ -57,19 +57,20 @@ const ReviewCards = () => {
 
 const Card = styled.div`
   display: flex;
-  flex-flow: column nowrap;
-  width: 250px;
+  flex-flow: row wrap;
+  width: 100%;
   cursor: pointer;
   box-shadow: 0 0 10px rgba(0,0,0,.2);
 `;
 const Img = styled.img`
-  width: 250px;
-  min-height: 200px;
+  width: 100%;
+  /* max-width: 450px; */
+  max-height: 200px;
   object-fit: cover;
 `;
 const Wrapper = styled.div`
   padding: 10px;
-  height: 100%;
+  width: 100%;
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-between;

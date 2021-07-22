@@ -67,7 +67,7 @@ const SearchShopCards = ({ shops }) => {
                         size={22}
                         activeColor="#ffd700"
                         isHalf={true}
-                        value={shop.rating}
+                        value={+shop.rating}
                       /> (34)
                     </Row>
                   </div>

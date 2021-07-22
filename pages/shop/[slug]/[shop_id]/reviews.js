@@ -11,7 +11,7 @@ import {
 } from '../../../../data/atoms';
 import SearchBanner from '../../../../components/SearchBanner';
 import Shop_Desktop_Review from '../../../../components/Shop/Shop_Desktop_Review';
-import Shop_Mobile from '../../../../components/Shop/Shop_Mobile';
+import Shop_Mobile_Review from '../../../../components/Shop/Shop_Mobile_Review';
 
 const shop = ({ getSingleShop, getShopProducts }) => {
   const hide = useState(false);
@@ -56,7 +56,7 @@ const shop = ({ getSingleShop, getShopProducts }) => {
           <Shop_Desktop_Review />
         ) : (
           <>
-            <Shop_Mobile />
+            <Shop_Mobile_Review />
           </>
         )}
       </Container>

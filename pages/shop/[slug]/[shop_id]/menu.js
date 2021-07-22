@@ -14,7 +14,7 @@ import {
 
 import SearchBanner from '../../../../components/SearchBanner';
 import Shop_Desktop_Menu from '../../../../components/Shop/Shop_Desktop_Menu';
-import Shop_Mobile from '../../../../components/Shop/Shop_Mobile';
+import Shop_Mobile_Menu from '../../../../components/Shop/Shop_Mobile_Menu';
 
 const shop = ({ getSingleShop, getShopProducts }) => {
   const hide = useState(false);
@@ -59,7 +59,7 @@ const shop = ({ getSingleShop, getShopProducts }) => {
           <Shop_Desktop_Menu />
         ) : (
           <>
-            <Shop_Mobile />
+            <Shop_Mobile_Menu />
           </>
         )}
       </Container>

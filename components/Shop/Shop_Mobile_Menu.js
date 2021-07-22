@@ -43,7 +43,7 @@ const Shop_Mobile_Menu = () => {
       <hr />
       <br /> */}
       <Section id="reviews">
-      <Title style={{fontSize: 28}}>{t`Reviews`}</Title>
+        <Title style={{ fontSize: 28 }}>{t`Reviews`}</Title>
         <ReviewFeed />
       </Section>
       <br />
@@ -67,6 +67,7 @@ const Section = styled.div`
     display:block;
     height:80px; /* fixed header height*/
     margin:-80px 0 0; /* negative fixed header height */
+  }
 `;
 const Wrapper = styled.div`
   display: flex;

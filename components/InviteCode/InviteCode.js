@@ -74,7 +74,7 @@ const InviteCode = () => {
             <a 
               style={{ cursor: "pointer" }}
               onClick={() => {
-                navigator.clipboard.writeText(window.location.origin + "/sign-up?invite-code=" + user.codes[0].code)
+                navigator.clipboard.writeText(window.location.origin + "/sign-up?invite_code=" + user.codes[0].code)
               }}
             >COPY INVITE URL</a>
             </div>

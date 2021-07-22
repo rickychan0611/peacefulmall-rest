@@ -2,12 +2,15 @@ import { useRef, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentShop as currentShopAtom,
   articles as articlesAtom,
   selectedPage as selectedPageAtom,
   currentShopProducts as currentShopProductsAtom,
+  discountedProducts as discountedProductsAtom,
+  currentShopPoplularProducts as currentShopPoplularProductsAtom,
+  popularProducts as popularProductsAtom,
 } from '../../data/atoms';
 import Shop_Desktop_Header from './Shop_Desktop_Header';
 
@@ -28,43 +31,10 @@ const Shop_Desktop = () => {
   const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
   const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
   const [articles, setArticles] = useRecoilState(articlesAtom);
-  const contextRef = useRef();
-  const [result, setResult] = useState({});
+  const discountedProducts = useRecoilValue(discountedProductsAtom)
   const url = '/shop/' + currentShop.name + '/' + currentShop.id
-
-  const query = async (topic, api, params) => {
-    const res = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/' + api, { params });
-    // setResult(prev => ({ ...prev, [topic]: res.data.data }))
-    setCurrentShop(prev => ({ ...prev, popular : [...currentShopProducts, ...res.data.data] }))
-    //get discounted items
-    // if (topic === "products") {
-    //   let discount = currentShopProducts
-    //   if (discount.length > 0) {
-    //     discount = discount.filter(item => !!item.promotion_price)
-    //   }
-    //   setResult(prev => ({ ...prev, discount: discount }))
-    // }
-  }
-
-  useEffect(async () => {
-    try {
-      // query("shop", "singleshop", { shop_id: router.query.shop_id });
-      query("popular", "shopproducts", { shop_id: router.query.shop_id, category_id: "popular" });
-      // query("products", "shopproducts", { shop_id: router.query.shop_id, category_id: "all" });
-      // setCurrentShop(prev => ({ ...prev, result }))
-
-      //get discounted items
-      // let discount = currentShopProducts
-      // console.log("111111currentShopProducts", discount)
-      // if (!discount.discount && discount.length > 0) {
-      //   discount = discount.filter(item => !!item.promotion_price)
-      //   setCurrentShop(prev => ({ ...prev, discount }))
-      // }
-    }
-    catch (err) {
-      console.log("query err:", err)
-    }
-  }, [])
+  const [currentShopPoplularProducts, setCurrentShopPoplularProducts] = useRecoilState(currentShopPoplularProductsAtom);
+  const popularProducts = useRecoilValue(popularProductsAtom);
 
   // get articles
   useEffect(async () => {
@@ -103,10 +73,10 @@ const Shop_Desktop = () => {
               <Button style={{ color: "white", backgroundColor: "#ee3160" }} onClick={() => router.push(url + '/menu')}> View Full Menu </Button>
             </Wrapper>
             <Slider>
-              <DishCards products={currentShop.popular && currentShop.popular.length > 0 ? currentShop.popular : currentShopProducts} />
+              <DishCards products={popularProducts} />
             </Slider>
 
-            {currentShop && currentShop.discount && <>
+            {discountedProducts &&  <>
               <Wrapper>
                 <Title>
                   <Icon name="food" size="small" style={{ marginRight: 10 }} />
@@ -115,10 +85,11 @@ const Shop_Desktop = () => {
                 <Button style={{ color: "white", backgroundColor: "#ee3160" }} onClick={() => router.push(url + '/menu')}> View Full Menu </Button>
               </Wrapper>
               <Slider>
-                <DishCards products={currentShop.discount} />
+                <DishCards products={discountedProducts} />
               </Slider>
             </>}
 
+            {/************* Photo Gallery ***********/}
             {/* <Wrapper>
               <Title>
                 <Icon name="photo" size="small" style={{ marginRight: 10 }} />

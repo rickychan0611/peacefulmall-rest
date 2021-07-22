@@ -177,7 +177,7 @@ const LabelContainer = styled.div({
 });
 const CatWrapper = styled.div`
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       flex-wrap: wrap;
       width: 100%;
       min-width: 100px;

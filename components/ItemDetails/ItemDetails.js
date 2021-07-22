@@ -44,7 +44,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
     });
     setOpenWarning(false);
     console.log("item.fromHomePage", item.fromHomePage)
-    item.fromHomePage ? router.push("/shop/" + item.currentShop.name + "/" + item.currentShop.id) : router.back();
+    item.fromHomePage ? router.push("/shop/" + currentShop.name + "/" + currentShop.id + "/menu") : router.back();
   };
 
   //function: addItem is called in <BottomAddBar>,
@@ -62,7 +62,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
       setOrderItems((prev) => {
         return [{ ...item, attributeTotal, quantity, shop: currentShop, uid: uid(item) }, ...prev];
       });
-      item.fromHomePage ? router.push("/shop/" + item.currentShop.name + "/" + item.currentShop.id) : router.back();
+      item.fromHomePage ? router.push("/shop/" + currentShop.name + "/" + currentShop.id  + "/menu") : router.back();
     } else {
       setOpenWarning(true);
     }

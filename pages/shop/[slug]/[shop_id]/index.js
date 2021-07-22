@@ -9,7 +9,8 @@ import { useIsMobile, useIsTablet, useIsDesktop } from '../../../../util/useScre
 import { useRecoilState } from 'recoil';
 import {
   currentShop as currentShopAtom,
-  currentShopProducts as currentShopProductsAtom
+  currentShopProducts as currentShopProductsAtom,
+  currentShopPoplularProducts as currentShopPoplularProductsAtom,
 } from '../../../../data/atoms';
 
 import SearchBanner from '../../../../components/SearchBanner';
@@ -24,10 +25,12 @@ const shop = () => {
   const isTablet = useIsTablet();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
+  const [, setCurrentShopPoplularProducts] = useRecoilState(currentShopPoplularProductsAtom);
 
   useEffect(async () => {
     console.log("Single shop", currentShop)
     if (!currentShop || currentShop.id !== router.query.shop_id) {
+
       const getSingleShop = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleshop', {
         params: { shop_id: router.query.shop_id }
       });
@@ -37,14 +40,15 @@ const shop = () => {
           category_id: 'all'
         }
       });
+      const getShopPopularProducts = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shopproducts', {
+        params: {
+          shop_id: router.query.shop_id,
+          category_id: 'popular'
+        }
+      });
       setCurrentShop(getSingleShop.data.data);
       setCurrentShopProducts(getShopProducts.data.data);
-
-      //get discounted items
-        let discount = getShopProducts.data.data
-        discount = discount.filter(item => !!item.promotion_price)
-        console.log("111111currentShopProducts", discount)
-        setCurrentShop({ ...getSingleShop.data.data, discount })
+      setCurrentShopPoplularProducts(getShopPopularProducts.data.data);
     }
   }, []);
 

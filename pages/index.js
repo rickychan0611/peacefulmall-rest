@@ -14,7 +14,9 @@ import CurrentAddress from '../components/CurrentAddress';
 import { useRecoilState } from 'recoil';
 import {
   currentPosition as currentPositionAtom,
-  articles as articlesAtom
+  articles as articlesAtom,
+  currentShop as currentShopAtom,
+  currentShopProducts as currentShopProductsAtom
 } from '../data/atoms';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 import styled from 'styled-components';
@@ -26,6 +28,8 @@ const Home = () => {
   const { t } = useTranslation('home');
   const [result, setResult] = useState({});
   const [currentPosition, setCurrentPosition] = useRecoilState(currentPositionAtom);
+  const [, setCurrentShop] = useRecoilState(currentShopAtom);
+  const [, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
   const [articles, setArticles] = useRecoilState(articlesAtom);
   const isDesktop = useIsDesktop();
   const isMobile = useIsMobile();
@@ -51,6 +55,8 @@ const Home = () => {
   }
 
   useEffect(async () => {
+    setCurrentShop();
+    setCurrentShopProducts();
     try {
       query("platcat", "getplatcat");
       query("discount", "products", { plat_category: 'all', type: 'discount', count: '20' });

@@ -37,23 +37,49 @@ export const currentItem = atom({
 
 export const currentOrder = atom({
   key: 'currentOrder',
-  default: null
+  default: []
 });
 
 export const currentShop = atom({
   key: 'currentShop',
-  default: null
+  default: []
 });
 
 export const currentShopProducts = atom({
   key: 'currentShopProducts',
-  default: null
+  default: []
 });
+
+export const discountedProducts = selector({
+  key: 'discountedProducts',
+  get: ({ get }) => {
+    let discount = get(currentShopProducts)
+    if (discount) {
+      discount = discount.filter(item => !!item.promotion_price)
+    }
+    return discount
+  }
+})
 
 export const currentShopPoplularProducts = atom({
   key: 'currentShopPoplularProducts',
   default: null
 });
+
+export const popularProducts = selector({
+  key: 'popularProducts',
+  get: ({ get }) => {
+    let popularProducts = get(currentShopPoplularProducts)
+    let shopProducts = get(currentShopProducts)
+    let newArr = []
+    if (!popularProducts && shopProducts) return shopProducts.slice(0, 5)
+    else if (shopProducts && popularProducts && popularProducts.length < 5) {
+      newArr = [...popularProducts, ...shopProducts.slice(0, 5)]
+      return newArr
+    }
+    return popularProducts
+  }
+})
 
 export const currentCat = atom({
   key: 'currentCat',
@@ -151,5 +177,6 @@ export const defaultAddress = selector({
     return get(addresses) && get(addresses).find(item => item.default_status === 1)
   }
 })
+
 
 

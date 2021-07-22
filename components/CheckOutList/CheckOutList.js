@@ -42,7 +42,10 @@ const CheckOutList = () => {
           <H4
             style={{ marginTop: 10, cursor: 'pointer', color: '#4183c4' }}
             onClick={() =>
-              router.push('/shop/' + orderDetails.shop.name + '/' + orderDetails.shop.id)
+              {
+                router.push('/shop/' + orderDetails.shop.name + '/' + orderDetails.shop.id)
+                setOpenCheckOutList(false);
+            }
             }>
             {orderDetails.shop && orderDetails.shop.name}
             <Icon name="linkify" />

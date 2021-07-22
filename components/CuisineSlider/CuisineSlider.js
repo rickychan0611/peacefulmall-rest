@@ -7,7 +7,7 @@ import SliderTitle from '../SliderTitle';
 import axios from 'axios';
 import PlaceHolder_Card from '../PlaceHolder_Card/';
 import useTranslation from 'next-translate/useTranslation';
-
+import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import {
   currentCat as currentCatAtom,
@@ -15,20 +15,6 @@ import {
   catChange as scatChangeAtom
 } from '../../data/atoms.js';
 
-// const data = [
-//   { name: 'Cantonese', img: 'canton-thumb.jpg' },
-//   { name: 'Bubble Tea', img: 'bubble-thumb.jpg' },
-//   { name: 'Chinese BBQ', img: 'bbq-thumb.jpg' },
-//   { name: 'Fast Food', img: 'fastFood-thumb.jpg' },
-//   { name: 'Fried Chicken', img: 'friedChicken-thumb.jpg' },
-//   { name: 'Hong Kong', img: 'hongkong-thumb.jpg' },
-//   { name: 'Japanese', img: 'japanese-thumb.jpg' },
-//   { name: 'Korean', img: 'korean-thumb.jpg' },
-//   { name: 'Spicy', img: 'spicy-thumb.jpg' },
-//   { name: 'Ramen', img: 'ramen-thumb.jpg' },
-//   { name: 'Taiwanese', img: 'taiwan-thumb.jpg' },
-//   { name: 'Mexcian', img: 'mexcian-thumb.jpg' }
-// ];
 
 const CuisineSlider = ( {sliderCats} ) => {
   const isMobile = useIsMobile();
@@ -36,6 +22,13 @@ const CuisineSlider = ( {sliderCats} ) => {
   // const [sliderCats, setSliderCats] = useRecoilState(sliderCatsAtom);
   const [catChange, setCatChange] = useRecoilState(scatChangeAtom);
   const { t } = useTranslation('home');
+  const router = useRouter();
+
+  const search = (keyword) => {
+    // setSearchValue(keyword);
+    router.push('/search/shop/' + keyword)
+    // setOpenModal(false)
+  }
 
   return (
     <>
@@ -65,8 +58,9 @@ const CuisineSlider = ( {sliderCats} ) => {
                         onClick={() => {
                           //** setCatChange to true to allow slider slide back to the beginning */
                           //** slider scrolling position stays while catChange is false */
-                          setCatChange(true);
-                          setCurrentCat(item);
+                          // setCatChange(true);
+                          // setCurrentCat(item);
+                          search(item.category_name)
                         }}
                         key={i}>
                         <Image
@@ -91,7 +85,7 @@ const Container = styled(ScrollContainer)`
   white-space: nowrap;
   background-color: white;
   /* padding-bottom: 10px; */
-  margin-bottom: 25px;
+  margin-bottom: 45px;
 `;
 const ItemWrapper = styled.div`
   display: flex;

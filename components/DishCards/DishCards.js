@@ -54,7 +54,6 @@ const DishCards = ({ products }) => {
                       ) : (
                         <Img src="/no-image.png" />
                       )}
-
                       <Name className="clamp2">{item.name}</Name>
                       <Description className="clamp2">{item.description}</Description>
                       {!item.promotion_price ? (

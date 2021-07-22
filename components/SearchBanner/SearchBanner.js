@@ -14,7 +14,7 @@ import {
 import axios from 'axios';
 
 const topSearch = [
-  "和平", "中西结合", "Dim Sum", "和平饭店", "Richmond", "Kitsilano"
+  "Peaceful", "body", "Dim Sum", "和平饭店", "Richmond", "Kitsilano"
 ]
 
 const SearchBanner = ({cats}) => {

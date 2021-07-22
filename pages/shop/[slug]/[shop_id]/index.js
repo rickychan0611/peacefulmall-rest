@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { useIsMobile, useIsTablet, useIsDesktop } from '../../../../util/useScreenSize';
 
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentShop as currentShopAtom,
   currentShopProducts as currentShopProductsAtom,
@@ -26,7 +26,7 @@ const shop = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
   const [, setCurrentShopPoplularProducts] = useRecoilState(currentShopPoplularProductsAtom);
-
+  
   useEffect(async () => {
     console.log("Single shop", currentShop)
     if (!currentShop || currentShop.id !== router.query.shop_id) {

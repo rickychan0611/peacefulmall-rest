@@ -7,7 +7,7 @@ import {
   currentShop as currentShopAtom,
 } from '../../data/atoms.js';
 
-const BackButton = () => {
+const BackButton = ({noMenu}) => {
   const router = useRouter();
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
@@ -17,10 +17,11 @@ const BackButton = () => {
       <div onClick={() => {
         router.back();
       }}><Icon name="arrow left" /> Back </div>
-      &nbsp;&nbsp;&nbsp;&nbsp;  | &nbsp;&nbsp;&nbsp;&nbsp; 
+      &nbsp;&nbsp;&nbsp;&nbsp;  
+      {!noMenu && <>| &nbsp;&nbsp;&nbsp;&nbsp; 
       <div onClick={() => {
         router.push("/shop/" + currentShop.name + "/" + currentShop.id + "/menu");
-      }}><Icon name="newspaper" /> View Full Menu</div>
+      }}><Icon name="newspaper" /> View Full Menu</div></>}
     </Container>
   );
 };

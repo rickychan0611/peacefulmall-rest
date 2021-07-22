@@ -5,6 +5,7 @@ import { useIsMobile } from '../../util/useScreenSize';
 import _ from 'lodash';
 import styled from 'styled-components';
 import toSlug from '../../util/toSlug';
+import ReactStars from 'react-rating-stars-component';
 
 import { useRecoilState } from 'recoil';
 import {
@@ -53,47 +54,73 @@ const ShopCards = ({ shops }) => {
                   )}
 
                   <Name className="clamp2">{shop.name}</Name>
-                  {/* <Description>{item.description}</Description> */}
-                  <Description>{t('location')}: {shop.address_city}</Description>
-                  <Description>{t('style')}: {shop.cuisine_type}</Description>
+                  <Description>{shop.description}</Description>
+                  {/* <Description>{t('location')}: {shop.address_city}</Description> */}
                   {/* <Description>{t('PriceRange')}: 💲💲💲💲</Description> */}
-                  <Description>{t('Reviews')}: ⭐⭐⭐⭐⭐ (34)</Description>
+                  <Row>
+                    <ReactStars
+                      count={5}
+                      edit={false}
+                      size={22}
+                      activeColor="#ffd700"
+                      isHalf={true}
+                      value={+shop.rating}
+                    /> ({shop.reviews ? shop.reviews.length : 0})
+                  </Row>
+                  <Row>
+                    {t('style')}:&nbsp;&nbsp;
+                      {shop.shop_types && shop.shop_types.map((item, i) => {
+                        return (
+                          <div key={i}>
+                            {(i > 0 ? ", " : "  ") + item.type_name}
+                          </div>
+                        )
+                      })}
+                  </Row>
+
                 </Card>
               );
             }) : <>no item found</>}
         </>
-      )}
+      )
+      }
     </>
   );
 };
 
-
-
 const Card = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  margin: 10px;
-  width: 100%;
-  min-width: 220px;
-  cursor: pointer;
-`;
+      display: flex;
+      flex-flow: column nowrap;
+      margin: 10px;
+      width: 100%;
+      min-width: 220px;
+      cursor: pointer;
+      `;
 const Img = styled.img`
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-`;
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      `;
 const Name = styled.div`
-  padding: 7px 0px;
-  font-size: 1.2rem;
-  font-weight: bold;
-`;
+      padding: 7px 0px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      `;
+const Row = styled.div`
+      display: flex;
+      flex-flow: row nowrap;
+      /* justify-content: center; */
+      align-items: center;
+      margin-bottom: 8px;
+      `;
 const Description = styled.div`
-  font-size: 1rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-`;
+      font-size: 1rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      margin-bottom: 5px;
+      `;
 
 export default ShopCards;

@@ -3,23 +3,28 @@ import axios from 'axios';
 
 import styled from 'styled-components';
 import { Container } from 'semantic-ui-react';
-import SearchShopCards from '../../../components/SearchShopCards';
-import SearchDishCards from '../../../components/SearchDishCards';
+import ShopCards from '../../../components/ShopCards';
+import DishCards from '../../../components/DishCards';
 import SearchBanner from '../../../components/SearchBanner';
 import BackButton from '../../../components/BackButton';
 import SearchToggle from '../../../components/SearchToggle';
 import { useIsMobile } from '../../../util/useScreenSize';
 import { useRecoilState } from 'recoil';
 import { searchValue as searchValueAtom } from '../../../data/atoms';
+import { useRouter } from 'next/router';
 
 const search = ({ shops, products, keyword }) => {
   const isMobile = useIsMobile();
   const [searchValue, setSearchValue] = useRecoilState(searchValueAtom);
   const [toggle, setToggle] = useState(false);
+  const router = useRouter();
 
-  useEffect(() => {
+  useEffect(async () => {
+
+    setToggle(false)
     console.log("products search result ", products)
-    console.log("shops search result ", products)
+    // console.log("shops search result ", shops)
+    console.log("shopType!!!!!!! ", shops)
     setSearchValue(keyword);
 
     if (shops.length === 0) setToggle(true)
@@ -31,13 +36,13 @@ const search = ({ shops, products, keyword }) => {
     <>
       <SearchBannerWrapper>
         <SearchBanner />
-        <BackButton />
+        <BackButton noMenu/>
       </SearchBannerWrapper>
       <Container style={{ marginTop: 100, paddingBottom: 50 }}>
         <ToggleContainer>
           <SearchToggle toggle={toggle} setToggle={setToggle} shops={shops} products={products} />
         </ToggleContainer>
-        
+
         {((!toggle && shops.length === 0) || (toggle && products.length === 0)) && (
           <>
             <Header>Sorry, no result found for </Header>
@@ -45,9 +50,9 @@ const search = ({ shops, products, keyword }) => {
             <Header style={{ fontSize: 24, marginBottom: 20 }}>"{keyword}"</Header>
           </>
         )}
-      
+
         <CardContainer isMobile={isMobile} toggle={toggle}>
-          {!toggle ? <SearchShopCards shops={shops} /> : <SearchDishCards products={products} />}
+          {!toggle ? <ShopCards shops={shops} /> : <DishCards products={products} />}
         </CardContainer>
       </Container>
     </>
@@ -56,16 +61,31 @@ const search = ({ shops, products, keyword }) => {
 
 export const getServerSideProps = async (context) => {
   console.log(context.params.keyword);
-  const getShops = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/search', {
+  let getShops = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/search', {
     params: {
       keyword: context.params.keyword
     }
   });
+  let getShopType = {data: {data: []}};
+  const getShopCat = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/getshoptype');
+  const index = getShopCat.data.data.findIndex(item => item.type_name === context.params.keyword)
+  if (index !== -1) {
+    getShopType = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shops', {
+      params: {
+        type: "all",
+        shop_type: getShopCat.data.data[index].id,
+        count: 100
+      }
+    });
+    // getShops.data.data.shops == [...getShopType.data.data.shops, ...getShops.data.data.shops]
+  }
   return {
     props: {
       keyword: context.params.keyword,
-      shops: getShops.data.data.shops,
-      products: getShops.data.data.products
+      // shops: getShops.data.data.shops,
+      products: getShops.data.data.products,
+      shopType: getShopType.data.data,
+      shops: [...getShopType.data.data, ...getShops.data.data.shops]
     }
   };
 };

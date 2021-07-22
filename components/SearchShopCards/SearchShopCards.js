@@ -7,6 +7,7 @@ import toSlug from '../../util/toSlug';
 import { useRecoilState } from 'recoil';
 import { currentShop as currentShopAtom } from '../../data/atoms.js';
 import useTranslation from 'next-translate/useTranslation';
+import ReactStars from 'react-rating-stars-component';
 
 import PlaceHolder_Card from '../PlaceHolder_Card';
 
@@ -51,42 +52,63 @@ const SearchShopCards = ({ shops }) => {
                     <Description>
                       {t('location')}: {shop.address_city}
                     </Description>
-                    <Description>
-                      {t('style')}: {'shop.cuisine_type'}
-                    </Description>
-                    {/* <Description>{t('PriceRange')}: 💲💲💲💲</Description> */}
-                    <Description>{t('Reviews')}: ⭐⭐⭐⭐⭐ (34)</Description>
+                    <Description>{t('style')}:
+                      {shop.shop_types.map((item, i) => {
+                        return (
+                          <>
+                            {(i > 0 ? ", " : " ") + item.type_name}
+                          </>
+                        )
+                      })}</Description>
+                    <Row>
+                      <ReactStars
+                        count={5}
+                        edit={false}
+                        size={22}
+                        activeColor="#ffd700"
+                        isHalf={true}
+                        value={shop.rating}
+                      /> (34)
+                    </Row>
                   </div>
                 </Card>
               );
             })}
         </>
-      )}
+      )
+      }
     </>
   );
 };
 
 const Card = styled.div`
-  cursor: pointer;
+      cursor: pointer;
   /* min-width: ${(p) => (p.isMobile ? '160px' : '200px')}; */
-  flex: 1;
-`;
+      flex: 1;
+      `;
 const Img = styled.img`
-  width: 100%;
-  max-width: 223;
-  height: 200px;
-  object-fit: cover;
-`;
+      width: 100%;
+      max-width: 223;
+      height: 200px;
+      object-fit: cover;
+      `;
 const Name = styled.div`
-  font-size: 1.1rem;
-  font-weight: bold;
-  overflow: hidden;
-  text-overflow: ellipsis;
+      font-size: 1.1rem;
+      font-weight: bold;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      `;
+const Row = styled.div`
+      display: flex;
+      flex-flow: row nowrap;
+      /* justify-content: center; */
+      align-items: center;
+      margin-bottom: 8px;
 `;
 const Description = styled.div`
-  font-size: 0.9rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      `;
 
 export default SearchShopCards;

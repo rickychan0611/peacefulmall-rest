@@ -103,7 +103,7 @@ const shop = () => {
         ) : isDesktop ? (
           <Shop_Desktop_Overview />
         ) : (
-            <Shop_Mobile_Overview />
+          <Shop_Mobile_Overview />
         )}
       </Container>
       {/* {currentShop && <Footer />} */}

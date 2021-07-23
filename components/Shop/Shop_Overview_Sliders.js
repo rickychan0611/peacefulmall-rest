@@ -25,7 +25,6 @@ const Shop_Overview_Slider = () => {
 
   return (
     <div>
-      
       <Wrapper>
         <Title>
           <Icon name="food" size="small" style={{ marginRight: 10 }} />
@@ -37,7 +36,7 @@ const Shop_Overview_Slider = () => {
         <DishCards products={popularProducts} />
       </Slider>
 
-      {discountedProducts.length > 0 && <>
+      {discountedProducts?.length > 0 && <>
         <Wrapper>
           <Title>
             <Icon name="food" size="small" style={{ marginRight: 10 }} />
@@ -59,7 +58,7 @@ const Shop_Overview_Slider = () => {
       </Wrapper>
       <Slider >
         {currentShop && currentShop.reviews && currentShop.reviews.length !== 0 ?
-          <ReviewCards shop={currentShop} /> : <h4>... No review yet 😋 </h4>}
+          <ReviewCards reviews={currentShop.reviews} /> : <h4>... No review yet 😋 </h4>}
       </Slider>
 
       <Wrapper>

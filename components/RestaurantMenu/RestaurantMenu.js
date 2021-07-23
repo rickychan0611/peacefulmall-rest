@@ -48,10 +48,8 @@ const RestaurantMenu = ({ contextRef, t }) => {
           <div>
             <Slider topic={t && t`FullMenu`} hideViewAll hideScrollbar>
               <CatWrapper>
-                {currentShop &&
-                  currentShop.shop_categories &&
-                  currentShop.shop_categories[0] &&
-                  currentShop.shop_categories.map((item, i) => {
+                {
+                  currentShop?.shop_categories?.map((item, i) => {
                     if (item.category_name !== "Popular Items") {
                       return (
                         <LabelContainer
@@ -183,7 +181,7 @@ const CatWrapper = styled.div`
       min-width: 100px;
       background-color: white;
       padding: 0px 0 0px 0;
-      max-height: 140px;
+      max-height: 100px;
       `;
 const CardContainer = styled.div`
       padding-bottom: 30px;

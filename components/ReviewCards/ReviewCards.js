@@ -1,16 +1,11 @@
 import { useEffect, useState } from 'react';
-import _ from 'lodash';
 import styled from 'styled-components';
-import { data } from '../../data/restaurants-old';
 import Link from 'next/link'
-import useTranslation from 'next-translate/useTranslation'
 import ReactStars from 'react-rating-stars-component';
 import { Feed } from 'semantic-ui-react';
 import moment from 'moment';
 
 const ReviewCards = ({ reviews }) => {
-  const [dishes, setDishes] = useState([]);
-  const { t } = useTranslation('home')
   console.log("reviews", reviews)
   return (
     <>
@@ -65,6 +60,7 @@ const Card = styled.div`
   /* margin-right: 15px; */
   width: 100%;
   min-width: 220px;
+  max-width: 250px;
   cursor: pointer;
   border: 1px solid lightgray;
   border-radius: 10px;

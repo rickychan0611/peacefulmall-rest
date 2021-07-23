@@ -29,20 +29,7 @@ const Shop_Mobile_Menu = () => {
         </Section>
       </Ref>
       <br />
-      <hr />
       <br />
-      <Section id="reviews">
-        <Title style={{ fontSize: 28 }}>{t`Reviews`}</Title>
-        <ReviewFeed />
-      </Section>
-      <br />
-      <hr />
-      <br />
-      <Section id="articles">
-        <ShopArticleList />
-      </Section>
-      <br />
-      <hr />
       <br />
       <BottomNavBar />
     </div>

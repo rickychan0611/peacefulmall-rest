@@ -21,7 +21,7 @@ const Shop_Container = ({ children }) => {
   const isDesktop = useIsDesktop();
   const isTablet = useIsTablet();
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
-  const [, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
+  const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
   const [, setCurrentShopPoplularProducts] = useRecoilState(currentShopPoplularProductsAtom);
   const [, setSelectedPage] = useRecoilState(selectedPageAtom);
   const [, setArticles] = useRecoilState(articlesAtom);
@@ -30,7 +30,7 @@ const Shop_Container = ({ children }) => {
   useEffect(async () => {
     console.log("!!!!currentShop", currentShop)
     console.log("router.query.shop_id", router.query.shop_id)
-    if (!currentShop || currentShop.length === 0 ) {
+    if (!currentShop || currentShop.length === 0 || !currentShopProducts) {
       console.log("RUNNN")
       if (!currentShop || currentShop.id !== router.query.shop_id) {
         try {

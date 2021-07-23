@@ -59,6 +59,7 @@ const Card = styled.div`
   display: flex;
   flex-flow: row wrap;
   width: 100%;
+  min-width: 230px;
   cursor: pointer;
   box-shadow: 0 0 10px rgba(0,0,0,.2);
 `;

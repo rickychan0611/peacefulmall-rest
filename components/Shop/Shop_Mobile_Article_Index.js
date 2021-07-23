@@ -43,7 +43,6 @@ const Shop_Mobile_Article_Index = () => {
 
   return (
     <div>
-      <Shop_Desktop_Header />
       <Wrapper>
         <Title>
           <Icon name="newspaper" size="small" style={{ marginRight: 10 }} />
@@ -74,8 +73,8 @@ const CardContainer = styled.div`
       grid-gap: ${(p) => (p.isMobile && !p.toggle ? "10px" : "15px")};
       grid-template-columns: ${(p) =>
     p.isMobile
-      ? "repeat(auto-fill, minmax(150px, 1fr))"
-      : "repeat(auto-fill, minmax(200px, 1fr))"};
+      ? "repeat(auto-fill, minmax(220px, 1fr))"
+      : "repeat(auto-fill, minmax(220px, 1fr))"};
       `;
 const Avatar = styled.img`
   display: flex;

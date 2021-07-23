@@ -91,14 +91,14 @@ const ShopCards = ({ shops }) => {
 const Card = styled.div`
       display: flex;
       flex-flow: column nowrap;
-      margin: 10px;
+      /* margin: 10px; */
       width: 100%;
       min-width: 220px;
       cursor: pointer;
       `;
 const Img = styled.img`
       width: 100%;
-      height: 220px;
+      height: 180px;
       object-fit: cover;
       `;
 const Name = styled.div`

@@ -45,7 +45,6 @@ const Shop_Mobile_Review = () => {
 
   return (
     <div>
-      <Shop_Desktop_Header />
       <Wrapper>
         <Title>
           <Icon name="star" size="small" style={{ marginRight: 10 }} />

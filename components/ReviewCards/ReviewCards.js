@@ -8,16 +8,16 @@ import ReactStars from 'react-rating-stars-component';
 import { Feed } from 'semantic-ui-react';
 import moment from 'moment';
 
-const ReviewCards = ({ shop }) => {
+const ReviewCards = ({ reviews }) => {
   const [dishes, setDishes] = useState([]);
   const { t } = useTranslation('home')
-
+  console.log("reviews", reviews)
   return (
     <>
       {
-        shop && shop.reviews && shop.reviews.map((item, i) => {
+       reviews?.map((item, i) => {
           return (
-            <Link href={'/shop/' + shop.name + '/' + shop.id + '/reviews#' + item.id} key={i}>
+            <Link href={'/shop/id/' + item.shop_id + '/reviews#' + item.id} key={i}>
               <Card key={i} >
                 <Feed>
                   <Feed.Event>
@@ -31,7 +31,7 @@ const ReviewCards = ({ shop }) => {
                           size={22}
                           activeColor="#ffd700"
                           isHalf={true}
-                          value={item.rating}
+                          value={+item.rating}
                           edit={false}
                         />
                         <span style={{ paddingTop: 5 }}>{item.rating}</span>
@@ -67,7 +67,7 @@ const Card = styled.div`
   cursor: pointer;
   border: 1px solid lightgray;
   border-radius: 10px;
-  padding: 20px;
+  padding: 20px 20px 20px 20px;
 `;
 const Img = styled.img`
   width: 250px;
@@ -101,7 +101,7 @@ const Description = styled.div`
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  width: 200px;
+  width: 180px;
 `;
 const Price = styled.div`
   font-size: 1rem;

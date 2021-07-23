@@ -62,7 +62,7 @@ const Home = () => {
       query("discount", "products", { plat_category: 'all', type: 'discount', count: '20' });
       query("popular", "products", { plat_category: 'all', type: 'popular', count: '20' });
       query("allShops", "shops", { shop_type: 'all', type: 'all', count: '20' });
-      query("reviews", "user/reviews");
+      query("reviews", "reviews");
     }
     catch (err) {
       console.log("query err:", err)
@@ -145,7 +145,7 @@ const Home = () => {
               </Slider>
 
               <Slider topic={t('UserReviews')} icon="star">
-                <ReviewCards shop={result.singleshop} />
+                <ReviewCards reviews={result.reviews} />
               </Slider>
 
               <Slider topic={t('FeaturedArticles')} icon="newspaper">
@@ -158,7 +158,6 @@ const Home = () => {
                   All Restaurants
                 </Title>
               </Wrapper>
-
               <CardContainer isMobile={isMobile}>
                 <ShopCards shops={result.allShops} />
                 <ShopCards shops={result.allShops} />
@@ -167,7 +166,6 @@ const Home = () => {
                 <ShopCards shops={result.allShops} />
                 <ShopCards shops={result.allShops} />
               </CardContainer>
-
             </Container>
           </div>
         </Ref>
@@ -182,21 +180,22 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  margin-bottom: 20px;
 `;
-const Title = styled.h2`
+const Title = styled.h3`
   color: "black";
-  margin: 0 10px 0 0;
+  margin: 0 10px 30px 0;
   display: flex;
   align-items: center;
 `;
 const CardContainer = styled.div`
   /* padding-bottom: 30px; */
   display: grid;
-  grid-gap: ${(p) => (p.isMobile && !p.toggle ? "15px" : "20px")};
+  grid-gap: ${(p) => (p.isMobile && !p.toggle ? "10px" : "20px")};
   grid-template-columns: ${(p) =>
     p.isMobile
-      ? "repeat(auto-fill, minmax(150px, 1fr))"
-      : "repeat(auto-fill, minmax(200px, 1fr))"};
+      ? "repeat(auto-fill, minmax(220px, 1fr))"
+      : "repeat(auto-fill, minmax(220px, 1fr))"};
 `;
 
 // export const getServerSideProps = async (context) => {

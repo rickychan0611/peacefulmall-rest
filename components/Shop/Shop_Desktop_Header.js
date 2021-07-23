@@ -6,17 +6,21 @@ const Shop_Desktop_Header = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
 
   return (
-    <Wrapper>
-      {currentShop.logo ? (
-        <Avatar src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + currentShop.logo} />
-      ) : (
-        <Avatar src="/avatar-placeholder.png" />
-      )}
-      <div style={{ width: 'calc(100% - 50px)' }}>
-        <Title>{currentShop.name}</Title>
-        <Description>{currentShop.description}</Description>
-      </div>
-    </Wrapper>
+    <>
+      {currentShop &&
+        <Wrapper>
+          {currentShop?.logo ? (
+            <Avatar src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + currentShop.logo} />
+          ) : (
+            <Avatar src="/avatar-placeholder.png" />
+          )}
+          <div style={{ width: 'calc(100% - 50px)' }}>
+            <Title>{currentShop?.name}</Title>
+            <Description>{currentShop?.description}</Description>
+          </div>
+        </Wrapper>
+      }
+    </>
   );
 };
 

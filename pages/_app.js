@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
+import styled, { ThemeProvider } from "styled-components";
+import theme from "../theme";
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import '../.semantic/dist/semantic.min.css';
 import './styles.css';
 import { CookiesProvider, useCookies } from 'react-cookie';
 import axios from 'axios';
+import { useIsDesktop } from "../util/useScreenSize";
 
 import { RecoilRoot, useRecoilState } from 'recoil';
 import { appReady as appReadyAtom } from '../data/atoms';
@@ -14,6 +17,7 @@ import { currentPosition as currentPositionAtom, addresses as addressAtom } from
 
 import SideMenu from '../components/SideMenu';
 import CheckOutListPusher from '../components/CheckOutListPusher';
+import TopNav from "../components/TopNav";
 import TopBar from '../components/TopBar';
 import GooglePlacesAutocomplete, { geocodeByLatLng } from 'react-google-places-autocomplete';
 
@@ -104,7 +108,7 @@ const InitApp = ({ children }) => {
             // };
 
             console.log('GPS location body: ', body);
-            setCurrentPosition({...body, lat: position.coords.latitude, lng: position.coords.longitude});
+            setCurrentPosition({ ...body, lat: position.coords.latitude, lng: position.coords.longitude });
           })
           .catch((error) => console.error(error));
       }
@@ -135,30 +139,36 @@ const InitApp = ({ children }) => {
 };
 
 function MyApp({ Component, pageProps }) {
+  const isDesktop = useIsDesktop();
+
   return (
-    <RecoilRoot>
-      <CookiesProvider>
-        <InitApp>
-          <Head>
-            <title>Peaceful Mall Restaurant</title>
-            <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
-            <script
-              type="text/javascript"
-              src={'https://maps.googleapis.com/maps/api/js?key=' + process.env.NEXT_PUBLIC_MAP_API + '&libraries=places'}
-            />
-          </Head>
-          <TopBar />
-          <div className="contents" style={{ paddingTop: 60, width: '100vw' }}>
-            <SideMenu>
-              <CheckOutListPusher>
-                <Component {...pageProps} />
-              </CheckOutListPusher>
-            </SideMenu>
-          </div>
-        </InitApp>
-      </CookiesProvider>
-    </RecoilRoot>
+    <ThemeProvider theme={theme}>
+      <RecoilRoot>
+        <CookiesProvider>
+          <InitApp>
+            <Head>
+              <title>Peaceful Mall Restaurant</title>
+              <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+              <script
+                type="text/javascript"
+                src={'https://maps.googleapis.com/maps/api/js?key=' + process.env.NEXT_PUBLIC_MAP_API + '&libraries=places'}
+              />
+            </Head>
+            {isDesktop && <TopNav />}
+            <TopBar />
+            <div className="contents" style={{ paddingTop: 138, width: '100vw' }}>
+              <SideMenu>
+                <CheckOutListPusher>
+                  <Component {...pageProps} />
+                </CheckOutListPusher>
+              </SideMenu>
+            </div>
+          </InitApp>
+        </CookiesProvider>
+      </RecoilRoot>
+    </ThemeProvider>
   );
 }
+
 
 export default MyApp;

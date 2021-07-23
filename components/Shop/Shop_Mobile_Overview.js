@@ -36,7 +36,7 @@ const Shop_Moble_Overview = () => {
         <Img src="/no-image.png" />
       )}
 
-      <Description style={{ marginBottom: 20 }}>{currentShop.description}</Description>
+      {/* <Description style={{ marginBottom: 20 }}>{currentShop.description}</Description> */}
 
       <ShopInfo shop={currentShop} />
 

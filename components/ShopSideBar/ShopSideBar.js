@@ -7,21 +7,21 @@ import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import { selectedPage as selectedPageAtom, currentShop as currentShopAtom } from '../../data/atoms.js';
 
-const ShopSideBar = ({ shop }) => {
+const ShopSideBar = () => {
   const isDesktop = useIsDesktop();
-  const profilePic = shop.images && process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(shop.images)[0]
   const router = useRouter();
   const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
-  const url = '/shop/' + currentShop.name + '/' + currentShop.id
+  const profilePic = currentShop?.images && process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(currentShop?.images)[0]
+  const url = '/shop/' + currentShop?.name + '/' + currentShop?.id
 
   useEffect(() => {
-    console.log("router", router.components)
-  }, [])
+    console.log("@@@@@@@currentShop", currentShop)
+  }, [currentShop])
 
   return (
     <>
-      {isDesktop && shop.images && <Img src={profilePic} />}
+      {isDesktop && currentShop?.images && <Img src={profilePic} />}
 
       <ButtonsWrapper>
 
@@ -47,7 +47,7 @@ const ShopSideBar = ({ shop }) => {
 
       </ButtonsWrapper>
 
-      <ShopInfo shop={shop} />
+      <ShopInfo shop={currentShop} />
 
       {/* <Row>
         <Header style={{ margin: 0 }}>{t`Reviews`}</Header>

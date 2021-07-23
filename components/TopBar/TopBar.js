@@ -33,7 +33,7 @@ const TopBar = () => {
   const { t } = useTranslation('home');
 
   return (
-    <Container>
+    <Container isDesktop={isDesktop}>
       <SpaceBetween>
         {!isDesktop ? (
           <TopBar_Mobile t={t} changeLocale={changeLocale} locales={locales} />
@@ -53,7 +53,7 @@ const Container = styled.div`
   background-color: white;
   width: 100%;
   height: 63px;
-  top: 0;
+  top: ${p => p.isDesktop ? "31px" : 0};
   box-shadow: 0 0 10px rgba(0,0,0,.2);
 `;
 const SpaceBetween = styled.div`

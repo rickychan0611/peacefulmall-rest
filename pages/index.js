@@ -1,7 +1,7 @@
 import { createRef, useEffect, useState } from 'react';
 import useTranslation from 'next-translate/useTranslation';
 import axios from 'axios';
-import { Container, Image, Ref, Icon, Sticky } from 'semantic-ui-react';
+import { Container, Ref, Icon, Sticky } from 'semantic-ui-react';
 import CuisineSlider from '../components/CuisineSlider';
 import DishCards from '../components/DishCards';
 import ShopCards from '../components/ShopCards';
@@ -16,7 +16,8 @@ import {
   currentPosition as currentPositionAtom,
   articles as articlesAtom,
   currentShop as currentShopAtom,
-  currentShopProducts as currentShopProductsAtom
+  currentShopProducts as currentShopProductsAtom,
+  currentShop
 } from '../data/atoms';
 import { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 import styled from 'styled-components';
@@ -113,7 +114,7 @@ const Home = () => {
         <Image src="/restaurant-banner-noText.jpg" />
         <Ref innerRef={contextRef}>
           <div>
-            <Sticky offset={62} context={contextRef}>
+            <Sticky offset={isDesktop ? 93 : 63} context={contextRef}>
               <SearchBanner />
               <CurrentAddress />
             </Sticky>
@@ -176,6 +177,12 @@ const Home = () => {
   );
 };
 
+const Image = styled.img`
+  width: 100%;
+  margin-bottom: -10px;
+  min-height: 40px;
+  object-fit: cover;  
+`;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -191,7 +198,6 @@ const Title = styled.div`
   align-items: center;
 `;
 const CardContainer = styled.div`
-  /* padding-bottom: 30px; */
   display: grid;
   grid-gap: ${(p) => (p.isMobile && !p.toggle ? "10px" : "20px")};
   grid-template-columns: ${(p) =>

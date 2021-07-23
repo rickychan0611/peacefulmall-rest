@@ -1,85 +1,113 @@
-import { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { useRouter } from 'next/router';
+import styled from 'styled-components';
 import { Button, Transition, Image, Icon, Dropdown, Menu } from 'semantic-ui-react';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import {
-  openSideMenu as openSideMenuAtom,
-  openCheckOutList as openCheckOutListAtom,
-  showCheckoutButton as showCheckoutButtonAtom
-} from '../../data/atoms.js';
+import { useRecoilState } from 'recoil';
 import { user as userAtom } from '../../data/userAtom';
-import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 import useTranslation from 'next-translate/useTranslation';
-import Dimmer from '../Dimmer';
-import { useCookies } from 'react-cookie';
+import setLanguage from 'next-translate/setLanguage';
 
-const TopBar_Desktop = ({ locales, changeLocale }) => {
+const cats = [
+  {
+    name: '资讯',
+    link: 'https://media.peacefulmall.com/'
+  },
+  {
+    name: '健康',
+    link: 'https://health.peacefulmall.com/'
+  },
+  {
+    name: '商城',
+    link: 'https://peacefulshops.com/'
+  },
+  {
+    name: '美食',
+    link: 'https://peaceful-restaurant.vercel.app/'
+  },
+  {
+    name: '生态',
+    link: 'https://eco.peacefulmall.com/'
+  },
+  {
+    name: '金融',
+    link: 'https://finance.peacefulmall.com/'
+  },
+  {
+    name: '旅行',
+    link: 'https://travel.peacefulmall.com/'
+  },
+  {
+    name: '教育',
+    link: 'https://education.peacefulmall.com/'
+  }
+];
+
+export const locales = [
+  {
+    key: 'en',
+    text: 'ENG',
+    value: 'en'
+  },
+  {
+    key: 'zh-CN',
+    text: '简体',
+    value: 'zh-CN'
+  }
+];
+
+export const changeLocale = async (e, { value }) => {
+  console.log(value);
+  await setLanguage(value);
+  const date = new Date();
+  const expireMs = 100 * 365 * 24 * 60 * 60 * 1000; // 100 days
+  date.setTime(date.getTime() + expireMs);
+  document.cookie = `NEXT_LOCALE=${value};expires=${date.toUTCString()};path=/`;
+};
+
+const TopNav = () => {
   const router = useRouter();
   const [user, setUser] = useRecoilState(userAtom);
-  const orderItems = useRecoilValue(orderItemsAtom);
-  const showCheckoutButton = useRecoilValue(showCheckoutButtonAtom);
-  const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
-  const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
-  const [jiggle, setJiggle] = useState(false);
   const { t } = useTranslation('home');
-  const [openDropdownMenu, setOpenDropdownMenu] = useState(false);
-  const [cookies, setCookie, removeCookie] = useCookies();
-  const [qty, setQty] = useState(0);
-
-  useEffect(() => {
-    if (orderItems && orderItems.length !== 0) {
-      let q = 0;
-      orderItems.forEach((item) => {
-        q = q + item.quantity;
-      });
-      setQty(q);
-    }
-    else setQty(0)
-  }, [orderItems]);
-  useEffect(() => {
-    setJiggle(!jiggle);
-  }, [orderItems]);
-  useEffect(() => {
-    console.log('showCheckoutButton', showCheckoutButton);
-  }, [showCheckoutButton]);
 
   return (
-    <>
-      {openDropdownMenu && <Dimmer state={openDropdownMenu} close={setOpenDropdownMenu} />}
-
-      <Row style={{ cursor: 'pointer' }} onClick={() => router.push('/')}>
-        <Image size="mini" src="/logo-p.png" />
-        <h4 style={{ color: '#4ab976', margin: 0 }}>
-          {t('title')}
-          <span style={{ color: '#ee3160' }}> | {t('subTitle')}</span>
-        </h4>
+    <Container>
+      <Row style={{ gap: 30 }}>
+        {cats.map((cat, i) => {
+          return (
+            <Cat
+              onClick={() => {
+                router.push(cat.link);
+              }}>
+              {cat.name}
+            </Cat>
+          );
+        })}
       </Row>
-      <Row>
-        <Item
-          onClick={() => {
-            router.push('/');
-          }}>
-          <Icon name="home" size="large" />
-          <H4>{t('home')}</H4>
-        </Item>
+      {/* <Row>
         {!user ? (
           <>
-            <Button
-              inverted
-              style={{ backgroundColor: '#ee3160', marginRight: 10, color: 'white' }}
+            <div
+              compact
+              style={{marginRight: 20 }}
               onClick={() => router.push('/sign-up')}>
               {t('signUp')}
-            </Button>
-            <Button
+            </div>
+            <div
               compact
-              style={{ backgroundColor: 'white' }}
+              style={{ marginRight: 20 }}
               onClick={() => router.push('/sign-in')}>
               {t('signIn')}
-            </Button>
+            </div>
           </>
         ) : (
           <>
+            <Item
+              onClick={() => {
+                router.push('/');
+              }}>
+              <Icon name="home" size="large" />
+              <H4>{t('home')}</H4>
+            </Item>
+
             <Item
               onClick={() => {
                 router.push('/consumer/orders');
@@ -88,7 +116,6 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
               <H4>{t('myOrder')}</H4>
             </Item>
 
-            {/* USER MENU */}
             <div style={{ position: 'relative' }}>
               <Item
                 onClick={() => {
@@ -96,7 +123,6 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
                 }}>
                 <Icon name="user circle" size="large" />
                 <H4>Hi, {user.first_name}</H4>
-                <Icon name="caret down" size="large" />
               </Item>
 
               {openDropdownMenu === 'user' && (
@@ -117,8 +143,6 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
                       onClick={() => {
                         removeCookie('userToken');
                         localStorage.removeItem('user');
-                        localStorage.removeItem('currentPosition');
-                        localStorage.removeItem('orderItems');
                         setUser(null);
                         setOpenSideMenu(false);
                         setOpenDropdownMenu(false);
@@ -130,64 +154,57 @@ const TopBar_Desktop = ({ locales, changeLocale }) => {
                 </DropDownContainer>
               )}
             </div>
-
-            {/* <Row
-              onClick={() => {
-                setOpenSideMenu(!openSideMenu);
-              }}>
-
-              <h4 style={{ margin: 0 }}>Hi, {user.name} &nbsp; &nbsp;</h4>
-              <Icon name="user circle" size="large" style={{ color: '#707070', marginRight: 20 }} />
-
-
-
-            </Row> */}
           </>
         )}
 
-        <Item>
+        <Item style={{ padding: 0 }}>
           <Dropdown
             // button
             options={locales}
             direction="left"
-            style={{ margin: '0 20px 0 10px' }}
+            style={{ margin: '0 0px 0 10px' }}
             onChange={changeLocale}
             value={router.locale}
           />
         </Item>
-
-        <Transition animation="jiggle" duration={600} visible={jiggle}>
-          {showCheckoutButton && (
-            <Button
-              style={{
-                backgroundColor: '#ee3160',
-                marginRight: 10,
-                color: 'white',
-                width: 80,
-                borderRadius: 30
-              }}
-              onClick={() => setOpenCheckOutList(!openCheckOutList)}>
-              <Icon name="shop" /> {" "} {qty}
-            </Button>
-          )}
-        </Transition>
-      </Row>
-    </>
+      </Row> */}
+    </Container>
   );
 };
 
+const Container = styled.div`
+  z-index:10000;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  width: 100%;
+  padding: 6px 40px 6px 40px;
+  position: fixed;
+  top: 0;
+  background-color: ${p => p.theme.lightGreen};
+`;
+
+const Cat = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  cursor: pointer;
+`;
 const Row = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
+  color: #6d7175;
 `;
 const Item = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  border-left: 1px solid #cacaca;
+  /* border-left: 1px solid #cacaca; */
   height: 100%;
   padding: 10px 20px 10px 20px;
   cursor: pointer;
@@ -232,4 +249,4 @@ const MenuItem = styled.h4`
   background-color: ${(p) => p.selected && '#bebe51'};
   border-radius: ${(p) => p.selected && p.last && '0px 0px 15px 15px'};
 `;
-export default TopBar_Desktop;
+export default TopNav;

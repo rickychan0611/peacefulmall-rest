@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { Grid, List, Header, Modal } from 'semantic-ui-react';
 import useTranslation from 'next-translate/useTranslation';
-import {useIsDesktop} from '../../util/useScreenSize';
 
 
 const ShopInfo = ({ shop }) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation('shop')
-  const isDesktop = useIsDesktop();
-  const profilePic = shop.images && process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(shop.images)[0]
 
   return (
     <>
@@ -26,7 +22,7 @@ const ShopInfo = ({ shop }) => {
               style={{ border: 10 }}
               loading="lazy"
               allowFullScreen
-              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBugBL6F0x-jyq_4l-6OS1i8Du6yv9bH-s&q=${shop.latitude},${shop.longitude}`}></iframe>
+              src={`https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_MAP_API}=${shop.latitude},${shop.longitude}`}></iframe>
           </Modal.Content>
         </Modal>
       <List style={{ padding: 10 }}>

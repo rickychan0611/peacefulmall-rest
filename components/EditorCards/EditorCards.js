@@ -31,6 +31,7 @@ const ReviewCards = () => {
             <Card key={i}
               onClick={() => {
                 setSelectedArticle(item)
+                setCurrentShop(null)
                 router.push('/shop/id/' + item.restaurant_id + '/articles/' + item.id)
               }}>
               <Img

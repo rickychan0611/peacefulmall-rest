@@ -1,19 +1,27 @@
 import styled from 'styled-components';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import RestaurantMenu from '../RestaurantMenu';
 import ReviewFeed from '../ReviewFeed';
 import BottomNavBar from '../BottomNavBar';
 import ShopArticleList from '../ShopSideBar/ShopArticleList';
 import { Ref } from 'semantic-ui-react';
 import useTranslation from 'next-translate/useTranslation';
+import { useRecoilState } from 'recoil';
+import { 
+  selectedPage as selectedPageAtom
+} from '../../data/atoms';
 
 const Shop_Mobile_Menu = () => {
   const contextRef = useRef();
   const { t } = useTranslation('shop');
+  const [, setSelectedPage] = useRecoilState(selectedPageAtom);
+
+  useEffect(() => {
+    setSelectedPage("menu")
+  }, [])
 
   return (
     <div style={{ marginTop: -100 }}>
-      <Section id="shopTop" style={{ height: 100 }}></Section>
 
       <Ref innerRef={contextRef}>
         <Section id="fullMenu">

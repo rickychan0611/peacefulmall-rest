@@ -25,23 +25,32 @@ const ShopSideBar = () => {
 
       <ButtonsWrapper>
 
-        <Button onClick={() => router.push(url + '/')}
+        <Button onClick={() => {
+          setSelectedPage("overview")
+          router.push(url + '/')
+        }}
           selected={selectedPage === "overview"}>
           Overview<Icon name="check" />
         </Button>
 
-        <Button onClick={() => router.push(url + '/menu')}
+        <Button onClick={() => {
+          setSelectedPage("menu")
+          router.push(url + '/menu')
+        }}
           selected={selectedPage === "menu"}>
           Full Menu <Icon name="bars" /></Button>
 
-        {/* <Button onClick={() => router.push(url + '/photos')}>
-          Photos <Icon name="photo" /></Button> */}
-
-        <Button onClick={() => router.push(url + '/articles')}
+        <Button onClick={() => {
+          setSelectedPage("articles")
+          router.push(url + '/articles')
+        }}
           selected={selectedPage === "articles"}>
           Featured Articles <Icon name="newspaper" /></Button>
 
-        <Button onClick={() => router.push(url + '/reviews')}
+        <Button onClick={() => {
+          setSelectedPage("reviews")
+          router.push(url + '/reviews')
+        }}
           selected={selectedPage === "reviews"}>
           User Reviews <Icon name="star" /></Button>
 

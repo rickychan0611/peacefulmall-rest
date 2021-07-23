@@ -2,32 +2,54 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
 import { useRecoilState } from 'recoil';
-import { openSideMenu as openSideMenuAtom } from '../../data/atoms.js';
+import {
+  selectedPage as selectedPageAtom
+} from '../../data/atoms.js';
 
 const BottomNavBar = () => {
   const router = useRouter();
-  const [openSideMenu, setOpenSideMenu] = useRecoilState(openSideMenuAtom);
+  const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
 
   return (
     <Container>
-      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id)}}>
-        <Icon name="store" size="large"/>
+      <IconWrapper
+        selected={selectedPage === "overview"}
+        onClick={() => {
+          router.push("/shop/" + router.query.slug + "/" + router.query.shop_id)
+          setSelectedPage("overview")
+        }}>
+        <Icon name="store" size="large" />
         <Label>Overview</Label>
       </IconWrapper>
-      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "/menu")}}>
-        <Icon name="bars" size="large"/>
+      <IconWrapper selected={selectedPage === "menu"}
+        onClick={() => {
+          router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "/menu")
+          setSelectedPage("menu")
+        }}>
+        <Icon name="bars" size="large" />
         <Label>Full Menu</Label>
       </IconWrapper>
-      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "/reviews")}}>
-        <Icon name="star" size="large"/>
+      <IconWrapper
+        selected={selectedPage === "reviews"}
+        onClick={() => {
+          router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "/reviews")
+          setSelectedPage("reviews")
+        }}>
+        <Icon name="star" size="large" />
         <Label>Reviews</Label>
       </IconWrapper>
-      <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "/articles")}}>
-        <Icon name="newspaper" size="large"/>
+      <IconWrapper
+        selected={selectedPage === "articles"}
+        onClick={() => {
+          router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "/articles")
+          setSelectedPage("articles")
+        }}>
+        <Icon name="newspaper" size="large" />
         <Label>Articles</Label>
       </IconWrapper>
-      <IconWrapper onClick={() => {router.push("/")}}>
-        <Icon name="home" size="large"/>
+      <IconWrapper
+        onClick={() => { router.push("/") }}>
+        <Icon name="home" size="large" />
         <Label>Home</Label>
       </IconWrapper>
     </Container>
@@ -56,6 +78,8 @@ const IconWrapper = styled.div`
   flex-wrap: nowrap;
   justify-content: center;
   align-items: center;
+  color: ${p => p.selected ? "#ee3160" : "black"};
+
 `;
 
 const Label = styled.div`

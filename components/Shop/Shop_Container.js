@@ -89,7 +89,6 @@ const Shop_Container = ({ children }) => {
   }, [currentShop]);
 
   useEffect(() => {
-    setSelectedPage("overview")
     console.log("currentShopcurrentShop, ", currentShop)
   }, [currentShop])
 

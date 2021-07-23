@@ -74,6 +74,7 @@ const TopNav = () => {
         {cats.map((cat, i) => {
           return (
             <Cat
+              key={i}
               onClick={() => {
                 router.push(cat.link);
               }}>

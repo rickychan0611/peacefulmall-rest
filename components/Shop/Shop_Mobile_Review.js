@@ -9,14 +9,15 @@ import { Icon } from 'semantic-ui-react';
 import BottomNavBar from '../BottomNavBar';
 import ReviewFeed from '../ReviewFeed/index.js';
 import Shop_Desktop_Header from './Shop_Desktop_Header';
+import { useRouter } from 'next/router';
 
 const Shop_Mobile_Review = ({shop}) => {
   const [, setSelectedPage] = useRecoilState(selectedPageAtom);
+  const router = useRouter();
 
   useEffect(() => {
-    console.log("!!!!!!shop", shop)
     setSelectedPage("reviews")
-  }, [])
+  }, [router])
 
   return (
     <div>

@@ -1,26 +1,13 @@
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
 import { useRef } from 'react';
-
-import { useRecoilState } from 'recoil';
-import {
-  currentShop as currentShopAtom,
-  currentShopProducts as currentShopProductsAtom
-} from '../../data/atoms';
-
-import Slider from '../Slider';
-import PopularDishes from '../PopularDishes';
 import RestaurantMenu from '../RestaurantMenu';
 import ReviewFeed from '../ReviewFeed';
 import BottomNavBar from '../BottomNavBar';
-import ShopInfo from '../ShopSideBar/ShopInfo';
 import ShopArticleList from '../ShopSideBar/ShopArticleList';
 import { Ref } from 'semantic-ui-react';
 import useTranslation from 'next-translate/useTranslation';
 
 const Shop_Mobile_Menu = () => {
-  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
-  const [currentShopProducts, setCurrentShopProducts] = useRecoilState(currentShopProductsAtom);
   const contextRef = useRef();
   const { t } = useTranslation('shop');
 
@@ -36,12 +23,6 @@ const Shop_Mobile_Menu = () => {
       <br />
       <hr />
       <br />
-      {/* <Slider topic="Other Restaurants you may like" hideViewAll>
-        <PopularDishes products={currentShopProducts}/>
-      </Slider> */}
-      {/* <br />
-      <hr />
-      <br /> */}
       <Section id="reviews">
         <Title style={{ fontSize: 28 }}>{t`Reviews`}</Title>
         <ReviewFeed />

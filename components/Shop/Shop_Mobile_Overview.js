@@ -16,6 +16,7 @@ import EditorCards from '../EditorCards';
 import ShopInfo from '../ShopSideBar/ShopInfo';
 import useTranslation from 'next-translate/useTranslation';
 import BottomNavBar from '../BottomNavBar';
+import Shop_Overview_Sliders from './Shop_Overview_Sliders';
 
 const Shop_Moble_Overview = () => {
   const { t } = useTranslation('home');
@@ -28,77 +29,23 @@ const Shop_Moble_Overview = () => {
 
   return (
     <div>
+      <Shop_Desktop_Header />
       {currentShop.images && currentShop.images[0] ? (
         <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(currentShop.images)[0]} />
       ) : (
         <Img src="/no-image.png" />
       )}
 
-      <InfoWrapper>
-        {currentShop.logo ? (
-          <Avatar src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + currentShop.logo} />
-        ) : (
-          <Avatar src="/avatar-placeholder.png" />
-        )}
-        <div style={{ width: 'calc(100% - 50px)' }}>
-          <Title>{currentShop.name}</Title>
-        </div>
-      </InfoWrapper>
       <Description style={{ marginBottom: 20 }}>{currentShop.description}</Description>
 
-        <ShopInfo shop={currentShop} />
+      <ShopInfo shop={currentShop} />
 
       <br />
       <hr />
       <br />
 
-      <Wrapper>
-        <Title>
-          <Icon name="food" size="small" style={{ marginRight: 10 }} />
-          Popular Items
-        </Title>
-        <Button style={{ color: "white", backgroundColor: "#ee3160" }} onClick={() => router.push(url + '/menu')}> View Full Menu </Button>
-      </Wrapper>
-      <Slider>
-        <DishCards products={popularProducts} />
-      </Slider>
+      <Shop_Overview_Sliders />
 
-      {discountedProducts && discountedProducts.length > 0 && <>
-        <Wrapper>
-          <Title>
-            <Icon name="food" size="small" style={{ marginRight: 10 }} />
-            Discounted Items
-          </Title>
-          <Button style={{ color: "white", backgroundColor: "#ee3160" }} onClick={() => router.push(url + '/menu')}> View Full Menu </Button>
-        </Wrapper>
-        <Slider>
-          <DishCards products={discountedProducts} />
-        </Slider>
-      </>}
-
-      <Wrapper>
-        <Title>
-          <Icon name="star" size="small" style={{ marginRight: 10 }} />
-          User Reviews
-        </Title>
-        {/* <Button onClick={() => router.push(url + '/reviews')}>View All Reviews</Button> */}
-      </Wrapper>
-      <Slider >
-        {currentShop && currentShop.reviews && currentShop.reviews.length !== 0 ?
-          <ReviewCards reviews={currentShop.reviews} /> : <h4>... No review yet 😋 </h4>}
-      </Slider>
-
-      <Wrapper>
-        <Title>
-          <Icon name="newspaper outline" size="small" style={{ marginRight: 10 }} />
-          Featured Articles
-        </Title>
-        {/* <Button onClick={() => router.push(url + '/articles')}>View All Articles</Button> */}
-      </Wrapper>
-      <Slider >
-        {articles && articles.length !== 0 ?
-          <EditorCards /> : <h4>... No article yet 😋 </h4>}
-      </Slider>
       <BottomNavBar />
       <br />
       <br />

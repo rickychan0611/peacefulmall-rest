@@ -106,7 +106,7 @@ const CardContainer = styled.div`
   display: grid;
   grid-gap: ${(p) => (p.isMobile && !p.toggle ? '10px' : '20px')};
   grid-template-columns: ${(p) =>
-    p.isMobile ? 'repeat(auto-fill, minmax(150px, 1fr))' : 'repeat(auto-fill, minmax(180px, 1fr))'};
+    p.isMobile ? 'repeat(auto-fill, minmax(220px, 1fr))' : 'repeat(auto-fill, minmax(220px, 1fr))'};
 `;
 
 const SearchBannerWrapper = styled.div`

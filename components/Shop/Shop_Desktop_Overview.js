@@ -15,6 +15,7 @@ import ShopSideBar from '../ShopSideBar';
 import ReviewCards from '../ReviewCards';
 import EditorCards from '../EditorCards';
 import useTranslation from 'next-translate/useTranslation';
+import Shop_Overview_Sliders from './Shop_Overview_Sliders';
 
 const Shop_Desktop = () => {
   const { t } = useTranslation('home');
@@ -36,53 +37,7 @@ const Shop_Desktop = () => {
           <div>
             <Shop_Desktop_Header />
 
-            <Wrapper>
-              <Title>
-                <Icon name="food" size="small" style={{ marginRight: 10 }} />
-                Popular Items
-              </Title>
-              <Button style={{ color: "white", backgroundColor: "#ee3160" }} onClick={() => router.push(url + '/menu')}> View Full Menu </Button>
-            </Wrapper>
-            <Slider>
-              <DishCards products={popularProducts} />
-            </Slider>
-
-            {discountedProducts.length > 0 &&  <>
-              <Wrapper>
-                <Title>
-                  <Icon name="food" size="small" style={{ marginRight: 10 }} />
-                  Discounted Items
-                </Title>
-                <Button style={{ color: "white", backgroundColor: "#ee3160" }} onClick={() => router.push(url + '/menu')}> View Full Menu </Button>
-              </Wrapper>
-              <Slider>
-                <DishCards products={discountedProducts} />
-              </Slider>
-            </>}
-
-             <Wrapper>
-              <Title>
-                <Icon name="star" size="small" style={{ marginRight: 10 }} />
-                User Reviews
-              </Title>
-              {/* <Button onClick={() => router.push(url + '/reviews')}>View All Reviews</Button> */}
-            </Wrapper>
-            <Slider >
-              {currentShop && currentShop.reviews && currentShop.reviews.length !== 0 ?
-                <ReviewCards shop={currentShop} /> : <h4>... No review yet 😋 </h4>}
-            </Slider>
-
-            <Wrapper>
-              <Title>
-                <Icon name="newspaper outline" size="small" style={{ marginRight: 10 }} />
-                Featured Articles
-              </Title>
-              {/* <Button onClick={() => router.push(url + '/articles')}>View All Articles</Button> */}
-            </Wrapper>
-            <Slider >
-              {articles && articles.length !== 0 ?
-                <EditorCards /> : <h4>... No article yet 😋 </h4>}
-            </Slider>
+            <Shop_Overview_Sliders />
 
           </div>
         </Grid.Column>

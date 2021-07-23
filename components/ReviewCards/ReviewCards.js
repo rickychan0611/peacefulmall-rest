@@ -62,12 +62,14 @@ const Row = styled.div`
 const Card = styled.div`
   display: inline-block;
   position: relative;
-  margin-right: 15px;
-  width: 220px;
+  /* margin-right: 15px; */
+  width: 100%;
+  min-width: 220px;
   cursor: pointer;
   border: 1px solid lightgray;
   border-radius: 10px;
   padding: 20px 20px 20px 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
 `;
 const Img = styled.img`
   width: 250px;

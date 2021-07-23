@@ -44,7 +44,7 @@ const RestaurantMenu = ({ contextRef, t }) => {
     <div style={{ position: "relative" }}>
       {/* Menu cat slider*/}
       {true && (
-        <Sticky offset={isMobile ? 80 : 70} context={contextRef}>
+        <Sticky offset={isMobile ? 65 : 70} context={contextRef}>
           <div>
             <Slider topic={t && t`FullMenu`} hideViewAll hideScrollbar>
               <CatWrapper>
@@ -84,7 +84,7 @@ const RestaurantMenu = ({ contextRef, t }) => {
       {isDesktop ? (
         <div id="result" style={{ paddingTop: 1 }} />
       ) : (
-        <div id="result" style={{ paddingTop: 190, marginTop: -190 }} />
+        <div id="result" style={{ paddingTop: 200, marginTop: -200 }} />
       )}
 
       {searchResults && searchResults[0] &&
@@ -118,12 +118,12 @@ const RestaurantMenu = ({ contextRef, t }) => {
               <MenuContainer key={i}>
                 {isDesktop ? (
                   <div id={cat.id} 
-                  style={{ paddingTop: 230, marginTop: -230 }}
+                  style={{ paddingTop: 220, marginTop: -220 }}
                   />
                 ) : (
                   <div
                     id={cat.id}
-                    style={{ paddingTop: 190, marginTop: -190 }}
+                    style={{ paddingTop: 200, marginTop: -200 }}
                   />
                 )}
 
@@ -182,7 +182,7 @@ const CatWrapper = styled.div`
       width: 100%;
       min-width: 100px;
       background-color: white;
-      padding: 15px 0 8px 0;
+      padding: 0px 0 0px 0;
       max-height: 140px;
       `;
 const CardContainer = styled.div`
@@ -211,7 +211,7 @@ const CatTitle = styled.div`
       line-height: normal;
       /* scroll-margin-top: 160px;
       scroll-snap-margin-top: 160px; */
-      padding-bottom: 10px;
+      padding-bottom: 5px;
       /* margin-top: 30px; */
       `;
 export default trackWindowScroll(RestaurantMenu);

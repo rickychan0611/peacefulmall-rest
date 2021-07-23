@@ -26,10 +26,10 @@ const BottomNavBar = () => {
         <Icon name="newspaper" size="large"/>
         <Label>Articles</Label>
       </IconWrapper>
-      {/* <IconWrapper onClick={() => {router.push("/shop/" + router.query.slug + "/" + router.query.shop_id + "#shopTop")}}>
-        <Icon name="arrow alternate circle up outline" size="large"/>
-        <Label>To top</Label>
-      </IconWrapper> */}
+      <IconWrapper onClick={() => {router.push("/")}}>
+        <Icon name="home" size="large"/>
+        <Label>Home</Label>
+      </IconWrapper>
     </Container>
   );
 };

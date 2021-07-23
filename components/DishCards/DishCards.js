@@ -38,43 +38,47 @@ const DishCards = ({ products }) => {
                     // setCurrentShop(item.shop);
                     router.push('/item/' + item.id);
                   }}>
-                  {item.promotion_price && <Label
-                    as="a"
-                    color="red"
-                    ribbon
-                    style={{ position: 'absolute', left: -13, margin: 0 }}>
-                    {/* {item.promotion_price / item.price * 100}% OFF */}
-                    {(100 - (item.promotion_price / item.price) * 100).toFixed(0)}% OFF
-                  </Label>}
-                  <Column>
-                    <div>
+                  <div style={{ position: "relative" }}>
+                    {item.promotion_price && <Label
+                      as="a"
+                      color="red"
+                      ribbon
+                      style={{ position: 'absolute', left: -13, margin: 0 }}>
+                      {/* {item.promotion_price / item.price * 100}% OFF */}
+                      {(100 - (item.promotion_price / item.price) * 100).toFixed(0)}% OFF
+                    </Label>}
 
-                      {item.images && item.images[0] ? (
-                        <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
-                      ) : (
-                        <Img src="/no-image.png" />
-                      )}
-                      <Name className="clamp2">{item.name}</Name>
-                      <Description className="clamp2">{item.description}</Description>
-                      {!item.promotion_price ? (
-                        <Price>
-                          <span style={{ marginRigth: 5, color: 'black' }}>${item.price}</span>
-                        </Price>
-                      ) : (
-                        <Price>
-                          <span
-                            style={{ textDecoration: 'line-through', marginRigth: 5, color: 'black' }}>
-                            ${item.price}
-                          </span>{' '}
-                          ${item.promotion_price}
-                        </Price>
-                      )}
-                      {item.shop && item.shop.name && <Description>by: {item.shop.name}</Description>}
-                    </div>
-                    <Button basic size="tiny" style={{ marginTop: 5, padding: 10, color: 'red' }}>
-                      {t('OrderNow')}
-                    </Button>
-                  </Column>
+                    {item.images && item.images[0] ? (
+                      <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
+                    ) : (
+                      <Img src="/no-image.png" />
+                    )}
+                    <Column>
+                      <div>
+                        <Name className="clamp2">{item.name}</Name>
+                        <Description className="clamp2">{item.description}</Description>
+                        {!item.promotion_price ? (
+                          <Price>
+                            <span style={{ marginRigth: 5, color: 'black' }}>${item.price}</span>
+                          </Price>
+                        ) : (
+                          <Price>
+                            <span
+                              style={{ textDecoration: 'line-through', marginRigth: 5, color: 'black' }}>
+                              ${item.price}
+                            </span>{' '}
+                            ${item.promotion_price}
+                          </Price>
+                        )}
+                        {item.shop && item.shop.name && <Description>by: {item.shop.name}</Description>}
+                      </div>
+                      <div>
+                        <Button basic size="tiny" style={{ width: "100%", marginTop: 5, padding: 10, color: 'red' }}>
+                          {t('OrderNow')}
+                        </Button>
+                      </div>
+                    </Column>
+                  </div>
                 </Card>
               );
             })
@@ -87,16 +91,20 @@ const DishCards = ({ products }) => {
 
 
 const Card = styled.div`
-  position: relative;
-  margin: 10px;
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+  min-width: 220px;
   cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,.2);
 `;
 const Column = styled.div`
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-between;  
-  height: 100%;
-  width: 200px;
+  /* height: 100%; */
+  min-height: 180px;
+  padding: 8px 10px 15px 10px;
 `;
 const Img = styled.img`
   width: 100%;

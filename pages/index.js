@@ -182,9 +182,11 @@ const Wrapper = styled.div`
   flex-wrap: nowrap;
   margin-bottom: 20px;
 `;
-const Title = styled.h3`
-  color: "black";
-  margin: 0 10px 30px 0;
+const Title = styled.div`
+  font-size: 24px;
+  font-weight: bold;
+  color: black;
+  margin: 0 10px 0px 0;
   display: flex;
   align-items: center;
 `;

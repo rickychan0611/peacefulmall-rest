@@ -17,6 +17,7 @@ const Shop_Desktop_Article = () => {
 
   return (
     <div>
+      <Shop_Desktop_Header />
       <Content_Mobile />
       <BottomNavBar />
       <br />

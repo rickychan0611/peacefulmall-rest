@@ -43,6 +43,7 @@ const Shop_Mobile_Article_Index = () => {
 
   return (
     <div>
+      <Shop_Desktop_Header />
       <Wrapper>
         <Title>
           <Icon name="newspaper" size="small" style={{ marginRight: 10 }} />

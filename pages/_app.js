@@ -156,7 +156,7 @@ function MyApp({ Component, pageProps }) {
             </Head>
             {isDesktop && <TopNav />}
             <TopBar />
-            <div className="contents" style={{ paddingTop: isDesktop ? 138 : 105, width: '100vw' }}>
+            <div className="contents" style={{ paddingTop: isDesktop ? 138 : 62, width: '100vw' }}>
               <SideMenu>
                 <CheckOutListPusher>
                   <Component {...pageProps} />

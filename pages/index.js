@@ -180,7 +180,7 @@ const Home = () => {
 const Image = styled.img`
   width: 100%;
   margin-bottom: -10px;
-  min-height: 40px;
+  min-height: 70px;
   object-fit: cover;  
 `;
 const Wrapper = styled.div`

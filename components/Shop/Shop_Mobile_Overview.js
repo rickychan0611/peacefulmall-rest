@@ -20,15 +20,15 @@ const Shop_Moble_Overview = () => {
 
   return (
     <div>
-      <Shop_Header />
       {currentShop?.images && currentShop?.images[0] ? (
         <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(currentShop?.images)[0]} />
-      ) : (
-        <Img src="/no-image.png" />
-      )}
+        ) : (
+          <Img src="/no-image.png" />
+          )}
 
       {/* <Description style={{ marginBottom: 20 }}>{currentShop.description}</Description> */}
 
+          <Shop_Header />
       <ShopInfo shop={currentShop} />
 
       <br />

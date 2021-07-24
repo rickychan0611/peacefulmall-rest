@@ -7,7 +7,8 @@ import {
 } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 import { useRouter } from 'next/router'
-import { Form, Grid, Icon, Radio, Image, Checkbox, Divider } from 'semantic-ui-react';
+import { Form, Grid, Icon, Radio, Image } from 'semantic-ui-react';
+import { useIsDesktop } from '../../util/useScreenSize';
 
 const ItemDetailsContext = ({
   checkOutListItem,
@@ -21,6 +22,7 @@ const ItemDetailsContext = ({
   const [item, setItem] = useState();
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
   const router = useRouter();
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     console.log('Load currentItem', currentItem);
@@ -58,7 +60,7 @@ const ItemDetailsContext = ({
   return (
     <>
       {item && (
-        <Wrapper>
+        <Wrapper isDesktop={isDesktop}>
           <Container>
             <StoreHeader
               onClick={() => {
@@ -78,7 +80,7 @@ const ItemDetailsContext = ({
               &nbsp;&nbsp;
               <div style={{ fontSize: 16 }}>{currentShop && currentShop.name}</div>
             </StoreHeader>
-            <h2>{item.name}</h2>
+            <h3>{item.name}</h3>
 
             {item.images && item.images[0] ? (
               <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
@@ -87,7 +89,7 @@ const ItemDetailsContext = ({
             )}
 
             <Description>{item.description}</Description>
-            <h4>Choose your options</h4>
+            {item.attributes?.length > 0 && <h4>Choose your options</h4>}
             <Form>
               <Form.Field></Form.Field>
               {item.attributes &&
@@ -232,12 +234,13 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding-top: ${p => p.isDesktop ? "0px" : "40px"};
 `;
 const Container = styled.div`
   padding: 20px;
   padding-top: 40px;
   padding-bottom: 150px;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 110px);
   width: 100%;
   max-width: 500px;
 `;
@@ -255,7 +258,7 @@ const Description = styled.h4`
 `;
 const Img = styled.img`
   width: 100%;
-  height: 350px;
+  height: 40vh;
   object-fit: cover;
 `;
 

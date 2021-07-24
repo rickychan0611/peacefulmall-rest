@@ -104,7 +104,7 @@ const Shop_Container = ({ children }) => {
       </SearchBannerWrapper>
       <Container
         style={{
-          marginTop: isMobile ? '45px' : isTablet ? '45px' : '25px'
+          marginTop: isMobile ? '65px' : isTablet ? '65px' : '25px'
         }}>
         {loading ?
           <div style={{ height: '80vh' }}>

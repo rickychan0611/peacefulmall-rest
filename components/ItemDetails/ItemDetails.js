@@ -10,6 +10,7 @@ import {
   openCheckOutList as openCheckOutListAtom,
 } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
+import { useIsDesktop } from '../../util/useScreenSize';
 
 import BottomAddBar from '../BottomAddBar';
 import BackButton from '../BackButton';
@@ -32,6 +33,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
   const [openWarning, setOpenWarning] = useState(false);
   const [quantity, setQty] = useState(1);
   const [openCheckOutList, setOpenCheckOutList] = useRecoilState(openCheckOutListAtom);
+  const isDesktop = useIsDesktop();
 
   const replacePrevItems = () => {
     let updatedItems;
@@ -137,7 +139,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
         <Loader loading={loading} />
       ) : (
         <>
-          <SearchBannerWrapper>
+          <SearchBannerWrapper isDesktop={isDesktop}>
             <SearchBanner />
             <BackButton noMenu />
           </SearchBannerWrapper>
@@ -159,7 +161,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
 const SearchBannerWrapper = styled.div`
   z-index: 1000;
   position: fixed;
-  top: 62px;
+  top: ${p => p.isDesktop ? "95px" : "62px"};
   .active {
     visibility: visible;
     transition: all 200ms ease-in;

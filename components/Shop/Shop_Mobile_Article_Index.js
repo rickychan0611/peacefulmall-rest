@@ -1,30 +1,23 @@
-import { useRef, useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
 
 import { useRecoilState } from 'recoil';
 import {
   currentShop as currentShopAtom,
   articles as articlesAtom,
-  selectedArticle as selectedArticleAtom,
   selectedPage as selectedPageAtom
 } from '../../data/atoms';
 
-import { Grid, Icon } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import EditorCards from '../EditorCards';
 import BottomNavBar from '../BottomNavBar';
 import Shop_Header from './Shop_Header';
 import axios from 'axios';
-import useTranslation from 'next-translate/useTranslation';
 
 const Shop_Mobile_Article_Index = () => {
-  const router = useRouter();
-  const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
-  const [selectedPage, setSelectedPage] = useRecoilState(selectedPageAtom);
+  const [currentShop] = useRecoilState(currentShopAtom);
+  const [, setSelectedPage] = useRecoilState(selectedPageAtom);
   const [articles, setArticles] = useRecoilState(articlesAtom);
-  const [result, setResult] = useState();
-  const url = '/shop/' + currentShop.name + '/' + currentShop.id
-  const [photos, setPhotos] = useState([]);
 
   useEffect(async () => {
     setSelectedPage("articles")

@@ -44,7 +44,7 @@ const RestaurantMenu = ({ contextRef, t }) => {
     <div style={{ position: "relative" }}>
       {/* Menu cat slider*/}
       {true && (
-        <Sticky offset={isMobile ? 65 : 70} context={contextRef}>
+        <Sticky offset={isDesktop ? 95 : 65} context={contextRef}>
           <div>
             <Slider topic={t && t`FullMenu`} hideViewAll hideScrollbar>
               <CatWrapper>
@@ -181,7 +181,7 @@ const CatWrapper = styled.div`
       min-width: 100px;
       background-color: white;
       padding: 0px 0 0px 0;
-      max-height: 100px;
+      max-height: 90px;
       `;
 const CardContainer = styled.div`
       padding-bottom: 30px;

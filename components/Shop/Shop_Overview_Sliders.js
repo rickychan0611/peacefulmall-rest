@@ -21,7 +21,7 @@ const Shop_Overview_Slider = () => {
   const articles = useRecoilValue(articlesAtom);
   const discountedProducts = useRecoilValue(discountedProductsAtom)
   const popularProducts = useRecoilValue(popularProductsAtom);
-  const url = '/shop/' + currentShop.name + '/' + currentShop.id
+  const url = '/shop/' + currentShop?.name + '/' + currentShop?.id
 
   return (
     <div>

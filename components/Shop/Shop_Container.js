@@ -32,7 +32,7 @@ const Shop_Container = ({ children }) => {
     console.log("!!!!currentShop", currentShop)
     console.log("currentShopProducts", currentShopProducts)
     if (!currentShop || currentShop?.length === 0 || currentShop.id !== +router.query.shop_id ||
-      !currentShopProducts || currentShopProducts[0].shop_id !== +router.query.shop_id) {
+      !currentShopProducts || currentShopProducts?.length === 0 || (currentShopProducts[0] && currentShopProducts[0].shop_id !== +router.query.shop_id)) {
       try {
         setLoading(true)
 
@@ -104,7 +104,7 @@ const Shop_Container = ({ children }) => {
       </SearchBannerWrapper>
       <Container
         style={{
-          marginTop: isMobile ? '45px' : isTablet ? '45px' : '85px'
+          marginTop: isMobile ? '45px' : isTablet ? '45px' : '25px'
         }}>
         {loading ?
           <div style={{ height: '80vh' }}>

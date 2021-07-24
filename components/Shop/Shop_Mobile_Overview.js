@@ -21,8 +21,8 @@ const Shop_Moble_Overview = () => {
   return (
     <div>
       <Shop_Header />
-      {currentShop.images && currentShop.images[0] ? (
-        <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(currentShop.images)[0]} />
+      {currentShop?.images && currentShop?.images[0] ? (
+        <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(currentShop?.images)[0]} />
       ) : (
         <Img src="/no-image.png" />
       )}

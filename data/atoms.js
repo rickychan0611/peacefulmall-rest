@@ -37,17 +37,17 @@ export const currentItem = atom({
 
 export const currentOrder = atom({
   key: 'currentOrder',
-  default: []
+  default: null
 });
 
 export const currentShop = atom({
   key: 'currentShop',
-  default: []
+  default: null
 });
 
 export const currentShopProducts = atom({
   key: 'currentShopProducts',
-  default: []
+  default: null
 });
 
 export const discountedProducts = selector({

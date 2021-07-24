@@ -28,7 +28,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 `;
 const Avatar = styled.img`
   display: flex;

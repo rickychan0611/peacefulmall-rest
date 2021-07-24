@@ -70,7 +70,7 @@ const Slider = ({ topic, children, icon, hideViewAll, marginBottom, hideScrollba
           width: "100%",
           gap: 20,
           padding: 10,
-          // paddingBottom: 10,
+          paddingBottom: 3,
           // paddingLeft: 10,
         }}
         onClick={() => {

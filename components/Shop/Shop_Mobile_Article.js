@@ -6,7 +6,7 @@ import {
 
 import Content_Mobile from '../Content/Content_Mobile';
 import BottomNavBar from '../BottomNavBar';
-import Shop_Desktop_Header from './Shop_Desktop_Header';
+import Shop_Header from './Shop_Header';
 
 const Shop_Desktop_Article = () => {
   const [, setSelectedPage] = useRecoilState(selectedPageAtom);
@@ -17,7 +17,7 @@ const Shop_Desktop_Article = () => {
 
   return (
     <div>
-      <Shop_Desktop_Header />
+      <Shop_Header />
       <Content_Mobile />
       <BottomNavBar />
       <br />

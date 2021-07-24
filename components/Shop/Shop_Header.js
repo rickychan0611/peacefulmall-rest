@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { currentShop as currentShopAtom } from '../../data/atoms';
 
-const Shop_Desktop_Header = () => {
+const Shop_Header = () => {
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
 
   return (
@@ -54,4 +54,4 @@ const Description = styled.div`
   text-overflow: ellipsis;
   margin-bottom: 30px;
 `;
-export default Shop_Desktop_Header;
+export default Shop_Header;

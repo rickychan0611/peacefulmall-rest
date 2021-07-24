@@ -5,7 +5,7 @@ import {
   currentShop as currentShopAtom,
   selectedPage as selectedPageAtom
 } from '../../data/atoms';
-import Shop_Desktop_Header from './Shop_Desktop_Header';
+import Shop_Header from './Shop_Header';
 import ShopInfo from '../ShopSideBar/ShopInfo';
 import BottomNavBar from '../BottomNavBar';
 import Shop_Overview_Sliders from './Shop_Overview_Sliders';
@@ -20,7 +20,7 @@ const Shop_Moble_Overview = () => {
 
   return (
     <div>
-      <Shop_Desktop_Header />
+      <Shop_Header />
       {currentShop.images && currentShop.images[0] ? (
         <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(currentShop.images)[0]} />
       ) : (

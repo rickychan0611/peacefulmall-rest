@@ -28,38 +28,40 @@ const Shop_Container = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(async () => {
+    console.log("1")
     console.log("!!!!currentShop", currentShop)
-    console.log("router.query.shop_id", router.query.shop_id)
-    if (!currentShop || currentShop.length === 0 || !currentShopProducts) {
-      console.log("RUNNN")
-      if (!currentShop || currentShop.id !== router.query.shop_id) {
-        try {
-          setLoading(true)
+    console.log("currentShopProducts", currentShopProducts)
+    if (!currentShop || currentShop?.length === 0 || currentShop.id !== +router.query.shop_id ||
+      !currentShopProducts || currentShopProducts[0].shop_id !== +router.query.shop_id) {
+      try {
+        setLoading(true)
 
-          const getSingleShop = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleshop', {
-            params: { shop_id: router.query.shop_id }
-          });
-          setCurrentShop(getSingleShop.data.data);
+        const getSingleShop = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/singleshop', {
+          params: { shop_id: router.query.shop_id }
+        });
+        console.log("2")
+        setCurrentShop(getSingleShop.data.data);
 
-          const getShopProducts = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shopproducts', {
-            params: {
-              shop_id: router.query.shop_id,
-              category_id: 'all'
-            }
-          });
-          setCurrentShopProducts(getShopProducts.data.data);
-        }
-        catch (err) {
-          console.log(err)
-        }
-        finally {
-          setLoading(false)
-        }
+        const getShopProducts = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shopproducts', {
+          params: {
+            shop_id: router.query.shop_id,
+            category_id: 'all'
+          }
+        });
+        console.log("3")
+        setCurrentShopProducts(getShopProducts.data.data);
+      }
+      catch (err) {
+        console.log(err)
+      }
+      finally {
+        setLoading(false)
       }
     }
   }, []);
 
   useEffect(async () => {
+    console.log("4")
     try {
       const getShopPopularProducts = await axios.get(process.env.NEXT_PUBLIC_HOST_URL + '/api/shopproducts', {
         params: {
@@ -68,6 +70,7 @@ const Shop_Container = ({ children }) => {
         }
       });
       setCurrentShopPoplularProducts(getShopPopularProducts.data.data);
+      console.log("5")
     }
     catch (err) {
       console.log(err)
@@ -75,11 +78,13 @@ const Shop_Container = ({ children }) => {
   }, []);
 
   useEffect(async () => {
+    console.log("6")
     if (currentShop) {
       try {
         const getArticles = await axios.get(
           process.env.NEXT_PUBLIC_STRAPI_URL + '/articles?_where[restaurant_id]=' +
           router.query.shop_id + "&_sort=updated_at:ASC")
+        console.log("7")
         setArticles(getArticles.data)
       }
       catch (err) {

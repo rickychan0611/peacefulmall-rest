@@ -8,7 +8,7 @@ import {
 import { Grid } from 'semantic-ui-react';
 import Content from '../Content';
 import ShopSideBar from '../ShopSideBar';
-import Shop_Desktop_Header from './Shop_Desktop_Header';
+import Shop_Header from './Shop_Header';
 
 const Shop_Desktop_Article = () => {
   const [currentShop] = useRecoilState(currentShopAtom);
@@ -27,7 +27,7 @@ const Shop_Desktop_Article = () => {
 
         <Grid.Column width={12} style={{ padding: '30px 20px 80px 20px' }}>
           <div>
-            <Shop_Desktop_Header />
+            <Shop_Header />
             <Content />
           </div>
         </Grid.Column>

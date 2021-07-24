@@ -8,7 +8,7 @@ import {
 import { Icon } from 'semantic-ui-react';
 import BottomNavBar from '../BottomNavBar';
 import ReviewFeed from '../ReviewFeed/index.js';
-import Shop_Desktop_Header from './Shop_Desktop_Header';
+import Shop_Header from './Shop_Header';
 import { useRouter } from 'next/router';
 
 const Shop_Mobile_Review = ({shop}) => {
@@ -21,7 +21,7 @@ const Shop_Mobile_Review = ({shop}) => {
 
   return (
     <div>
-      <Shop_Desktop_Header />
+      <Shop_Header />
       <Wrapper>
         <Title>
           <Icon name="star" size="small" style={{ marginRight: 10 }} />

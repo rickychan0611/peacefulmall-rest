@@ -15,7 +15,7 @@ import ShopSideBar from '../ShopSideBar';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
 import Gallery from "react-photo-gallery";
-import Shop_Desktop_Header from './Shop_Desktop_Header';
+import Shop_Header from './Shop_Header';
 
 const Shop_Desktop_Photos = () => {
   const router = useRouter();
@@ -65,7 +65,7 @@ const Shop_Desktop_Photos = () => {
 
         <Grid.Column width={12} style={{ padding: '30px 20px 80px 20px' }}>
           <div>
-          <Shop_Desktop_Header />
+          <Shop_Header />
 
             <Wrapper>
               <Title>

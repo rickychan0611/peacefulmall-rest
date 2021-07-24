@@ -8,7 +8,7 @@ import {
   currentShopProducts as currentShopProductsAtom,
   selectedPage as selectedPageAtom
 } from '../../data/atoms';
-import Shop_Desktop_Header from './Shop_Desktop_Header';
+import Shop_Header from './Shop_Header';
 
 import { Grid, Ref } from 'semantic-ui-react';
 import Slider from '../Slider';
@@ -40,7 +40,7 @@ const Shop_Desktop = () => {
 
         <Grid.Column width={12} style={{ padding: '30px 20px 80px 20px' }}>
           <div>
-          <Shop_Desktop_Header />
+          <Shop_Header />
 
             <Ref innerRef={contextRef}>
               <RestaurantMenu t={t} contextRef={contextRef} />

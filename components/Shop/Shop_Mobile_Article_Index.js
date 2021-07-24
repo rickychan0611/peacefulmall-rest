@@ -13,7 +13,7 @@ import {
 import { Grid, Icon } from 'semantic-ui-react';
 import EditorCards from '../EditorCards';
 import BottomNavBar from '../BottomNavBar';
-import Shop_Desktop_Header from './Shop_Desktop_Header';
+import Shop_Header from './Shop_Header';
 import axios from 'axios';
 import useTranslation from 'next-translate/useTranslation';
 
@@ -43,7 +43,7 @@ const Shop_Mobile_Article_Index = () => {
 
   return (
     <div>
-      <Shop_Desktop_Header />
+      <Shop_Header />
       <Wrapper>
         <Title>
           <Icon name="newspaper" size="small" style={{ marginRight: 10 }} />

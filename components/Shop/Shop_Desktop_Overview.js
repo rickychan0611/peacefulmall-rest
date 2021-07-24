@@ -5,7 +5,7 @@ import {
   currentShop as currentShopAtom,
   selectedPage as selectedPageAtom
 } from '../../data/atoms';
-import Shop_Desktop_Header from './Shop_Desktop_Header';
+import Shop_Header from './Shop_Header';
 import ShopSideBar from '../ShopSideBar';
 import Shop_Overview_Sliders from './Shop_Overview_Sliders';
 
@@ -27,7 +27,7 @@ const Shop_Desktop = () => {
 
         <Grid.Column width={12} style={{ padding: '30px 20px 80px 20px' }}>
           <div>
-            <Shop_Desktop_Header />
+            <Shop_Header />
 
             <Shop_Overview_Sliders />
 

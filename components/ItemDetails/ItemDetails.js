@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useIsMobile } from '../../util/useScreenSize';
-import toSlug from '../../util/toSlug';
-import axios from 'axios';
+import styled from 'styled-components';
 import Loader from '../Loader';
-
 import { useRecoilState } from 'recoil';
 import {
   currentItem as currentItemAtom,
@@ -20,6 +18,7 @@ import _ from 'lodash';
 import { useEffect } from 'react';
 import { uid } from 'react-uid';
 import { Button, Modal } from 'semantic-ui-react';
+import SearchBanner from '../SearchBanner';
 
 const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
   const router = useRouter();
@@ -62,7 +61,7 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
       setOrderItems((prev) => {
         return [{ ...item, attributeTotal, quantity, shop: currentShop, uid: uid(item) }, ...prev];
       });
-      item.fromHomePage ? router.push("/shop/" + currentShop.name + "/" + currentShop.id  + "/menu") : router.back();
+      item.fromHomePage ? router.push("/shop/" + currentShop.name + "/" + currentShop.id + "/menu") : router.back();
     } else {
       setOpenWarning(true);
     }
@@ -123,9 +122,10 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
         <Modal.Header>Oops... different restaurant</Modal.Header>
         <Modal.Content>
           Your shopping cart contains items from a differnet restaurant. If you add this item, all
-          items in the cart will be removed. <a onClick={()=>{
-             setOpenWarning(false)
-            setOpenCheckOutList(true)}}>Check Cart</a>
+          items in the cart will be removed. <a onClick={() => {
+            setOpenWarning(false)
+            setOpenCheckOutList(true)
+          }}>Check Cart</a>
         </Modal.Content>
         <Modal.Actions>
           <Button onClick={() => setOpenWarning(false)}>NO</Button>
@@ -137,7 +137,10 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
         <Loader loading={loading} />
       ) : (
         <>
-          <BackButton /> 
+          <SearchBannerWrapper>
+            <SearchBanner />
+            <BackButton noMenu />
+          </SearchBannerWrapper>
           <ItemDetailsContext attributes={attributes} setAttributes={setAttributes} />
           <BottomAddBar
             attributeTotal={attributeTotal}
@@ -152,5 +155,20 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
     </>
   );
 };
+
+const SearchBannerWrapper = styled.div`
+  z-index: 1000;
+  position: fixed;
+  top: 62px;
+  .active {
+    visibility: visible;
+    transition: all 200ms ease-in;
+  }
+  .hidden {
+    visibility: hidden;
+    transition: all 200ms ease-out;
+    transform: translate(0, -100%);
+  }
+`;
 
 export default ItemDetails;

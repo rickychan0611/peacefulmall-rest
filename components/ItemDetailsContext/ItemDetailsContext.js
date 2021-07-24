@@ -6,7 +6,7 @@ import {
   currentShop as currentShopAtom
 } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
-
+import { useRouter } from 'next/router'
 import { Form, Grid, Icon, Radio, Image, Checkbox, Divider } from 'semantic-ui-react';
 
 const ItemDetailsContext = ({
@@ -20,6 +20,7 @@ const ItemDetailsContext = ({
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [item, setItem] = useState();
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
+  const router = useRouter();
 
   useEffect(() => {
     console.log('Load currentItem', currentItem);
@@ -61,10 +62,11 @@ const ItemDetailsContext = ({
           <Container>
             <StoreHeader
               onClick={() => {
-                // router.push('/store/' + toSlug(selectedStore.name) + '/' + selectedStore.id + '#top');
+                router.push('/shop/' + currentShop.name + '/' + currentShop.id + '/menu');
                 // handleClose();
               }}>
               <Image
+                style={{ margimRight: 10 }}
                 src={
                   currentShop && currentShop.logo
                     ? process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + currentShop.logo
@@ -74,7 +76,7 @@ const ItemDetailsContext = ({
                 size="mini"
               />
               &nbsp;&nbsp;
-              {currentShop && currentShop.name}
+              <div style={{ fontSize: 16 }}>{currentShop && currentShop.name}</div>
             </StoreHeader>
             <h2>{item.name}</h2>
 
@@ -113,10 +115,10 @@ const ItemDetailsContext = ({
                           attribute.options.map((option, j) => {
                             return (
                               <Grid key={j}>
-                                <Grid.Column width={8}>
+                                <Grid.Column width={10} style={{paddingRight: 0}}>
                                   {attribute.type === 2 ? (
-                                    <QtyContainer>
-                                      <div>
+                                    <Row>
+                                      <QtyContainer>
                                         <Icon
                                           style={{ cursor: 'pointer' }}
                                           name="minus circle"
@@ -134,9 +136,9 @@ const ItemDetailsContext = ({
                                             onChange('plus', option);
                                           }}
                                         />
-                                      </div>
+                                      </QtyContainer>
                                       {option.option_name}
-                                    </QtyContainer>
+                                    </Row>
                                   ) : (
                                     // <Checkbox
                                     //   type={attribute.type === 2 ? 'checkbox' : 'radio'}
@@ -186,7 +188,7 @@ const ItemDetailsContext = ({
                                     />
                                   )}
                                 </Grid.Column>
-                                <Grid.Column width={8} style={{ textAlign: 'right' }}>
+                                <Grid.Column width={6} style={{ textAlign: 'right', paddingLeft: 0}}>
                                   + ${option.option_price} / ea.
                                 </Grid.Column>
                               </Grid>
@@ -204,18 +206,23 @@ const ItemDetailsContext = ({
   );
 };
 
+const Row = styled.div`
+ display: flex;
+ flex-flow: row nowrap;
+ width: 100%;
+`;
 const OptionTitle = styled.div`
   padding: 5px;
   background-color: #ded9d9;
   margin: 15px 0 15px 0;
 `;
 const QtyContainer = styled.div`
-  margin: 10px 10px 0 10px;
+  /* margin: 10px 10px 0 10px; */
   display: flex;
   justify-content: flex-start;
   align-items: center;
   flex-wrap: nowrap;
-  width: 100%;
+  min-width: 60px;
 `;
 
 const Wrapper = styled.div`
@@ -241,13 +248,14 @@ const StoreHeader = styled.div`
   align-items: center;
   font-size: 1.5rem;
   font-weight: bold;
+  margin-top: 10px;
 `;
 const Description = styled.h4`
   color: grey;
 `;
 const Img = styled.img`
   width: 100%;
-  height: 300px;
+  height: 350px;
   object-fit: cover;
 `;
 

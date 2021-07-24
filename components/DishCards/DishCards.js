@@ -95,7 +95,7 @@ const Card = styled.div`
   flex-flow: column nowrap;
   width: 100%;
   min-width: 220px;
-  max-width: 250px;
+  max-width: 400px;
   cursor: pointer;
   box-shadow: 0 0 10px rgba(0,0,0,.2);
 `;

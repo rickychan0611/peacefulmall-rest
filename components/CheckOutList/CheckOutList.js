@@ -33,7 +33,7 @@ const CheckOutList = () => {
       <Icon
         name="close"
         size="large"
-        style={{ marginTop: 80, marginLeft: 10, marginBottom: 20, cursor: 'pointer' }}
+        style={{ marginTop: 110, marginLeft: 10, marginBottom: 20, cursor: 'pointer' }}
         onClick={() => setOpenCheckOutList(false)}
       />
       {orderItems && orderItems[0] ? (

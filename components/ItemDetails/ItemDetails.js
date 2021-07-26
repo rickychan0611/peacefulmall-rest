@@ -11,11 +11,9 @@ import {
 } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 import { useIsDesktop } from '../../util/useScreenSize';
-
 import BottomAddBar from '../BottomAddBar';
 import BackButton from '../BackButton';
-import ItemDetailsContext from '../ItemDetailsContext';
-import _ from 'lodash';
+import ItemDetails_Mobile from '../ItemDetails_Mobile';
 import { useEffect } from 'react';
 import { uid } from 'react-uid';
 import { Button, Modal } from 'semantic-ui-react';
@@ -143,15 +141,21 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
             <SearchBanner />
             <BackButton noMenu />
           </SearchBannerWrapper>
-          <ItemDetailsContext attributes={attributes} setAttributes={setAttributes} />
-          <BottomAddBar
-            attributeTotal={attributeTotal}
-            attributes={attributes}
-            quantity={quantity}
-            setQty={setQty}
-            price={item.promotion_price === null ? item.price : item.promotion_price}
-            addItem={addItem}
-          />
+          {isDesktop ?
+            <ItemDetails_Mobile attributes={attributes} setAttributes={setAttributes} />
+            :
+            <>
+              <ItemDetails_Mobile attributes={attributes} setAttributes={setAttributes} />
+              <BottomAddBar
+                attributeTotal={attributeTotal}
+                attributes={attributes}
+                quantity={quantity}
+                setQty={setQty}
+                price={item.promotion_price === null ? item.price : item.promotion_price}
+                addItem={addItem}
+              />
+            </>
+            }
         </>
       )}
     </>

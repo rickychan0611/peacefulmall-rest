@@ -8,7 +8,7 @@ import setLanguage from 'next-translate/setLanguage';
 
 const cats = [
   {
-    name: '资讯',
+    name: '传媒',
     link: 'https://media.peacefulmall.com/'
   },
   {
@@ -20,11 +20,11 @@ const cats = [
     link: 'https://peacefulshops.com/'
   },
   {
-    name: '美食',
+    name: '餐饮',
     link: 'https://peaceful-restaurant.vercel.app/'
   },
   {
-    name: '生态',
+    name: '娱乐',
     link: 'https://eco.peacefulmall.com/'
   },
   {
@@ -174,7 +174,7 @@ const TopNav = () => {
 };
 
 const Container = styled.div`
-  z-index:10000;
+  z-index:100;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;

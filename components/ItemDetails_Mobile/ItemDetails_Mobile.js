@@ -8,27 +8,37 @@ import {
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 import { useRouter } from 'next/router'
 import { Form, Grid, Icon, Radio, Image } from 'semantic-ui-react';
-import { useIsDesktop } from '../../util/useScreenSize';
+import ImageGallery from 'react-image-gallery';
 
-const ItemDetailsContext = ({
+const ItemDetails_Mobile = ({
   checkOutListItem,
-  attributes,
-  setAttributes,
   updateItem,
-  attributeTotal
 }) => {
   const [currentItem, setCurrentItem] = useRecoilState(currentItemAtom);
   const [currentShop, setCurrentShop] = useRecoilState(currentShopAtom);
   const [item, setItem] = useState();
   const [orderItems, setOrderItems] = useRecoilState(orderItemsAtom);
   const router = useRouter();
-  const isDesktop = useIsDesktop();
+  const [imageUrls, setImageUrls] = useState([]);
 
   useEffect(() => {
     console.log('Load currentItem', currentItem);
     console.log('Load checkOutListItem', checkOutListItem);
     checkOutListItem ? setItem(checkOutListItem) : setItem(currentItem);
-    // setItem(currentItem);
+    let tempArr = currentItem ? JSON.parse(currentItem.images) : []
+
+    //restructure object data for image gallery
+    for (let i in tempArr) {
+      tempArr[i] = {
+        original: process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + tempArr[i],
+        thumbnail: process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + tempArr[i],
+        originalClass: "mainPhoto",
+        thumbnailClass: "thumbnailPhoto",
+      }
+    }
+    tempArr?.length > 0 && setImageUrls(tempArr);
+
+    setItem(currentItem);
   }, [checkOutListItem, currentItem]);
 
   const onChange = (task, option) => {
@@ -60,7 +70,7 @@ const ItemDetailsContext = ({
   return (
     <>
       {item && (
-        <Wrapper isDesktop={isDesktop}>
+        <Wrapper>
           <Container>
             <StoreHeader
               onClick={() => {
@@ -80,16 +90,33 @@ const ItemDetailsContext = ({
               &nbsp;&nbsp;
               <div style={{ fontSize: 16 }}>{currentShop && currentShop.name}</div>
             </StoreHeader>
-            <h3>{item.name}</h3>
+            <h2>{item.name}</h2>
 
-            {item.images && item.images[0] ? (
+            {/* {item.images && item.images[0] ? (
               <Img src={process.env.NEXT_PUBLIC_HOST_URL + '/storage/' + JSON.parse(item.images)[0]} />
             ) : (
               <Img src="/no-image.png" />
-            )}
+            )} */}
+            <Gallery>
+              <ImageGallery
+                items={imageUrls}
+                renderLeftNav={() => null}
+                renderRightNav={() => null}
+                renderPlayPauseButton={() => null}
+              />
+            </Gallery>
+
+            {item.promotion_price ?
+              <>
+                <CrossedPrice>${item.price}</CrossedPrice>
+                <Saving>You Save: ${(item.price - item.promotion_price).toFixed(2)} ({(100 - (item.promotion_price / item.price) * 100).toFixed(0)}% OFF)</Saving>
+                <Price>${item.promotion_price}</Price>
+              </> :
+              <Price>${item.price}</Price>
+            }
 
             <Description>{item.description}</Description>
-            {item.attributes?.length > 0 && <h4>Choose your options</h4>}
+            {item.attributes && item.attributes[0] && <h4>Choose your options</h4>}
             <Form>
               <Form.Field></Form.Field>
               {item.attributes &&
@@ -117,7 +144,7 @@ const ItemDetailsContext = ({
                           attribute.options.map((option, j) => {
                             return (
                               <Grid key={j}>
-                                <Grid.Column width={10} style={{paddingRight: 0}}>
+                                <Grid.Column width={10} style={{ paddingRight: 0 }}>
                                   {attribute.type === 2 ? (
                                     <Row>
                                       <QtyContainer>
@@ -190,7 +217,7 @@ const ItemDetailsContext = ({
                                     />
                                   )}
                                 </Grid.Column>
-                                <Grid.Column width={6} style={{ textAlign: 'right', paddingLeft: 0}}>
+                                <Grid.Column width={6} style={{ textAlign: 'right', paddingLeft: 0 }}>
                                   + ${option.option_price} / ea.
                                 </Grid.Column>
                               </Grid>
@@ -208,6 +235,22 @@ const ItemDetailsContext = ({
   );
 };
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;
+const Container = styled.div`
+  padding: 20px;
+  padding-top: 70px;
+  padding-bottom: 150px;
+  min-height: calc(100vh - 60px);
+  width: 100%;
+  max-width: 500px;
+`;
 const Row = styled.div`
  display: flex;
  flex-flow: row nowrap;
@@ -226,23 +269,19 @@ const QtyContainer = styled.div`
   flex-wrap: nowrap;
   min-width: 60px;
 `;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  padding-top: ${p => p.isDesktop ? "0px" : "40px"};
+const Price = styled.div`
+  font-size: 24px;
+  margin-top: 30px;
 `;
-const Container = styled.div`
-  padding: 20px;
-  padding-top: 40px;
-  padding-bottom: 150px;
-  min-height: calc(100vh - 110px);
-  width: 100%;
-  max-width: 500px;
+const CrossedPrice = styled.div`
+  font-size: 16px;
+  color: grey;
+  text-decoration: line-through;
+  margin-top: 30px;
+`;
+const Saving = styled.div`
+  font-size: 16px;
+  margin-top: 3px;
 `;
 const StoreHeader = styled.div`
   display: flex;
@@ -258,8 +297,39 @@ const Description = styled.h4`
 `;
 const Img = styled.img`
   width: 100%;
-  height: 40vh;
+  height: 350px;
   object-fit: cover;
 `;
+const Gallery = styled.div`  
+  .image-gallery {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* max-width: 1000px; */
+  /* padding: 50px; */
+  }
+  .image-gallery-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  object-fit: contain;
+  background-color: white;
+  }
+.image-gallery-image {
+    height: 100%;
+    min-height: 300px;
+    max-height: 600px;
+    width: 100%;
+    min-width: 300px;
+    max-width: 900px;
+    object-fit: contain; 
+  }
+  .thumbnailPhoto {
+    width: 92px;
+    height: 92px;
+    object-fit: contain;
+    background-color: white;
+  }
+`;
 
-export default ItemDetailsContext;
+export default ItemDetails_Mobile;

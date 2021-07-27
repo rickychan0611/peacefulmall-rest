@@ -3047,6 +3047,8 @@ figures@^3.0.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-3.2.0.tgz#625c18bd293c604dc4a8ddb2febf0c88341746af"
   integrity sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==
+  dependencies:
+    escape-string-regexp "^1.0.5"
 
 file-entry-cache@^6.0.1:
   version "6.0.1"
@@ -4629,6 +4631,8 @@ isobject@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-2.1.0.tgz#f065561096a3f1da2ef46272f815c840d87e0c89"
   integrity sha1-8GVWEJaj8dou9GJy+BXIQNh+DIk=
+  dependencies:
+    isarray "1.0.0"
 
 isobject@^3.0.0, isobject@^3.0.1:
   version "3.0.1"
@@ -6187,6 +6191,10 @@ object-copy@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/object-copy/-/object-copy-0.1.0.tgz#7e7d858b781bd7c991a41ba975ed3812754e998c"
   integrity sha1-fn2Fi3gb18mRpBupde04EnVOmYw=
+  dependencies:
+    copy-descriptor "^0.1.0"
+    define-property "^0.2.5"
+    kind-of "^3.0.3"
 
 object-inspect@^1.9.0:
   version "1.10.3"
@@ -6577,6 +6585,10 @@ path-type@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-1.1.0.tgz#59c44f7ee491da704da415da5a4070ba4f8fe441"
   integrity sha1-WcRPfuSR2nBNpBXaWkBwuk+P5EE=
+  dependencies:
+    graceful-fs "^4.1.2"
+    pify "^2.0.0"
+    pinkie-promise "^2.0.0"
 
 pbkdf2@^3.0.3:
   version "3.1.2"
@@ -6955,6 +6967,11 @@ react-google-places-autocomplete@^3.3.1:
     react-select "^4.1.0"
     typescript "^3.9.7"
     use-debounce "^3.4.3"
+
+react-image-gallery@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/react-image-gallery/-/react-image-gallery-1.2.5.tgz#41e15a9272b295e54a5421b6b72c31048a8a269a"
+  integrity sha512-jAjCpgRnK3rCIj5dBK79duIDKkWNVeh222vAzWntG8TAMy0ZYGR0TM/jOXrshwpDJkqVv4TuYShHwPY4O4kOpQ==
 
 react-indiana-drag-scroll@^2.0.1:
   version "2.0.1"

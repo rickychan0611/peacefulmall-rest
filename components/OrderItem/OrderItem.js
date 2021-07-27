@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { useRecoilState } from 'recoil';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 import { Divider, Icon, Modal } from 'semantic-ui-react';
-import ItemDetails_Mobile from '../ItemDetails_Mobile';
+import ItemDetails_Context from '../ItemDetails/ItemDetails_Context';
 import {
   currentItem as currentItemAtom,
   currentShop as currentShopAtom,
@@ -97,7 +97,7 @@ const OrderItem = ({ item, index }) => {
         onOpen={() => setOpen(true)}
         open={open}>
         <div style={{ height: '90vh', overflowY: 'auto', position: 'relative' }}>
-          <ItemDetails_Mobile checkOutListItem={item} updateItem attributeTotal={attributeTotal}/>
+          <ItemDetails_Context checkOutListItem={item} updateItem attributeTotal={attributeTotal}/>
           <BottomAddBar
             index={index}
             remove={remove}

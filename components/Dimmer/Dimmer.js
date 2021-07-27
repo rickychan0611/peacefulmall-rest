@@ -15,11 +15,12 @@ const Dimmer = ({ state, close }) => {
 
 const Container = styled.div`
   position: fixed;
-  top: 60px;
+  top: 95px;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: ${(p) => (p.state ? 'rgba(0,0,0,0.1)' : 'none')}; 
-  backdrop-filter: ${(p) => (p.state ? 'blur(5px)' : 'none')};
+  background-color: ${p => p.state ? 'rgba(0,0,0,0.1)' : 'none'}; 
+  backdrop-filter: ${p => p.state ? 'blur(5px)' : 'none'};
 `;
 
 export default Dimmer;

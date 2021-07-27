@@ -174,7 +174,7 @@ const TopNav = () => {
 };
 
 const Container = styled.div`
-  z-index:100;
+  z-index:1000;
   display: flex;
   flex-flow: row nowrap;
   align-items: center;

@@ -11,13 +11,12 @@ import {
 } from '../../data/atoms.js';
 import { orderItems as orderItemsAtom } from '../../data/orderAtoms.js';
 import { useIsDesktop } from '../../util/useScreenSize';
-import BottomAddBar from '../BottomAddBar';
 import BackButton from '../BackButton';
-import ItemDetails_Mobile from '../ItemDetails_Mobile';
 import { useEffect } from 'react';
 import { uid } from 'react-uid';
 import { Button, Modal } from 'semantic-ui-react';
 import SearchBanner from '../SearchBanner';
+import ItemDetails_Context from './ItemDetails_Context';
 
 const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
   const router = useRouter();
@@ -133,31 +132,25 @@ const ItemDetails = ({ getProduct, setOpen, fromRestaurantPage }) => {
         </Modal.Actions>
       </Modal>
 
-      {!item ? (
+      {!item ?
         <Loader loading={loading} />
-      ) : (
+        :
         <>
           <SearchBannerWrapper isDesktop={isDesktop}>
             <SearchBanner />
             <BackButton noMenu />
           </SearchBannerWrapper>
-          {isDesktop ?
-            <ItemDetails_Mobile attributes={attributes} setAttributes={setAttributes} />
-            :
-            <>
-              <ItemDetails_Mobile attributes={attributes} setAttributes={setAttributes} />
-              <BottomAddBar
-                attributeTotal={attributeTotal}
-                attributes={attributes}
-                quantity={quantity}
-                setQty={setQty}
-                price={item.promotion_price === null ? item.price : item.promotion_price}
-                addItem={addItem}
-              />
-            </>
-            }
+          <ItemDetails_Context
+            attributes={attributes}
+            setAttributes={setAttributes}
+            attributeTotal={attributeTotal}
+            attributes={attributes}
+            quantity={quantity}
+            setQty={setQty}
+            addItem={addItem}
+          />
         </>
-      )}
+      }
     </>
   );
 };

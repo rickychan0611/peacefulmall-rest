@@ -7,6 +7,7 @@ import { user as userAtom } from '../../data/userAtom.js';
 import { useCookies } from 'react-cookie';
 import { locales, changeLocale } from '../TopBar/TopBar';
 import useTranslation from 'next-translate/useTranslation';
+import { useIsDesktop } from '../../util/useScreenSize.js';
 
 const SidebarMenu = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const SidebarMenu = () => {
   const [user, setUser] = useRecoilState(userAtom);
   const [cookies, setCookie, removeCookie] = useCookies();
   const { t } = useTranslation('home');
+  const isDesktop = useIsDesktop();
 
   const handleClick = (name) => {
     router.push(name)
@@ -32,7 +34,7 @@ const SidebarMenu = () => {
         backgroundColor: 'white',
         position: "fixed",
         boxShadow: "10px 0px 25px rgba(0, 0, 0, .3)",
-        padding: "80px 10px 10px 10px",
+        padding: isDesktop ? "130px 10px 10px 10px" : "80px 10px 10px 10px",
       }}
     >
       <Icon name="close" size="large"

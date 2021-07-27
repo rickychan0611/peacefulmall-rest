@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
-
+import { useIsDesktop } from '../../util/useScreenSize';
 const BottomAddBar = ({ index, remove, setOpen, quantity, setQty, price, addItem, updateItem, attributes, attributeTotal }) => {
-  
+  const isDesktop = useIsDesktop();
   const total = () => {
     return +(Math.round(((+price + +attributeTotal) * +quantity) + "e+2")  + "e-2") }
 
   return (
     <>
-      <BottomBar>
+      <BottomBar isDesktop={isDesktop}>
         <QtyContainer>
           <Icon
             name="minus circle"
@@ -57,7 +57,7 @@ const Remove = styled.p`
   padding-right: 10px;
 `;
 const BottomBar = styled.div`
-  position: fixed;
+  position: ${p => p.isDesktop ? "" :"fixed"};
   bottom: 0px;
   width: 100%;
   height: 70px;
@@ -68,6 +68,7 @@ const BottomBar = styled.div`
   align-items: center;
   flex-wrap: nowrap;
   border-radius: 0 0 10px 10px;
+  margin-top: 50px;
 `;
 const AddButton = styled.div`
   display: flex;

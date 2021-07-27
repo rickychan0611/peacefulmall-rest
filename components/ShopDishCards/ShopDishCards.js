@@ -142,7 +142,7 @@ const Card = styled.div`
   margin-bottom: 20px;
 `;
 const Img = styled(LazyLoadImage)`
-  object-fit: contain;
+  object-fit: cover;
 `;
 const Name = styled.div`
   font-size: 1.1rem;

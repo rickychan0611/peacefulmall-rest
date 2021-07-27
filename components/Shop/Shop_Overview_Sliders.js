@@ -73,6 +73,20 @@ const Shop_Overview_Slider = () => {
           <EditorCards /> : <h4>... No article yet 😋 </h4>}
       </Slider>
 
+      <Wrapper>
+        <Title>
+          <Icon name="bars" size="small" style={{ marginRight: 10 }} />
+          Order now!
+        </Title>
+        {/* <Button onClick={() => router.push(url + '/articles')}>View All Articles</Button> */}
+      </Wrapper>
+      <Button
+        style={{ color: "white", backgroundColor: "#ee3160", marginBottom: 40 }}
+        onClick={() => router.push(url + '/menu')}>
+        View Full Menu
+      </Button>
+
+
     </div >
   );
 };

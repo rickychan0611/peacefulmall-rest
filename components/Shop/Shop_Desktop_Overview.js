@@ -30,7 +30,7 @@ const Shop_Desktop = () => {
             <Shop_Header />
 
             <Shop_Overview_Sliders />
-
+            
           </div>
         </Grid.Column>
       </Grid>

@@ -110,7 +110,7 @@ const Column = styled.div`
 const Img = styled.img`
   width: 100%;
   height: 180px;
-  object-fit: contain;
+  object-fit: cover;
 `;
 const Name = styled.div`
   font-size: 1.2rem;

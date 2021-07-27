@@ -70,14 +70,24 @@ const Wrapper = styled.div`
   width: 100%;
   padding-bottom: 100px;
 `
+const Gallery = styled.div`
+  width: 600px;
+  .image-gallery-thumbnail-image {
+    width: 92px;
+    height: 92px;
+    object-fit: contain;
+  }
+`;
+const Content = styled.div`
+    width: 500px;
+`;
 const Container = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
   padding: 20px;
-  padding-top: 130px;
-  /* min-height: calc(100vh - 60px); */
+  padding-top: 100px;
   width: 100%;
   max-width: 1400px;
   gap: 40px;
@@ -92,37 +102,5 @@ const DescriptionContainer = styled.div`
 const Description = styled.h4`
   color: grey;
 `;
-const Gallery = styled.div`
-  flex: 1;
-  .image-gallery {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  }
-  .image-gallery-slide {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  object-fit: contain;
-  background-color: white;
-  }
-.image-gallery-image {
-    height: 100%;
-    min-height: 300px;
-    max-height: 600px;
-    width: 100%;
-    min-width: 300px;
-    max-width: 900px;
-    object-fit: contain; 
-  }
-  .thumbnailPhoto {
-    width: 92px;
-    height: 92px;
-    object-fit: contain;
-    background-color: white;
-  }
-`;
-const Content = styled.div`
-    flex: 1;
-`;
+
 export default ItemDetails_Desktop;

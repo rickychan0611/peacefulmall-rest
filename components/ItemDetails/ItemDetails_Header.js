@@ -43,6 +43,7 @@ const StoreHeader = styled.div`
   font-size: 1.5rem;
   font-weight: bold;
   margin-top: 10px;
+  cursor: pointer;
 `;
 
 export default ItemDetails_Header;
